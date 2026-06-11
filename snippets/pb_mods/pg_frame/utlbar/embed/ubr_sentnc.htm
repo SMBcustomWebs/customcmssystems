@@ -1,0 +1,46 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_sntc_gen_grp" label="General Settings" order='10' >  
+    <cms:editable type='message' name='ccs_ubr_sntc_init_cstm_msg' order='5'>
+        <h2>Utility Bar: Sentence Accent</h2>
+        <p>An accent bar for highlighting a single phrase or announcement.</p>
+        <br><hr>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_sntc_gen_ht_row' order='10'>
+        <cms:editable type='dropdown' name='ccs_ubr_sntc_py' label='Height Padding' opt_values='dropdowns/util-pad.htm' dynamic='opt_values' class='col-md-3' order='5' />
+        <cms:editable type='dropdown' name='ccs_ubr_sntc_bg_clr_opt' label='Bar Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='10' />
+        <cms:editable type='dropdown' name='ccs_ubr_sntc_dspr' label='Screen Size Visibility' opt_values='dropdowns/display.htm' dynamic='opt_values' class='col-md-5' order='20' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_sntc_stky_row' order='25'>
+        <cms:editable type='message' name='ccs_ubr_sntc_stky_msg' class='col-md-9' order='1'>
+            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin-top:10px;">
+                <strong>Sticky Positioning Warning:</strong><br> "Stick Bar To Top" should not be used if your Main Navigation Menu is also set to sticky.
+            </div>
+        </cms:editable>
+        <cms:editable type='checkbox' name='ccs_ubr_sntc_stky' label='Stick Bar To Top' desc='stays visible on scroll' opt_values='Yes=1' class='col-md-3' order='2'/>
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_sntc_txt_fmt_grp" label="Text Settings" order="20" >  
+    <cms:editable type='message' name='ccs_ubr_sntc_txt_msg' order='5'>
+        <h3>Phrase & Typography</h3>
+        <p>Enter your announcement. Leave typography fields set to "Default" to inherit global site styles.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_sntc_txt_txt_row' order='10'>
+        <cms:editable type='text' name='ccs_ubr_sntc_txt_txt' label='Phrase / Announcement Text' class='col-md-12' order='5' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_sntc_txt_row' order='20'>
+        <cms:editable type='dropdown' name='ccs_ubr_sntc_txt_clr' label='Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='5'  />
+        <cms:editable type='dropdown' name='ccs_ubr_sntc_txt_sz' label='Text Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-4' order='10'  />
+        <cms:editable type='dropdown' name='ccs_ubr_sntc_txt_aln' label='Text Alignment' opt_values='dropdowns/h-align.htm' dynamic='opt_values' class='col-md-4' order='15' />
+        <cms:editable type='dropdown' name='ccs_ubr_sntc_txt_fnt_wt' label='Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4' order='20'  />
+        <cms:editable type='dropdown' name='ccs_ubr_sntc_txt_fnt_st' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-4' order='25'  />
+        <cms:editable type='dropdown' name='ccs_ubr_sntc_txt_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4' order='30'  />
+        <cms:editable type='dropdown' name='ccs_ubr_sntc_txt_ls' label='Letter Spacing' opt_values='dropdowns/hdr_ltr-spc.htm' dynamic='opt_values' class='col-md-4' order='35' />
+    </cms:editable>
+</cms:editable>

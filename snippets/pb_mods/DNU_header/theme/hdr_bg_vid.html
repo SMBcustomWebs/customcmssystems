@@ -1,0 +1,10 @@
+<cms:if hdr_vid_src_opt='1'>
+    <video class="bg-video" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline">
+        <source src="<cms:show hdr_vid_mp4 />" type="video/mp4" />
+        <source src="<cms:show hdr_vid_webm />" type="video/webm" />
+        <source src="<cms:show hdr_vid_ogv />" type="video/ogv" />
+    </video>
+<cms:else />
+    <div class="bg-holder bg-youtube" data-youtube-embed='{"videoId":"<cms:show hdr_vid_yt_strm />","startSeconds":"<cms:show hdr_vid_yt_strm_str />","endSeconds":"<cms:show hdr_vid_yt_strm_stp />"}'>
+    </div>
+</cms:if>

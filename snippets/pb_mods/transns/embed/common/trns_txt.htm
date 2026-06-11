@@ -1,0 +1,319 @@
+<cms:editable type="group" name="trns_txt_grp" label="Section Text" not_active=trns_txt_chc order='30' >
+    <cms:editable type='row' name='trns_txtblk_gen_row'  order='5' >
+        <cms:editable type='message' name='trns_txtblk_gen_msg' order='2'>
+            <h2>The following settings define the size and placement of the Text Box</h2>
+            <h4>Text Box is the area where the information displays in columns. No need to edit unless necessary.</h4>
+            <p>Choosing 'Custom' will open up additional options below.</p>
+        </cms:editable>
+        <cms:editable type='dropdown' name='trns_txtbx_sz_opt' label='Size of Text Box' desc='choosing "Custom" will open up options below'
+            opt_values='dropdowns/trns_txt-box_size.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='4'
+        />
+        <cms:editable type='dropdown'  name='trns_txtbx_valg' label='Align TextBox Vertical' desc='Top, Middle, Bottom'
+            opt_values='dropdowns/v-align.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='6'
+        />
+        <cms:editable type='dropdown'  name='trns_txtbx_halg' label='Align TextBox Horizontal' desc='Left, Center, Right'
+            opt_values='dropdowns/h-align.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='8'
+        /> 
+        <cms:editable type='dropdown'  name='trns_txt_halg' label='Align Text Inside TextBox' desc='Alignment of what is inside the text block'
+            opt_values='dropdowns/h-align.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='10'
+        />
+        <cms:editable type='checkbox'  name='trns_txt_fx_opt'  label='Add Text Typing Effect' desc=''
+          opt_values='Add Typing Text=1'
+          order='12'
+        />
+    </cms:editable>
+    <cms:func _into='trns_txtbx_sz_chc' trns_txtbx_sz_opt=''>
+        <cms:if trns_txtbx_sz_opt="custom" >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func> 
+    <cms:editable type='row' name='trns_txtbx_cstm_sz_row' not_active=trns_txtbx_sz_chc order='10' >
+        <cms:editable type='message' name='trns_txtbx_cstm_sz_msg' order='2'>
+            <hr><br>
+            <h2>Custom Size Text Block</h2><h4><a href='https://getbootstrap.com/docs/5.1/layout/grid/' target="_blank">More Info on Bootstrap</a></h4>
+            <p>Screen Size adjusts for device screens. 12 columns means full width for that screen size.</p>
+        </cms:editable>
+        <cms:repeatable name='trns_txtbx_cstm_sz_rpt' label="Set column size per Bootstrap https://getbootstrap.com/docs/5.1/layout/grid/" order='4'>
+            <cms:editable type="dropdown" name='trns_txtbx_cstm_col_sz' label='Screen Size' 
+                opt_values='dropdowns/col-size.htm' 
+                dynamic='opt_values'
+                order='4'
+            />
+            <cms:editable type="dropdown" name='trns_txtbx_cstm_col_val' label='Columns out of 12' 
+                opt_values='dropdowns/col-size-val.htm'  
+                dynamic='opt_values'
+                order='6'
+            />
+        </cms:repeatable>       
+    </cms:editable>
+
+    <cms:editable type='row' name='trns_m_txtblk_txt_row' not_active=trns_txtm_chc order='15' >
+        <cms:editable type='message' name='trns_txtm_msg' class='col-md-12' order='2'>
+            <hr><br>
+            <h2>Each Section Text Line adds a single line of text. "Add A Row" adds a new line of text.</h2>
+            <h4></h4>
+            <p></p>
+        </cms:editable>
+        <cms:repeatable name='trns_txtm_rpt' label='Section Text Lines - New Row = New Line' stacked_layout='1' not_active=trns_m_txtm_chc order='4' >
+            <cms:editable type='text' name='trns_txtm_ln' label='Text'
+                order='6' 
+            />
+            <cms:editable type='dropdown' name='trns_txtm_clr' label='Text Color' 
+                opt_values='dropdowns/solid-colors.htm'
+                opt_selected='white'
+                dynamic='opt_values'
+                order='8'  
+            />
+            <cms:editable type='dropdown' name='trns_txtm_sz' label='Text Size' 
+                opt_values='dropdowns/text-size.htm'
+                dynamic='opt_values'
+                order='12'  
+            />
+            <cms:editable type='dropdown' name='trns_txtm_font' label='Font Family' 
+                opt_values='dropdowns/font-family.htm'
+                dynamic='opt_values'
+                order='20'  
+            />
+            <cms:editable type='dropdown' name='trns_txtm_fnt_wt' label='Font Weight' 
+                opt_values='dropdowns/font-weight.htm'
+                dynamic='opt_values'
+                order='14'  
+            />
+            <cms:editable type='dropdown' name='trns_txtm_fnt_st' label='Font Style' 
+                opt_values='dropdowns/font-style.htm'
+                dynamic='opt_values'
+                order='18'  
+            />
+            <cms:editable type='dropdown' name='trns_txtm_ltr_spc' label='Letter Spacing' 
+                opt_values='dropdowns/hdr_ltr-spc.htm'
+                dynamic='opt_values'
+                order='16'  
+            />
+        </cms:repeatable>
+    </cms:editable>
+    
+
+
+
+
+
+
+
+    
+
+    <cms:editable type='row' name='trns_txt2_row' not_active=trns_txt2_chc order='20' >
+        <cms:editable type='message' name='trns_txt1_fx_msg' class='col-md-12' order='2'>
+            <hr><br>
+            <h2>Line 1 Format as needed</h2>
+            <h4></h4>
+            <p></p>
+        </cms:editable>
+
+        <cms:editable type='text' name='trns_txt1_ln' label='Text'
+            class='col-md-12'
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='trns_txt1_clr' label='Text Color' 
+            opt_values='dropdowns/solid-colors.htm'
+            opt_selected='white'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='trns_txt1_sz' label='Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='6'  
+        />
+        <cms:editable type='message' name='trns_txt1_sp_msg' class='col-md-12' order='7'>
+            <hr><br>
+        </cms:editable>
+        <cms:editable type='dropdown' name='trns_txt1_font' label='Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='8'  
+        />
+        <cms:editable type='dropdown' name='trns_txt1_fnt_wt' label='Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='10'  
+        />
+        <cms:editable type='dropdown' name='trns_txt1_fnt_st' label='Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='12'  
+        />
+        <cms:editable type='dropdown' name='trns_txt1_ltr_spc' label='Letter Spacing' 
+            opt_values='dropdowns/hdr_ltr-spc.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='14'  
+        />
+        <cms:editable type='message' name='trns_txt2_fx_msg' class='col-md-12' order='20'>
+            <hr><br>
+            <h2>Line 2 Format as needed</h2>
+            <h4></h4>
+            <p></p>
+        </cms:editable>
+
+        <cms:editable type='text' name='trns_txt2_ln' label='Text'
+            class='col-md-12'
+            order='22' 
+        />
+        <cms:editable type='dropdown' name='trns_txt2_clr' label='Text Color' 
+            opt_values='dropdowns/solid-colors.htm'
+            opt_selected='white'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='24'  
+        />
+        <cms:editable type='dropdown' name='trns_txt2_sz' label='Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='26'  
+        />
+        <cms:editable type='message' name='trns_txt2_sp_msg' class='col-md-12' order='27'>
+            <hr><br>
+        </cms:editable>
+        <cms:editable type='dropdown' name='trns_txt2_font' label='Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='28'  
+        />
+        <cms:editable type='dropdown' name='trns_txt2_fnt_st' label='Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='30'  
+        />
+        <cms:editable type='dropdown' name='trns_txt2_fnt_wt' label='Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='32'  
+        />
+        <cms:editable type='dropdown' name='trns_txt2_ltr_spc' label='Letter Spacing' 
+            opt_values='dropdowns/hdr_ltr-spc.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='34'  
+        />
+        <cms:editable type='message' name='trns_m_txt_fx_msg' class='col-md-12' order='90'>
+            <hr><br>
+            <h2>Be sure to save each page.</h2>
+            <h4></h4>
+            <p></p>
+        </cms:editable>
+
+
+    </cms:editable>
+
+
+    <cms:func _into='trns_txt_fx_chc' trns_txt_fx_opt=''>
+        <cms:if "<cms:is '1' in=trns_txt_fx_opt />" >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='row' name='trns_txt_fx_row' not_active=trns_txt_fx_chc order='25' >
+        <cms:editable type='message' name='trns_txtblk_txt_msg' order='2'>
+             <hr><br>
+             <h2>Type a sentence that ends with a typed effect.</h2>
+             <h4>The below settings are for the static words of the sentence.</h4>
+             <p></p>
+        </cms:editable>
+            <cms:editable type='dropdown' name='trns_txt_fx_txt_clr' label='Text Color' 
+                opt_values='dropdowns/solid-colors.htm'
+                opt_selected='white'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='8'  
+            />
+            <cms:editable type='dropdown' name='trns_txt_fx_txt_txt_sz' label='Text Size' 
+                opt_values='dropdowns/text-size.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='12'  
+            />
+            <cms:editable type='dropdown' name='trns_txt_fx_fnt_wt' label='Font Weight' 
+                opt_values='dropdowns/font-weight.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='14'  
+            />
+            <cms:editable type='dropdown' name='trns_txt_fx_ltr_spc' label='Letter Spacing' 
+                opt_values='dropdowns/hdr_ltr-spc.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='16'  
+            />
+            <cms:editable type='dropdown' name='trns_txt_fx_fnt_st' label='Font Style' 
+                opt_values='dropdowns/font-style.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='18'  
+            />
+            <cms:editable type='dropdown' name='trns_txt_fx_font' label='Font Family' 
+                opt_values='dropdowns/font-family.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='20'  
+            />
+            <cms:editable type='text' name='trns_fx_txt_ln' label='Text Before Effect' desc='Create a highlighted sentence'
+                class='col-md-12'
+                order='26' 
+            />
+            <cms:editable type='message' name='trns_txt_fx_txt_msg'  class='col-md-12' order='27'>
+                 <br>
+                 <h2>Finish the sentence with a typed effect.</h2>
+                 <h4>Each row will be typed individually.</h4>
+                 <p>the new typed words will replace the old, the loop is continuous.</p>
+            </cms:editable>
+            <cms:repeatable name='trns_txt_fx_rpt' label='Add words or short phrases. New Row = New Line' stacked_layout='1' order='28' >
+                <cms:editable type='text' name='trns_txt_fx_txt_ln' label='Text'
+                    order='29' 
+                /> 
+            </cms:repeatable>
+                <cms:editable type='message' name='trns_txt_fx_txt_msg'  class='col-md-12' order='30'>
+                 <br>
+                 <h2>Enhance the typed words.</h2>
+                 <h4>Set the color and weight of the TYPED words.</h4>
+                 <p></p>
+            </cms:editable>
+            <cms:editable type='dropdown' name='trns_txt_fx_txt_clr_rp' label='Typed Word Color' 
+                opt_values='dropdowns/solid-colors.htm'
+                opt_selected='white'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='35'
+           />
+           <cms:editable type='dropdown' name='trns_txt_fx_fnt_wt_rp' label='Typed Word Weight' 
+                opt_values='dropdowns/font-weight.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='37'  
+            />
+    </cms:editable>
+</cms:editable>
+

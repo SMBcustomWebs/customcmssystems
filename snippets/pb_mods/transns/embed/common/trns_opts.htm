@@ -1,0 +1,215 @@
+<cms:editable type='message' name='trns_msg' order='1' >
+    <h2>Transition Options Section</h2>
+    <h3>May choose background image or only color. Image option for transparency will allow color to show through image.</h3>
+    <h4>Default background color is set as default Body Color in Site Theme settings</h4>
+</cms:editable>
+<cms:editable type="group" name="trns_gen_grp" label="Basic Section Options" order='3' >
+    <cms:editable type='row' name='trns_opt_init_row'  order='5' >
+        <cms:editable type='dropdown' name='bg_clr_opt' label='Background' desc='color, image'
+            opt_values='dropdowns/trns-bg.htm'
+            dynamic='opt_values'
+            class='col-md-3 col-sm-6'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='trns_py_ht' label='Section Height' desc='adds height'
+            opt_values='0|1|2|3|4||5|6|7|8|9|10|11'
+            opt_selected='4'
+            class='col-md-3 col-sm-6'
+            order='4'
+        />
+        <cms:editable type='dropdown' name='trns_fx_opt' label='Visual Scrolling Effects' desc=''
+            opt_values='dropdowns/prlx-scrl.htm'
+            dynamic='opt_values'
+            class='col-md-3 col-sm-6'
+            order='6'
+        />
+        <cms:editable type='dropdown' name='trns_bg_img_opc' label='Transparency' desc=''
+            opt_values='dropdowns/bg-transparency.htm'
+            dynamic='opt_values'
+            class='col-md-3 col-sm-6'
+            order='8'
+        />
+    </cms:editable>
+    <cms:editable type='row' name='trns_opt_xtr_row'  order='10' >
+
+        <cms:editable type='dropdown' name='trns_txt_opt' label='Text' desc=''
+            opt_values='No Text= |Up To 2 Lines Text=1 |More than 2 Lines Text=2'
+            class='col-md-3 col-sm-6'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='trns_vid_opt' label='Popout Video' desc='adds play button'
+            opt_values='No Video Element= |Uploaded Video=1|YouTube Video=2|Vimeo Video=3'
+            class='col-md-3 col-sm-6'
+            order='4'
+        />
+    </cms:editable>
+    <cms:func _into='bg_clr_chc' bg_clr_opt=''>
+        <cms:if bg_clr_opt="gradient" >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:func _into='bg_img_chc' bg_clr_opt=''>
+        <cms:if bg_clr_opt="img" >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func> 
+    <cms:func _into='trns_txt_chc' trns_txt_opt=''>
+        <cms:if trns_txt_opt ge "1" >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>   
+    <cms:func _into='trns_txt2_chc' trns_txt_opt=''>
+        <cms:if trns_txt_opt = "1" >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>   
+    <cms:func _into='trns_txtm_chc' trns_txt_opt=''>
+        <cms:if trns_txt_opt = "2" >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>   
+    <cms:func _into='trns_vid_chc' trns_vid_opt=''>
+        <cms:if trns_vid_opt ge "1"  >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func> 
+     <cms:editable type='row' name='trns_c2a_opt_row'  order='15' >
+        <cms:editable type='dropdown' name='trns_c2a_ct_opt' label='Call-to-Action Link' desc='button'
+            opt_values='No Link= |One Link=1|Two Links=2|Three Links=3|Four Links=4'
+            class='col-md-3 col-sm-6'
+            order='2'
+        />
+        <cms:func _into='trns_btn_chc' trns_c2a_ct_opt=''>
+            <cms:if trns_c2a_ct_opt ge "1"  >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func> 
+
+        <cms:editable type='dropdown' name='trns_frmt_c2a_opt' label='Call-to-Action Link Type'
+            opt_values='Button=btn|Text Only=lnk'
+            not_active=trns_btn_chc
+            class='col-md-3 col-sm-6'
+            order='4'
+        />
+        <cms:func _into='trns_btn_bn_chc' trns_c2a_ct_opt='' trns_frmt_c2a_opt=''>
+            <cms:if trns_c2a_ct_opt ge '1' &&  trns_frmt_c2a_opt='btn' >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func> 
+        <cms:func _into='trns_lnk_dvd_chc' trns_c2a_ct_opt='' trns_frmt_c2a_opt=''>
+            <cms:if trns_c2a_ct_opt ge '2' &&  trns_frmt_c2a_opt='lnk' >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func> 
+
+        <cms:editable type='dropdown' name='trns_c2a_sz' label='Button Size' 
+            opt_values='dropdowns/button-size.htm'
+            dynamic='opt_values'
+            not_active=trns_btn_bn_chc
+            class='col-md-3'
+            order='6'  
+        />
+        <cms:func _into='trns_frmt_c2a_btn_chc' trns_frmt_c2a_opt=''>
+            <cms:if trns_frmt_c2a_opt = 'btn' >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:func _into='trns_frmt_c2a_lnk_chc' trns_frmt_c2a_opt=''>
+            <cms:if trns_frmt_c2a_opt = 'lnk' >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+    </cms:editable>
+
+    <cms:func _into='trns_c2a1_chc' trns_c2a_ct_opt=''>
+        <cms:if trns_c2a_ct_opt ge '1' >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:func _into='trns_c2a2_chc' trns_c2a_ct_opt=''>
+        <cms:if trns_c2a_ct_opt ge '2' >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:func _into='trns_c2a3_chc' trns_c2a_ct_opt=''>
+        <cms:if trns_c2a_ct_opt ge '3' >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:func _into='trns_c2a4_chc' trns_c2a_ct_opt=''>
+        <cms:if trns_c2a_ct_opt ge '4' >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='row' name='trns_c2a_ml_row' not_active=trns_c2a2_chc order='20' >
+        <cms:editable type='message' name='trns_c2a_cust_lnk_msg' not_active=trns_c2a_2_chc class='col-sm-12' order='2'>
+            <h2>Options for Multiple Call-To-Action Links</h2>
+            <h4>Choose how the multiple links or button will layout. Horizontally or Vertically</h4>
+            <p>The Width Setting helps keep buttons looking uniform inside the text block</p>
+        </cms:editable>
+        <cms:editable type='dropdown' name='trns_c2a_mult_ord' label='Layout' 
+            opt_values='Stack Vertical=-vertical|Lay Horizontal='
+            dynamic='opt_values'
+            class='col-md-4'
+            order='4'  
+        /> 
+        <cms:editable type='dropdown' name='trns_c2a_mult_btn_wd' label='Nav Link Width' desc='percentage of text block'
+            opt_values='dropdowns/button-width.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='8'
+        />
+        <cms:editable type='dropdown' name='trns_frmt_c2a_mg' label='Margin' desc='space between links'
+            opt_values='2|4|6|0'
+            class='col-md-4'
+            order='10'
+        />
+        <cms:editable type='dropdown' name='trns_lnk_dvd_opt' label='Nav Link Divider' desc='Visual Separator of links'
+            opt_values='dropdowns/link-dividers.htm'
+            dynamic='opt_values'
+            separator='@'
+            not_active=trns_lnk_dvd_chc
+            class='col-md-4'
+            order='12'
+        />
+        <cms:editable type='dropdown' name='trns_lnk_dvd_clr_opt' label='Link Divider Color' desc='Visual Separator of links'
+            opt_values='dropdowns/solid-colors.htm'
+            dynamic='opt_values'
+            opt_selected="black"
+            not_active=trns_lnk_dvd_chc
+            class='col-md-4'
+            order='14'
+        />
+
+    </cms:editable>
+</cms:editable>

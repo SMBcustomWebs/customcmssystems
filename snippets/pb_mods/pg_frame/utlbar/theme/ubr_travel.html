@@ -1,0 +1,140 @@
+<section class="bg-<cms:show ccs_ubr_travel_bg_clr_opt /> py-<cms:show ccs_ubr_travel_py /> <cms:show ccs_ubr_travel_dspr /> <cms:if ccs_ubr_travel_stky>sticky-top top-0 start-0 z-3</cms:if>" id="travel" aria-label="Flight Search">
+    
+    <cms:if ccs_gl_edt_ok>
+        <div class="container-fluid pt-2">
+            <cms:popup_edit 'ccs_ubr_travel_gen_grp|ccs_ubr_travel_init_msg|ccs_ubr_travel_gen_row|ccs_ubr_travel_bg_clr_opt|ccs_ubr_travel_py|ccs_ubr_travel_dspr|ccs_ubr_travel_stky_row|ccs_ubr_travel_stky_msg|ccs_ubr_travel_stky' link_text="<span class='bg-800 link-warning'>| [EDIT BAR SETTINGS] |</span>" />
+            <cms:popup_edit 'ccs_ubr_travel_lbl_grp|ccs_ubr_travel_lbl_msg|ccs_ubr_travel_lbl_row_1|ccs_ubr_travel_lbl_origin|ccs_ubr_travel_lbl_dest|ccs_ubr_travel_lbl_dep|ccs_ubr_travel_lbl_ret|ccs_ubr_travel_lbl_pax' link_text="<span class='bg-800 link-warning'>| [EDIT LABELS] |</span>" />
+            <cms:popup_edit 'ccs_ubr_travel_btn_grp|ccs_ubr_travel_btn_msg|ccs_ubr_travel_btn_txt_row|ccs_ubr_travel_btn_txt|ccs_ubr_travel_btn_clr|ccs_ubr_travel_btn_lnk_clr|ccs_ubr_travel_btn_fmt_row|ccs_ubr_travel_btn_fill|ccs_ubr_travel_btn_st|ccs_ubr_travel_btn_sz|ccs_ubr_travel_btn_w|ccs_ubr_travel_btn_icon_row|ccs_ubr_travel_btn_icon_pos|ccs_ubr_travel_btn_icon_msg|ccs_ubr_travel_btn_icon_fa' link_text="<span class='bg-800 link-warning'>| [EDIT BUTTON] |</span>" />
+        </div>
+    </cms:if>
+    
+    <div class="container">
+      
+      <cms:set ccs_get_origin="<cms:gpc 'origin' method='get' />" scope="global" />
+      <cms:set ccs_get_dest="<cms:gpc 'dest' method='get' />" scope="global" />
+      <cms:set ccs_get_depart="<cms:gpc 'depart' method='get' />" scope="global" />
+      <cms:set ccs_get_return="<cms:gpc 'return' method='get' />" scope="global" />
+      <cms:set ccs_get_pax="<cms:gpc 'pax' method='get' />" scope="global" />
+
+      <cms:form method="POST" anchor="0" class="row align-items-end">
+          
+        <cms:if k_success >
+            <cms:set raw_origin="<cms:gpc 'origin' method='post' />" />
+            <cms:set raw_dest="<cms:gpc 'destination' method='post' />" />
+            <cms:redirect url="<cms:link 'travel_results.php' />?origin=<cms:show raw_origin urlencode='1' />&dest=<cms:show raw_dest urlencode='1' />&depart=<cms:show frm_departure urlencode='1' />&return=<cms:show frm_return urlencode='1' />&pax=<cms:show frm_passengers urlencode='1' />" />
+        </cms:if>
+
+        <style> .js-travel-date[readonly] { background-color: inherit; } </style>
+
+        <div class="col-lg-2 col-md-4 mb-3 mb-lg-0">
+          <label for="origin" class="form-label mb-1"><cms:show ccs_ubr_travel_lbl_origin /></label>
+          <div class="input-group">
+              <select name="origin" id="origin" class="form-select border-end-0" required>
+                  <option value="" disabled <cms:if "<cms:not ccs_get_origin />">selected</cms:if>>Select...</option>
+                  <cms:pages masterpage='locations.php' orderby='page_title' order='asc'>
+                      <option value="<cms:show k_page_name />" <cms:if k_page_name == ccs_get_origin>selected</cms:if>><cms:show k_page_title /></option>
+                  </cms:pages>
+              </select>
+              <span class="input-group-text bg-transparent border-start-0 ps-0 pe-2"><i class="fa-solid fa-plane-departure text-muted" aria-hidden="true"></i></span>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-md-4 mb-3 mb-lg-0">
+          <label for="destination" class="form-label mb-1"><cms:show ccs_ubr_travel_lbl_dest /></label>
+          <div class="input-group">
+              <select name="destination" id="destination" class="form-select border-end-0" required>
+                  <option value="" disabled <cms:if "<cms:not ccs_get_dest />">selected</cms:if>>Select...</option>
+                  <cms:pages masterpage='locations.php' orderby='page_title' order='asc'>
+                      <option value="<cms:show k_page_name />" <cms:if k_page_name == ccs_get_dest>selected</cms:if>><cms:show k_page_title /></option>
+                  </cms:pages>
+              </select>
+              <span class="input-group-text bg-transparent border-start-0 ps-0 pe-2"><i class="fa-solid fa-plane-arrival text-muted" aria-hidden="true"></i></span>
+          </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-4 mb-3 mb-lg-0">
+          <label for="departure" class="form-label mb-1"><cms:show ccs_ubr_travel_lbl_dep /></label>
+          <div class="input-group">
+              <cms:input type="text" name="departure" id="departure" class="form-control border-end-0 js-travel-date" placeholder="Select..." value=ccs_get_depart required='1' />
+              <span class="input-group-text bg-transparent border-start-0 ps-0 pe-2"><i class="fa-regular fa-calendar-days text-muted" aria-hidden="true"></i></span>
+          </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-4 mb-3 mb-lg-0">
+          <label for="return" class="form-label mb-1"><cms:show ccs_ubr_travel_lbl_ret /></label>
+          <div class="input-group">
+              <cms:input type="text" name="return" id="return_date" class="form-control border-end-0 js-travel-date" placeholder="Select..." value=ccs_get_return required='1' />
+              <span class="input-group-text bg-transparent border-start-0 ps-0 pe-2"><i class="fa-regular fa-calendar-days text-muted" aria-hidden="true"></i></span>
+          </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-4 mb-3 mb-lg-0">
+          <label for="passengers" class="form-label mb-1"><cms:show ccs_ubr_travel_lbl_pax /></label>
+          <div class="input-group">
+              <cms:input type="text" name="passengers" id="passengers" class="form-control border-end-0" validator="non_zero_integer" min="1" value="<cms:if ccs_get_pax><cms:show ccs_get_pax /><cms:else />1</cms:if>" required='1' />
+              <span class="input-group-text bg-transparent border-start-0 ps-0 pe-2"><i class="fa-solid fa-user-group text-muted" aria-hidden="true"></i></span>
+          </div>
+        </div>
+        
+        <div class="col-lg-2 col-md-4">
+            <cms:capture into='final_cta_class' scope='global'>
+                <cms:if ccs_ubr_travel_btn_clr == 'link'>
+                    btn btn-link link-<cms:show ccs_ubr_travel_btn_lnk_clr /> text-decoration-none <cms:show ccs_ubr_travel_btn_w /> <cms:show ccs_ubr_travel_btn_icon_pos />
+                </cms:if>
+                <cms:if ccs_ubr_travel_btn_clr != 'link'>
+                    btn <cms:if ccs_ubr_travel_btn_clr>btn<cms:show ccs_ubr_travel_btn_fill />-<cms:show ccs_ubr_travel_btn_clr /></cms:if> <cms:show ccs_ubr_travel_btn_st /> <cms:if ccs_ubr_travel_btn_sz>btn<cms:show ccs_ubr_travel_btn_sz /></cms:if> <cms:show ccs_ubr_travel_btn_w /> <cms:show ccs_ubr_travel_btn_icon_pos />
+                </cms:if>
+            </cms:capture>
+
+            <button type="submit" name="submit" id="submit" class="<cms:show final_cta_class />">
+                <cms:if ccs_ubr_travel_btn_icon_pos == 'btn-icon-left'><cms:if "<cms:not_empty ccs_ubr_travel_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_travel_btn_icon_fa /> me-2" aria-hidden="true"></i></span></cms:if></cms:if>
+                <cms:show ccs_ubr_travel_btn_txt />
+                <cms:if ccs_ubr_travel_btn_icon_pos == 'btn-icon-right'><cms:if "<cms:not_empty ccs_ubr_travel_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_travel_btn_icon_fa /> ms-2" aria-hidden="true"></i></span></cms:if></cms:if>
+            </button>
+        </div>
+        
+      </cms:form>
+    </div>
+</section>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var paxInput = document.getElementById('passengers');
+    if(paxInput) { paxInput.type = 'number'; }
+
+    if (typeof flatpickr !== 'undefined') {
+        var retEl = document.getElementById("return_date");
+        var depEl = document.getElementById("departure");
+
+        var initRet = retEl ? retEl.value : null;
+        var initDep = depEl ? depEl.value : null;
+
+        if (retEl && depEl) {
+            var retPicker = flatpickr(retEl, {
+                enableTime: false,
+                dateFormat: "Y-m-d",         
+                altInput: true,
+                altFormat: "F j, Y",
+                minDate: "today",
+                defaultDate: initRet,
+                disableMobile: "true"
+            });
+
+            flatpickr(depEl, {
+                enableTime: false,
+                dateFormat: "Y-m-d",         
+                altInput: true,
+                altFormat: "F j, Y",
+                minDate: "today",
+                defaultDate: initDep,
+                disableMobile: "true",
+                onChange: function(selectedDates, dateStr, instance) {
+                    retPicker.set('minDate', dateStr);
+                }
+            });
+        }
+    }
+});
+</script>

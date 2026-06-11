@@ -1,0 +1,128 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_mnu_gen_grp" label="General Settings" order="10">
+    <cms:editable type='message' name='ccs_ubr_mnu_gen_msg' order='10' >
+        <h2>Utility Bar: Dual Navigation Menu</h2>
+        <p>Displays two separate sets of navigational links (Left/Right on desktop, Top/Bottom on mobile).</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_mnu_stl_row' order='20' >
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_pd' label='Height Padding' opt_values='dropdowns/util-pad.htm' dynamic='opt_values' class='col-md-4' order='10' />
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_bg_clr_opt' label='Bar Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='20' />
+        <cms:editable type='checkbox' name='ccs_ubr_mnu_swap' label='Swap Menu Sides' desc='Swaps link-group sides' opt_values='Yes=1' class='col-md-4' order='30' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_mnu_stky_row' order='30'>
+        <cms:editable type='message' name='ccs_ubr_mnu_frmt_msg' class='col-md-9' order='10' >
+            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin-top:10px;">
+                <strong>Sticky Positioning Warning:</strong><br> "Stick Bar To Top" should not be used if your Main Navigation Menu is also set to sticky.
+            </div>
+        </cms:editable>
+        <cms:editable type='checkbox' name='ccs_ubr_mnu_stky' label='Stick Bar To Top' desc='Stays visible on scroll' opt_values='Yes=1' class='col-md-3' order='20' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type='group' name='ccs_ubr_mnu_sc1_grp' label='Section 1: Formatting & Links' order='20' >
+    <cms:editable type='message' name='ccs_ubr_mnu_sc1_init_msg' order='5'>
+        <h3>Section 1 Formatting</h3>
+        <p>Control the typography for the links. Leave as "Default" to inherit global styles.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_mnu_sc1_txt_row' order='10' >
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc1_text' label='Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc1_sz' label='Text Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20' />
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc1_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='30' />
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc1_fw' label='Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='40' />  
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc1_fst' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='50' />
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc1_ls' label='Letter Spacing' opt_values='dropdowns/hdr_ltr-spc.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='60' />
+    </cms:editable>
+
+    <cms:editable type='message' name='ccs_ubr_mnu_sc1_rpt_msg' order='20' >
+        <br><hr><br>
+        <h3>Section 1 Links</h3>
+        <p>Define the links that will appear in this cluster.</p>
+        <div style="background-color: #f8f9fa; border-left: 4px solid #007bff; padding: 10px 15px; margin-top:10px; margin-bottom:10px;">
+            <p style="margin-bottom: 5px;"><strong>Font Awesome Icon Instructions:</strong></p>
+            <p style="margin-bottom: 5px;">Find your icon at <a href="https://fontawesome.com/v6/search?m=free" target="_blank">Font Awesome v6</a>. Paste the full class name below.</p>
+            <p style="margin-bottom: 0;"><em>Examples:</em> <code>fa-solid fa-comments</code> or <code>fa-brands fa-github</code></p>
+        </div>
+    </cms:editable>
+    
+    <cms:repeatable name='ccs_ubr_mnu_sc1_rpt' label='Section 1 Nav Links' stacked_layout='1' order='30'>
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc1_lnk' label='Route Destination' opt_values='dropdowns/links.htm' dynamic='opt_values' order='10' />
+        <cms:func _into='ccs_ubr_mnu_sc1_is_custom' ccs_ubr_mnu_sc1_lnk=''><cms:if ccs_ubr_mnu_sc1_lnk='custom'>0<cms:else />1</cms:if></cms:func>
+        <cms:editable type='text' name='ccs_ubr_mnu_sc1_cst' label='Custom URL Destination' desc='Input the entire URL (e.g., https://mysite.com/)' width='400' not_active=ccs_ubr_mnu_sc1_is_custom order='20' />
+        <cms:editable type='text' name='ccs_ubr_mnu_sc1_ttl' label='Link Title' width='200' maxlength="40" order='30' />
+        <cms:editable type='text' name='ccs_ubr_mnu_sc1_icn' label='Font Awesome Icon Class' width='400' maxlength='100' order='40' />
+
+        <cms:config_list_view>
+            <cms:field 'k_content'>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0;">
+                    <div>
+                        <strong style="font-size: 14px; color: #007bff;"><cms:show ccs_ubr_mnu_sc1_ttl /></strong>
+                        <span style="color: #6c757d; font-size: 12px; margin-left: 10px;">
+                            <cms:if ccs_ubr_mnu_sc1_lnk == 'custom'>&rarr; <cms:show ccs_ubr_mnu_sc1_cst /><cms:else />&rarr; <cms:show ccs_ubr_mnu_sc1_lnk /></cms:if>
+                        </span>
+                    </div>
+                    <div style="background: #e9ecef; padding: 4px 10px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #495057;">
+                        <cms:if ccs_ubr_mnu_sc1_icn><cms:show ccs_ubr_mnu_sc1_icn /><cms:else />(No Icon)</cms:if>
+                    </div>
+                </div>
+            </cms:field>
+        </cms:config_list_view>
+    </cms:repeatable>
+</cms:editable>
+
+<cms:editable type='group' name='ccs_ubr_mnu_sc2_grp' label='Section 2: Formatting & Links' order='30' >
+    <cms:editable type='message' name='ccs_ubr_mnu_sc2_init_msg' order='5'>
+        <h3>Section 2 Formatting</h3>
+        <p>Control the typography for the links. Leave as "Default" to inherit global styles.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_mnu_sc2_txt_row' order='10' >
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc2_text' label='Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc2_sz' label='Text Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20' />
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc2_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='30' />
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc2_fw' label='Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='40' />  
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc2_fst' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='50' />
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc2_ls' label='Letter Spacing' opt_values='dropdowns/hdr_ltr-spc.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='60' />
+    </cms:editable>
+
+    <cms:editable type='message' name='ccs_ubr_mnu_sc2_rpt_msg' order='20' >
+        <br><hr><br>
+        <h3>Section 2 Links</h3>
+        <p>Define the links that will appear in this cluster.</p>
+        <div style="background-color: #f8f9fa; border-left: 4px solid #007bff; padding: 10px 15px; margin-top:10px; margin-bottom:10px;">
+            <p style="margin-bottom: 5px;"><strong>Font Awesome Icon Instructions:</strong></p>
+            <p style="margin-bottom: 5px;">Find your icon at <a href="https://fontawesome.com/v6/search?m=free" target="_blank">Font Awesome v6</a>. Paste the full class name below.</p>
+            <p style="margin-bottom: 0;"><em>Examples:</em> <code>fa-solid fa-comments</code> or <code>fa-brands fa-github</code></p>
+        </div>
+    </cms:editable>
+    
+    <cms:repeatable name='ccs_ubr_mnu_sc2_rpt' label='Section 2 Nav Links' stacked_layout='1' order='30'>
+        <cms:editable type='dropdown' name='ccs_ubr_mnu_sc2_lnk' label='Route Destination' opt_values='dropdowns/links.htm' dynamic='opt_values' order='10' />
+        <cms:func _into='ccs_ubr_mnu_sc2_is_custom' ccs_ubr_mnu_sc2_lnk=''><cms:if ccs_ubr_mnu_sc2_lnk='custom'>0<cms:else />1</cms:if></cms:func>
+        <cms:editable type='text' name='ccs_ubr_mnu_sc2_cst' label='Custom URL Destination' desc='Input the entire URL (e.g., https://mysite.com/)' width='400' not_active=ccs_ubr_mnu_sc2_is_custom order='20' />
+        <cms:editable type='text' name='ccs_ubr_mnu_sc2_ttl' label='Link Title' width='200' maxlength="40" order='30' />
+        <cms:editable type='text' name='ccs_ubr_mnu_sc2_icn' label='Font Awesome Icon Class' width='400' maxlength='100' order='40' />
+
+        <cms:config_list_view>
+            <cms:field 'k_content'>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0;">
+                    <div>
+                        <strong style="font-size: 14px; color: #007bff;"><cms:show ccs_ubr_mnu_sc2_ttl /></strong>
+                        <span style="color: #6c757d; font-size: 12px; margin-left: 10px;">
+                            <cms:if ccs_ubr_mnu_sc2_lnk == 'custom'>&rarr; <cms:show ccs_ubr_mnu_sc2_cst /><cms:else />&rarr; <cms:show ccs_ubr_mnu_sc2_lnk /></cms:if>
+                        </span>
+                    </div>
+                    <div style="background: #e9ecef; padding: 4px 10px; border-radius: 4px; font-family: monospace; font-size: 12px; color: #495057;">
+                        <cms:if ccs_ubr_mnu_sc2_icn><cms:show ccs_ubr_mnu_sc2_icn /><cms:else />(No Icon)</cms:if>
+                    </div>
+                </div>
+            </cms:field>
+        </cms:config_list_view>
+    </cms:repeatable>
+</cms:editable>

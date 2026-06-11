@@ -1,0 +1,83 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_booking_gen_grp" label="General Layout & Colors" order="10">
+    <cms:editable type='message' name='ccs_ubr_booking_init_msg' order='1'>
+        <h2>Utility Bar: Booking Form</h2>
+        <p>A specialized date-selection form with a guest modifier.</p>
+        <br><hr>
+    </cms:editable>
+    <cms:editable type='row' name='ccs_ubr_booking_gen_row' order='2'>
+        <cms:editable type='dropdown' name='ccs_ubr_booking_bg_clr_opt' label='Bar Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='1' />
+        <cms:editable type='dropdown' name='ccs_ubr_booking_py' label='Height Padding' opt_values='dropdowns/util-pad.htm' dynamic='opt_values' class='col-md-4' order='2' />
+        <cms:editable type='dropdown' name='ccs_ubr_booking_dspr' label='Responsive Visibility' opt_values='dropdowns/display.htm' dynamic='opt_values' class='col-md-4' order='3' />
+    </cms:editable>
+    <cms:editable type='row' name='ccs_ubr_booking_stky_row' order='3'>
+        <cms:editable type='message' name='ccs_ubr_booking_stky_msg' class='col-md-9' order='1'>
+            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin-top:10px;">
+                <strong>Sticky Positioning Warning:</strong><br> "Stick Bar To Top" should not be used if your Main Navigation Menu is also set to sticky.
+            </div>
+        </cms:editable>
+        <cms:editable type='checkbox' name='ccs_ubr_booking_stky' label='Stick Bar To Top' desc='stays visible on scroll' opt_values='Yes=1' class='col-md-3' order='2' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_booking_lbl_grp" label="Form Labels" order="20">
+    <cms:editable type='message' name='ccs_ubr_booking_lbl_msg' order='5'>
+        <h3>Search Form Labels</h3>
+        <p>Customize the text labels that appear directly above the search inputs.</p>
+        <br><hr>
+    </cms:editable>
+    <cms:editable type='row' name='ccs_ubr_booking_lbl_row_1' order='10'>
+        <cms:editable type='text' name='ccs_ubr_booking_lbl_checkin' label='Check-In Field Label' default='Check-in Date' class='col-md-4' order='1'/>
+        <cms:editable type='text' name='ccs_ubr_booking_lbl_checkout' label='Check-Out Field Label' default='Check-out Date' class='col-md-4' order='2'/>
+        <cms:editable type='text' name='ccs_ubr_booking_lbl_guest' label='Guests Field Label' default='Guests' class='col-md-4' order='3'/>
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_booking_btn_grp" label="Submit Action Button" order="30">
+    <cms:editable type='message' name='ccs_ubr_booking_btn_msg' order='5'>
+        <h3>Submit Button Configurations</h3>
+        <p>Define the submit button text and appearance for the form.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_booking_btn_txt_row' order='10'>
+        <cms:editable type='text' name='ccs_ubr_booking_btn_txt' label='Button Text' default='Search Availability' maxlength='60' class='col-md-4 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ubr_booking_btn_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20' />
+        
+        <cms:func _into='ccs_ubr_booking_btn_is_link' ccs_ubr_booking_btn_clr=''><cms:if ccs_ubr_booking_btn_clr='link'>0<cms:else />1</cms:if></cms:func>
+        <cms:func _into='ccs_ubr_booking_btn_not_link' ccs_ubr_booking_btn_clr=''><cms:if ccs_ubr_booking_btn_clr='link'>1<cms:else />0</cms:if></cms:func>
+        
+        <cms:editable type='dropdown' name='ccs_ubr_booking_btn_lnk_clr' label='Link Text Color (If Link Chosen)' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' not_active=ccs_ubr_booking_btn_is_link class='col-md-4 col-sm-6' order='30' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_booking_btn_fmt_row' not_active=ccs_ubr_booking_btn_not_link order='20'>
+        <cms:editable type='dropdown' name='ccs_ubr_booking_btn_fill' label='Fill Style' opt_values='dropdowns/button-fill.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ubr_booking_btn_st' label='Button Shape' opt_values='dropdowns/button-style.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='20' />
+        <cms:editable type='dropdown' name='ccs_ubr_booking_btn_sz' label='Button Size' opt_values='dropdowns/button-size.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='30' />
+        <cms:editable type='dropdown' name='ccs_ubr_booking_btn_w' label='Button Width' opt_values='dropdowns/button-width.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='40' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_booking_btn_icon_row' not_active=ccs_ubr_booking_btn_not_link order='30'>
+        <cms:editable type='dropdown' name='ccs_ubr_booking_btn_icon_pos' label='Icon Position' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10' />
+        
+        <cms:func _into='ccs_ubr_booking_btn_no_icon' ccs_ubr_booking_btn_icon_pos=''><cms:if ccs_ubr_booking_btn_icon_pos=''>1<cms:else />0</cms:if></cms:func>
+        
+        <cms:editable type='message' name='ccs_ubr_booking_btn_icon_msg' not_active=ccs_ubr_booking_btn_no_icon class='col-md-4 col-sm-6' order='15'>
+            <p class="mb-0 mt-3 text-muted" style="font-size:12px;">Find icons at <a href="https://fontawesome.com/v6/search?m=free" target="_blank">Font Awesome v6</a>.</p>
+        </cms:editable>
+        <cms:editable type='text' name='ccs_ubr_booking_btn_icon_fa' label='Font Awesome Class (e.g., fa-solid fa-arrow-right)' maxlength='50' width='300' not_active=ccs_ubr_booking_btn_no_icon class='col-md-4 col-sm-12' order='20' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_booking_msg_grp" label="Validation Error Message" order="50">
+    <cms:editable type='message' name='ccs_ubr_booking_err_msg' order='1'>
+        <h3>Error Handling</h3>
+        <br><hr>
+    </cms:editable>
+    <cms:editable type='row' name='ccs_ubr_booking_msg_row' order='2'>
+        <cms:editable type='textarea' name='ccs_ubr_booking_error_msg' label='Error Message' desc='Displays if validation fails (e.g., negative guests)' height='80' class='col-md-12' order='1'>
+            There was an error processing your request. Please double-check your inputs and try again.
+        </cms:editable>
+    </cms:editable>
+</cms:editable>

@@ -1,0 +1,64 @@
+<footer class="py-<cms:show ccs_ftr_bsc_pad_y /> bg-<cms:show ccs_ftr_bsc_bg_clr_opt />">
+    <cms:if ccs_gl_edt_ok>
+        <div class="container-fluid pt-2">
+            <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_gen_stng_msg|ccs_ftr_bsc_gen_set_row|ccs_ftr_bsc_pad_y|ccs_ftr_bsc_bg_clr_opt' link_text="<span class='bg-800 link-warning'>| [Background &amp; Height] |</span>" />
+            <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_typ_msg|ccs_ftr_bsc_txt_fmt_row|ccs_ftr_bsc_text|ccs_ftr_bsc_fs|ccs_ftr_bsc_font|ccs_ftr_bsc_fwt|ccs_ftr_bsc_fst|ccs_ftr_bsc_ls' link_text="<span class='bg-800 link-warning'>| [Format Text] |</span>" />
+        </div>
+    </cms:if>
+    
+    <div class="container">
+        <div class="row align-items-center justify-content-between">
+            <div class="col-auto link-<cms:show ccs_ftr_bsc_text /> font-<cms:show ccs_ftr_bsc_font /> fs-<cms:show ccs_ftr_bsc_fs /> fst-<cms:show ccs_ftr_bsc_fst /> fw-<cms:show ccs_ftr_bsc_fwt /> ls-<cms:show ccs_ftr_bsc_ls />">
+                <cms:if "<cms:not_empty ccs_ftr_bsc_site_logo />">
+                    <img class="d-inline-block align-middle me-2" src="<cms:show ccs_ftr_bsc_site_logo />" alt="<cms:show ccs_ftr_bsc_site_logo_alt />" style="max-width: 150px;" />
+                </cms:if>
+                &copy; <cms:date format='Y' /> <cms:get_field 'ccs_gl_site_name' masterpage="globals.php" />
+                <cms:if ccs_gl_edt_ok>
+                    <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_img_msg|ccs_ftr_bsc_img_row|ccs_ftr_bsc_site_logo|ccs_ftr_bsc_site_logo_alt' link_text="<span class='bg-800 link-warning ms-2'>| [EDIT Logo] |</span>" /> 
+                </cms:if>
+            </div>
+            
+            <div class="col-auto">
+                <cms:show_repeatable 'ccs_ftr_bsc_lnks_rpt'>
+                    
+                    <cms:set final_icon="" scope='global' />
+                    
+                    <cms:if ccs_ftr_bsc_lnk_dd == 'custom'>
+                        <cms:set final_ftr_lnk="<cms:show ccs_ftr_bsc_lnk_cst />" scope='global' />
+                        <cms:set final_ftr_tgt="target='_blank'" scope='global' />
+                        <cms:set final_icon="<i class='fa-solid fa-arrow-up-right-from-square ms-1' style='font-size: 0.75em;' aria-hidden='true'></i>" scope='global' />
+                    <cms:else />
+                        <cms:set final_ftr_lnk="<cms:show ccs_ftr_bsc_lnk_dd />" scope='global' />
+                        <cms:set final_ftr_tgt="" scope='global' />
+                    </cms:if>
+                    
+                    <a class="d-md-inline-block link-<cms:show ccs_ftr_bsc_text /> font-<cms:show ccs_ftr_bsc_font /> fs-<cms:show ccs_ftr_bsc_fs /> fst-<cms:show ccs_ftr_bsc_fst /> fw-<cms:show ccs_ftr_bsc_fwt /> ls-<cms:show ccs_ftr_bsc_ls />" href="<cms:show final_ftr_lnk />" <cms:show final_ftr_tgt />>
+                        <cms:show ccs_ftr_bsc_ttl /> <cms:show final_icon /> 
+                    </a>
+                    
+                    <cms:if "<cms:not k_last_row />">
+                        <span class="px-2 text-<cms:show ccs_ftr_bsc_text />" aria-hidden="true">|</span>
+                    </cms:if>
+                </cms:show_repeatable>
+                
+                <cms:if ccs_gl_edt_ok>                  
+                    <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_lnk_msg|ccs_ftr_bsc_lnks_rpt' link_text="<span class='bg-800 link-warning ms-2'>| [EDIT Links] |</span>" /> 
+                </cms:if>
+            </div>
+            
+            <div class="col-auto">
+                <cms:pages masterpage='globals.php' limit='1'>
+                    <cms:show_repeatable 'ccs_gl_social'>
+                        <a class="p-2 link-<cms:show ccs_ftr_bsc_text />" href="<cms:show ccs_gl_social_link />" title="<cms:show ccs_gl_social_name />" target="_blank">
+                            <span class="<cms:show ccs_gl_social_icon /> fs-<cms:show ccs_ftr_bsc_fs />" data-fa-transform="up-1" aria-hidden="true"></span>
+                            <span class="visually-hidden"><cms:show ccs_gl_social_name /></span>
+                        </a>
+                    </cms:show_repeatable>
+                    <cms:if ccs_gl_edt_ok>
+                        <cms:popup_edit 'ccs_gl_site_scl_grp|ccs_gl_social_msg|ccs_gl_social' link_text="<span class='bg-800 link-warning ms-2'>| [EDIT Social] |</span>" />
+                    </cms:if>
+                </cms:pages>                
+            </div>
+        </div>
+    </div>
+</footer>

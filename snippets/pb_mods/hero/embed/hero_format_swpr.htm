@@ -1,0 +1,262 @@
+<cms:editable type="group" name="hero_swpr_frmt_gen_grp" label="General Carousell Settings" order="300" >  
+    <cms:editable type='row' name='hero_swpr_frmt_gen_ht_row' label='General Settings Row' order='305'>
+        <cms:editable type='message' name='hero_swpr_frmt_gen_ht_msg' order='2'>
+            <h2>Settings for the general size of this Hero Section</h2><h4>Height is the size of the background window.</h4>
+        </cms:editable>
+		<cms:editable type='dropdown' name='hero_swpr_slide_cnt' label='Number of Slides' desc='How many slides in this carousel?' opt_values='1|2|3|4|5' class='col-md-4' order='4' />
+        <cms:editable type='dropdown' name='hero_swpr_vht' label='Height' desc='size' opt_values='Full=100|Half=50|3/4=75|1/4=25' class='col-md-4' order='6' />
+		 <cms:editable type='dropdown' name='ccs_hro_swpr_bg_scrl_spd' label='Page Scrolling Effect' desc='Creates a 3D effect. Negative numbers push the image behind the page; positive numbers pull it to the front.'
+					opt_values='dropdowns/prlx-scrl.htm'
+					dynamic='opt_values'
+					class='col-md-4'
+					order='8'
+				/>
+    </cms:editable>
+    <cms:editable type='row' name='hero_swpr_frmt_gen_swpr_row' order='308'>
+        <cms:editable type='message' name='hero_swpr_frmt_gen_swpr_msg' order='2'>
+            <hr><br>
+            <h2>Settings for Carousell Slide Transitions</h2>
+        </cms:editable>
+        <cms:editable type='dropdown' name='hero_swpr_delay' label='Time Delay' desc='in seconds' opt_values='5=5000|7=7000|3=3000|9=9000|12=12000|15=15000|20=20000' class='col-md-3' order='4' />
+        <cms:editable type='dropdown' name='hero_swpr_trns' label='Slide Transitions' desc='visual change' opt_values='dropdowns/transitions.htm' dynamic='opt_values' class='col-md-3' order='6' />
+        <cms:editable type='dropdown' name='hero_swpr_arw_clr' label='Arrow Color' desc='arrows for previous and next slide' opt_values='dropdowns/shades_gray.htm' opt_selected='800' dynamic='opt_values' class='col-md-3' order='8' >black</cms:editable>
+        <cms:editable type='dropdown' name='hero_swpr_arw_bg_clr' label='Arrow Backing Color' desc='seperates arrows from image' opt_values='dropdowns/shades_gray.htm' opt_selected='200' dynamic='opt_values' class='col-md-3' order='10' />
+    </cms:editable>
+    <cms:editable type='row' name='hero_swpr_frmt_gen_bg_row' label='General Settings Row' order='310'>
+		<cms:editable type='message' name='hero_swpr_glbl_clr_msg' order='2'>
+			<hr><br>
+			<h2>Universal Background Color</h2>
+			<h3>Choosing 'Gradient' will open up additional options below.</h3>
+			<p>This color sits behind all slides globally. Individual slides control their own image and overlay opacities.</p>
+		</cms:editable>
+
+        <cms:editable type='dropdown' name='hero_swpr_bg_clr_opt' label='Hero Background Color' desc='' opt_values='dropdowns/all-colors.htm' dynamic='opt_values' class='col-md-12' order='6' />
+    </cms:editable>
+    
+     
+    
+    <cms:editable type='row' name='hero_swpr_txtbx_mode_row' order='318'>
+        <cms:editable type='message' name='hero_swpr_txtbx_mode_msg' order='2'>
+            <hr><br><h2>Text Box Layout & Style Mode</h2>
+            <p>This controls Box Size, Alignment, Padding, Backgrounds, and Borders.</p>
+        </cms:editable>
+        <cms:editable type='radio' name='hero_swpr_glbl_txtbx_mode' label='Slide options for Text Box Layout' opt_values='Local=local | Global=global' opt_selected='local' class='col-md-12' order='4' />
+    </cms:editable>
+
+    <cms:func _into='hide_glbl_txtbx' hero_swpr_glbl_txtbx_mode=''>
+        <cms:if hero_swpr_glbl_txtbx_mode == 'local'>1<cms:else />0</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='hero_swpr_txtblk_gen_row' not_active=hide_glbl_txtbx label='Global Text Block Size and Alignment' order='325' >
+         <cms:editable type='message' name='hero_swpr_txtblk_gen_msg' order='2'>
+             <h2>Global Text Box Size and Placement</h2>
+        </cms:editable>
+        <cms:editable type='dropdown' name='hero_swpr_txtbx_sz_opt' label='Size of Text Box' desc='Choosing "Custom" opens options' opt_values='dropdowns/hero_txt-box_size.htm' dynamic='opt_values' class='col-md-3' order='4' />
+        <cms:editable type='dropdown' name='hero_swpr_txtbx_valg' label='Align Text Vertical' desc='Top, Middle, Bottom' opt_values='dropdowns/v-align.htm' dynamic='opt_values' class='col-md-3' order='6' />
+        <cms:editable type='dropdown' name='hero_swpr_txtbx_halg' label='Align Text Box Horizontal' desc='Left, Center, Right' opt_values='dropdowns/h-align.htm' dynamic='opt_values' class='col-md-3' order='8' />
+        <cms:editable type='dropdown' name='hero_swpr_txt_halg' label='Align Inside Textbox' desc='Alignment of what is inside the text block' opt_values='dropdowns/h-align.htm' dynamic='opt_values' class='col-md-3' order='10' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='hero_swpr_txtblk_opt_row' not_active=hide_glbl_txtbx label='Global Text Block Settings' order='326' >
+        <cms:editable type='dropdown' name='hero_swpr_py_ht' label='Top and Bottom Padding' desc='Outer padding' opt_values='0|3|6|8|11' opt_selected='0' class='col-md-6' order='2' />
+        <cms:editable type='dropdown' name='hero_swpr_txtbx_bg_opt' label='Text Box Style' desc='Background visibility' opt_values='None=none|Backdrop Only=backdrop|Backdrop with Border=border' opt_selected='none' class='col-md-6' order='4' />
+    </cms:editable>
+
+    <cms:func _into='hide_glbl_txtbx_bg' hero_swpr_glbl_txtbx_mode='' hero_swpr_txtbx_bg_opt=''>
+        <cms:if hero_swpr_glbl_txtbx_mode == 'local'>
+            1
+        <cms:else_if hero_swpr_txtbx_bg_opt == 'none' />
+            1
+        <cms:else />
+            0
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='hero_swpr_txtblk_bg_clr_row' not_active=hide_glbl_txtbx_bg order='327'>
+        <cms:editable type='dropdown' name='hero_swpr_txtblk_bg_pd' label='Inner Padding' desc='space from text block edge' opt_values='dropdowns/padding.htm' dynamic='opt_values' class='col-md-4' order='2' />
+        <cms:editable type='dropdown' name='hero_swpr_txtblk_bg_clr' label='Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='4' />
+        <cms:editable type='dropdown' name='hero_swpr_txtblk_bg_opc' label='Background Opacity' desc='Transparency of the text box' opt_values='dropdowns/img-transparency.htm' dynamic='opt_values' class='col-md-4' order='6' />
+    </cms:editable>
+
+    <cms:func _into='hide_glbl_txtbx_brd' hero_swpr_glbl_txtbx_mode='' hero_swpr_txtbx_bg_opt=''>
+        <cms:if hero_swpr_glbl_txtbx_mode == 'local'>
+            1
+        <cms:else_if hero_swpr_txtbx_bg_opt != 'border' />
+            1
+        <cms:else />
+            0
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='hero_swpr_txtblk_brd_row' not_active=hide_glbl_txtbx_brd order='328'>
+        <cms:editable type='dropdown' name='hero_swpr_txtblk_bg_brd_siz' label='Border Size' opt_values='dropdowns/border-size.htm' dynamic='opt_values' class='col-md-3' order='2' />
+        <cms:editable type='dropdown' name='hero_swpr_txtblk_bg_brd_sty' label='Border Style' opt_values='dropdowns/border-style.htm' dynamic='opt_values' class='col-md-3' order='4' />
+        <cms:editable type='dropdown' name='hero_swpr_txtblk_bg_brd_clr' label='Border Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-3' order='6' />
+        <cms:editable type='dropdown' name='hero_swpr_txtblk_brd_rad' label='Border Radius' opt_values='0 | 1 | 2 | 3 | 4 | 5 | circle | pill' class='col-md-3' order='8' />
+		<cms:editable type='dropdown' name='ccs_hro_swpr_txtblk_brd_spc' label='Border Distance' desc='space around the border'
+			opt_values='0|.10|.25|.50|.60|.75|.85|1|1.10|1.25'
+			opt_selected='.50'
+			class='col-md-4'
+			order='10'
+		/>
+    </cms:editable>
+
+    <cms:editable type='row' name='hero_swpr_typo_mode_row' order='330'>
+        <cms:editable type='message' name='hero_swpr_typo_mode_msg' order='2'>
+            <hr><br><h2>Typography Management Mode</h2>
+        </cms:editable>
+        <cms:editable type='radio' name='hero_swpr_glbl_typo_mode' label='Slide options for Typography' opt_values='Local=local | Global=global' opt_selected='local' class='col-md-12' order='4' />
+    </cms:editable>
+
+    <cms:func _into='hide_glbl_typo' hero_swpr_glbl_typo_mode=''>
+        <cms:if hero_swpr_glbl_typo_mode == 'local'>1<cms:else />0</cms:if>
+    </cms:func>
+
+    <cms:editable type='message' name='ccs_hro_swpr_glbl_eye_msg' not_active=hide_glbl_typo order='332'>
+        <h3>Global Eyebrow Style</h3>
+    </cms:editable>
+    <cms:editable type='row' name='ccs_hro_swpr_glbl_eye_row' not_active=hide_glbl_typo label='Global Eyebrow Style' order='335'>
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_eye_clr' label='Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-2' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_eye_sz' label='Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-2' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_eye_wt' label='Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-2' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_eye_fst' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-2' order='8' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_eye_fam' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-2' order='10' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_eye_lspc' label='Letter Spacing' opt_values='dropdowns/hdr_ltr-spc.htm' dynamic='opt_values' class='col-md-2' order='12' />
+    </cms:editable>
+
+    <cms:editable type='message' name='ccs_hro_swpr_glbl_hd_msg' not_active=hide_glbl_typo order='337'>
+        <hr><br><h3>Global Headline Style</h3>
+    </cms:editable>
+    <cms:editable type='row' name='ccs_hro_swpr_glbl_hd_row' not_active=hide_glbl_typo label='Global Headline Style' order='340'>
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_hd_clr' label='Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-2' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_hd_sz' label='Size' opt_values='dropdowns/heading-size.htm' dynamic='opt_values' class='col-md-2' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_hd_wt' label='Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-2' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_hd_fst' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-2' order='8' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_hd_fam' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-2' order='10' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_hd_lspc' label='Letter Spacing' opt_values='dropdowns/hdr_ltr-spc.htm' dynamic='opt_values' class='col-md-2' order='12' />
+    </cms:editable>
+
+    <cms:editable type='message' name='ccs_hro_swpr_glbl_sub_msg' not_active=hide_glbl_typo order='342'>
+        <hr><br><h3>Global Subheadline Style</h3>
+    </cms:editable>
+    <cms:editable type='row' name='ccs_hro_swpr_glbl_sub_row' not_active=hide_glbl_typo label='Global Subheadline Style' order='345'>
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_sub_clr' label='Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-2' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_sub_sz' label='Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-2' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_sub_wt' label='Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-2' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_sub_fst' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-2' order='8' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_sub_fam' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-2' order='10' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_sub_lspc' label='Letter Spacing' opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-md-2' order='12' />
+    </cms:editable>
+
+    <cms:editable type='row' name='hero_swpr_cta_mode_row' order='350'>
+        <cms:editable type='message' name='hero_swpr_cta_mode_msg' order='2'>
+            <hr><br><h2>Call to Action Management Mode</h2>
+        </cms:editable>
+        <cms:editable type='radio' name='hero_swpr_glbl_cta_mode' label='Slide options for Call to Action' opt_values='Local=local | Global=global' opt_selected='local' class='col-md-12' order='4' />
+    </cms:editable>
+
+    <cms:func _into='hide_glbl_cta' hero_swpr_glbl_cta_mode=''>
+        <cms:if hero_swpr_glbl_cta_mode == 'local'>1<cms:else />0</cms:if>
+    </cms:func>
+    
+    <cms:editable type='row' name='ccs_hro_swpr_glbl_cta_clr_row' not_active=hide_glbl_cta order='355'>
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_halg' label='Button Alignment' opt_values='Left=start | Center=center | Right=end' opt_selected='center' class='col-md-6' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-6' order='4' />
+    </cms:editable>
+
+    <cms:func _into='hide_glbl_cta_std' hero_swpr_glbl_cta_mode='' ccs_hro_swpr_glbl_cta_clr=''>
+        <cms:if hero_swpr_glbl_cta_mode == 'local'>
+            1
+        <cms:else_if ccs_hro_swpr_glbl_cta_clr == 'link' />
+            1
+        <cms:else />
+            0
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_swpr_glbl_cta_std_row' not_active=hide_glbl_cta_std order='357'>
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_fill' label='Fill Style' opt_values='dropdowns/button-fill.htm' dynamic='opt_values' class='col-md-3' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_st' label='Shape' opt_values='dropdowns/button-style.htm' dynamic='opt_values' class='col-md-3' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_sz' label='Size' opt_values='dropdowns/button-size.htm' dynamic='opt_values' class='col-md-3' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_w' label='Width' opt_values='dropdowns/button-width.htm' dynamic='opt_values' class='col-md-3' order='8' />
+    </cms:editable>
+
+    <cms:func _into='hide_glbl_cta_lnk' hero_swpr_glbl_cta_mode='' ccs_hro_swpr_glbl_cta_clr=''>
+        <cms:if hero_swpr_glbl_cta_mode == 'local'>
+            1
+        <cms:else_if ccs_hro_swpr_glbl_cta_clr != 'link' />
+            1
+        <cms:else />
+            0
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_swpr_glbl_cta_lnk_row' not_active=hide_glbl_cta_lnk order='359'>
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_lnk_clr' label='Link Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-12' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_swpr_glbl_cta_icon_row' not_active=hide_glbl_cta_std order='360'>
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_icon_pos' label='Icon Position' opt_values='None=0 | Left=left | Right=right' class='col-md-6' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_icon_fa' label='Font Awesome Icon' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-6' order='4' />
+    </cms:editable>
+
+</cms:editable>
+
+<cms:func _into='hero_swpr_txtbx_sz_chc' hero_swpr_txtbx_sz_opt=''>
+    <cms:if hero_swpr_txtbx_sz_opt == 'custom' >show<cms:else />hide</cms:if>
+</cms:func> 
+
+<cms:func _into='hero_swpr_txtbx_bg_chc' hero_swpr_txtbx_bg_opt=''>
+    <cms:if "<cms:is '1' in=hero_swpr_txtbx_bg_opt />">show<cms:else />hide</cms:if>
+</cms:func>
+
+<cms:func _into='hero_swpr_bg_clr_cust_chc' hero_swpr_bg_clr_opt=''>
+    <cms:if hero_swpr_bg_clr_opt == 'gradient' >show<cms:else />hide</cms:if>
+</cms:func>   
+
+<cms:editable type='group' name='hero_swpr_txtbx_cstm_sz_grp' collapsed='1' label='Set Custom Textbox Size' not_active=hero_swpr_txtbx_sz_chc order='370' >
+    <cms:editable type='message' name='hero_swpr_txtbx_cstm_sz_msg' order='2'>
+        <hr><br>
+        <h2>Custom Size Text Block</h2>
+        <p>Screen Size adjusts for device screens. 12 columns means full width for that screen size.</p>
+    </cms:editable>
+    <cms:repeatable name='hero_swpr_txtbx_cstm_sz_rpt' label="Set column size" order='4'>
+        <cms:editable type="dropdown" name='hero_swpr_txtbx_cstm_col_sz' label='Screen Size' opt_values='dropdowns/col-size.htm' dynamic='opt_values' order='2' />
+        <cms:editable type="dropdown" name='hero_swpr_txtbx_cstm_col_val' label='Columns out of 12' opt_values='dropdowns/col-size-val.htm' dynamic='opt_values' order='4' />
+    </cms:repeatable>       
+</cms:editable>    
+
+<cms:editable type='group' name='hero_swpr_bg_clr_cstm_grp' collapsed='1' label='Background Custom Color' not_active=hero_swpr_bg_clr_cust_chc order='375' >
+    <cms:editable type='message' name='hero_swpr_bg_clr_cstm_msg' order='2'>
+        <hr><br>
+        <h2>Custom Background Color</h2>
+    </cms:editable>
+    <cms:editable type='row' name='hero_swpr_bg_clr_cstm_opt_row' label='Solid Color or Gradient' order='4'>
+        <cms:editable type='dropdown' name='hero_swpr_bg_clr_cstm_grdt_opt' label='Solid or Gradient Color' opt_values='Solid=0|Gradient=1' class='col-md-3' order='2' />
+        <cms:func _into='hero_swpr_bg_clr_cstm_grdt_chc' hero_swpr_bg_clr_cstm_grdt_opt=''>
+            <cms:if hero_swpr_bg_clr_cstm_grdt_opt == '1' >show<cms:else />hide</cms:if>
+        </cms:func> 
+    </cms:editable>
+    <cms:editable name='hero_swpr_bg_clr_cstm_clr_row' type='row' order='6'>
+        <cms:editable type='color' name='hero_swpr_bg_clr_cstm_one' label='Color 1' color='#000000' alpha='1' width='50%' height='100px' class='col-md-6' order='2'>#00000000</cms:editable>
+        <cms:editable type='color' name='hero_swpr_bg_clr_cstm_two' label='Color 2' color='#000000' alpha='1' width='50%' height='100px' class='col-md-6' not_active=hero_swpr_bg_clr_cstm_grdt_chc order='4'>#00000000</cms:editable>
+        <cms:editable type='dropdown' name='hero_swpr_bg_clr_cust_grad_split_opt' label='Gradient Split Style' opt_values='dropdowns/gradient-split.htm' dynamic='opt_values' separator='@' class='col-md-4' not_active=hero_swpr_bg_clr_cstm_grdt_chc order='6' />
+        <cms:editable type='checkbox' name='hero_swpr_bg_clr_cstm_grad_rvrs_opt' label='Reverse Gradient Colors' opt_values='Swap=1' class='col-md-3' not_active=hero_swpr_bg_clr_cstm_grdt_chc order='8' />
+    </cms:editable>
+</cms:editable>
+
+<cms:func _into='ccs_hro_swpr_sl_2_show' hero_swpr_slide_cnt=''>
+    <cms:if hero_swpr_slide_cnt ge '2'>show<cms:else />hide</cms:if>
+</cms:func>
+
+<cms:func _into='ccs_hro_swpr_sl_3_show' hero_swpr_slide_cnt=''>
+    <cms:if hero_swpr_slide_cnt ge '3'>show<cms:else />hide</cms:if>
+</cms:func>
+
+<cms:func _into='ccs_hro_swpr_sl_4_show' hero_swpr_slide_cnt=''>
+    <cms:if hero_swpr_slide_cnt ge '4'>show<cms:else />hide</cms:if>
+</cms:func>
+
+<cms:func _into='ccs_hro_swpr_sl_5_show' hero_swpr_slide_cnt=''>
+    <cms:if hero_swpr_slide_cnt ge '5'>show<cms:else />hide</cms:if>
+</cms:func>

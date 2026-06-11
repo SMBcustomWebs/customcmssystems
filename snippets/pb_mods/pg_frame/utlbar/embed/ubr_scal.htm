@@ -1,0 +1,111 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_scal_gen_grp" label="General Settings" order="30" >  
+    <cms:editable type='message' name='ccs_ubr_scal_init_cstm_msg' order='2'>
+        <h2>Utility Bar: Focal Text & Socials</h2>
+        <p>Displays 1 Focal Announcement, Social Media Icons, and a Call-To-Action button.<br><em>Note: Social Links are configured in your Global Settings.</em></p>
+        <br><hr>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_scal_gen_ht_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_ubr_scal_py' label='Height Padding' opt_values='dropdowns/util-pad.htm' dynamic='opt_values' class='col-sm-3' order='2' />
+        <cms:editable type='checkbox' name='ccs_ubr_scal_cta_opt' label='No Link Button' opt_values='Remove Call-to-Action Button=1' dynamic='opt_values' class='col-sm-3' order='4' />
+        <cms:editable type='dropdown' name='ccs_ubr_scal_dspr' label='Screen Size Visibility' opt_values='dropdowns/display.htm' dynamic='opt_values' class='col-sm-6' order='6' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_scal_stky_row' order='10'>
+        <cms:editable type='message' name='ccs_ubr_scal_stky_msg' class='col-md-9' order='1'>
+            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin-top:10px;">
+                <strong>Sticky Positioning Warning:</strong><br> "Stick Bar To Top" should not be used if your Main Navigation Menu is also set to sticky.
+            </div>
+        </cms:editable>
+        <cms:editable type='checkbox' name='ccs_ubr_scal_stky' label='Stick Bar To Top' desc='stays visible on scroll' opt_values='Yes=1' class='col-md-3' order='2'/>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_scal_clr_row' order='33'>
+        <cms:editable type='message' name='ccs_ubr_scal_bg_clr_msg' order='2'>
+            <br><hr><br>
+            <h3>Bar Colors & Layout</h3>
+        </cms:editable>
+        <cms:editable type='dropdown' name='ccs_ubr_scal_bg_clr_opt' label='Bar Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-sm-4' order='4' />
+        <cms:editable type='dropdown' name='ccs_ubr_scal_txt_clr' label='Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-sm-4' order='6' />
+        <cms:editable type='dropdown' name='ccs_ubr_scal_layout' label='Column Layout' opt_values='dropdowns/layout-swap.htm' dynamic='opt_values' class='col-sm-4' order='8' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_scal_txt_grp" label="Focal Text Settings" order="36" >  
+    <cms:editable type='message' name='ccs_ubr_scal_txt_cstm_msg' order='2'>
+        <h3>Focal Text</h3>
+        <p>A brief announcement to stand out (e.g., 'Free shipping on orders over $50').</p>
+        <br><hr>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_scal_txt_row' order='5'>
+        <cms:editable type='text' name='ccs_ubr_scal_txt_txt' label='Announcement Text' class='col-md-12' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_scal_cta_cust_row' order='10'>
+        <cms:editable type='dropdown' name='ccs_ubr_scal_txt_sz' label='Text Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-sm-4' order='2' />
+        <cms:editable type='dropdown' name='ccs_ubr_scal_txt_fnt_wt' label='Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-sm-4' order='4' />
+        <cms:editable type='dropdown' name='ccs_ubr_scal_txt_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-sm-4' order='6' />
+    </cms:editable>
+</cms:editable>
+
+<cms:func _into='ccs_ubr_scal_cta_chc' ccs_ubr_scal_cta_opt=''><cms:if ccs_ubr_scal_cta_opt='1'>1<cms:else />0</cms:if></cms:func>
+
+<cms:editable type="group" name="ccs_ubr_scal_cta_grp" label="Call To Action Button" not_active=ccs_ubr_scal_cta_chc order="38">
+    <cms:editable type='message' name='ccs_ubr_scal_cta_msg' order='5'>
+        <h3>Action Button Configurations</h3>
+        <p>Define the button text, appearance, and destination. Use the "Custom" link option to send users to an external website.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_scal_cta_txt_row' order='10'>
+        <cms:editable type='text' name='ccs_ubr_scal_cta_txt' label='Button Text' maxlength='60' class='col-md-4 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ubr_scal_cta_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20' />
+        
+        <cms:func _into='ccs_ubr_scal_cta_is_link' ccs_ubr_scal_cta_clr=''><cms:if ccs_ubr_scal_cta_clr='link'>0<cms:else />1</cms:if></cms:func>
+        <cms:func _into='ccs_ubr_scal_cta_not_link' ccs_ubr_scal_cta_clr=''><cms:if ccs_ubr_scal_cta_clr='link'>1<cms:else />0</cms:if></cms:func>
+        
+        <cms:editable type='dropdown' name='ccs_ubr_scal_cta_lnk_clr' label='Link Text Color (If Link Chosen)' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' not_active=ccs_ubr_scal_cta_is_link class='col-md-4 col-sm-6' order='30' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_scal_cta_fmt_row' not_active=ccs_ubr_scal_cta_not_link order='20'>
+        <cms:editable type='dropdown' name='ccs_ubr_scal_cta_fill' label='Fill Style' opt_values='dropdowns/button-fill.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ubr_scal_cta_st' label='Button Shape' opt_values='dropdowns/button-style.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='20' />
+        <cms:editable type='dropdown' name='ccs_ubr_scal_cta_sz' label='Button Size' opt_values='dropdowns/button-size.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='30' />
+        <cms:editable type='dropdown' name='ccs_ubr_scal_cta_w' label='Button Width' opt_values='dropdowns/button-width.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='40' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_scal_cta_icon_row' not_active=ccs_ubr_scal_cta_not_link order='30'>
+        <cms:editable type='dropdown' name='ccs_ubr_scal_cta_icon_pos' label='Icon Position' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-4 col-sm-12' order='10' />
+        
+        <cms:func _into='ccs_ubr_scal_cta_no_icon' ccs_ubr_scal_cta_icon_pos=''><cms:if ccs_ubr_scal_cta_icon_pos=''>1<cms:else />0</cms:if></cms:func>
+        
+        <cms:editable type='message' name='ccs_ubr_scal_cta_icon_msg' not_active=ccs_ubr_scal_cta_no_icon class='col-md-4 col-sm-12' order='15'>
+            <p class="mb-0 mt-3 text-muted" style="font-size:12px;">Find icons at <a href="https://fontawesome.com/v6/search?m=free" target="_blank">Font Awesome v6</a>.</p>
+        </cms:editable>
+        
+        <cms:editable type='text' name='ccs_ubr_scal_cta_icon_fa' label='Font Awesome Icon Class (e.g., fa-solid fa-arrow-right)' maxlength='50' width='300' not_active=ccs_ubr_scal_cta_no_icon class='col-md-4 col-sm-12' order='20' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_scal_cta_dest_row' order='40'>
+        <cms:editable type='dropdown' name='ccs_ubr_scal_cta_lnk' label='Button Link' opt_values='dropdowns/links.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10' />
+        
+        <cms:func _into='ccs_ubr_scal_cta_is_custom' ccs_ubr_scal_cta_lnk=''><cms:if ccs_ubr_scal_cta_lnk='custom'>0<cms:else />1</cms:if></cms:func>
+        
+        <cms:editable type='text' name='ccs_ubr_scal_cta_cst_lnk' label='Custom URL Destination' desc='Input the entire URL (e.g., https://mysite.com/)' width='400' not_active=ccs_ubr_scal_cta_is_custom class='col-md-8 col-sm-6' order='20' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_scal_scl_grp" label="Social Icons Format" order="39" >
+    <cms:editable type='message' name='ccs_ubr_scal_scl_msg' order='2'>
+        <h3>Social Icon Formatting</h3>
+        <p>Controls spacing and sizing for the globally defined social icons.</p>
+        <br><hr>
+    </cms:editable>
+    <cms:editable type='row' name='ccs_ubr_scal_scl_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_ubr_scal_scl_px' label='Space Between Icons' opt_values='dropdowns/scal-spc.htm' dynamic='opt_values' class='col-sm-3' order='4' />
+        <cms:editable type='dropdown' name='ccs_ubr_scal_scl_sz' label='Social Icons Size' opt_values='dropdowns/fa-size.htm' dynamic='opt_values' class='col-sm-3' order='6' />
+    </cms:editable>
+</cms:editable>

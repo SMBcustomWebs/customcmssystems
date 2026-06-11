@@ -1,0 +1,29 @@
+Custom (External URL)=custom |
+
+<cms:templates show_hidden='0'>
+    <cms:if k_template_order ge '1000' && k_template_order le '9999'>
+        
+        <cms:if k_template_is_clonable>
+            
+            Menu: <cms:show k_template_title /> = <cms:show k_template_link /> |
+            
+            <cms:pages masterpage=k_template_name limit='500'>
+                <cms:if k_page_foldername==''>
+                    --- Page: <cms:show k_page_title /> = <cms:show k_page_link /> |
+                </cms:if>
+            </cms:pages>
+
+            <cms:folders masterpage=k_template_name hierarchical='1'>
+                -- Category: <cms:show k_folder_title /> = <cms:show k_folder_link /> |
+                
+                <cms:pages masterpage=k_template_name folder=k_folder_name limit='500'>
+                    --- Page: <cms:show k_page_title /> = <cms:show k_page_link /> |
+                </cms:pages>
+            </cms:folders>
+            
+        <cms:else />
+            Menu: <cms:show k_template_title /> = <cms:show k_template_link /> |
+        </cms:if>
+
+    </cms:if>
+</cms:templates>

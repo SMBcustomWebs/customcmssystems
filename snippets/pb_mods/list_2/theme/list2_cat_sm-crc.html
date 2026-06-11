@@ -1,0 +1,92 @@
+<!--sets text box size if custom -->
+<cms:if list2_cat_sm_crc_hdg_txtbx_sz_opt='custom'>
+    <cms:capture into='txtbx_size_cap' scope="global">
+        <cms:show_repeatable 'list2_cat_sm_crc_hdg_txtbx_cstm_sz_rpt'>
+            col-<cms:show list2_cat_sm_crc_hdg_txtbx_cstm_col_sz />-<cms:show list2_cat_sm_crc_hdg_txtbx_cstm_col_val />
+        </cms:show_repeatable>
+    </cms:capture>
+    <cms:set txtbx_size="<cms:show txtbx_size_cap />" scope="global"/>
+<cms:else />
+    <cms:set txtbx_size="col <cms:show list2_cat_sm_crc_hdg_txtbx_sz_opt />" scope="global" />
+</cms:if>
+<section class="text-<cms:show list2_cat_sm_crc_hdg_txt_halg />" >
+
+<div class="container bg-<cms:show list2_cat_sm_crc_bdy_bg_clr />">
+<div class="row justify-content-<cms:show list2_cat_sm_crc_hdg_txtbx_halg /> py-<cms:show list2_cat_sm_crc_hdg_txtbx_pd />">
+<div class="<cms:show txtbx_size />"><!-- pulled from embed custom settings -->
+<cms:if "<cms:not list2_cat_sm_crc_rmhdr_opt />" ><!-- section header -->
+<cms:show_repeatable 'list2_cat_sm_crc_hdg_txt_rpt'>
+<<cms:show list2_cat_sm_crc_hdg_txt_hdg_sz /> class="text-<cms:show list2_cat_sm_crc_hdg_txt_clr /> fs-<cms:show list2_cat_sm_crc_hdg_txt_sz /> fw-<cms:show list2_cat_sm_crc_hdg_txt_fnt_wt /> fst-<cms:show list2_cat_sm_crc_hdg_txt_fnt_st /> font-<cms:show list2_cat_sm_crc_hdg_txt_font /> ls-<cms:show list2_cat_sm_crc_hdg_txt_ltr_spc /> lh-<cms:show list2_cat_sm_crc_hdg_txt_ln_ht />  ">
+<cms:show list2_cat_sm_crc_hdg_txt_ln />
+</<cms:show list2_cat_sm_crc_hdg_txt_hdg_sz />>
+</cms:show_repeatable>
+<cms:if list2_cat_sm_crc_hdg_hr!='none'>
+<hr class="<cms:show list2_cat_sm_crc_hdg_hr /> text-<cms:show list2_cat_sm_crc_hdg_hr_clr /> my-<cms:show list2_cat_sm_crc_hdg_hr_pd /> mx-auto" />
+</cms:if>
+</cms:if>    
+</div>
+</div>
+<div class="row">
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-01.jpg" alt="Taylor Otwell" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Taylor Otwell</a></h5>
+<div class="text-uppercase fs-10 text-600">Creator of Laravel</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-02.jpg" alt="Jeffrey Way" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Jeffrey Way</a></h5>
+<div class="text-uppercase fs-10 text-600">Founder of Laracasts</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-03.jpg" alt="Michele Hansen" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Michele Hansen</a></h5>
+<div class="text-uppercase fs-10 text-600">Developer / Surfer</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-04.jpg" alt="Evan You" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Evan You</a></h5>
+<div class="text-uppercase fs-10 text-600">Creator of Vue.js</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-05.jpg" alt="Laura Elizabeth" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Laura Elizabeth</a></h5>
+<div class="text-uppercase fs-10 text-600">Partner at Tighten</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-06.jpg" alt="Nils Adermann" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Nils Adermann</a></h5>
+<div class="text-uppercase fs-10 text-600">Co-Creator of Composer</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-07.jpg" alt="Justin Jackson" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Justin Jackson</a></h5>
+<div class="text-uppercase fs-10 text-600">Maker</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-08.jpg" alt="Freek Van der Herten" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Freek Van der Herten</a></h5>
+<div class="text-uppercase fs-10 text-600">Developer at Spatie</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-09.jpg" alt="Sean Larkin" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Sean Larkin</a></h5>
+<div class="text-uppercase fs-10 text-600">Webpack Core Team</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-10.jpg" alt="Adam Wathan" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Adam Wathan</a></h5>
+<div class="text-uppercase fs-10 text-600">UI / UX Designer</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-11.jpg" alt="Tom Schlick" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Tom Schlick</a></h5>
+<div class="text-uppercase fs-10 text-600">Sr. Engineer at RunMyBusiness</div>
+</div>
+<div class="col-sm-6 col-md-4 col-lg-3 p-4"> <img class="img-fluid rounded-circle px-5" src="<cms:show k_site_link />assets/images/portraits/portrait-12.jpg" alt="Maxime Locqueville" />
+<h5 class="fs-9 mt-3 mb-1"><a class="link-1100" href="#!">Maxime Locqueville</a></h5>
+<div class="text-uppercase fs-10 text-600">Lead Engineer at VideoBlocks</div>
+</div>
+</div>
+</div>
+<!-- end of .container-->
+
+</section>
+<!-- <section> close ============================-->
+<!-- ============================================-->
+
+
+
+
+
+
+<!-- div container continues on  -->
+<!-- section continues on  -->

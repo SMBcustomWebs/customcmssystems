@@ -1,0 +1,119 @@
+<cms:set final_cta_icon="" scope="global" />
+
+<cms:if ccs_ubr_ctct_cta_lnk == 'custom'>
+    <cms:set final_cta_lnk="<cms:show ccs_ubr_ctct_cta_cst_lnk />" scope="global" />
+    <cms:set final_cta_tgt='target="_blank"' scope="global" />
+    <cms:set final_cta_icon="<i class='fa-solid fa-arrow-up-right-from-square ms-1' style='font-size: 0.75em;' aria-hidden='true'></i>" scope='global' />
+<cms:else />
+    <cms:set final_cta_lnk="<cms:show ccs_ubr_ctct_cta_lnk />" scope="global" />
+    <cms:set final_cta_tgt='' scope="global" />
+</cms:if>
+
+<cms:capture into='final_cta_class' scope='global'>
+    <cms:if ccs_ubr_ctct_cta_clr == 'link'>
+        link-<cms:show ccs_ubr_ctct_cta_lnk_clr /> 
+        <cms:show ccs_ubr_ctct_cta_w /> 
+        <cms:show ccs_ubr_ctct_cta_icon_pos />
+    <cms:else />
+        btn 
+        btn<cms:show ccs_ubr_ctct_cta_fill />-<cms:show ccs_ubr_ctct_cta_clr /> 
+        <cms:show ccs_ubr_ctct_cta_st /> 
+        <cms:if ccs_ubr_ctct_cta_sz>btn<cms:show ccs_ubr_ctct_cta_sz /></cms:if> 
+        <cms:show ccs_ubr_ctct_cta_w />
+        <cms:show ccs_ubr_ctct_cta_icon_pos />
+    </cms:if>
+    
+    fw-<cms:show ccs_ubr_ctct_txt_fnt_wt /> 
+    fst-<cms:show ccs_ubr_ctct_txt_fnt_st /> 
+    font-<cms:show ccs_ubr_ctct_txt_font /> 
+    fs-<cms:show ccs_ubr_ctct_txt_sz />
+</cms:capture>
+
+<section class="bg-<cms:show ccs_ubr_ctct_bg_clr_opt /> py-<cms:show ccs_ubr_ctct_py /> <cms:show ccs_ubr_ctct_dspr /> <cms:if ccs_ubr_ctct_stky>sticky-top top-0 start-0 z-3</cms:if>" aria-label="Contact Information">
+    <cms:if ccs_gl_edt_ok>
+        <div class="container-fluid pt-2">
+            <cms:popup_edit 'ccs_ubr_ctct_gen_grp|ccs_ubr_ctct_init_cstm_msg|ccs_ubr_ctct_gen_ht_row|ccs_ubr_ctct_py|ccs_ubr_ctct_bg_clr_opt|ccs_ubr_ctct_cta_opt|ccs_ubr_ctct_stky_row|ccs_ubr_ctct_stky_msg|ccs_ubr_ctct_stky|ccs_ubr_ctct_clr_row|ccs_ubr_ctct_bg_clr_msg|ccs_ubr_ctct_dspr|ccs_ubr_ctct_txt_grp|ccs_ubr_ctct_txt_msg|ccs_ubr_ctct_txt_row|ccs_ubr_ctct_txt_clr|ccs_ubr_ctct_txt_sz|ccs_ubr_ctct_txt_fnt_wt|ccs_ubr_ctct_txt_fnt_st|ccs_ubr_ctct_txt_font' link_text="<span class='bg-800 link-warning' title='Edit format & typography'>| [EDIT BAR SETTINGS] |</span>" />
+        </div>
+    </cms:if>
+    
+    <div class="container">
+        <div class="row align-items-center">
+            
+            <div class="col-auto align-self-center">
+                <cms:pages masterpage='globals.php' limit='1'>
+                    <p class="mb-md-0 text-<cms:show ccs_ubr_ctct_txt_clr /> fw-<cms:show ccs_ubr_ctct_txt_fnt_wt /> fst-<cms:show ccs_ubr_ctct_txt_fnt_st /> font-<cms:show ccs_ubr_ctct_txt_font /> fs-<cms:show ccs_ubr_ctct_txt_sz />">
+                        
+                        <span class="fas fa-map-marker-alt" aria-hidden="true"></span>
+                        <span class="visually-hidden">Address:</span>
+                        <cms:show ccs_gl_hdqt_st_add />
+                        <cms:if "<cms:not_empty ccs_gl_hdqt_st_ad2 />">
+                            <cms:show ccs_gl_hdqt_st_ad2 />
+                        </cms:if>
+                        <cms:show ccs_gl_hdqt_cty />, 
+                        <cms:show ccs_gl_hdqt_sta /> 
+                        <cms:show ccs_gl_hdqt_zip /> 
+                        
+                        <cms:if ccs_gl_edt_ok>
+                            <cms:popup_edit 'ccs_gl_site_cntc_grp|ccs_gl_hdqt_st_add|ccs_gl_hdqt_st_ad2|ccs_gl_hdqt_cty|ccs_gl_hdqt_sta|ccs_gl_hdqt_zip' link_text="<span class='bg-800 link-warning ms-1'>[EDIT ADDRESS] </span>" />
+                        </cms:if>
+                        
+                        <span aria-hidden="true">&nbsp;|&nbsp;</span>
+                        
+                        <cms:show_repeatable 'ccs_gl_hdqt_pho_rpt'>
+                            <a class="link-<cms:show ccs_ubr_ctct_txt_clr />" href="tel:<cms:show ccs_gl_hdqt_pho />">
+                                 <span class="<cms:show ccs_gl_hdqt_pho_fa_icon />" aria-hidden="true"></span>
+                                 <span class="visually-hidden">Phone:</span>
+                                <cms:show ccs_gl_hdqt_pho /> &nbsp;
+                            </a>
+                        </cms:show_repeatable>
+                        
+                        <cms:if ccs_gl_edt_ok>
+                            <cms:popup_edit 'ccs_gl_site_cntc_grp|ccs_gl_hdqt_pho_rpt' link_text="<span class='bg-800 link-warning ms-1'>[EDIT PHONE] </span>" />
+                        </cms:if>
+                        
+                        <cms:show_repeatable 'ccs_gl_ggl_maps_rpt' limit='1'>
+                            <cms:if "<cms:not_empty ccs_gl_ggl_map_link />">
+                                <span aria-hidden="true">|</span>
+                                <a class="link-<cms:show ccs_ubr_ctct_txt_clr /> fs-<cms:show ccs_ubr_ctct_txt_sz /> ps-2 ms-1" href="<cms:show ccs_gl_ggl_map_link />" target='_blank'>
+                                    <span class="fas fa-map-location-dot" aria-hidden="true"></span>
+                                    Maps &amp; Directions
+                                </a>
+                            </cms:if>
+                        </cms:show_repeatable>
+                        
+                        <cms:if ccs_gl_edt_ok>
+                            <cms:popup_edit 'ccs_gl_site_cntc_grp|ccs_gl_ggl_maps_rpt' link_text="<span class='bg-800 link-warning ms-1'>[EDIT MAP]</span>" />
+                        </cms:if>
+                        
+                    </p>
+                </cms:pages>
+            </div>
+            
+            <div class="col align-self-center text-end">
+                <cms:if "<cms:not ccs_ubr_ctct_cta_opt />">
+                    <a href="<cms:show final_cta_lnk />" class="<cms:show final_cta_class />" <cms:show final_cta_tgt />>
+                        
+                        <cms:if ccs_ubr_ctct_cta_icon_pos == 'btn-icon-left'>
+                            <cms:if "<cms:not_empty ccs_ubr_ctct_cta_icon_fa />">
+                                <span class="btn-brand"><i class="<cms:show ccs_ubr_ctct_cta_icon_fa /> me-2" aria-hidden="true"></i></span>
+                            </cms:if>
+                        </cms:if>
+                        
+                        <cms:show ccs_ubr_ctct_cta_txt /> <cms:show final_cta_icon />
+                        
+                        <cms:if ccs_ubr_ctct_cta_icon_pos == 'btn-icon-right'>
+                            <cms:if "<cms:not_empty ccs_ubr_ctct_cta_icon_fa />">
+                                <span class="btn-brand"><i class="<cms:show ccs_ubr_ctct_cta_icon_fa /> ms-2" aria-hidden="true"></i></span>
+                            </cms:if>
+                        </cms:if>
+                        
+                    </a>
+                </cms:if>
+                <cms:if ccs_gl_edt_ok>
+                    <cms:popup_edit 'ccs_ubr_ctct_gen_grp|ccs_ubr_ctct_gen_ht_row|ccs_ubr_ctct_cta_opt|ccs_ubr_ctct_cta_grp|ccs_ubr_ctct_cta_msg|ccs_ubr_ctct_cta_txt_row|ccs_ubr_ctct_cta_txt|ccs_ubr_ctct_cta_clr|ccs_ubr_ctct_cta_lnk_clr|ccs_ubr_ctct_cta_fmt_row|ccs_ubr_ctct_cta_fill|ccs_ubr_ctct_cta_st|ccs_ubr_ctct_cta_sz|ccs_ubr_ctct_cta_w|ccs_ubr_ctct_cta_icon_row|ccs_ubr_ctct_cta_icon_pos|ccs_ubr_ctct_cta_icon_msg|ccs_ubr_ctct_cta_icon_fa|ccs_ubr_ctct_cta_dest_row|ccs_ubr_ctct_cta_lnk|ccs_ubr_ctct_cta_cst_lnk' link_text="<span class='bg-800 link-warning ms-3' title='Edit this call-to-action button'>[EDIT BUTTON]</span>" />
+                </cms:if>
+            </div>
+            
+        </div>
+    </div>
+</section>

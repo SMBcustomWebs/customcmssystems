@@ -1,0 +1,134 @@
+<cms:editable type='dropdown'  name='hdr_txt_halg' label='Align Text Horizontal' desc='Left, Center, Right'
+    opt_values='dropdowns/h-align.htm'
+    dynamic='opt_values'
+    order='210'
+/>
+<cms:editable type='dropdown'  name='hdr_txt_valg' label='Align Text Vertical' desc='Top, Middle, Bottom'
+    opt_values='dropdowns/v-align.htm'
+    dynamic='opt_values'
+    order='220'
+/>
+<cms:editable type='dropdown'  name='hdr_txt_bx_alg' label='Align Text Box' desc='Left, Center, Right'
+    opt_values='dropdowns/h-align.htm'
+    dynamic='opt_values'
+    order='222'
+/>
+
+<cms:editable type='dropdown' name='hdr_txt_blk_opt' label='Choose Text Block Display' desc='do not use forms for carousell slider headers'
+    opt_values='Text=0|Upload Image=1|Create Form (single headers only)=2'
+    order='230'
+/>
+
+<cms:func _into='hdr_txt_txt' hdr_txt_blk_opt=''>
+    <cms:if hdr_txt_blk_opt='0'>
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+<cms:func _into='hdr_txt_img' hdr_txt_blk_opt=''>
+    <cms:if hdr_txt_blk_opt='1'>
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+<cms:func _into='hdr_txt_frm' hdr_txt_blk_opt=''>
+    <cms:if (hdr_txt_blk_opt='2') >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+
+<cms:repeatable name='hdr_txt_rpt' label='Header Text Lines - New Row = New Line' stacked_layout='1' not_active=hdr_txt_txt order='240' >
+    <cms:editable type='text' name='hdr_txt_ln' label='Text'
+        order='242' 
+    />
+    <cms:editable type='dropdown' name='hdr_txt_clr' label='Text Color' 
+        opt_values='dropdowns/colors.htm'
+        dynamic='opt_values'
+        order='243'  
+    />
+    <cms:editable type='dropdown' name='hdr_txt_hdg_sz' label='Main Text Size' 
+        opt_values='dropdowns/heading-size.htm'
+        dynamic='opt_values'
+        order='244'  
+    />
+    <cms:editable type='dropdown' name='hdr_txt_txt_sz' label='Text Size (for more control over size)' 
+        opt_values='dropdowns/text-size.htm'
+        dynamic='opt_values'
+        order='245'  
+    />
+    <cms:editable type='dropdown' name='hdr_fnt_wt' label='Font Weight' 
+        opt_values='dropdowns/font-weight.htm'
+        dynamic='opt_values'
+        order='246'  
+    />
+    <cms:editable type='dropdown' name='hdr_ltr_spc' label='Letter Spacing' 
+        opt_values='dropdowns/hdr_ltr-spc.htm'
+        dynamic='opt_values'
+        order='247'  
+    />
+    <cms:editable type='dropdown' name='hdr_fnt_st' label='Font Style' 
+        opt_values='dropdowns/font-style.htm'
+        dynamic='opt_values'
+        order='248'  
+    />
+    <cms:editable type='dropdown' name='hdr_font' label='Font Family' 
+        opt_values='dropdowns/font-family.htm'
+        dynamic='opt_values'
+        order='249'  
+    />
+</cms:repeatable>
+
+    <cms:editable type='image' name='hdr_txt_blk_img' label='Upload Image for Text' desc='1:1 ratio max h or w will be enforced at 500px'
+        width='500'
+        height='500'
+        enforce_max='1'
+        show_preview='1'
+        preview_width='75'
+        not_active=hdr_txt_img
+        order='252'
+    />
+    <cms:editable type='text' name='hdr_txt_blk_img_alt' label='Text Image Alt Description' desc='for screen readers' not_active=hdr_txt_img order='254'  />
+
+
+<cms:editable type='checkbox' name='hdr_txt_bg_opt' label='Add Background to Text' desc='Can sometimes help text pop'
+    opt_values='Yes=1'
+    order='287'
+/>
+<cms:func _into='hdr_txt_bg' hdr_txt_bg_opt=''>
+    <cms:if "<cms:is '1' in=hdr_txt_bg_opt />">
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+
+
+    
+    <cms:editable type='dropdown' name='hdr_txt_bg_pd' label='Inner Padding' desc='space around edge of background'
+    opt_values='0|1|2|3|4'
+    not_active=hdr_txt_bg
+    order='288'
+/>
+<cms:editable type='dropdown'  name='hdr_txt_bg_clr' label='Text Background Color' desc=''
+    opt_values='dropdowns/colors.htm'
+    dynamic='opt_values'
+    not_active=hdr_txt_bg
+    order='289'
+/>
+<cms:editable type='dropdown'  name='hdr_txt_bg_brd' label='Border Style' desc='thick, thin, solid, dashed'
+    opt_values='dropdowns/borders.htm'
+    dynamic='opt_values'
+    not_active=hdr_txt_bg
+    order='290'
+/>
+<cms:editable type='dropdown'  name='hdr_txt_bg_brd_clr' label='Border Color' desc=''
+    opt_values='dropdowns/colors.htm'
+    dynamic='opt_values'
+    not_active=hdr_txt_bg
+    order='291'
+/>
+

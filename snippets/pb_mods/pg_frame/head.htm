@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<cms:set ccs_thm="<cms:get_custom_field 'ccs_gl_site_thm_opt' masterpage='globals.php' />" />
+<html data-bs-theme="<cms:show ccs_thm />" lang="en-US" dir="ltr">
+	
+    <!-- =======change when site goes live==============-->
+    <meta name="robots" content="noindex, nofollow">
+    <!-- ===============================================-->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="<cms:get_field 'ccs_gl_site_desc' masterpage='globals.php' />">
+    <link rel="canonical" href="<cms:show k_site_link />" />
+    <base href="<cms:show k_site_link />">
+      
+    <!-- ===============================================-->
+    <!--    Document Title-->
+    <!-- ===============================================-->
+    <title><cms:get_field 'ccs_gl_site_name' masterpage='globals.php' /></title>
+      
+    <!-- ===============================================-->
+    <!--    Social Cards -->
+    <!-- ===============================================-->
+    <meta property="og:type" content="article" /> 
+    <meta property="og:title" content="" /> 
+    <meta property="og:description" content="DESCRIPTION OF PAGE CONTENT" /> 
+    <meta property="og:image" content="LINK TO THE IMAGE FILE" /> 
+    <meta property="og:url" content="PERMALINK" /> 
+    <meta property="og:site_name" content="SITE NAME" />
+    <meta name="x:card" content="summary_large_image">
+    <meta name="x:title" content="">
+    <meta name="x:description" content="">
+    <meta name="x:image" content="">
+    <meta name="x:image:alt" content="">
+      
+    <!-- ===============================================-->
+    <!--    Favicons-->
+    <!-- ===============================================-->
+	<cms:set site_favicon="<cms:get_field 'ccs_gl_site_favicon' masterpage='globals.php' />" />
+    
+    <cms:if site_favicon>
+        <link rel="apple-touch-icon" sizes="180x180" href="<cms:thumbnail site_favicon width='180' height='180' crop='1' />">
+        <link rel="icon" type="image/png" sizes="32x32" href="<cms:thumbnail site_favicon width='32' height='32' crop='1' />">
+        <link rel="icon" type="image/png" sizes="16x16" href="<cms:thumbnail site_favicon width='16' height='16' crop='1' />">
+        <link rel="shortcut icon" type="image/x-icon" href="<cms:thumbnail site_favicon width='32' height='32' crop='1' />">
+    </cms:if>
+    
+    <link rel="manifest" href="<cms:show k_site_link />assets/images/favicons/manifest.json">
+    <meta name="msapplication-TileImage" content="<cms:show k_site_link />assets/images/favicons/mstile-150x150.png">
+    <meta name="theme-color" content="#ffffff">      
+    <!-- ===============================================-->
+    <!--    Font Awesome Styles -->
+    <!-- ===============================================-->
+    <link href="<cms:show k_site_link />assets/fontawesome/css/fontawesome.css" rel="stylesheet" />
+    <link href="<cms:show k_site_link />assets/fontawesome/css/brands.css" rel="stylesheet" />
+    <link href="<cms:show k_site_link />assets/fontawesome/css/solid.css" rel="stylesheet" />
+    <!--<link href="<cms:show k_site_link />assets/fontawesome/css/sharp-thin.css" rel="stylesheet" />-->
+    <!--<link href="<cms:show k_site_link />assets/fontawesome/css/duotone-thin.css" rel="stylesheet" />-->
+    <!--<link href="<cms:show k_site_link />assets/fontawesome/css/sharp-duotone-thin.css" rel="stylesheet" />-->
+      
+    <!-- ===============================================-->
+    <!--    Privacy Consent Here -->
+    <!-- ===============================================-->
+
+    <!-- ===============================================-->
+    <!--    Stylesheets-->
+    <!-- ===============================================-->
+    <link rel="stylesheet" href="<cms:show k_site_link />vendors/swiper/swiper-bundle.min.css">
+    <link rel="stylesheet" href="<cms:show k_site_link />vendors/prism/prism.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet">
+    <link href="<cms:show k_site_link />assets/fonts/iconsmind/iconsmind.css" rel="stylesheet">
+    <link href="<cms:show k_site_link />vendors/hamburgers/hamburgers.css" rel="stylesheet">
+    <link href="<cms:show k_site_link />assets/css/theme.css" rel="stylesheet" />
+    <link href="<cms:show k_site_link />assets/css/user.php?page=<cms:show k_template_name />&post=<cms:show k_page_id />" rel="stylesheet" />
+
+
+
+	<!-- ===============================================-->
+    <!--    For Site Wide Styling -->
+    <!-- ===============================================-->
+	<cms:embed 'utils/format_typography.htm' />
+		 
+    <!-- ===============================================-->
+    <!--    For Site Editing -->
+    <!-- ===============================================-->
+     <cms:if k_user_access_level ge '7' && "<cms:not "<cms:get_session 'inline_edit_on' />" />" > 
+        <cms:no_edit />
+    </cms:if>
+    <cms:load_edit /> 
+	<!-- ===============================================-->
+    <!--    Edit Modal Sizing -->
+    <!-- ===============================================-->
+	<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >
+    
+     <style>
+        /* Target the CouchCMS inline popup container */		 
+		 #k_inline {
+			width: 95vw !important;
+			max-width: 750px !important; /* Shrunk from 1400px. Perfect size for desktop modals. */
+			max-height: 90vh !important; /* Prevents vertical blowout on small screens */
+			border-radius: 8px; 
+		}
+		#k_inline iframe {
+			width: 100% !important;
+			height: 100% !important;
+			border-radius: inherit;
+		} 
+    </style>
+</cms:if>
+  </head>
+  <body>

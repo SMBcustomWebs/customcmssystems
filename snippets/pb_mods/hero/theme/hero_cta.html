@@ -1,0 +1,92 @@
+<cms:if ccs_hro_cta_opt ge '1'>
+    
+    <div class="d-flex flex-wrap w-100 <cms:show ccs_hro_cta_grp_dir /> gap-<cms:if ccs_hro_cta_grp_gap><cms:show ccs_hro_cta_grp_gap /><cms:else />3</cms:if> justify-content-<cms:if ccs_hro_cta_grp_halg><cms:show ccs_hro_cta_grp_halg /><cms:else />center</cms:if> align-items-<cms:if ccs_hro_cta_grp_halg><cms:show ccs_hro_cta_grp_halg /><cms:else />center</cms:if> mt-4">
+
+        <cms:set btn_1_tgt="<cms:if ccs_hro_cta_1_lnk='custom'>target='_blank'</cms:if>" />
+        <cms:set btn_1_url="<cms:if ccs_hro_cta_1_lnk='custom'><cms:show ccs_hro_cta_1_cst_lnk /><cms:else /><cms:show ccs_hro_cta_1_lnk /></cms:if>" />
+        
+        <cms:capture into='btn_1_cls'>
+            <cms:if ccs_hro_cta_1_clr='link'>
+                text-decoration-none fw-bold <cms:if ccs_hro_cta_1_lnk_clr>text-<cms:show ccs_hro_cta_1_lnk_clr /><cms:else />text-primary</cms:if>
+            <cms:else />
+                btn btn<cms:show ccs_hro_cta_1_fill />-<cms:if ccs_hro_cta_1_clr><cms:show ccs_hro_cta_1_clr /><cms:else />primary</cms:if> <cms:show ccs_hro_cta_1_st /> <cms:show ccs_hro_cta_1_sz /> <cms:show ccs_hro_cta_1_w />
+            </cms:if>
+        </cms:capture>
+
+        <a href="<cms:show btn_1_url />" class="<cms:show btn_1_cls />" <cms:show btn_1_tgt />>
+            <cms:if ccs_hro_cta_1_clr != 'link' && ccs_hro_cta_1_icon_pos='left'>
+                <i class="<cms:show ccs_hro_cta_1_icon_fa /> me-2" aria-hidden="true"></i>
+            </cms:if>
+            <cms:show ccs_hro_cta_1_txt />
+            <cms:if ccs_hro_cta_1_clr != 'link' && ccs_hro_cta_1_icon_pos='right'>
+                <i class="<cms:show ccs_hro_cta_1_icon_fa /> ms-2" aria-hidden="true"></i>
+            </cms:if>
+            <cms:if ccs_hro_cta_1_lnk='custom'>
+                <i class="fa-solid fa-arrow-up-right-from-square ms-2 opacity-75" style="font-size: 0.85em;" aria-hidden="true"></i>
+                <span class="visually-hidden">(opens in a new tab)</span>
+            </cms:if>
+        </a>
+
+        <cms:if ccs_hro_cta_opt ge '2'>
+            <cms:set btn_2_tgt="<cms:if ccs_hro_cta_2_lnk='custom'>target='_blank'</cms:if>" />
+            <cms:set btn_2_url="<cms:if ccs_hro_cta_2_lnk='custom'><cms:show ccs_hro_cta_2_cst_lnk /><cms:else /><cms:show ccs_hro_cta_2_lnk /></cms:if>" />
+            
+            <cms:capture into='btn_2_cls'>
+                <cms:if ccs_hro_cta_2_clr='link'>
+                    text-decoration-none fw-bold <cms:if ccs_hro_cta_2_lnk_clr>text-<cms:show ccs_hro_cta_2_lnk_clr /><cms:else />text-primary</cms:if>
+                <cms:else />
+                    btn btn<cms:show ccs_hro_cta_2_fill />-<cms:if ccs_hro_cta_2_clr><cms:show ccs_hro_cta_2_clr /><cms:else />primary</cms:if> <cms:show ccs_hro_cta_2_st /> <cms:show ccs_hro_cta_2_sz /> <cms:show ccs_hro_cta_2_w />
+                </cms:if>
+            </cms:capture>
+
+            <a href="<cms:show btn_2_url />" class="<cms:show btn_2_cls />" <cms:show btn_2_tgt />>
+                <cms:if ccs_hro_cta_2_clr != 'link' && ccs_hro_cta_2_icon_pos='left'>
+                    <i class="<cms:show ccs_hro_cta_2_icon_fa /> me-2" aria-hidden="true"></i>
+                </cms:if>
+                <cms:show ccs_hro_cta_2_txt />
+                <cms:if ccs_hro_cta_2_clr != 'link' && ccs_hro_cta_2_icon_pos='right'>
+                    <i class="<cms:show ccs_hro_cta_2_icon_fa /> ms-2" aria-hidden="true"></i>
+                </cms:if>
+                <cms:if ccs_hro_cta_2_lnk='custom'>
+                    <i class="fa-solid fa-arrow-up-right-from-square ms-2 opacity-75" style="font-size: 0.85em;" aria-hidden="true"></i>
+                    <span class="visually-hidden">(opens in a new tab)</span>
+                </cms:if>
+            </a>
+        </cms:if>
+
+        <cms:if ccs_hro_cta_opt ge '3'>
+            <cms:set btn_3_tgt="<cms:if ccs_hro_cta_3_lnk='custom'>target='_blank'</cms:if>" />
+            <cms:set btn_3_url="<cms:if ccs_hro_cta_3_lnk='custom'><cms:show ccs_hro_cta_3_cst_lnk /><cms:else /><cms:show ccs_hro_cta_3_lnk /></cms:if>" />
+            
+            <cms:capture into='btn_3_cls'>
+                <cms:if ccs_hro_cta_3_clr='link'>
+                    text-decoration-none fw-bold <cms:if ccs_hro_cta_3_lnk_clr>text-<cms:show ccs_hro_cta_3_lnk_clr /><cms:else />text-primary</cms:if>
+                <cms:else />
+                    btn btn<cms:show ccs_hro_cta_3_fill />-<cms:if ccs_hro_cta_3_clr><cms:show ccs_hro_cta_3_clr /><cms:else />primary</cms:if> <cms:show ccs_hro_cta_3_st /> <cms:show ccs_hro_cta_3_sz /> <cms:show ccs_hro_cta_3_w />
+                </cms:if>
+            </cms:capture>
+
+            <a href="<cms:show btn_3_url />" class="<cms:show btn_3_cls />" <cms:show btn_3_tgt />>
+                <cms:if ccs_hro_cta_3_clr != 'link' && ccs_hro_cta_3_icon_pos='left'>
+                    <i class="<cms:show ccs_hro_cta_3_icon_fa /> me-2" aria-hidden="true"></i>
+                </cms:if>
+                <cms:show ccs_hro_cta_3_txt />
+                <cms:if ccs_hro_cta_3_clr != 'link' && ccs_hro_cta_3_icon_pos='right'>
+                    <i class="<cms:show ccs_hro_cta_3_icon_fa /> ms-2" aria-hidden="true"></i>
+                </cms:if>
+                <cms:if ccs_hro_cta_3_lnk='custom'>
+                    <i class="fa-solid fa-arrow-up-right-from-square ms-2 opacity-75" style="font-size: 0.85em;" aria-hidden="true"></i>
+                    <span class="visually-hidden">(opens in a new tab)</span>
+                </cms:if>
+            </a>
+        </cms:if>
+
+    </div>
+
+</cms:if>
+
+<cms:if ccs_hro_cta_social == '1'>
+    <div class="d-flex w-100 justify-content-<cms:if ccs_hro_cta_social_halg><cms:show ccs_hro_cta_social_halg /><cms:else />center</cms:if> mt-3">
+        <cms:embed 'pb_mods/hero/theme/hero_social.html' />
+    </div>
+</cms:if>

@@ -1,0 +1,24 @@
+<section class="bg-<cms:show ccs_ubr_sntc_bg_clr_opt /> py-<cms:show ccs_ubr_sntc_py /> <cms:show ccs_ubr_sntc_dspr /> <cms:if ccs_ubr_sntc_stky>sticky-top top-0 start-0 z-3</cms:if>" aria-label="Announcement Bar">
+    
+    <cms:if ccs_gl_edt_ok>
+        <div class="container-fluid pt-2">
+            <cms:popup_edit 'ccs_ubr_sntc_gen_grp|ccs_ubr_sntc_init_cstm_msg|ccs_ubr_sntc_gen_ht_row|ccs_ubr_sntc_py|ccs_ubr_sntc_bg_clr_opt|ccs_ubr_sntc_dspr|ccs_ubr_sntc_stky_row|ccs_ubr_sntc_stky_msg|ccs_ubr_sntc_stky' link_text="<span class='bg-800 link-warning' title='Edit format of this main bar'>| [EDIT BAR SETTINGS] | </span>" />
+        </div>
+    </cms:if>
+    
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            
+            <div class="col text-<cms:show ccs_ubr_sntc_txt_aln />">
+                <p class="mb-0 text-<cms:show ccs_ubr_sntc_txt_clr /> fw-<cms:show ccs_ubr_sntc_txt_fnt_wt /> fst-<cms:show ccs_ubr_sntc_txt_fnt_st /> font-<cms:show ccs_ubr_sntc_txt_font /> fs-<cms:show ccs_ubr_sntc_txt_sz /> ls-<cms:show ccs_ubr_sntc_txt_ls />">
+                    <cms:show ccs_ubr_sntc_txt_txt />
+                    
+                    <cms:if ccs_gl_edt_ok>
+                        <cms:popup_edit 'ccs_ubr_sntc_txt_fmt_grp|ccs_ubr_sntc_txt_msg|ccs_ubr_sntc_txt_txt_row|ccs_ubr_sntc_txt_txt|ccs_ubr_sntc_txt_row|ccs_ubr_sntc_txt_clr|ccs_ubr_sntc_txt_sz|ccs_ubr_sntc_txt_aln|ccs_ubr_sntc_txt_fnt_wt|ccs_ubr_sntc_txt_fnt_st|ccs_ubr_sntc_txt_font|ccs_ubr_sntc_txt_ls' link_text="<span class='bg-800 link-warning ms-2' title='Edit text'>[EDIT TEXT]</span>" />
+                    </cms:if>
+                </p>
+            </div>
+            
+        </div>
+    </div>
+</section>

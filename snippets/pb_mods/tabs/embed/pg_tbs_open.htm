@@ -1,0 +1,183 @@
+<!--<cms:ignore><cms:editable type='hidden' name='section_caching'  >never</cms:editable></cms:ignore>-->
+<!-- this is not an easy mod to create since the tab titles are seperate from their contents-->
+<cms:editable type='message' name='sct_hdr_msg'  order='1' >
+    <h2>Tabs:: Section with subject matter divided in tab form above content </h2>
+    <h3></h3>
+    <h4></h4>
+    <p>See an example of this section <a href="https://customcmssystems.com/#tabs" target="_blank" title="will open up in another tab" >here</a>.</p>
+    <br><hr><br><hr>
+</cms:editable>
+<cms:editable type='group' name='gst_grp' label='Section General Settings' desc='click to expand/close'  order='3' >
+    <cms:editable type='message' name='gst_msg'  order='2' >
+        <h3>Section Settings</h3>
+        <h4></h4>
+        <p></p>
+    </cms:editable>
+    <cms:editable type='row' name='gst_row'  order='5' >
+        <cms:editable type='dropdown' name='sct_bg_clr' label='Section Background Color' desc=''
+            opt_values='dropdowns/solid-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='2'  
+        />
+        <cms:editable type='checkbox' name='hdr_rm_opt' label='Hide Section Header' desc='hides heading and subheading'
+            opt_values='Yes Hide Header=1'
+            class='col-md-4'
+            order='4'
+        />
+        <cms:editable type='dropdown' name='sct_fdfx' label='Section Fade-In Effect' 
+            opt_values='dropdowns/fade_fx.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='6'
+        />
+        <cms:func _into='hdr_rm_chc' hdr_rm_opt=''>
+            <cms:if "<cms:is '1' in=hdr_rm_opt />">
+                hide
+            <cms:else />
+                show
+            </cms:if>
+        </cms:func>
+        <cms:editable type='dropdown'  name='hdr_halg' label='Align Text Left, Center, Right' desc=''
+            opt_values='dropdowns/h-align.htm'
+            opt_selected='center'
+            dynamic='opt_values'
+            not_active=hdr_rm_chc
+            class='col-md-4'
+            order='8'
+        />
+        <cms:editable type='dropdown'  name='hdr_hr' label='Separation Line between Header and Body' desc=''
+            opt_values='dropdowns/hr-size.htm'
+            opt_selected='none'
+            dynamic='opt_values'
+            not_active=hdr_rm_chc
+            class='col-md-4'
+            order='10'
+        />
+        <cms:editable type='dropdown'  name='hr_clr' label='Separation Line Color' desc=''
+            opt_values='dropdowns/solid-colors.htm'
+            opt_selected='black'
+            dynamic='opt_values'
+            not_active=hdr_rm_chc
+            class='col-md-4'
+            order='10'
+        />
+    </cms:editable>    
+</cms:editable>
+
+<cms:editable type='message' name='hdr_grp_msg' not_active=hdr_rm_chc order='5' >
+    <br><hr><br><hr>
+    <h3>Create and Style Optional Section Header</h3>
+    <h4>Change colors and text styles or keep default.</h4>
+    <p>Website global default colors and fonts can be changed <a href="<cms:link masterpage='globals.php' />" target="blank" title="opens up in seperate tab">here</a>. (Site Editing must be enabled)</p>
+</cms:editable>
+
+<cms:editable type='group' name='hdr_grp' label='Page Header Headline' desc='click to expand/close' not_active=hdr_rm_chc  order='6' >
+    <cms:editable type='row' name='hdg_row'  order='5' >
+        <cms:editable type='text' name='hdg' label='Section Heading' desc='Top Line'
+            class='col-md-10'
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='hdg_clr' label='Section Heading Color'
+            opt_values='dropdowns/solid-colors.htm'
+            dynamic='opt_values'
+            class='col-md-5'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='hdg_sz' label='Section Heading Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            class='col-md-5'
+            order='6'  
+        />
+        <cms:editable type='message' name='hdg_msg' class='col-md-12'  order='7' >
+            <br>
+        </cms:editable>
+        <cms:editable type='dropdown' name='hdg_fnt_fm' label='Section Heading Line Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='8'  
+        />
+         <cms:editable type='dropdown' name='hdg_fnt_wt' label='Section Heading Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='10'  
+        />  
+        <cms:editable type='dropdown' name='hdg_fnt_st' label='Section Heading Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='12'  
+        />
+        <cms:editable type='dropdown' name='hdg_ltr_spc' label='Section Heading Letter Spacing' 
+            opt_values='dropdowns/hdr_ltr-spc.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='14'  
+        />
+    </cms:editable>
+    <cms:editable type='message' name='row_div_msg'  order='9' >
+        <br><hr><br>
+    </cms:editable>
+    <cms:editable type='row' name='sbh_row'  order='10' >
+        <cms:editable type='text' name='sbh' label='Section Subheading' desc='Second Line'
+            class='col-md-10'
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='sbh_clr' label='Section Subheading Color'
+            opt_values='dropdowns/solid-colors.htm'
+            dynamic='opt_values'
+            class='col-md-5'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='sbh_sz' label='Section Subheading Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            class='col-md-5'
+            order='6'  
+        />
+        <cms:editable type='message' name='sbh_msg' class='col-md-12'  order='7' >
+            <br>
+        </cms:editable>
+        <cms:editable type='dropdown' name='sbh_fnt_fm' label='Section Subheading Line Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='8'  
+        />
+         <cms:editable type='dropdown' name='sbh_fnt_wt' label='Section Subheading Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='10'  
+        />  
+        <cms:editable type='dropdown' name='sbh_fnt_st' label='Section Subheading Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='12'  
+        />
+        <cms:editable type='dropdown' name='sbh_ltr_spc' label='Section Subheading Letter Spacing' 
+            opt_values='dropdowns/hdr_ltr-spc.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='14'  
+        />
+    </cms:editable>
+</cms:editable>
+<cms:editable type='message' name='hdr_grp_msg' not_active=hdr_rm_chc order='5' >
+    <br><hr><br><hr>
+    <h2>Tabs Content</h2>
+    <h4>Set Tab Title and Content below</h4>
+    <p>"Add Row" adds a new tab.</p>
+</cms:editable>
+<cms:repeatable name="tbs_rpt" label='Tabs - Title &amp; Content' stacked_layout='1' order='9'>
+    <cms:editable type='text' name='tbs_ttl' label='Tab Title' order='2' />
+    <cms:editable type='richtext' name='tbs_cnt' label='content - format as nesessary' toolbar='full' order='4' 
+    
+    />
+
+
+</cms:repeatable>

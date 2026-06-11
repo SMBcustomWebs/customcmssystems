@@ -1,0 +1,34 @@
+
+<cms:editable type="group" name="trns_img_grp" label="Background Image" not_active=bg_img_chc order='20' > 
+    <cms:editable type='message' name='trnsimg_bg_clr_cstm_msg' order='2'>
+        <h2>Custom Background Color</h2>
+        <h4>These colors will cover the background image and overlay colors. Use Transparancy as needed to see the images.</h4>
+    </cms:editable>
+    <cms:editable type='row' name='trns_img_row'  order='5' >
+        <cms:editable type='image' name='trns_bg_img' label='Section Background Image' desc='16:9 ratio - 2560x1440,1920x1080,etc'
+            width='2560'
+            height='1440'
+            enforce_max='1'
+            show_preview='1'
+            preview_width='75'
+            class='col-md-12'
+            order='2'
+        />
+        <cms:editable type='text' name='trns_bg_img_alt' label='Image Description'  desc='for screen readers and SEO'
+            class='col-md-12'
+            order='3' 
+            />
+        <cms:editable type='dropdown' name='bg_img_pos' label='Image Anchor Position' desc=''
+            opt_values='dropdowns/bg-img-pos.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='6'
+        />
+        <cms:editable type='dropdown' name='ovrly_clr_opt' label='Image Color Overlay Option' desc=''
+            opt_values='dropdowns/overly-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'  
+            order='10'
+        />
+    </cms:editable>
+</cms:editable>

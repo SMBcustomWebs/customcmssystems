@@ -1,0 +1,159 @@
+<!--sets text box size if custom -->
+<cms:if trns_txtbx_sz_opt='custom'>
+    <cms:capture into='txtbx_size_cap' scope="global">
+        <cms:show_repeatable 'trns_txtbx_cstm_sz_rpt'>
+            col-<cms:show trns_txtbx_cstm_col_sz />-<cms:show trns_txtbx_cstm_col_val />
+        </cms:show_repeatable>
+    </cms:capture>
+    <cms:set trns_txtbx_size="<cms:show txtbx_size_cap />" "global" />
+<cms:else />
+    <cms:set trns_txtbx_size="col <cms:show trns_txtbx_sz_opt />" "global" />
+</cms:if>
+
+ <cms:if trns_c2a_1_lnk='custom'>
+    <cms:set trns_c2a_lnk_1="<cms:show trns_c2a_1_cst_lnk />" "global" />
+<else />
+    <cms:set trns_c2a_lnk_1="<cms:show trns_c2a_1_lnk />" "global" />
+</cms:if>
+ <cms:if trns_c2a_2_lnk='custom'>
+    <cms:set trns_c2a_lnk_2="<cms:show trns_c2a_2_cst_lnk />" "global" />
+<else />
+    <cms:set trns_c2a_lnk_2="<cms:show trns_c2a_2_lnk />" "global" />
+</cms:if>
+ <cms:if trns_c2a_3_lnk='custom'>
+    <cms:set trns_c2a_lnk_3="<cms:show trns_c2a_3_cst_lnk />" "global" />
+<else />
+    <cms:set trns_c2a_lnk_3="<cms:show trns_c2a_3_lnk />" "global" />
+</cms:if>
+ <cms:if trns_c2a_4_lnk='custom'>
+    <cms:set trns_c2a_lnk_4="<cms:show trns_c2a_4_cst_lnk />" "global" />
+<else />
+    <cms:set trns_c2a_lnk_4="<cms:show trns_c2a_4_lnk />" "global" />
+</cms:if>
+<cms:ignore><!--
+ <cms:if ovrly_clr_grdt_opt="1" >
+        <cms:if ovrly_clr_cstm_grdt_rvrs_opt >
+            <style>
+                .bg-holder.overlay-gradient:before {
+                    background: -webkit-gradient(<cms:show ovrly_cust_grad_split_opt />deg, <cms:show ovrly_clr_cstm_two />, <cms:show ovrly_clr_cstm_one />)!important;
+                    background:linear-gradient(<cms:show ovrly_cust_grad_split_opt />deg, <cms:show ovrly_clr_cstm_two />, <cms:show ovrly_clr_cstm_one />)!important;
+                }
+            </style>
+        <cms:else />
+            <style>
+                .bg-holder.overlay-gradient:before {
+                    background: -webkit-gradient(<cms:show ovrly_cust_grad_split_opt />deg, <cms:show ovrly_clr_cstm_one />, <cms:show ovrly_clr_cstm_two />)!important;
+                    background: linear-gradient(<cms:show ovrly_cust_grad_split_opt />deg, <cms:show ovrly_clr_cstm_one />, <cms:show ovrly_clr_cstm_two />) !important;
+                }
+            </style>
+        </cms:if>
+<cms:else />
+    <style>
+        .bg-holder.overlay-gradient:before {
+            background: -webkit-gradient(0deg, <cms:show ovrly_clr_cstm_one />, <cms:show ovrly_clr_cstm_one />)!important;
+            background:linear-gradient(0deg, <cms:show ovrly_clr_cstm_one />, <cms:show ovrly_clr_cstm_one />)!important;
+        }
+    </style>
+ </cms:if>
+--></cms:ignore>
+<section class="bg-<cms:show bg_clr_opt /> bg-opacity-<cms:show trns_bg_img_opc />  py-<cms:show trns_py_ht /> has-parallax">
+    <cms:popup_edit 'trns_frmt_gen_grp|trns_frmt_gen_ht_msg|trns_frmt_gen_ht_row|trns_py_ht|trns_gen_xt_row|trns_gen_xtr_scrl_msg|trns_bg_scrl_spd|' link_text="<span class='bg-800 link-warning ms-0' title='Edit format of this section, and scroll effects'>| [EDIT SECTION FORMAT] | </span><br>" />
+    <cms:popup_edit width='576' 'trns_frmt_gen_grp|trns_frmt_gen_clr_row|trns_form_gen_clr_msg|trns_bg_clr_opt|trns_bg_clr_trns|trns_ovrly_clr_opt|trns_bg_clr_cstm_grp|trns_bg_clr_cstm_msg|trns_bg_clr_cstm_grdt_opt_row|trns_bg_clr_cstm_grdt_opt|trns_bg_clr_cstm_row|trns_bg_clr_cstm_one|trns_bg_clr_cstm_two|trns_bg_clr_cust_grad_split_opt|trns_bg_clr_cstm_grad_rvrs_opt|trns_ovrly_clr_cstm_grp|trns_ovrly_clr_cstm_msg|trns_ovrly_clr_cstm_grdt_opt_row|trns_ovrly_clr_grdt_opt|trns_ovrly_cstm_row|trns_ovrly_clr_cstm_one|trns_ovrly_clr_cstm_two|trns_ovrly_cust_grad_split_opt|trns_ovrly_clr_cstm_grdt_rvrs_opt' link_text="<span class='bg-800 link-warning ms-0' title='Edit background and overly colors'>| [EDIT COLORS] | </span>" />
+
+    <div class="bg-holder overlay overlay-<cms:show ovrly_clr_opt />" style="<cms:if bg_clr_opt='img'>background-image:url(<cms:show trns_bg_img />); background-position:<cms:show bg_img_pos />; opacity:<cms:show trns_bg_img_opc /> ; </cms:if>" data-rellax-speed="<cms:show trns_fx_opt />" data-parallax="data-parallax" role="img" aria-label="<cms:show trns_bg_img_alt />" >
+    </div> 
+   
+    <div class="container text-<cms:show trns_txt_halg /> align-items-<cms:show trns_txtbx_valg />">
+      
+            <div class="row justify-content-<cms:show trns_txtbx_halg />">
+                <div class="<cms:show trns_txtbx_size />">
+                    <cms:popup_edit 'trns_frmt_gen_ht_row|trns_txtblk_txt_grp|trns_txtblk_gen_row|trns_txtblk_gen_msg|trns_txtbx_sz_opt|trns_txtbx_valg|trns_txtbx_halg|trns_txt_halg|trns_txtbx_cstm_sz_row|trns_txtbx_cstm_sz_msg|trns_txtbx_cstm_sz_rpt' link_text="<span class='bg-800 link-warning ms-0' title='Edit size and placement of text area (textbox) and alignment of text'>| [EDIT TEXTBOX] |<br> </span>" />
+                    <cms:popup_edit 'trns_frmt_gen_ht_row|trns_txtbx_txt_rpt' link_text="<span class='bg-800 link-warning ms-0' title='Edit the text itself'>EDIT TEXT | </span>" />
+                    <cms:popup_edit 'trns_frmt_gen_ht_row|trns_txtblk_gen_row|trns_txt_fx_msg|trns_txt_fx_opt|trns_txt_fx_row|trns_txtblk_txt_msg|trns_txt_fx_txt_clr|trns_txt_fx_txt_txt_sz|trns_txt_fx_fnt_wt|trns_txt_fx_ltr_spc|trns_txt_fx_fnt_st|trns_txt_fx_font|trns_fx_txt_ln|trns_txt_fx_rpt|trns_txt_fx_txt_msg|trns_txt_fx_txt_clr_rp|trns_txt_fx_fnt_wt_rp' link_text="<span class='bg-800 link-warning ms-0' title='Edit the text typing effects and words'> EDIT TEXT FX</span>" />
+                    <cms:if trns_txt_opt='2'>
+                        <cms:show_repeatable 'trns_txtm_rpt' limit='1' order='asc' >
+                            <cms:if k_first_row >
+                                <div class="<cms:if trns_vid_opt!='0'>mb-lg-5 mb-md-3 mb-sm-2</cms:if> 
+                                    text-<cms:show trns_txtm_clr />
+                                    fs-<cms:show trns_txtm_sz />
+                                    font-<cms:show trns_txtm_font />
+                                    fw-<cms:show trns_txtm_fnt_wt /> 
+                                    fst-<cms:show trns_txtm_fnt_st /> 
+                                    ls-<cms:show trns_txtm_ltr_spc /> 
+                                ">
+                                    <cms:show trns_txtm_ln />
+                                </div>
+                            </cms:if>
+                        </cms:show_repeatable>
+                    <cms:else_if trns_txt_opt='1' />
+                        <div class="<cms:if trns_vid_opt!='0'>mb-lg-5 mb-md-3 mb-sm-2</cms:if> 
+                            text-<cms:show trns_txt1_clr />
+                            fs-<cms:show trns_txt1_sz />
+                            font-<cms:show trns_txt1_font />
+                            fw-<cms:show trns_txt1_fnt_wt /> 
+                            fst-<cms:show trns_txt1_fnt_st /> 
+                            ls-<cms:show trns_txt1_ltr_spc /> 
+                        ">
+                            <cms:show trns_txt1_ln />
+                        </div>
+                    </cms:if>
+                    <!-- adds play button for popout video if optioned-->
+                    <cms:if trns_vid_opt !='0'> 
+                        <cms:if trns_mdl_vid_src_opt='3' ><!--streaming or local -->
+                            <a class="bg-video video-modal d-block mt-<cms:show trns_add_vid_btn_mgn /> py-2" href="#!" data-bigPicture='{"vimeoSrc":"<cms:show trns_mdl_vim_id />"}'>
+                                <img src="<cms:show k_site_link />assets/images/icons/icon-play<cms:show trns_add_vid_btn_clr />.svg" alt="video play button" width="80" />
+                            </a>
+                        <cms:else_if trns_vid_opt='2' />
+                            <a class="bg-video video-modal d-block mt-<cms:show trns_add_vid_btn_mgn /> py-2" href="#!" data-bigPicture='{"ytSrc":"<cms:show trns_mdl_ytb_id />"}'>
+                                <img src="<cms:show k_site_link />assets/images/icons/icon-play<cms:show trns_add_vid_btn_clr />.svg" alt="video play button" width="80" />
+                            </a>
+                         <cms:else_if trns_vid_opt='1' />
+                            <a class="bg-video video-modal d-block mt-<cms:show trns_add_vid_btn_mgn /> py-2" href="#!" data-bigPicture='{"vidSrc":"<cms:show trns_mdl_vid_upl_vid_mp4 />"}'>
+                                <img src="<cms:show k_site_link />assets/images/icons/icon-play<cms:show trns_add_vid_btn_clr />.svg" alt="video play button" width="80" />
+                            </a>
+                        </cms:if>
+                    </cms:if>
+
+                    <cms:if trns_txt_opt='2'>
+                        <cms:show_repeatable 'trns_txtm_rpt' offset='1' order='asc' >
+                            <div class="
+                                text-<cms:show trns_txtm_clr />
+                                fs-<cms:show trns_txtm_sz />
+                                font-<cms:show trns_txtm_font />
+                                fw-<cms:show trns_txtm_fnt_wt /> 
+                                fst-<cms:show trns_txtm_fnt_st /> 
+                                ls-<cms:show trns_txtm_ltr_spc /> 
+                            ">
+                                <cms:show trns_txtm_ln />
+                            </div>
+                        </cms:show_repeatable> 
+                    <cms:else_if  trns_txt_opt='1' />
+                        <div class="
+                            text-<cms:show trns_txt2_clr />
+                            fs-<cms:show trns_txt2_sz />
+                            font-<cms:show trns_txt1_font />
+                            fw-<cms:show trns_txt2_fnt_wt /> 
+                            fst-<cms:show trns_txt2_fnt_st /> 
+                            ls-<cms:show trns_txt2_ltr_spc /> 
+                        ">
+                            <cms:show trns_txt2_ln />
+                        </div>
+                    </cms:if>
+                    <cms:if trns_txt_fx_opt >
+                        <div class="fw-<cms:show trns_txt_fx_fnt_wt /> text-<cms:show trns_txt_fx_txt_clr /> font-<cms:show trns_txt_fx_font /> fst-<cms:show trns_txt_fx_fnt_st /> ls-<cms:show trns_txt_fx_ltr_spc /> fs-<cms:show trns_txt_fx_txt_txt_sz />"><cms:show trns_fx_txt_ln />
+                        <span class="typed-text fw-<cms:show trns_txt_fx_fnt_wt_rp /> text-<cms:show trns_txt_fx_txt_clr_rp />" data-typed-text='[<cms:show_repeatable "trns_txt_fx_rpt" >"<cms:if k_last_row ><cms:show trns_txt_fx_txt_ln /><cms:else /><cms:show trns_txt_fx_txt_ln />",</cms:if></cms:show_repeatable>"]'></span>
+                    </div>
+                    </cms:if>
+
+                    <cms:if trns_c2a_ct_opt >    
+                        <cms:embed 'pb_mods/transns/theme/trnsimp_c2a.html' />
+                    </cms:if>
+                </div>
+                
+                <cms:popup_edit 'trns_frmt_c2a_row|trns_form_gen_c2a_msg|trns_frmt_c2a_opt|trns_frmt_c2a_opt_ct|trns_frmt_c2a_mt|trns_c2a_grp|trns_c2a_btn_set_row|trns_c2a_btn_set_msg|trns_c2a_sz|trns_c2a_clr_out_chk|trns_c2a_st|trns_c2a_icon_msg|trns_c2a_icon_fa|trns_c2a_txt_row|trns_c2a_txt|trns_c2a_clr|trns_c2a_lnk_sz|trns_c2a_lnk_fnt_wt|trns_c2a_lnk_ltr_spc|trns_c2a_lnk_fnt_st|trns_c2a_lnk_font|trns_c2a_lnk_row|trns_c2a_clk_row|trns_c2a_cust_lnk_msg|trns_c2a_cst_lnk|trns_c2a_mult_grp|trns_c2a_mult_lay_msg|trns_c2a_cust_lnk_msg|trns_c2a_mult_ord|trns_c2a_cust_lnk_wd_msg|trns_c2a_mult_btn_wd|trns_c2a_mult_rpt' link_text="<span class='bg-800 link-warning ms-0' title='Edit the call-to-action-button'>EDIT c2a</span>" />
+            </div> <!-- end text row -->
+ 
+    </div> <!-- end container-fluid -->
+    <cms:popup_edit 'trns_img_alt_row|trns_bg_img|trns_bg_img_alt' link_text="<span class='bg-800 link-warning ms-0' title='Edit background image (may need to remove color to see)'>| [EDIT IMAGE] | </span><br>" />
+    <cms:popup_edit 'trns_frmt_gen_grp|trns_gen_xt_row2|trns_gen_xtr_add_msg|trns_vid_add_opt|trns_mdl_stg_grp|trns_gen_xt_msg|trns_mdl_vid_row|trns_add_vid_btn_clr|trns_add_vid_btn_mgn|trns_mdl_vid_row2|trns_mdl_vid_msg|trns_mdl_vid_src_opt|trns_mdl_ytb_id|trns_mdl_vim_id|trns_mdl_vid_upl_vid_mp4' link_text="<span class='bg-800 link-warning ms-0' title='Add or removed video'>| [EDIT POPUP VIDEO] | </span>" />
+</section>

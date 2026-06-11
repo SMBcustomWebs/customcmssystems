@@ -1,0 +1,71 @@
+<cms:editable type="group" name="trns_fx_grp" label="Interactive Video" not_active=trns_vid_chc order='18' >
+
+    <cms:editable type='message' name='trns_gen_xt_msg' order='2'>
+        <h2>Will show 'play' button and a modal will pop up on clicking</h2>
+        <h4>Play Button space means how much space above and below button.</h4>
+    </cms:editable>
+    <cms:editable type='row' name='trns_mdl_vid_row' label="Video Popup"  order='5' >
+        <cms:editable type='dropdown' name='trns_add_vid_btn_clr' label='Play Button Shade' 
+            opt_values='Light=|Dark=-drk'
+            class='col-md-4'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='trns_add_vid_btn_mgn' label='Play Button Space' 
+            opt_values='2|4|6|0'
+            class='col-md-4'
+            order='4'
+        />
+    </cms:editable>
+    <cms:editable type='row' name='trns_mdl_vid_row2' label="Video Popup"  order='10' >
+        <cms:editable type='message' name='trns_mdl_vid_msg' order='2'>
+            <br>
+            <h2>Streaming Video ID or Upload your own</h2><h4>IMPORTANT: If You Tube or Vimeo, only the ID is needed</h4>
+        </cms:editable>
+        <cms:editable type='dropdown' name='trns_mdl_vid_src_opt' label='Upload or Stream' 
+            opt_values='Upload=0|You Tube=1|Vimeo=2'
+            class='col-md-4'
+            order='4'
+        />
+        <cms:func _into='trns_mdl_vid_lcl_chc' trns_mdl_vid_src_opt=''>
+            <cms:if trns_mdl_vid_src_opt='0'>
+                show
+                <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:func _into='trns_mdl_vid_ytb_chc' trns_mdl_vid_src_opt=''>
+            <cms:if trns_mdl_vid_src_opt='1'>
+                show
+                <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:func _into='trns_mdl_vid_vim_chc' trns_mdl_vid_src_opt=''>
+            <cms:if trns_mdl_vid_src_opt='2'>
+                show
+                <cms:else />
+                hide
+            </cms:if>
+        </cms:func> 
+
+        <cms:editable type="text" name="trns_mdl_ytb_id" label="You Tube Video ID"
+            width="275"
+            not_active=trns_mdl_vid_ytb_chc
+            class='col-md-4'
+            order='6'
+        />
+        <cms:editable type="text" name="trns_mdl_vim_id" label="Vimeo Video ID"
+            width="275"
+            not_active=trns_mdl_vid_vim_chc
+            class='col-md-4'
+            order='8'
+        />     
+
+        <cms:editable type="file" name="trns_mdl_vid_upl_vid_mp4" label="mp4"
+            width='30' 
+            not_active=trns_mdl_vid_lcl_chc
+            class='col-md-4'
+            order='10'  
+        />
+    </cms:editable>
+</cms:editable>

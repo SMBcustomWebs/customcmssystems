@@ -1,0 +1,50 @@
+<cms:editable type='row' name='hdr_vid_add_row' label='Header Video Options'  not_active=hdr_add_video order='45' >
+
+    <cms:editable type='dropdown' name='hdr_add_vid_src_opt' label='Upload or Stream' 
+        opt_values='Upload=0|You Tube=1|Vimeo=2'
+        order='48'
+    />
+    <cms:func _into='hdr_add_vid_lcl' hdr_add_vid_src_opt=''>
+        <cms:if hdr_add_vid_src_opt='0'>
+            show
+            <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:func _into='hdr_add_vid_yt' hdr_add_vid_src_opt=''>
+        <cms:if hdr_add_vid_src_opt='1'>
+            show
+            <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:func _into='hdr_add_vid_vm' hdr_add_vid_src_opt=''>
+        <cms:if hdr_add_vid_src_opt='2'>
+            show
+            <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+ 
+    <cms:editable type="file" name="hdr_add_vid_lcl_mp4" label="mp4"  width='30' not_active=hdr_add_vid_lcl order='49'  />
+
+    <cms:editable type="text" name="hdr_add_vid_stm_yt" label="You Tube Video ID"
+        width="275"
+        not_active=hdr_add_vid_yt
+        order="52"
+    />
+    <cms:editable type="text" name="hdr_add_vid_stm_vm" label="Vimeo Video ID"
+        width="275"
+        not_active=hdr_add_vid_vm
+        order="53"
+    />
+    <cms:editable type='dropdown' name='hdr_add_vid_btn_clr' label='Play Button Shade' 
+        opt_values='Light=|Dark=-drk'
+        order='55'
+    />
+    <cms:editable type='dropdown' name='hdr_add_vid_btn_mgn' label='Play Button Space' 
+        opt_values='2|4|6|0'
+        order='56'
+    />
+    
+</cms:editable>

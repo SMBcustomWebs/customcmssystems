@@ -1,0 +1,99 @@
+<!-- ============================================-->
+<!-- <section> begin ============================-->
+<section class="text-<cms:show list1_cat_hov_genset_hdg_txt_halg />">
+
+    <div class="container">
+        <cms:if "<cms:not list1_cat_hov_rmhdr_opt />" ><!-- section header -->
+            <cms:show_repeatable 'list1_cat_hov_genset_hdg_txt_rpt'>
+                <<cms:show list1_cat_hov_genset_hdg_txt_hdg_sz /> class="text-<cms:show list1_cat_hov_genset_hdg_txt_txt_clr /> fs-<cms:show list1_cat_hov_genset_hdg_txt_txt_sz /> fw-<cms:show list1_cat_hov_genset_hdg_txt_fnt_wt /> fst-<cms:show list1_cat_hov_genset_hdg_txt_fnt_st /> font-<cms:show list1_cat_hov_genset_hdg_txt_font /> ls-<cms:show list1_cat_hov_genset_hdg_txt_ltr_spc /> lh-<cms:show list1_cat_hov_genset_hdg_txt_ln_ht />  ">
+                    <cms:show list1_cat_hov_genset_hdg_txt_txt_ln />
+                </<cms:show list1_cat_hov_genset_hdg_txt_hdg_sz />>
+            </cms:show_repeatable>
+            <cms:if list1_cat_hov_genset_hdg_hr!='none'>
+                <hr class="<cms:show list1_cat_hov_genset_hdg_hr /> text-<cms:show list1_cat_hov_genset_hdg_hrt_clr /> my-<cms:show list1_cat_hov_genset_hdg_hrt_pd /> mx-auto" />
+            </cms:if>
+        </cms:if>
+      <div class="row justify-content-center my-6">
+        <div class="col-7 col-sm-4 col-md-3">
+          <select class="form-select form-select-lg text-1100" id="filter" name="filter" data-filter-NAV="data-filter-NAV">
+            <option class="isotope-nav active" value="*" data-filter="*" selected="selected"> Viewing all</option>
+            <option class="isotope-nav" value=".digital" data-filter=".digital"> Digital </option>
+            <option class="isotope-nav" value=".animation" data-filter=".animation"> Animation</option>
+            <option class="isotope-nav" value=".print" data-filter=".print">Print </option>
+          </select>
+        </div>
+      </div>
+      <div class="row text-start" data-isotope='{"layoutMode":"packery"}'>
+        <div class="col-lg-6 isotope-item animation"><a class="text-white" href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox mb-4"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-01.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center bg-1100 row text-center">
+                <div class="col">
+                  <p class="mb-2 d-inline-block">Website </p><br />
+                  <h5 class="text-white d-inline-block mt-0">Website for Sarah and Mike </h5><br />
+                  <div class="btn btn-outline-white btn-xs mt-4">View Details</div>
+                </div>
+              </div>
+            </div>
+          </a></div>
+        <div class="col-lg-6 isotope-item digital"><a class="text-white" href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox mb-4"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-02.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center bg-1100 row text-center">
+                <div class="col">
+                  <p class="mb-2 d-inline-block">Design </p><br />
+                  <h5 class="text-white d-inline-block mt-0">Wildlife videography of the North</h5><br />
+                  <div class="btn btn-outline-white btn-xs mt-4">View Details </div>
+                </div>
+              </div>
+            </div>
+          </a></div>
+        <div class="col-lg-6 isotope-item print"><a class="text-white" href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox mb-4"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-03.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center bg-1100 row text-center">
+                <div class="col">
+                  <p class="mb-2 d-inline-block">Animation </p><br />
+                  <h5 class="text-white d-inline-block mt-0">Design of the coolest interior furniture</h5><br />
+                  <div class="btn btn-outline-white btn-xs mt-4">View Details </div>
+                </div>
+              </div>
+            </div>
+          </a></div>
+        <div class="col-lg-6 isotope-item animation"><a class="text-white" href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox mb-4"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-04.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center bg-1100 row text-center">
+                <div class="col">
+                  <p class="mb-2 d-inline-block">Website </p><br />
+                  <h5 class="text-white d-inline-block mt-0">Tale of natural bridge</h5><br />
+                  <div class="btn btn-outline-white btn-xs mt-4">View Details</div>
+                </div>
+              </div>
+            </div>
+          </a></div>
+        <div class="col-lg-6 isotope-item print"><a class="text-white" href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox mb-4"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-05.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center bg-1100 row text-center">
+                <div class="col">
+                  <p class="mb-2 d-inline-block">Photography </p><br />
+                  <h5 class="text-white d-inline-block mt-0">The horse </h5><br />
+                  <div class="btn btn-outline-white btn-xs mt-4">View Details </div>
+                </div>
+              </div>
+            </div>
+          </a></div>
+        <div class="col-lg-6 isotope-item digital"><a class="text-white" href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox mb-4"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-06.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center bg-1100 row text-center">
+                <div class="col">
+                  <p class="mb-2 d-inline-block">Animation</p><br />
+                  <h5 class="text-white d-inline-block mt-0">Grizzly Bear</h5><br />
+                  <div class="btn btn-outline-white btn-xs mt-4">View Details</div>
+                </div>
+              </div>
+            </div>
+          </a></div>
+      </div>
+    </div>
+    <!-- end of .container-->
+
+</section>
+<!-- <section> close ============================-->
+<!-- ============================================-->

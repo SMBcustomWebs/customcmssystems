@@ -1,0 +1,296 @@
+<cms:editable type="group" name="trnsmp_c2a_grp" label="Call-To-Action Link" not_active=trnsmp_c2a_chc order="24" >
+    <cms:editable type='row' name='trnsmp_c2a_opt_row'  order='5'>
+        
+        
+        
+        
+        <cms:editable type='text' name='trnsmp_c2a_txt' label='Button Text'
+            maxlength='60'
+            width='275'
+            class='col-md-4 col-sm-6'
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_clr' label='Button Color' 
+            opt_values='dropdowns/btn-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='3'  
+        />
+        <cms:func _into='trnsmp_c2a_clr_lnk' trnsmp_c2a_clr=''>  
+            <cms:if trnsmp_c2a_clr='link' >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:func _into='trnsmp_c2a_btn_clr_chc' trnsmp_c2a_clr=''>  
+            <cms:if trnsmp_c2a_clr='link' >
+                hide
+            <cms:else />
+                show
+            </cms:if>
+        </cms:func>
+    </cms:editable>    
+    <cms:editable type='row' name='trnsmp_c2a_txt_lnk_row'  not_active=trnsmp_c2a_clr_lnk order='8'>
+        <cms:editable type='dropdown' name='trnsmp_c2a_lnk_clr' label='Link Color' 
+            opt_values='dropdowns/solid-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='3'  
+        />
+        
+        <cms:editable type='dropdown' name='trnsmp_c2a_lnk_sz' label='Link Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            opt_selected='-sm'
+            class='col-md-4 col-sm-6'
+            order='4'  
+        />
+        
+        <cms:editable type='dropdown' name='trnsmp_c2a_lnk_fnt_wt' label='Link Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='8'  
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_lnk_ltr_spc' label='Link Letter Spacing' 
+            opt_values='dropdowns/hdr_ltr-spc.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='9'  
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_lnk_fnt_st' label='Link Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='10'  
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_lnk_font' label='Link Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='11'  
+        />
+        
+    </cms:editable>
+    <cms:editable type='row' name='trnsmp_c2a_frm_row' not_active=trnsmp_c2a_btn_clr_chc order='10'>
+        <cms:editable type='dropdown' name='trnsmp_c2a_sz' label='Button Size' 
+            opt_values='dropdowns/button-size.htm'
+            dynamic='opt_values'
+            opt_selected='-sm'
+            class='col-md-4 col-sm-6'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_st' label='Button Style' desc=''
+            opt_values='dropdowns/button-style.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='6'
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_clr_out_chk' label='Solid Color or Outline' desc=''
+            opt_values='Solid= |Outline= -outline'
+            class='col-md-4 col-sm-6'
+            order='4'
+        />
+        
+    </cms:editable>
+    
+    <cms:func _into='trnsmp_c2a_icon_fa_chc' trnsmp_c2a_st=''>  
+        <cms:if (trnsmp_c2a_st !='') && (trnsmp_c2a_st !='rounded-capsule') >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='row' name='trnsmp_c2a_fa_row' not_active=trnsmp_c2a_btn_clr_chc order='15'>
+        <cms:editable type='message' name='trnsmp_c2a_icon_msg' not_active=trnsmp_c2a_icon_fa_chc class='col-sm-12'  order='5'>
+            <h3>Font Awesome Icons v6. Enter the full code.  EX: fab fa-gitlab</h3>
+            <h4>See all options <a href="https://fontawesome.com/v6/search" target="_bland">here at https://fontawesome.com/v6/search</a> </h4>
+            <p></p>
+        </cms:editable>
+        <cms:editable type='text' name='trnsmp_c2a_icon_fa' label='Enter full Font Awesome Icon' desc='EX: fa fa-heart'
+            width='275'
+            not_active=trnsmp_c2a_icon_fa_chc
+            class='col-sm-12'
+            order='6'
+        />
+    </cms:editable>
+    
+    <cms:editable type='row' name='trnsmp_c2a_lnk_row'  order='20'>
+        <cms:editable type='dropdown' name='trnsmp_c2a_lnk' label='Button Link' 
+            opt_values='dropdowns/links.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='2'  
+        />
+    </cms:editable>
+    <cms:func _into='trnsmp_c2a_cstm' trnsmp_c2a_lnk=''>
+        <cms:if trnsmp_c2a_lnk='custom'>
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='row' name='trnsmp_c2a_clk_row' not_active=trnsmp_c2a_cstm order='25'>
+        <cms:editable type='message' name='trnsmp_c2a_cust_lnk_msg' class='col-sm-12' order='5'>
+            <h2>Enter the full url for cutsom link.</h2>
+            <h4>Will open in a seperate tab</h4>
+            <p></p>
+        </cms:editable>
+        <cms:editable type='text' name='trnsmp_c2a_cst_lnk' label='Custom Button Link'  desc='enter full url' 
+            class='col-sm-12'
+            order='6' 
+        />
+    </cms:editable>
+</cms:editable>
+
+
+<cms:editable type="group" name="trnsmp_c2a_mult_grp" label="Mutiple Call-To-Action Links" not_active=trnsmp_c2a_mult_chc order="28" >
+    
+    <cms:repeatable name="trnsmp_c2a_mult_rpt" label='Call-To-Action Settings' stacked_layout='1' order='30'>
+        <cms:editable type='text' name='trnsmp_c2a_mult_txt' label='Button Text'
+            maxlength='60'
+            width='275'
+          
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_clr' label='Button Color' 
+            opt_values='dropdowns/btn-colors.htm'
+            dynamic='opt_values'
+            
+            order='4'  
+        />
+        <cms:func _into='trnsmp_c2a_mult_clr_lnk' trnsmp_c2a_mult_clr=''>  
+            <cms:if trnsmp_c2a_mult_clr='link' >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:func _into='trnsmp_c2a_mult_btn_clr_chc' trnsmp_c2a_mult_clr=''>  
+            <cms:if trnsmp_c2a_mult_clr='link' >
+                hide
+            <cms:else />
+                show
+            </cms:if>
+        </cms:func>
+  
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_lnk_clr' label='Link Color' 
+            opt_values='dropdowns/solid-colors.htm'
+            dynamic='opt_values'
+            not_active=trnsmp_c2a_mult_clr_lnk
+            order='6'  
+        />
+        
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_lnk_sz' label='Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            opt_selected='-sm'
+            order='8'  
+        />
+        
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_lnk_fnt_wt' label='Link Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            not_active=trnsmp_c2a_mult_clr_lnk
+            order='12'  
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_lnk_ltr_spc' label='Link Letter Spacing' 
+            opt_values='dropdowns/hdr_ltr-spc.htm'
+            dynamic='opt_values'
+            not_active=trnsmp_c2a_mult_clr_lnk
+            order='16'  
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_lnk_fnt_st' label='Link Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            not_active=trnsmp_c2a_mult_clr_lnk
+            order='18'  
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_lnk_font' label='Link Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            not_active=trnsmp_c2a_mult_clr_lnk
+            order='20'  
+        />
+        
+  
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_sz' label='Button Size' 
+            opt_values='dropdowns/button-size.htm'
+            dynamic='opt_values'
+            opt_selected='-sm'
+            not_active=trnsmp_c2a_mult_btn_clr_chc
+          
+            order='24'  
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_btn_wd' label='Width' desc='percentage of text block'
+            opt_values='dropdowns/button-width.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='25'
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_st' label='Button Style' desc=''
+            opt_values='dropdowns/button-style.htm'
+            dynamic='opt_values'
+            not_active=trnsmp_c2a_mult_btn_clr_chc
+         
+            order='26'
+        />
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_clr_out_chk' label='Solid Color or Outline' desc=''
+            opt_values='Solid= |Outline= -outline'
+            not_active=trnsmp_c2a_mult_btn_clr_chc
+       
+            order='28'
+        />
+
+    
+    <cms:func _into='trnsmp_c2a_mult_icon_fa_chc' trnsmp_c2a_mult_st=''>  
+        <cms:if (trnsmp_c2a_mult_st !='') && (trnsmp_c2a_mult_st !='rounded-capsule') >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+ 
+        <cms:editable type='message' name='trnsmp_c2a_mult_icon_msg' not_active=trnsmp_c2a_mult_icon_fa_chc   order='32'>
+            <h3>Font Awesome Icons v6. Enter the full code.  EX: fab fa-gitlab</h3>
+            <h4>See all options <a href="https://fontawesome.com/v6/search" target="_bland">here at https://fontawesome.com/v6/search</a> </h4>
+            <p></p>
+        </cms:editable>
+        <cms:editable type='text' name='trnsmp_c2a_mult_icon_fa' label='Enter full Font Awesome Icon' desc='EX: fa fa-heart'
+            width='275'
+            not_active=trnsmp_c2a_mult_icon_fa_chc
+            order='34'
+        />
+  
+ 
+        <cms:editable type='dropdown' name='trnsmp_c2a_mult_lnk' label='Button Link' 
+            opt_values='dropdowns/links.htm'
+            dynamic='opt_values'
+  
+            order='36'  
+        />
+
+    <cms:func _into='trnsmp_c2a_mult_cstm' trnsmp_c2a_mult_lnk=''>
+        <cms:if trnsmp_c2a_mult_lnk='custom'>
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+   
+        <cms:editable type='message' name='trnsmp_c2a_mult_cust_lnk_msg'  not_active=trnsmp_c2a_mult_cstm class='col-sm-12' order='38'>
+            <h2>Enter the full url for cutsom link.</h2>
+            <h4>Will open in a seperate tab</h4>
+            <p></p>
+        </cms:editable>
+        <cms:editable type='text' name='trnsmp_c2a_mult_cst_lnk' label='Custom Button Link'  desc='enter full url' 
+             not_active=trnsmp_c2a_mult_cstm
+            order='39' 
+        />
+  
+        
+        
+        
+    </cms:repeatable>
+</cms:editable>

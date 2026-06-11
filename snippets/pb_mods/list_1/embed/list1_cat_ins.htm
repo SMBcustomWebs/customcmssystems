@@ -1,0 +1,163 @@
+<cms:editable type='message' name='list1_cat_ins_msg' order='2' >
+    <h2>Catalog or List Page Setup. Headings Inside Image</h2>
+    <h4></h4>
+</cms:editable>
+<cms:editable type="group" name="list1_cat_ins_hdr_grp" label="General Settings" order='5' >
+    <cms:editable type='message' name='list1_cat_ins_hdr_msg' order='2' >
+        <h2>Header General Settings</h2>
+        <h4>Layout and Size</h4>
+    </cms:editable>
+    <cms:editable type='row' name='list1_cat_ins_hdg_row'  order='4' >
+        <cms:editable type='checkbox' name='list1_cat_ins_rmhdr_opt' label='Remove Header' desc='check to remove section heading'
+            opt_values='Remove Section Header=1'
+            class='col-sm-12'
+            order='4'
+        />
+    </cms:editable>
+    <cms:func _into='list1_cat_ins_rmhdr_chc' list1_cat_ins_rmhdr_opt=''>
+        <cms:if "<cms:is '1' in=list1_cat_ins_rmhdr_opt />" >
+            hide
+        <cms:else />
+            show
+        </cms:if>
+    </cms:func>
+    <cms:editable type='message' name='list1_cat_ins_hdg_txtbx_msg' not_active=list1_cat_ins_rmhdr_chc order='5' >
+        <h2>Heading TextBox. Size of text box sets area text is dispayed.</h2>
+        <h4>This is the space where the text resides.</h4>
+    </cms:editable>
+    <cms:editable type='row' name='list1_cat_ins_hdg_txt_row' not_active=list1_cat_ins_rmhdr_chc  order='6' >
+        <cms:editable type='dropdown'  name='list1_cat_ins_hdg_txtbx_pd' label='Extra Space Above &amp; Below Heading' desc=''
+            opt_values='dropdowns/padding.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='4'
+        />
+        <cms:editable type='dropdown'  name='list1_cat_ins_hdg_txtbx_halg' label='Align Text Box Horizontal' desc='Left, Center, Right'
+            opt_values='dropdowns/h-align.htm'
+            opt_selected='center'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='6'
+        />
+        <cms:editable type='dropdown'  name='list1_cat_ins_hdg_txt_halg' label='Align Inside Text' desc='Alignment of what is inside the text block'
+            opt_values='dropdowns/h-align.htm'
+            opt_selected='center'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='8'
+        />
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_txtbx_sz_opt' label='Size of Text Box' desc='choosing "Custom" will open up options below'
+            opt_values='dropdowns/txt-box_size.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='10'
+        />
+        
+     </cms:editable>
+    
+    <cms:func _into='list1_cat_ins_hdg_txtbx_sz_chc' list1_cat_ins_hdg_txtbx_sz_opt=''>
+        <cms:if list1_cat_ins_hdg_txtbx_sz_opt="custom" >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    
+    <cms:editable type='message' name='list1_cat_ins_hdg_txtbx_cstm_sz_msg' not_active=list1_cat_ins_hdg_txtbx_sz_chc order='8'>
+        <hr><br>
+        <h2>Custom Size Text Block</h2><h4><a href='https://getbootstrap.com/docs/5.1/layout/grid/' target="_blank">More Info on Bootstrap</a></h4>
+        <p>Screen Size adjusts for device screens. 12 columns means full width for that screen size.</p>
+    </cms:editable>
+    <cms:repeatable name='list1_cat_ins_hdg_txtbx_cstm_sz_rpt' label="Set column size per Bootstrap https://getbootstrap.com/docs/5.1/layout/grid/" not_active=list1_cat_ins_hdg_txtbx_sz_chc order='10'>
+        <cms:editable type="dropdown" name='list1_cat_ins_hdg_txtbx_cstm_col_sz' label='Screen Size' 
+            opt_values='dropdowns/col-size.htm' 
+            dynamic='opt_values'
+            order='2'
+        />
+        <cms:editable type="dropdown" name='list1_cat_ins_hdg_txtbx_cstm_col_val' label='Columns out of 12' 
+            opt_values='dropdowns/col-size-val.htm'  
+            dynamic='opt_values'
+            order='3'
+        />
+    </cms:repeatable>       
+    <cms:editable type='message' name='list1_cat_ins_hdg_txt_br_msg' not_active=list1_cat_ins_rmhdr_chc order='11' >
+        <br><hr><br><hr>
+    </cms:editable>
+    <cms:editable type='message' name='list1_cat_ins_hdg_txt_msg' not_active=list1_cat_ins_rmhdr_chc order='12' >
+        <hr><br>
+        <h2>Header Text</h2>
+        <h4>Each row is a new line of text. </h4>
+    </cms:editable>
+    <cms:repeatable name='list1_cat_ins_hdg_txt_rpt' stacked_layout='1' not_active=list1_cat_ins_rmhdr_chc order='16'>
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_txt_hdg_sz' label='Main Text Size' 
+            opt_values='dropdowns/heading-size.htm'
+            dynamic='opt_values'
+            order='1'  
+        />
+        <cms:editable type='text' name='list1_cat_ins_hdg_txt_ln' label='Text Word(s)'
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_txt_clr' label='Text Color'
+            opt_values='dropdowns/solid-colors.htm'
+            opt_selected='600'
+            dynamic='opt_values'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_txt_sz' label='Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            order='6'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_txt_fnt_wt' label='Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            order='8'  
+        />
+
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_txt_fnt_st' label='Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            order='10'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_txt_font' label='Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            order='12'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_txt_ltr_spc' label='Letter Spacing' 
+            opt_values='dropdowns/ltr-spc.htm'
+            dynamic='opt_values'
+            order='14'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_txt_ln_ht' label='Text Line Height' 
+            opt_values='dropdowns/line-height.htm'
+            dynamic='opt_values'
+            order='16'  
+        />
+    </cms:repeatable>
+    <cms:editable type='message' name='list1_cat_ins_hdr_hr_msg' not_active=list1_cat_ins_rmhdr_chc order='20' >
+        <h2>Visual Dividing Line</h2>
+        <h4>Color Size and Space Settings below</h4>
+    </cms:editable>    
+   
+    <cms:editable type='row' name='list1_cat_ins_hdg_hr_row' not_active=list1_cat_ins_rmhdr_chc order='23' >
+        
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_hr' label='Size' 
+            opt_values='dropdowns/hr-size.htm'
+            dynamic='opt_values'
+            order='2'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_hr_clr' label='Color' 
+            opt_values='dropdowns/solid-colors.htm'
+            opt_selected='500'
+            dynamic='opt_values'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_ins_hdg_hr_pd' label='Space Between' 
+            opt_values='dropdowns/padding.htm'
+            opt_selected='4'
+            dynamic='opt_values'
+            order='6'  
+        />
+    </cms:editable>
+</cms:editable>

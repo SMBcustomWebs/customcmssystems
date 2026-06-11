@@ -1,0 +1,113 @@
+<cms:editable type="group" name="list1_cat_hov_genset_msg_grp" label="General Settings" order='25' >
+    <cms:editable type='message' name='list1_cat_hov_genset_msg' order='2' >
+        <h2>Portfolio Catelog Layout Setup</h2>
+        <h4>Entries are are pulled from your portfilio entries here:</h4>
+    </cms:editable>
+    
+</cms:editable>
+<cms:editable type="group" name="list1_cat_hov_genset_hdr_grp" label="General Settings" order='30' >
+    <cms:editable type='message' name='list1_cat_hov_genset_hdr_msg' order='2' >
+        <h2>Portfolio General Settings</h2>
+        <h4>Layout and Size</h4>
+    </cms:editable>
+    <cms:editable type='row' name='list1_cat_hov_genset_hdg_row'  order='4' >
+        <cms:editable type='checkbox' name='list1_cat_hov_rmhdr_opt' label='Remove Header' desc='check to remove section heading'
+            opt_values='Remove Section Header=1'
+            class='col-sm-12'
+            order='4'
+        />
+    </cms:editable>
+    <cms:func _into='list1_cat_hov_rmhdr_chc' list1_cat_hov_rmhdr_opt=''>
+        <cms:if "<cms:is '1' in=list1_cat_hov_rmhdr_opt />" >
+            hide
+        <cms:else />
+            show
+        </cms:if>
+    </cms:func> 
+    <cms:editable type='row' name='list1_cat_hov_genset_hdg_txt_row' not_active=list1_cat_hov_rmhdr_chc  order='6' >
+        <cms:editable type='message' name='list1_cat_hov_genset_hdg_txt_msg' order='2' >
+            <h2>Portfolio Header Heading Text</h2>
+            <h4></h4>
+        </cms:editable>
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_txt_halg' label='Text Alignment' 
+            opt_values='dropdowns/h-align.htm'
+            dynamic='opt_values'
+            opt_selected='center'
+            order='4'  
+        />
+     </cms:editable>
+    <cms:repeatable name='list1_cat_hov_genset_hdg_txt_rpt' stacked_layout='1' not_active=list1_cat_hov_rmhdr_chc order='8'>
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_txt_hdg_sz' label='Main Text Size' 
+            opt_values='dropdowns/heading-size.htm'
+            dynamic='opt_values'
+            order='1'  
+        />
+        <cms:editable type='text' name='list1_cat_hov_genset_hdg_txt_txt_ln' label='Text Word(s)'
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_txt_txt_clr' label='Text Color'
+            opt_values='dropdowns/solid-colors.htm'
+            opt_selected='white'
+            dynamic='opt_values'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_txt_txt_sz' label='Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            order='6'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_txt_fnt_wt' label='Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            order='8'  
+        />
+
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_txt_fnt_st' label='Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            order='10'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_txt_font' label='Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            order='12'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_txt_ltr_spc' label='Letter Spacing' 
+            opt_values='dropdowns/ltr-spc.htm'
+            dynamic='opt_values'
+            order='14'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_txt_ln_ht' label='Line Height' 
+            opt_values='dropdowns/line-height.htm'
+            dynamic='opt_values'
+            order='16'  
+        />
+    </cms:repeatable>
+        
+   
+    <cms:editable type='row' name='list1_cat_hov_genset_hdg_hr_row' not_active=list1_cat_hov_rmhdr_chc order='10' >
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_hr' label='Horizontal Line Visual Seperator' 
+            opt_values='dropdowns/hr-size.htm'
+            dynamic='opt_values'
+            order='2'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_hrt_clr' label='Horizontal Line Visual Seperator Color' 
+            opt_values='dropdowns/solid-colors.htm'
+            opt_selected='500'
+            dynamic='opt_values'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='list1_cat_hov_genset_hdg_hrt_pd' label='Space Between' 
+            opt_values='dropdowns/padding.htm'
+            opt_selected='4'
+            dynamic='opt_values'
+            order='6'  
+        />
+    </cms:editable>
+</cms:editable>
+
+
+
+
+
+

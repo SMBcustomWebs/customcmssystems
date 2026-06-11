@@ -1,0 +1,80 @@
+<cms:if ccs_ubr_mnu_swap>
+    <cms:set sc1_col_layout="col-auto text-lg-end me-lg-n1 px-0 pe-lg-1 order-2" scope="global" />
+    <cms:set sc2_col_layout="col order-1" scope="global" />
+<cms:else />
+    <cms:set sc1_col_layout="col order-1" scope="global" />
+    <cms:set sc2_col_layout="col-auto text-lg-end me-lg-n1 px-0 pe-lg-1 order-2" scope="global" />
+</cms:if>
+
+<section id="tpb_mnu" class="bg-<cms:show ccs_ubr_mnu_bg_clr_opt /> py-<cms:show ccs_ubr_mnu_pd /> <cms:if ccs_ubr_mnu_stky>sticky-top top-0 start-0 z-3</cms:if>" aria-label="Secondary Navigation">
+    
+    <cms:if ccs_gl_edt_ok>
+        <div class="container-fluid pt-2">
+            <cms:popup_edit 'ccs_ubr_mnu_gen_grp|ccs_ubr_mnu_gen_msg|ccs_ubr_mnu_stl_row|ccs_ubr_mnu_pd|ccs_ubr_mnu_bg_clr_opt|ccs_ubr_mnu_swap|ccs_ubr_mnu_stky_row|ccs_ubr_mnu_frmt_msg|ccs_ubr_mnu_stky' link_text="<span class='bg-800 link-warning' title='Edit Top Bar background color, size, position'>| [EDIT BAR SETTINGS] |</span>" />
+        </div>
+    </cms:if>
+    
+    <div class="container">
+        <div class="row">
+            
+            <div class="<cms:show sc1_col_layout />">
+                <cms:if ccs_gl_edt_ok>
+                    <div class="mb-1 <cms:if ccs_ubr_mnu_swap>text-end</cms:if>">
+                        <cms:popup_edit 'ccs_ubr_mnu_sc1_grp|ccs_ubr_mnu_sc1_init_msg|ccs_ubr_mnu_sc1_txt_row|ccs_ubr_mnu_sc1_text|ccs_ubr_mnu_sc1_sz|ccs_ubr_mnu_sc1_font|ccs_ubr_mnu_sc1_fw|ccs_ubr_mnu_sc1_fst|ccs_ubr_mnu_sc1_ls' link_text="<span class='bg-800 link-warning' title='Format text'>| [FORMAT SEC 1 TEXT] |</span>" />
+                        <cms:popup_edit 'ccs_ubr_mnu_sc1_grp|ccs_ubr_mnu_sc1_rpt_msg|ccs_ubr_mnu_sc1_rpt' link_text="<span class='bg-800 link-warning ms-1' title='Change links & icons'>| [EDIT SEC 1 LINKS] |</span>" />
+                    </div>
+                </cms:if>
+                
+                <cms:show_repeatable 'ccs_ubr_mnu_sc1_rpt'>
+                    <cms:set final_sc1_tgt='' scope="global" />
+                    <cms:set final_sc1_ext_icn="" scope="global" />
+                    
+                    <cms:if ccs_ubr_mnu_sc1_lnk == 'custom'>
+                        <cms:set final_sc1_lnk="<cms:show ccs_ubr_mnu_sc1_cst />" scope="global" />
+                        <cms:set final_sc1_tgt='target="_blank"' scope="global" />
+                        <cms:set final_sc1_ext_icn="<i class='fa-solid fa-arrow-up-right-from-square ms-1' style='font-size: 0.75em;' aria-hidden='true'></i>" scope="global" />
+                    <cms:else />
+                        <cms:set final_sc1_lnk="<cms:show ccs_ubr_mnu_sc1_lnk />" scope="global" />
+                    </cms:if>
+                    
+                    <a href="<cms:show final_sc1_lnk />" <cms:show final_sc1_tgt /> class="btn btn-link btn-xs pe-4 ps-0 link-<cms:show ccs_ubr_mnu_sc1_text /> fs-<cms:show ccs_ubr_mnu_sc1_sz /> font-<cms:show ccs_ubr_mnu_sc1_font /> fst-<cms:show ccs_ubr_mnu_sc1_fst /> fw-<cms:show ccs_ubr_mnu_sc1_fw /> ls-<cms:show ccs_ubr_mnu_sc1_ls />">
+                        <cms:if "<cms:not_empty ccs_ubr_mnu_sc1_icn />">
+                            <span class="<cms:show ccs_ubr_mnu_sc1_icn /> me-1" aria-hidden="true"></span>
+                        </cms:if>
+                        <span><cms:show ccs_ubr_mnu_sc1_ttl /></span> <cms:show final_sc1_ext_icn />
+                    </a>
+                </cms:show_repeatable>
+            </div>
+            
+            <div class="<cms:show sc2_col_layout />">
+                <cms:if ccs_gl_edt_ok>
+                    <div class="mb-1 <cms:if "<cms:not ccs_ubr_mnu_swap />">text-end</cms:if>">
+                        <cms:popup_edit 'ccs_ubr_mnu_sc2_grp|ccs_ubr_mnu_sc2_init_msg|ccs_ubr_mnu_sc2_txt_row|ccs_ubr_mnu_sc2_text|ccs_ubr_mnu_sc2_sz|ccs_ubr_mnu_sc2_font|ccs_ubr_mnu_sc2_fw|ccs_ubr_mnu_sc2_fst|ccs_ubr_mnu_sc2_ls' link_text="<span class='bg-800 link-warning' title='Format text'>| [FORMAT SEC 2 TEXT] |</span>" />
+                        <cms:popup_edit 'ccs_ubr_mnu_sc2_grp|ccs_ubr_mnu_sc2_rpt_msg|ccs_ubr_mnu_sc2_rpt' link_text="<span class='bg-800 link-warning ms-1' title='Change links & icons'>| [EDIT SEC 2 LINKS] |</span>" />
+                    </div>
+                </cms:if>
+                
+                <cms:show_repeatable 'ccs_ubr_mnu_sc2_rpt'>
+                    <cms:set final_sc2_tgt='' scope="global" />
+                    <cms:set final_sc2_ext_icn="" scope="global" />
+
+                    <cms:if ccs_ubr_mnu_sc2_lnk == 'custom'>
+                        <cms:set final_sc2_lnk="<cms:show ccs_ubr_mnu_sc2_cst />" scope="global" />
+                        <cms:set final_sc2_tgt='target="_blank"' scope="global" />
+                        <cms:set final_sc2_ext_icn="<i class='fa-solid fa-arrow-up-right-from-square ms-1' style='font-size: 0.75em;' aria-hidden='true'></i>" scope="global" />
+                    <cms:else />
+                        <cms:set final_sc2_lnk="<cms:show ccs_ubr_mnu_sc2_lnk />" scope="global" />
+                    </cms:if>
+                    
+                    <a href="<cms:show final_sc2_lnk />" <cms:show final_sc2_tgt /> class="btn btn-link btn-xs pe-4 ps-0 link-<cms:show ccs_ubr_mnu_sc2_text /> fs-<cms:show ccs_ubr_mnu_sc2_sz /> font-<cms:show ccs_ubr_mnu_sc2_font /> fst-<cms:show ccs_ubr_mnu_sc2_fst /> fw-<cms:show ccs_ubr_mnu_sc2_fw /> ls-<cms:show ccs_ubr_mnu_sc2_ls />">
+                        <cms:if "<cms:not_empty ccs_ubr_mnu_sc2_icn />">
+                            <span class="<cms:show ccs_ubr_mnu_sc2_icn /> me-1" aria-hidden="true"></span>
+                        </cms:if>
+                        <span><cms:show ccs_ubr_mnu_sc2_ttl /></span> <cms:show final_sc2_ext_icn />
+                    </a>
+                </cms:show_repeatable>
+            </div>
+            
+        </div>
+    </div>
+</section>

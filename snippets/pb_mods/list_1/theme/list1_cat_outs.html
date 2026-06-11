@@ -1,0 +1,93 @@
+<!-- ============================================-->
+<!-- <section> begin ============================-->
+<section class="text-<cms:show list1_cat_outs_genset_hdg_txt_halg />">
+
+    <div class="container">
+        <cms:if "<cms:not list1_cat_outs_rmhdr_opt />" ><!-- section header -->
+            <cms:show_repeatable 'list1_cat_outs_genset_hdg_txt_rpt'>
+                <<cms:show list1_cat_outs_genset_hdg_txt_hdg_sz /> class="text-<cms:show list1_cat_outs_genset_hdg_txt_txt_clr /> fs-<cms:show list1_cat_outs_genset_hdg_txt_txt_sz /> fw-<cms:show list1_cat_outs_genset_hdg_txt_fnt_wt /> fst-<cms:show list1_cat_outs_genset_hdg_txt_fnt_st /> font-<cms:show list1_cat_outs_genset_hdg_txt_font /> ls-<cms:show list1_cat_outs_genset_hdg_txt_ltr_spc /> lh-<cms:show list1_cat_outs_genset_hdg_txt_ln_ht /> ">
+                    <cms:show list1_cat_outs_genset_hdg_txt_txt_ln />
+                </<cms:show list1_cat_outs_genset_hdg_txt_hdg_sz />>
+            </cms:show_repeatable>
+            <cms:if list1_cat_outs_genset_hdg_hr!='none'>
+                <hr class="<cms:show list1_cat_outs_genset_hdg_hr /> text-<cms:show list1_cat_outs_genset_hdg_hrt_clr /> my-<cms:show list1_cat_outs_genset_hdg_hrt_pd /> mx-auto" />
+            </cms:if>
+        </cms:if>
+      <div class="row justify-content-center my-6">
+        <div class="col-7 col-sm-4 col-md-3">
+          <select class="form-select form-select-lg text-1100" id="filter" name="filter" data-filter-NAV="data-filter-NAV">
+            <option class="isotope-nav active" value="*" data-filter="*" selected="selected"> Viewing all</option>
+            <option class="isotope-nav" value=".digital" data-filter=".digital"> Digital </option>
+            <option class="isotope-nav" value=".animation" data-filter=".animation"> Animation</option>
+            <option class="isotope-nav" value=".print" data-filter=".print">Print </option>
+          </select>
+        </div>
+      </div>
+      <div class="row text-start" data-isotope='{"layoutMode":"packery"}'>
+        <div class="col-lg-6 mb-6 isotope-item animation"><a href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-01.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center background-semi-transparent text-center row text-white">
+                <div class="col"> <span class="icon-Add fs-7"> </span></div>
+              </div>
+            </div>
+          </a>
+          <h5 class="mt-3 mb-1"> <a class="link-1100" href="<cms:show k_site_link />pages/portfolio-details.html"> Website for Sarah and Mike </a></h5>
+          <p class="text-700">Animation </p>
+        </div>
+        <div class="col-lg-6 mb-6 isotope-item digital"><a href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-02.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center background-semi-transparent text-center row text-white">
+                <div class="col"> <span class="icon-Add fs-7"> </span></div>
+              </div>
+            </div>
+          </a>
+          <h5 class="mt-3 mb-1"> <a class="link-1100" href="<cms:show k_site_link />pages/portfolio-details.html"> Wildlife videography of the North </a></h5>
+          <p class="text-700">Design </p>
+        </div>
+        <div class="col-lg-6 mb-6 isotope-item print"><a href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-03.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center background-semi-transparent text-center row text-white">
+                <div class="col"> <span class="icon-Add fs-7"> </span></div>
+              </div>
+            </div>
+          </a>
+          <h5 class="mt-3 mb-1"> <a class="link-1100" href="<cms:show k_site_link />pages/portfolio-details.html"> Design of the coolest interior furniture</a></h5>
+          <p class="text-700">Videography </p>
+        </div>
+        <div class="col-lg-6 mb-6 isotope-item animation"><a href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-04.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center background-semi-transparent text-center row text-white">
+                <div class="col"> <span class="icon-Add fs-7"> </span></div>
+              </div>
+            </div>
+          </a>
+          <h5 class="mt-3 mb-1"> <a class="link-1100" href="<cms:show k_site_link />pages/portfolio-details.html">Tale of a natural bridge </a></h5>
+          <p class="text-700">Photography </p>
+        </div>
+        <div class="col-lg-6 mb-6 isotope-item print"><a href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-05.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center background-semi-transparent text-center row text-white">
+                <div class="col"> <span class="icon-Add fs-7"> </span></div>
+              </div>
+            </div>
+          </a>
+          <h5 class="mt-3 mb-1"> <a class="link-1100" href="<cms:show k_site_link />pages/portfolio-details.html"> The horse race </a></h5>
+          <p class="text-700">Website </p>
+        </div>
+        <div class="col-lg-6 mb-6 isotope-item digital"><a href="<cms:show k_site_link />pages/portfolio-details.html">
+            <div class="hoverbox"> <img class="rounded-1" src="<cms:show k_site_link />assets/images/s-06.png" alt="" />
+              <div class="hoverbox-content d-flex justify-content-center align-items-center background-semi-transparent text-center row text-white">
+                <div class="col"> <span class="icon-Add fs-7"> </span></div>
+              </div>
+            </div>
+          </a>
+          <h5 class="mt-3 mb-1"> <a class="link-1100" href="<cms:show k_site_link />pages/portfolio-details.html"> Grizzly Bear </a></h5>
+          <p class="text-700">Animation </p>
+        </div>
+      </div>
+    </div>
+    <!-- end of .container-->
+
+</section>
+<!-- <section> close ============================-->
+<!-- ============================================-->

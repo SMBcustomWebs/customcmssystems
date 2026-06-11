@@ -1,0 +1,100 @@
+
+<cms:editable type="group" name="trns_img_grp" label="Background Image" not_active=trns_img_chc order='9' > 
+    <cms:editable type='message' name='trnsimg_bg_clr_cstm_msg' order='2'>
+        <h2>Custom Background Color</h2><h4>These colors will cover the background image and overlay colors. Use Transparancy as needed to see the images.</h4>
+    </cms:editable>
+    <cms:editable type='row' name='trns_img_row'  order='5' >
+        <cms:editable type='image' name='trns_bg_img' label='Section Background Image' desc='16:9 ratio - 2560x1440,1920x1080,etc'
+            width='2560'
+            height='1440'
+            enforce_max='1'
+            show_preview='1'
+            preview_width='75'
+            class='col-md-12'
+            order='2'
+        />
+        <cms:editable type='text' name='trns_bg_img_alt' label='Image Description'  desc='for screen readers and SEO'
+            class='col-md-12'
+            order='3' 
+            />
+        <cms:editable type='dropdown' name='trns_img_trns' label='Image Transparency' desc=''
+            opt_values='dropdowns/img-transparency.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='6'
+        />
+        <cms:editable type='dropdown' name='trns_ovrly_clr_opt' label='Image Overlay Option' desc=''
+            opt_values='No Overlay=0|Add Overlay Color=1' 
+            class='col-md-4 col-sm-6'  
+            order='8'
+        />
+    </cms:editable>
+</cms:editable>
+
+<cms:func _into='trns_ovrly_chc' trns_img_opt='' trns_ovrly_clr_opt=''>
+    <cms:if "(<cms:is '1' in=trns_img_opt />) && (trns_ovrly_clr_opt='1')" >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+
+<cms:editable type='group' name='trns_ovrly_clr_cstm_grp' label='Color Overlay' not_active=trns_ovrly_chc order='12' >
+    <cms:editable type='message' name='trns_ovrly_clr_cstm_msg' order='2'>
+        <h2>Custom Image Overlay Color</h2><h4>These colors will cover any image. Set Transparancy below 100% To Reveal any Image</h4>
+    </cms:editable>
+    <cms:editable name='trns_ovrly_clr_cstm_grdt_opt_row' type='row' order='5'>
+        <cms:editable type='dropdown' name='trns_ovrly_clr_grdt_opt' label='Image Overlay' desc=''
+            opt_values='Solid=0|Gradient=1' 
+            class='col-md-3'  
+            order='2'
+        />
+
+        <cms:func _into='trns_ovrly_clr_grdt_chc' trns_ovrly_clr_grdt_opt=''>
+            <cms:if trns_ovrly_clr_grdt_opt="1" >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func> 
+    </cms:editable>
+    <cms:editable name='trns_ovrly_cstm_row' type='row' order='10'>
+        <cms:editable type='color'
+            name='trns_ovrly_clr_cstm_one'
+            label='Color 1'
+            desc='Solid Color or First of Gradient'
+            color='#000000'
+            alpha='1'
+            width='50%'
+            height='100px'
+            class='col-md-6'
+            order='2'
+        >#00000000</cms:editable>
+        <cms:editable type='color'
+            name='trns_ovrly_clr_cstm_two'
+            label='Color 2'
+            desc='Second Color of Gradient - Ramp'
+            color='#000000'
+            alpha='1'
+            width='50%'
+            height='100px'
+            class='col-md-6'
+            not_active=trns_ovrly_clr_grdt_chc
+            order='4' 
+        >#00000000</cms:editable>
+        <cms:editable type='dropdown'  name='trns_ovrly_cust_grad_split_opt' label='Gradient Split Style' desc='vision division of gradient'
+            opt_values='dropdowns/gradient-split.htm'
+            dynamic='opt_values'
+            separator='@'
+            class='col-md-3'
+            not_active=trns_ovrly_clr_grdt_chc 
+            order='6'
+        />
+        <cms:editable type='checkbox' name='trns_ovrly_clr_cstm_grdt_rvrs_opt' label='Reverse Overlay Gradient Colors' 
+            opt_values='Swap=1' 
+            class='col-md-3' 
+            not_active=trns_ovrly_clr_grdt_chc  
+            order='8'
+        />
+    </cms:editable>
+</cms:editable>

@@ -1,0 +1,16 @@
+<cms:if hero_swpr_bg_clr_opt == 'custom' || hero_swpr_bg_clr_opt == 'gradient'>
+    <cms:set swpr_bg_clr="gradient" scope="global" />
+<cms:else />
+    <cms:set swpr_bg_clr="<cms:show hero_swpr_bg_clr_opt />" scope="global" />
+</cms:if>
+
+<cms:if hero_swpr_txtbx_sz_opt == 'custom'>
+    <cms:capture into='swpr_txtbx_size_cap'>
+        <cms:show_repeatable 'hero_swpr_txtbx_cstm_sz_rpt'>
+            col-<cms:show hero_swpr_txtbx_cstm_col_sz />-<cms:show hero_swpr_txtbx_cstm_col_val />
+        </cms:show_repeatable>
+    </cms:capture>
+    <cms:set swpr_txtbx_size="<cms:show swpr_txtbx_size_cap />" scope="global" />
+<cms:else />
+    <cms:set swpr_txtbx_size="col <cms:show hero_swpr_txtbx_sz_opt />" scope="global" />
+</cms:if>

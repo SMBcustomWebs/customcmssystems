@@ -1,0 +1,66 @@
+<cms:set var_cta_rmv="ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_rmv" />
+<cms:capture into='cur_cta_rmv'><cms:get var_cta_rmv /></cms:capture>
+
+<cms:if (ccs_hro_swpr_glbl_cta_rmv!='1') && (cur_cta_rmv!='1')>
+    
+    <cms:set var_cta_txt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_txt" />
+    <cms:capture into='cur_cta_txt'><cms:get var_cta_txt /></cms:capture>
+    
+    <cms:set var_cta_lnk="ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_lnk" />
+    <cms:capture into='cur_cta_lnk'><cms:get var_cta_lnk /></cms:capture>
+    
+    <cms:if cur_cta_lnk='custom'>
+        <cms:set var_cta_cst_lnk="ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_cst_lnk" />
+        <cms:capture into='cur_dest'><cms:get var_cta_cst_lnk /></cms:capture>
+    <cms:else />
+        <cms:capture into='cur_dest'><cms:show cur_cta_lnk /></cms:capture>
+    </cms:if>
+
+    <cms:if (cur_cta_txt) && (cur_dest)>
+        
+        <cms:set var_cta_ovr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_ovr" />
+        <cms:capture into='cur_cta_ovr'><cms:get var_cta_ovr /></cms:capture>
+        
+        <cms:if cur_cta_ovr='1'>
+            <cms:set var_loc_cta_halg="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_halg" /><cms:capture into='btn_halg'><cms:get var_loc_cta_halg /></cms:capture>
+            <cms:set var_loc_cta_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_clr" /><cms:capture into='btn_clr'><cms:get var_loc_cta_clr /></cms:capture>
+            <cms:set var_loc_cta_lnk_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_lnk_clr" /><cms:capture into='btn_lnk_clr'><cms:get var_loc_cta_lnk_clr /></cms:capture>
+            <cms:set var_loc_cta_fill="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_fill" /><cms:capture into='btn_fill'><cms:get var_loc_cta_fill /></cms:capture>
+            <cms:set var_loc_cta_st="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_st" /><cms:capture into='btn_st'><cms:get var_loc_cta_st /></cms:capture>
+            <cms:set var_loc_cta_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_sz" /><cms:capture into='btn_sz'><cms:get var_loc_cta_sz /></cms:capture>
+            <cms:set var_loc_cta_w="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_w" /><cms:capture into='btn_w'><cms:get var_loc_cta_w /></cms:capture>
+            <cms:set var_loc_cta_icon_pos="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_icon_pos" /><cms:capture into='btn_icon_pos'><cms:get var_loc_cta_icon_pos /></cms:capture>
+            <cms:set var_loc_cta_icon_fa="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_icon_fa" /><cms:capture into='btn_icon_fa'><cms:get var_loc_cta_icon_fa /></cms:capture>
+        <cms:else />
+            <cms:capture into='btn_halg'><cms:show ccs_hro_swpr_glbl_cta_halg /></cms:capture>
+            <cms:capture into='btn_clr'><cms:show ccs_hro_swpr_glbl_cta_clr /></cms:capture>
+            <cms:capture into='btn_lnk_clr'><cms:show ccs_hro_swpr_glbl_cta_lnk_clr /></cms:capture>
+            <cms:capture into='btn_fill'><cms:show ccs_hro_swpr_glbl_cta_fill /></cms:capture>
+            <cms:capture into='btn_st'><cms:show ccs_hro_swpr_glbl_cta_st /></cms:capture>
+            <cms:capture into='btn_sz'><cms:show ccs_hro_swpr_glbl_cta_sz /></cms:capture>
+            <cms:capture into='btn_w'><cms:show ccs_hro_swpr_glbl_cta_w /></cms:capture>
+            <cms:capture into='btn_icon_pos'><cms:show ccs_hro_swpr_glbl_cta_icon_pos /></cms:capture>
+            <cms:capture into='btn_icon_fa'><cms:show ccs_hro_swpr_glbl_cta_icon_fa /></cms:capture>
+        </cms:if>
+
+        <div class="d-flex w-100 justify-content-<cms:if btn_halg><cms:show btn_halg /><cms:else />center</cms:if> mt-4">
+            <a class="btn <cms:if btn_st><cms:show btn_st /> </cms:if><cms:if btn_sz>btn<cms:show btn_sz /> </cms:if><cms:if btn_w>w-<cms:show btn_w /> </cms:if><cms:if btn_clr='link'>btn-link text-<cms:show btn_lnk_clr /><cms:else />btn<cms:show btn_fill />-<cms:show btn_clr /></cms:if>" 
+               href="<cms:show cur_dest />" 
+               <cms:if cur_cta_lnk='custom'>target="_blank"</cms:if>>
+               
+               <cms:if (btn_icon_pos=='left') && (btn_icon_fa)>
+                   <span class="btn-brand me-2"><i class="<cms:show btn_icon_fa />"></i></span>
+               </cms:if>
+               
+               <cms:show cur_cta_txt />
+               
+               <cms:if (btn_icon_pos='right') && (btn_icon_fa)>
+                   <span class="btn-brand ms-2"><i class="<cms:show btn_icon_fa />"></i></span>
+               </cms:if>
+               
+            </a>
+        </div>
+        
+    </cms:if>
+
+</cms:if>

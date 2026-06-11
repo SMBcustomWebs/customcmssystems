@@ -1,0 +1,103 @@
+<cms:set ccs_active_page_master = k_template_name scope='global' />
+<!-- start page rendering -->
+<cms:set single_content="single/<cms:php>
+echo(str_replace( \"php\", \"html\", \"<cms:show k_template_name />\" ));
+</cms:php>" />
+<cms:embed 'pb_mods/pg_frame/head.htm' />
+<!-- set page redirect link before edit button -->
+<cms:set my_redirect_link="<cms:show k_page_link />" />
+<!-- toggles editing for logged in Admin -->
+
+<cms:if k_user_access_level ge '7' && "<cms:not "<cms:get_session 'inline_edit_on' />" />" >
+    <cms:no_edit />
+</cms:if>
+<cms:if k_user_access_level ge '7' >   
+    <cms:form method='post' anchor='0' class='m-0 p-0' >
+        <cms:if k_success>
+            <cms:if "<cms:get_session 'inline_edit_on' />" >
+                <cms:delete_session 'inline_edit_on' />
+            <cms:else />
+                <cms:set_session 'inline_edit_on' value='1' />
+            </cms:if>
+            <cms:redirect my_redirect_link />
+        </cms:if>
+        <cms:if "<cms:get_session 'inline_edit_on' />" >
+            <div>
+                <button class="btn btn-sm">
+                    <cms:input class="bg-warning"  name='submit' type="submit" value="Turn Edit Off" />
+                </button>
+            </div>
+        <cms:else />
+            <div>
+                <button class="btn btn-sm">
+                    <cms:input class="bg-danger" name='submit' type="submit" value="Turn Edit On" />
+                </button>
+            </div>
+        </cms:if>
+    </cms:form>
+</cms:if>
+                
+<cms:embed 'pb_mods/pg_frame/main-cap.htm' />   
+<cms:embed 'pb_mods/pg_frame/nav/nav_emb.htm' /> 
+
+<!-- navigation via breadcrum 
+<cms:breadcrumbs separator='&nbsp;>>&nbsp;' include_template='1' />-->  
+<!-- break up page into views -->
+<cms:if k_is_page>
+    <cms:pages masterpage="<cms:show k_template_name />__globals" limit="1" >
+        <cms:show_pagebuilder 'glb_sng_hro_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+            <cms:show k_content />
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'glb_sng_hro_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Header</button>" />
+
+        <cms:embed "<cms:show single_content />" />
+
+        <cms:show_pagebuilder 'glb_sng_cnt_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+            <cms:show k_content />
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'glb_sng_cnt_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+
+        <cms:show_pagebuilder 'glb_sng_xtr_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+            <cms:show k_content />
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'glb_sng_xtr_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Endr</button>" />
+    </cms:pages>
+
+<cms:else_if k_is_folder />
+    <cms:show_pagebuilder 'sbm_hro_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+        <cms:show k_content />
+    </cms:show_pagebuilder>
+    <cms:popup_edit 'sbm_hro_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+
+    <cms:show_pagebuilder 'sbm_cnt_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+        <cms:show k_content />
+    </cms:show_pagebuilder>
+    <cms:popup_edit 'sbm_cnt_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+
+    <cms:show_pagebuilder 'sbm_xtr_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+        <cms:show k_content />
+    </cms:show_pagebuilder>
+    <cms:popup_edit 'sbm_xtr_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+
+<cms:else />
+
+    <cms:pages masterpage="<cms:show k_template_name />__globals" limit="1" >
+        <cms:show_pagebuilder 'glb_hmv_hro_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+            <cms:show k_content />
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'glb_hmv_hro_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+
+        <cms:show_pagebuilder 'glb_hmv_cnt_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+            <cms:show k_content />
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'glb_hmv_cnt_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+
+        <cms:show_pagebuilder 'glb_hmv_xtr_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+            <cms:show k_content />
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'glb_hmv_xtr_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+
+    </cms:pages>
+</cms:if>
+<cms:embed 'pb_mods/pg_frame/footer/ftr_emb.htm' />
+<cms:embed 'pb_mods/pg_frame/tail.htm' />

@@ -1,0 +1,56 @@
+<nav class="navbar navbar-top navbar-expand-lg bg-white navbar-double sticky-top top-0 start-0">
+    <div class="container"><a class="navbar-brand" href="<cms:show k_site_link />"><img src="<cms:get_field 'site_logo' masterpage='globals.php' />" alt="" width="200" /></a>
+      <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarStandard" aria-controls="navbarStandard" aria-expanded="false" aria-label="Toggle navigation" data-hamburger-icon="data-hamburger-icon"><span class="hamburger hamburger--emphatic"><span class="hamburger-box"> <span class="hamburger-inner"></span></span></span></button>
+      <div class="collapse navbar-collapse w-100" id="navbarStandard">
+          <cms:if k_user_access_level ge '7' >
+                <br style="clear:both">
+                <cms:form method='post' anchor='0' >
+                    <cms:if k_success>
+                            <cms:if "<cms:get_session 'inline_edit_on' />" >
+                            <cms:delete_session 'inline_edit_on' />
+                    <cms:else />
+                            <cms:set_session 'inline_edit_on' value='1' />
+                        </cms:if>
+                        <cms:redirect k_page_link />
+                    </cms:if>
+                    <cms:if "<cms:get_session 'inline_edit_on' />" >
+                        <li class="nav-item mt-3 btn btn-sm-primary"><cms:input name='submit' type="submit" value="Turn Edit Off" /></li>
+                    <cms:else />
+                        <li class="nav-item mt-3 btn btn-sm-primary"><cms:input name='submit' type="submit" value="Turn Edit On" /></li>
+                    </cms:if>
+                </cms:form>
+            </cms:if> 
+            <ul class="navbar-nav navbar-nav-top justify-content-end flex-1 me-lg-n2" data-top-nav-dropdowns="data-top-nav-dropdowns">
+              <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">Site Pages<span class="fas fa-chevron-down dropdown-toggle-icon"></span></a>
+                <ul class="dropdown-menu navbar-dropdown-caret">
+
+                  <li> <a class="dropdown-item" href="#">
+                      <div class="dropdown-item-wrapper">About - Co &amp; peeps
+                      </div>
+                    </a>
+                  </li>
+                <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#!" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">Pages<span class="fas fa-chevron-down dropdown-toggle-icon"></span></a>
+                    <ul class="dropdown-menu navbar-dropdown-caret">
+                      <li> <a class="dropdown-item" href="#">
+                          <div class="dropdown-item-wrapper">Starter
+                          </div>
+                        </a>
+                      </li>
+                      <li class="dropdown"><a class="dropdown-item dropdown-toggle" id="about" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                          <div class="dropdown-item-wrapper"><span>About</span><span class="fas fa-chevron-right dropdown-indicator-icon d-none d-lg-block"> </span><span class="fas fa-chevron-down dropdown-indicator-icon d-lg-none"> </span></div>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li> <a class="dropdown-item" href="#">
+                              <div class="dropdown-item-wrapper">About Company
+                              </div>
+                            </a>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                </li>
+            </ul>
+         
+      </div>
+    </div>
+    </nav>

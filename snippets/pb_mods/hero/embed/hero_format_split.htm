@@ -1,0 +1,68 @@
+<cms:editable type="group" name="ccs_hro_splt_frmt_grp" label="Master Split Structure" order="500">
+
+    <!-- ==========================================
+         GRID LAYOUT CONFIGURATION
+    =========================================== -->
+    <cms:editable type='message' name='ccs_hro_splt_frmt_msg' order='2'>
+        <hr><br>
+        <h3>Split Grid Configuration</h3>
+        <p>Define the physical layout, ratio, and alignment of the two columns.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_grid_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_hro_splt_ratio' label='Column Ratio (Left / Right)' desc='Based on a 12-column grid'
+            opt_values='50 / 50 Even Split=50 | 60 / 40 Left Heavy=60 | 40 / 60 Right Heavy=40' 
+            class='col-md-4' order='2' />
+        
+        <cms:editable type='dropdown' name='ccs_hro_splt_valign' label='Vertical Alignment' 
+            opt_values='Center=align-items-center | Top=align-items-start | Bottom=align-items-end' 
+            class='col-md-4' order='4' />
+
+        <cms:editable type='checkbox' name='ccs_hro_splt_rvrs' label='Grid Ordering' 
+            opt_values='Reverse columns on Desktop (Swap Left and Right)=flex-lg-row-reverse' 
+            class='col-md-4' order='6' />
+    </cms:editable>
+
+    <!-- ==========================================
+         VERTICAL SPACING & HEIGHT
+    =========================================== -->
+    <cms:editable type='message' name='ccs_hro_splt_spc_msg' order='8'>
+        <hr><br>
+        <h3>Vertical Spacing & Height</h3>
+        <p>Control the padding and overall height of the hero block.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_spc_row' order='10'>
+        <cms:editable type='dropdown' name='ccs_hro_splt_vht' label='Main Height of Section' desc='Overall vertical space.'
+            opt_values='Full=100|Half=50|3/4=75|1/4=25'
+            class='col-sm-6 col-md-4'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_splt_py_ht' label='Top and Bottom Padding' desc='Space from the Y edges.'
+            opt_values='dropdowns/padding.htm'
+            dynamic='opt_values'
+            class='col-sm-6 col-md-4'
+            order='4'
+        />
+    </cms:editable>
+
+    <!-- ==========================================
+         MASTER BACKGROUND
+    =========================================== -->
+    <cms:editable type='message' name='ccs_hro_splt_bg_msg' order='12'>
+        <hr><br>
+        <h3>Master Background</h3>
+        <p>Applies to the section behind both columns.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_bg_row' order='15'>
+        <cms:editable type='dropdown' name='ccs_hro_splt_bg_clr' label='Background Color' 
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' 
+            class='col-md-6 col-sm-12' order='2' />
+            
+        <cms:editable type='image' name='ccs_hro_splt_bg_img' label='Background Image (Optional Override)' desc='Recommended 16:9 ratio'
+            width='2560' enforce_max='1' show_preview='1' preview_width='75' 
+            class='col-md-6 col-sm-12' order='4' />
+    </cms:editable>
+
+</cms:editable>

@@ -1,0 +1,85 @@
+
+<section class="p-0">
+    <div class="bg-holder <cms:if hdr_img_oly ne'-'>overlay overlay-<cms:show hdr_img_oly /></cms:if>" style="background-image:url(<cms:show hdr_img />);" data-rellax-speed="<cms:show hdr_scrl_spd />" data-parallax="data-parallax">
+        <cms:if hdr_img_vid_opt='2'>
+            <cms:embed 'pb_mods/header/theme/hdr_bg_vid.html' />
+        </cms:if>
+    </div>
+
+    <div class="container">
+      <div class="row vh-lg-<cms:show hdr_vht /> justify-content-<cms:show hdr_txt_bx_alg /> align-items-<cms:show hdr_txt_valg />">
+        <div class="col-md-6 align-self-<cms:show hdr_txt_valg /> py-<cms:show hdr_pd_ht />">
+            <div class="<cms:if hdr_txt_bg_opt >shop-slider-card p-<cms:show hdr_txt_bg_pd /></cms:if> text-<cms:show hdr_txt_halg /> ">
+            <cms:if hdr_txt_blk_opt='1'> <!-- image  chosen -->
+                <img src="<cms:show hdr_txt_blk_img />" alt="<cms:show hdr_txt_blk_img_alt />" />
+                <cms:if hdr_video_add>
+                    <cms:embed 'pb_mods/header/theme/hdr_add_vid.html' />
+                </cms:if>
+            <cms:else_if hdr_txt_blk_opt='2' /> <!-- form chosen -->
+                <cms:if "<cms:not hdr_sing_crsl_opt />" >
+                    <cms:embed 'pb_mods/header/theme/hdr_form.html' />
+                </cms:if>
+                <cms:if hdr_video_add>
+                    <cms:embed 'pb_mods/header/theme/hdr_add_vid.html' />
+                </cms:if>
+            <cms:else />  <!-- Entered Text chosen -->
+                <div class="py-4">
+                    <cms:embed 'pb_mods/header/theme/hdr_txt.html' />
+                </div>
+            </cms:if>
+            <cms:if hdr_c2a_lnk='custom'>
+                <cms:set c2a_lnk="<cms:show hdr_c2a_cst_lnk />" />
+            <cms:else />
+                <cms:set c2a_lnk="<cms:show hdr_c2a_lnk />" />
+            </cms:if>
+            <cms:if "<cms:not hdr_c2a_opt />" >
+                <a class="btn btn<cms:show hdr_c2a_clr_out_chk />-<cms:show hdr_c2a_clr /> btn<cms:show hdr_c2a_sz /> mt-4" href="<cms:show c2a_lnk />">
+                    <cms:show hdr_c2a_txt />
+                </a>
+                <cms:if hdr_c2a_mult_opt>
+                    <cms:show_repeatable 'hdr_mult_c2a_rpt' > 
+                        <cms:if hdr_c2a_mult_pdg='1'>
+                            <br>
+                        </cms:if>
+                        <a class="mx-<cms:show hdr_c2a_mult_pdg /> btn btn<cms:show hdr_c2a_mult_clr_out_chk />-<cms:show hdr_c2a_mult_clr /> btn<cms:show hdr_c2a_mult_sz /> mt-4" href="<cms:show c2a_lnk />">
+                            <cms:show hdr_c2a_mult_txt />
+                        </a>
+                    </cms:show_repeatable>
+                </cms:if>
+            </cms:if>            
+            </div>
+        </div>
+        <div class="col-lg-4 offset-lg-2 d-none d-lg-block">
+            <div class="swiper-theme-container home-slider" data-swiper-theme-container="data-swiper-theme-container">
+                <div class="swiper" data-swiper='{"effect":"flip","loop":true,"autoplay":{"delay":4000}}'>
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <cms:if hdr_offset_opt='1' >
+                                <img class="mt-8" src="<cms:show hdr_offset_img />" alt="" />
+                            <cms:else_if hdr_offset_opt='2' />
+                                <video class="mt-8" width='420' height="800" src="<cms:show hdr_offset_vib_mp4 />" controls  > </video>
+                            </cms:if>
+                        </div>
+                        <cms:if hdr_ofst_crsl_opt > <!-- start of repeating slides -->
+                            <cms:if hdr_offset_opt='2' >
+                                <cms:set hdr_ofst_swpr_rpt='hdr_ofst_mp4_swpr_rpt' />
+                            <cms:else />
+                                <cms:set hdr_ofst_swpr_rpt='hdr_ofst_img_swpr_rpt' />
+                            </cms:if>
+                            <cms:show_repeatable hdr_ofst_swpr_rpt >
+                                <div class="swiper-slide">
+                                    <cms:if hdr_offset_opt='1' >
+                                        <img class="mt-8" src="<cms:show hdr_swpr_ofst_img />" alt="" />
+                                    <cms:else_if hdr_offset_opt='2' />
+                                        <video class="mt-8" width='420' height="800" src="<cms:show hdr_swpr_offset_vib_mp4 />" controls  > </video>
+                                    </cms:if>
+                                </div>
+                            </cms:show_repeatable>
+                        </cms:if>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>

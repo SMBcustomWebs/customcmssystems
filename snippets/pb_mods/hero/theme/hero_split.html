@@ -1,0 +1,202 @@
+<!-- ============================================-->
+<!-- <section> SPLIT HERO BEGIN =================-->
+<!-- ============================================-->
+
+<!-- 1. CAPTURE MASTER CONTAINER STYLES -->
+<cms:capture into='splt_sec_classes'>
+    <cms:show ccs_hro_splt_bg_clr /> <cms:show ccs_hro_splt_py_ht /> <cms:if ccs_hro_splt_vht>vh-<cms:show ccs_hro_splt_vht /></cms:if>
+</cms:capture>
+
+<cms:capture into='splt_row_classes'>
+    row <cms:show ccs_hro_splt_valign /> <cms:show ccs_hro_splt_rvrs />
+</cms:capture>
+
+<!-- 2. DYNAMIC COLUMN RATIO CALCULATION -->
+<cms:if ccs_hro_splt_ratio='60'>
+    <cms:set c1_grid='col-lg-7 mb-5 mb-lg-0' scope='global' />
+    <cms:set c2_grid='col-lg-5 ps-xl-5 mb-5 mb-lg-0' scope='global' />
+<cms:else_if ccs_hro_splt_ratio='40' />
+    <cms:set c1_grid='col-lg-5 mb-5 mb-lg-0' scope='global' />
+    <cms:set c2_grid='col-lg-7 ps-xl-5 mb-5 mb-lg-0' scope='global' />
+<cms:else />
+    <cms:set c1_grid='col-lg-6 mb-5 mb-lg-0' scope='global' />
+    <cms:set c2_grid='col-lg-6 ps-xl-5 mb-5 mb-lg-0' scope='global' />
+</cms:if>
+
+<section class="<cms:show splt_sec_classes />" <cms:if ccs_hro_splt_bg_img>style="background-image: url('<cms:show ccs_hro_splt_bg_img />'); background-size: cover; background-position: center;"</cms:if>>
+    <div class="container">
+        <div class="<cms:show splt_row_classes />">
+            
+            <!-- ============================================-->
+            <!-- COLUMN 1 (LEFT/PRIMARY)                     -->
+            <!-- ============================================-->
+            <div class="<cms:show c1_grid />">
+                
+                <!-- PATH A: IMAGE -->
+                <cms:if ccs_hro_splt_c1_type='img' && ccs_hro_splt_c1_img>
+                    <div class="ratio ratio-4x3">
+                        <img class="img-fluid rounded" src="<cms:show ccs_hro_splt_c1_img />" alt="<cms:show ccs_hro_splt_c1_img_alt />" style="object-fit: cover;" />
+                    </div>
+                </cms:if>
+
+                <!-- PATH B: VIDEO -->
+                <cms:if ccs_hro_splt_c1_type='vid'>
+                    <div class="ratio ratio-16x9">
+                        <cms:if ccs_hro_splt_c1_vid_src='0' && ccs_hro_splt_c1_vid_mp4>
+                            <!-- Local Upload -->
+                            <video class="img-fluid rounded" autoplay="autoplay" loop="loop" muted="muted" playsinline>
+                                <source src="<cms:show ccs_hro_splt_c1_vid_mp4 />" type="video/mp4">
+                                <cms:if ccs_hro_splt_c1_vid_webm><source src="<cms:show ccs_hro_splt_c1_vid_webm />" type="video/webm"></cms:if>
+                            </video>
+                        <cms:else_if ccs_hro_splt_c1_vid_src='1' && ccs_hro_splt_c1_yt_id />
+                            <!-- YouTube Stream -->
+                            <cms:set yt1_start="<cms:if ccs_hro_splt_c1_yt_tm_chk='1'>&start=<cms:show ccs_hro_splt_c1_yt_str /></cms:if>" />
+                            <cms:set yt1_stop="<cms:if ccs_hro_splt_c1_yt_tm_chk='1' && ccs_hro_splt_c1_yt_stp>&end=<cms:show ccs_hro_splt_c1_yt_stp /></cms:if>" />
+                            <iframe class="rounded" src="https://www.youtube.com/embed/<cms:show ccs_hro_splt_c1_yt_id />?autoplay=1&mute=1&loop=1&controls=0&playlist=<cms:show ccs_hro_splt_c1_yt_id /><cms:show yt1_start /><cms:show yt1_stop />" allow="autoplay; fullscreen" style="border:none;"></iframe>
+                        <cms:else_if ccs_hro_splt_c1_vid_src='2' && ccs_hro_splt_c1_vm_id />
+                            <!-- Vimeo Stream -->
+                            <cms:set vm1_start="<cms:if ccs_hro_splt_c1_vm_tm_chk='1'>#t=<cms:show ccs_hro_splt_c1_vm_str />s</cms:if>" />
+                            <iframe class="rounded" src="https://player.vimeo.com/video/<cms:show ccs_hro_splt_c1_vm_id />?background=1&autoplay=1&loop=1&byline=0&title=0<cms:show vm1_start />" allow="autoplay; fullscreen" style="border:none;"></iframe>
+                        </cms:if>
+                    </div>
+                </cms:if>
+
+                <!-- PATH C: TEXT & FORMS/CTAS -->
+                <cms:if ccs_hro_splt_c1_type='txt'>
+                    
+                    <!-- Text Matrix -->
+                    <cms:if ccs_hro_splt_c1_eye_txt><p class="text-uppercase tracking-wide fs-8 fw-bold mb-2"><cms:show ccs_hro_splt_c1_eye_txt /></p></cms:if>
+                    <cms:if ccs_hro_splt_c1_hd_txt><h2 class="mb-3 fw-normal"><cms:show ccs_hro_splt_c1_hd_txt /></h2></cms:if>
+                    <cms:if ccs_hro_splt_c1_sub_txt><p class="fs-6 fw-light mt-2 mb-4 text-700"><cms:show ccs_hro_splt_c1_sub_txt /></p></cms:if>
+
+                    <!-- Inline Form Component -->
+                    <cms:if ccs_hro_splt_c1_frm_chk='1'>
+                        <form method="POST" onsubmit="return false;" class="mb-4">
+                            <div class="row gx-2">
+                                <div class="col-sm-8 mb-2 mb-sm-0">
+                                    <input class="form-control" type="email" name="email" required="required" placeholder="Enter email address" aria-label="Email Address" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-primary w-100 d-block" type="submit"><cms:show ccs_hro_splt_c1_frm_cta_txt /></button>
+                                </div>
+                            </div>
+                        </form>
+                    </cms:if>
+
+                    <!-- CTA Gold Standard Matrix -->
+                    <cms:if ccs_hro_splt_c1_cta_rmv != '1'>
+                        <!-- Target Resolution -->
+                        <cms:set c1_tgt="<cms:if ccs_hro_splt_c1_cta_lnk='custom'>target='_blank'</cms:if>" />
+                        <cms:set c1_url="<cms:if ccs_hro_splt_c1_cta_lnk='custom'><cms:show ccs_hro_splt_c1_cta_cst_lnk /><cms:else /><cms:show ccs_hro_splt_c1_cta_lnk /></cms:if>" />
+                        
+                        <!-- Class String Builder -->
+                        <cms:capture into='c1_btn_cls'>
+                            <cms:if ccs_hro_splt_c1_cta_clr='link'>
+                                text-decoration-none fw-bold <cms:show ccs_hro_splt_c1_cta_lnk_clr />
+                            <cms:else />
+                                btn <cms:show ccs_hro_splt_c1_cta_clr /><cms:show ccs_hro_splt_c1_cta_fill /> <cms:show ccs_hro_splt_c1_cta_st /> <cms:show ccs_hro_splt_c1_cta_sz /> <cms:show ccs_hro_splt_c1_cta_w />
+                            </cms:if>
+                        </cms:capture>
+
+                        <a href="<cms:show c1_url />" class="<cms:show c1_btn_cls />" <cms:show c1_tgt />>
+                            <cms:if ccs_hro_splt_c1_cta_clr != 'link' && ccs_hro_splt_c1_cta_icon_pos='left'>
+                                <i class="<cms:show ccs_hro_splt_c1_cta_icon_fa /> me-2" aria-hidden="true"></i>
+                            </cms:if>
+                            <cms:show ccs_hro_splt_c1_cta_txt />
+                            <cms:if ccs_hro_splt_c1_cta_clr != 'link' && ccs_hro_splt_c1_cta_icon_pos='right'>
+                                <i class="<cms:show ccs_hro_splt_c1_cta_icon_fa /> ms-2" aria-hidden="true"></i>
+                            </cms:if>
+                        </a>
+                    </cms:if>
+                </cms:if>
+            </div>
+
+            <!-- ============================================-->
+            <!-- COLUMN 2 (RIGHT/SECONDARY)                  -->
+            <!-- ============================================-->
+            <div class="<cms:show c2_grid />">
+                
+                <!-- PATH A: IMAGE -->
+                <cms:if ccs_hro_splt_c2_type='img' && ccs_hro_splt_c2_img>
+                    <div class="ratio ratio-4x3">
+                        <img class="img-fluid rounded" src="<cms:show ccs_hro_splt_c2_img />" alt="<cms:show ccs_hro_splt_c2_img_alt />" style="object-fit: cover;" />
+                    </div>
+                </cms:if>
+
+                <!-- PATH B: VIDEO -->
+                <cms:if ccs_hro_splt_c2_type='vid'>
+                    <div class="ratio ratio-16x9">
+                        <cms:if ccs_hro_splt_c2_vid_src='0' && ccs_hro_splt_c2_vid_mp4>
+                            <!-- Local Upload -->
+                            <video class="img-fluid rounded" autoplay="autoplay" loop="loop" muted="muted" playsinline>
+                                <source src="<cms:show ccs_hro_splt_c2_vid_mp4 />" type="video/mp4">
+                                <cms:if ccs_hro_splt_c2_vid_webm><source src="<cms:show ccs_hro_splt_c2_vid_webm />" type="video/webm"></cms:if>
+                            </video>
+                        <cms:else_if ccs_hro_splt_c2_vid_src='1' && ccs_hro_splt_c2_yt_id />
+                            <!-- YouTube Stream -->
+                            <cms:set yt2_start="<cms:if ccs_hro_splt_c2_yt_tm_chk='1'>&start=<cms:show ccs_hro_splt_c2_yt_str /></cms:if>" />
+                            <cms:set yt2_stop="<cms:if ccs_hro_splt_c2_yt_tm_chk='1' && ccs_hro_splt_c2_yt_stp>&end=<cms:show ccs_hro_splt_c2_yt_stp /></cms:if>" />
+                            <iframe class="rounded" src="https://www.youtube.com/embed/<cms:show ccs_hro_splt_c2_yt_id />?autoplay=1&mute=1&loop=1&controls=0&playlist=<cms:show ccs_hro_splt_c2_yt_id /><cms:show yt2_start /><cms:show yt2_stop />" allow="autoplay; fullscreen" style="border:none;"></iframe>
+                        <cms:else_if ccs_hro_splt_c2_vid_src='2' && ccs_hro_splt_c2_vm_id />
+                            <!-- Vimeo Stream -->
+                            <cms:set vm2_start="<cms:if ccs_hro_splt_c2_vm_tm_chk='1'>#t=<cms:show ccs_hro_splt_c2_vm_str />s</cms:if>" />
+                            <iframe class="rounded" src="https://player.vimeo.com/video/<cms:show ccs_hro_splt_c2_vm_id />?background=1&autoplay=1&loop=1&byline=0&title=0<cms:show vm2_start />" allow="autoplay; fullscreen" style="border:none;"></iframe>
+                        </cms:if>
+                    </div>
+                </cms:if>
+
+                <!-- PATH C: TEXT & FORMS/CTAS -->
+                <cms:if ccs_hro_splt_c2_type='txt'>
+                    
+                    <!-- Text Matrix -->
+                    <cms:if ccs_hro_splt_c2_eye_txt><p class="text-uppercase tracking-wide fs-8 fw-bold mb-2"><cms:show ccs_hro_splt_c2_eye_txt /></p></cms:if>
+                    <cms:if ccs_hro_splt_c2_hd_txt><h2 class="mb-3 fw-normal"><cms:show ccs_hro_splt_c2_hd_txt /></h2></cms:if>
+                    <cms:if ccs_hro_splt_c2_sub_txt><p class="fs-6 fw-light mt-2 mb-4 text-700"><cms:show ccs_hro_splt_c2_sub_txt /></p></cms:if>
+
+                    <!-- Inline Form Component -->
+                    <cms:if ccs_hro_splt_c2_frm_chk='1'>
+                        <form method="POST" onsubmit="return false;" class="mb-4">
+                            <div class="row gx-2">
+                                <div class="col-sm-8 mb-2 mb-sm-0">
+                                    <input class="form-control" type="email" name="email" required="required" placeholder="Enter email address" aria-label="Email Address" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-primary w-100 d-block" type="submit"><cms:show ccs_hro_splt_c2_frm_cta_txt /></button>
+                                </div>
+                            </div>
+                        </form>
+                    </cms:if>
+
+                    <!-- CTA Gold Standard Matrix -->
+                    <cms:if ccs_hro_splt_c2_cta_rmv != '1'>
+                        <!-- Target Resolution -->
+                        <cms:set c2_tgt="<cms:if ccs_hro_splt_c2_cta_lnk='custom'>target='_blank'</cms:if>" />
+                        <cms:set c2_url="<cms:if ccs_hro_splt_c2_cta_lnk='custom'><cms:show ccs_hro_splt_c2_cta_cst_lnk /><cms:else /><cms:show ccs_hro_splt_c2_cta_lnk /></cms:if>" />
+                        
+                        <!-- Class String Builder -->
+                        <cms:capture into='c2_btn_cls'>
+                            <cms:if ccs_hro_splt_c2_cta_clr='link'>
+                                text-decoration-none fw-bold <cms:show ccs_hro_splt_c2_cta_lnk_clr />
+                            <cms:else />
+                                btn <cms:show ccs_hro_splt_c2_cta_clr /><cms:show ccs_hro_splt_c2_cta_fill /> <cms:show ccs_hro_splt_c2_cta_st /> <cms:show ccs_hro_splt_c2_cta_sz /> <cms:show ccs_hro_splt_c2_cta_w />
+                            </cms:if>
+                        </cms:capture>
+
+                        <a href="<cms:show c2_url />" class="<cms:show c2_btn_cls />" <cms:show c2_tgt />>
+                            <cms:if ccs_hro_splt_c2_cta_clr != 'link' && ccs_hro_splt_c2_cta_icon_pos='left'>
+                                <i class="<cms:show ccs_hro_splt_c2_cta_icon_fa /> me-2" aria-hidden="true"></i>
+                            </cms:if>
+                            <cms:show ccs_hro_splt_c2_cta_txt />
+                            <cms:if ccs_hro_splt_c2_cta_clr != 'link' && ccs_hro_splt_c2_cta_icon_pos='right'>
+                                <i class="<cms:show ccs_hro_splt_c2_cta_icon_fa /> ms-2" aria-hidden="true"></i>
+                            </cms:if>
+                        </a>
+                    </cms:if>
+                </cms:if>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- <section> SPLIT HERO CLOSE =================-->
+<!-- ============================================-->

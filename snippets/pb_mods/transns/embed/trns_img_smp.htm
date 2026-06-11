@@ -1,0 +1,472 @@
+<cms:editable type="group" name="trns_txt_grp" label="Section Text" not_active=trns_txt_chc order='9' >
+
+
+<cms:func _into='trnsmp_txtbx_txt_chc' trnsmp_txtbx_txt_opt=''>
+    <cms:if "<cms:is '1' in=trnsmp_txtbx_txt_opt />">
+    hide
+<cms:else />
+    show
+    </cms:if>
+</cms:func>
+
+
+
+
+    <cms:editable type='row' name='trnsmp_txtblk_gen_row'  order='5' >
+        <cms:editable type='message' name='trnsmp_txtblk_gen_msg' order='2'>
+            <h2>The following settings define the size and placement of the Text Box</h2>
+            <h4>Text Box is the area where the information displays in columns. No need to edit unless necessary.</h4>
+            <p>Choosing 'Custom' will open up additional options below.</p>
+        </cms:editable>
+        <cms:editable type='dropdown' name='trnsmp_txtbx_sz_opt' label='Size of Text Box' desc='choosing "Custom" will open up options below'
+            opt_values='dropdowns/trnsmp_txt-box_size.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='4'
+        />
+        <cms:editable type='dropdown'  name='trnsmp_txtbx_valg' label='Align Text Vertical' desc='Top, Middle, Bottom'
+            opt_values='dropdowns/v-align.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='6'
+        />
+        <cms:editable type='dropdown'  name='trnsmp_txtbx_halg' label='Align Text Box Horizontal' desc='Left, Center, Right'
+            opt_values='dropdowns/h-align.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='8'
+        /> 
+        <cms:editable type='dropdown'  name='trnsmp_txt_halg' label='Align Inside Text' desc='Alignment of what is inside the text block'
+            opt_values='dropdowns/h-align.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='10'
+        />
+        <cms:editable type='message' name='trnsmp_txt_fx_msg' class='col-md-12' order='11'>
+            <hr><br>
+            <h2>Add a single line of text that ends with a typing effect of words or phrases typed on the screen alternately.</h2>
+            <h4></h4>
+            <p></p>
+        </cms:editable>
+        <cms:editable type='checkbox'  name='trnsmp_txt_fx_opt'  label='Add Text Typing Effect' desc=''
+          opt_values='Add Typing Text=1'
+          order='12'
+        />
+    </cms:editable>
+    <cms:func _into='trnsmp_txtbx_sz_chc' trnsmp_txtbx_sz_opt=''>
+        <cms:if trnsmp_txtbx_sz_opt="custom" >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func> 
+    <cms:editable type='row' name='trnsmp_txtbx_cstm_sz_row' not_active=trnsmp_txtbx_sz_chc order='10' >
+        <cms:editable type='message' name='trnsmp_txtbx_cstm_sz_msg' order='2'>
+            <hr><br>
+            <h2>Custom Size Text Block</h2><h4><a href='https://getbootstrap.com/docs/5.1/layout/grid/' target="_blank">More Info on Bootstrap</a></h4>
+            <p>Screen Size adjusts for device screens. 12 columns means full width for that screen size.</p>
+        </cms:editable>
+        <cms:repeatable name='trnsmp_txtbx_cstm_sz_rpt' label="Set column size per Bootstrap https://getbootstrap.com/docs/5.1/layout/grid/" order='4'>
+            <cms:editable type="dropdown" name='trnsmp_txtbx_cstm_col_sz' label='Screen Size' 
+                opt_values='dropdowns/col-size.htm' 
+                dynamic='opt_values'
+                order='4'
+            />
+            <cms:editable type="dropdown" name='trnsmp_txtbx_cstm_col_val' label='Columns out of 12' 
+                opt_values='dropdowns/col-size-val.htm'  
+                dynamic='opt_values'
+                order='6'
+            />
+        </cms:repeatable>       
+    </cms:editable>
+    
+    <cms:editable type='row' name='trnsmp_txtblk_txt_row' order='15' >
+         <cms:editable type='message' name='trnsmp_txtblk_txt_msg' order='2'>
+             <hr><br>
+             <h2>Text</h2>
+             <h4>Each 'Row' is a Line of Text</h4>
+             <p></p>
+        </cms:editable>
+        <cms:repeatable name='trnsmp_txtbx_txt_rpt' label='Hero Text Lines - New Row = New Line' stacked_layout='1' order='4' >
+            <cms:editable type='text' name='trnsmp_txt_ln' label='Text'
+                order='6' 
+            />
+            <cms:editable type='dropdown' name='trnsmp_txt_clr' label='Text Color' 
+                opt_values='dropdowns/solid-colors.htm'
+                opt_selected='white'
+                dynamic='opt_values'
+                order='8'  
+            />
+            <cms:editable type='dropdown' name='trnsmp_txt_txt_sz' label='Text Size' 
+                opt_values='dropdowns/text-size.htm'
+                dynamic='opt_values'
+                order='12'  
+            />
+            <cms:editable type='dropdown' name='trnsmp_fnt_wt' label='Font Weight' 
+                opt_values='dropdowns/font-weight.htm'
+                dynamic='opt_values'
+                order='14'  
+            />
+            <cms:editable type='dropdown' name='trnsmp_ltr_spc' label='Letter Spacing' 
+                opt_values='dropdowns/hdr_ltr-spc.htm'
+                dynamic='opt_values'
+                order='16'  
+            />
+            <cms:editable type='dropdown' name='trnsmp_fnt_st' label='Font Style' 
+                opt_values='dropdowns/font-style.htm'
+                dynamic='opt_values'
+                order='18'  
+            />
+            <cms:editable type='dropdown' name='trnsmp_font' label='Font Family' 
+                opt_values='dropdowns/font-family.htm'
+                dynamic='opt_values'
+                order='20'  
+            />
+
+        </cms:repeatable>
+    </cms:editable>
+    
+    <cms:func _into='trnsmp_txt_fx_chc' trnsmp_txt_fx_opt=''>
+        <cms:if "<cms:is '1' in=trnsmp_txt_fx_opt />" >
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='row' name='trnsmp_txt_fx_row' not_active=trnsmp_txt_fx_chc order='18' >
+        <cms:editable type='message' name='trnsmp_txtblk_txt_msg' order='2'>
+             <hr><br>
+             <h2>Type a sentence that ends with a typed effect.</h2>
+             <h4>The blow settings are for the static words of the sentence.</h4>
+             <p></p>
+        </cms:editable>
+            <cms:editable type='dropdown' name='trnsmp_txt_fx_txt_clr' label='Text Color' 
+                opt_values='dropdowns/solid-colors.htm'
+                opt_selected='white'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='8'  
+            />
+            <cms:editable type='dropdown' name='trnsmp_txt_fx_txt_txt_sz' label='Text Size' 
+                opt_values='dropdowns/text-size.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='12'  
+            />
+            <cms:editable type='dropdown' name='trnsmp_txt_fx_fnt_wt' label='Font Weight' 
+                opt_values='dropdowns/font-weight.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='14'  
+            />
+            <cms:editable type='dropdown' name='trnsmp_txt_fx_ltr_spc' label='Letter Spacing' 
+                opt_values='dropdowns/hdr_ltr-spc.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='16'  
+            />
+            <cms:editable type='dropdown' name='trnsmp_txt_fx_fnt_st' label='Font Style' 
+                opt_values='dropdowns/font-style.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='18'  
+            />
+            <cms:editable type='dropdown' name='trnsmp_txt_fx_font' label='Font Family' 
+                opt_values='dropdowns/font-family.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='20'  
+            />
+            <cms:editable type='text' name='trnsmp_fx_txt_ln' label='Text Before Effect' desc='Create a highlighted sentence'
+                class='col-md-12'
+                order='26' 
+            />
+            <cms:editable type='message' name='trnsmp_txt_fx_txt_msg'  class='col-md-12' order='27'>
+                 <br>
+                 <h2>Finish the sentence with a typed effect.</h2>
+                 <h4>Each row will be typed individually.</h4>
+                 <p>the new typed words will replace the old, the loop is continuous.</p>
+            </cms:editable>
+            <cms:repeatable name='trnsmp_txt_fx_rpt' label='Add words or short phrases. New Row = New Line' stacked_layout='1' order='28' >
+                <cms:editable type='text' name='trnsmp_txt_fx_txt_ln' label='Text'
+                    order='29' 
+                /> 
+            </cms:repeatable>
+                <cms:editable type='message' name='trnsmp_txt_fx_txt_msg'  class='col-md-12' order='30'>
+                 <br>
+                 <h2>Enhance the typed words.</h2>
+                 <h4>Set the color and weight of the TYPED words.</h4>
+                 <p></p>
+            </cms:editable>
+            <cms:editable type='dropdown' name='trnsmp_txt_fx_txt_clr_rp' label='Typed Word Color' 
+                opt_values='dropdowns/solid-colors.htm'
+                opt_selected='white'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='35'
+           />
+           <cms:editable type='dropdown' name='trnsmp_txt_fx_fnt_wt_rp' label='Typed Word Weight' 
+                opt_values='dropdowns/font-weight.htm'
+                dynamic='opt_values'
+                class='col-md-4 col-sm-6'
+                order='37'  
+            />
+    </cms:editable>
+</cms:editable>
+<cms:editable type="group" name="trns_c2a_grp" label="Navigation Link(s)" not_active=trns_btn_chc order='12' >   
+    <cms:editable type='row' name='trns_c2a_row'  order='5' >
+        <cms:editable type='message' name='trnsmp_form_gen_c2a_msg' class='col-md-12' order='2'>
+            <hr>
+            <h2>Call-To-Action Settings</h2>
+            <h4>Set for button or text link or none</h4>
+            <p>More settings open up below.</p>
+        </cms:editable>
+        
+        <cms:editable type='dropdown' name='trnsmp_frmt_c2a_opt' label='Call-to-Action Style'
+            opt_values='Button=btn|Text Link=lnk|No Call-To-Action=0'
+            class='col-md-4'
+            order='3'
+        />
+        <cms:func _into='trnsmp_frmt_c2a_sty_grp_chc' trnsmp_frmt_c2a_opt=''>
+            <cms:if trnsmp_frmt_c2a_opt != '0' >
+            show
+        <cms:else />
+            hide
+            </cms:if>
+        </cms:func>
+        <cms:editable type='dropdown' name='trnsmp_frmt_c2a_opt_ct' label='Call-to-Action Count' desc=''
+            opt_values='Single=1|Multiple=2'
+            not_active=trnsmp_frmt_c2a_sty_grp_chc
+            class='col-md-4'
+            order='6'
+        />
+        <cms:editable type='dropdown' name='trnsmp_frmt_c2a_mt' label='Space between Text & c2a link' desc=''
+            opt_values='3|2|4|5|1|0'
+            not_active=trnsmp_frmt_c2a_sty_grp_chc
+            class='col-md-4'
+            order='8'
+        />
+    </cms:editable>
+
+
+</cms:editable>
+<cms:editable type="group" name="trns_vid_grp" label="Interactive Video" not_active=trns_vid_chc order='15' >   
+    <cms:editable type='row' name='trnsmp_gen_xt_row2' order='5'>
+        <cms:editable type='message' name='trnsmp_gen_xtr_add_msg' order='2' >
+        <hr><br>
+        <h2>Add a video popup modal</h2>
+        <h4>More interactivity</h4>
+            <p></p>
+        </cms:editable> 
+        <cms:editable type='checkbox' name='trnsmp_vid_add_opt' label='Add Popup Video' desc='with Play button'
+            opt_values='Add Video=1'
+            class='col-md-4'
+            order='4'
+        />
+    </cms:editable>
+</cms:editable>
+
+
+<cms:editable type="group" name="trns_fx_grp" label="Interactive Video" not_active=fx_trns_chc order='18' >
+
+    <cms:editable type='message' name='trnsmp_gen_xt_msg' order='2'>
+        <h2>Will show 'play' button and a modal will pop up on clicking</h2>
+        <h4>Play Button space means how much space above and below button.</h4>
+    </cms:editable>
+    <cms:editable type='row' name='trnsmp_mdl_vid_row' label="Video Popup"  order='5' >
+        <cms:editable type='dropdown' name='trnsmp_add_vid_btn_clr' label='Play Button Shade' 
+            opt_values='Light=|Dark=-drk'
+            class='col-md-4'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='trnsmp_add_vid_btn_mgn' label='Play Button Space' 
+            opt_values='2|4|6|0'
+            class='col-md-4'
+            order='4'
+        />
+    </cms:editable>
+    <cms:editable type='row' name='trnsmp_mdl_vid_row2' label="Video Popup"  order='10' >
+        <cms:editable type='message' name='trnsmp_mdl_vid_msg' order='2'>
+            <br>
+            <h2>Streaming Video ID or Upload your own</h2><h4>IMPORTANT: If You Tube or Vimeo, only the ID is needed</h4>
+        </cms:editable>
+        <cms:editable type='dropdown' name='trnsmp_mdl_vid_src_opt' label='Upload or Stream' 
+            opt_values='Upload=0|You Tube=1|Vimeo=2'
+            class='col-md-4'
+            order='4'
+        />
+        <cms:func _into='trnsmp_mdl_vid_lcl_chc' trnsmp_mdl_vid_src_opt=''>
+            <cms:if trnsmp_mdl_vid_src_opt='0'>
+                show
+                <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:func _into='trnsmp_mdl_vid_ytb_chc' trnsmp_mdl_vid_src_opt=''>
+            <cms:if trnsmp_mdl_vid_src_opt='1'>
+                show
+                <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:func _into='trnsmp_mdl_vid_vim_chc' trnsmp_mdl_vid_src_opt=''>
+            <cms:if trnsmp_mdl_vid_src_opt='2'>
+                show
+                <cms:else />
+                hide
+            </cms:if>
+        </cms:func> 
+
+        <cms:editable type="text" name="trnsmp_mdl_ytb_id" label="You Tube Video ID"
+            width="275"
+            not_active=trnsmp_mdl_vid_ytb_chc
+            class='col-md-4'
+            order='6'
+        />
+        <cms:editable type="text" name="trnsmp_mdl_vim_id" label="Vimeo Video ID"
+            width="275"
+            not_active=trnsmp_mdl_vid_vim_chc
+            class='col-md-4'
+            order='8'
+        />     
+
+        <cms:editable type="file" name="trnsmp_mdl_vid_upl_vid_mp4" label="mp4"
+            width='30' 
+            not_active=trnsmp_mdl_vid_lcl_chc
+            class='col-md-4'
+            order='10'  
+        />
+    </cms:editable>
+
+
+
+
+
+</cms:editable>
+
+
+<cms:func _into='trnsmp_bg_clr_cust_chc' trnsmp_bg_clr_opt=''>
+    <cms:if trnsmp_bg_clr_opt="gradient" >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>   
+<cms:func _into='trnsmp_bg_ovrly_cust_chc' trnsmp_ovrly_clr_opt=''>
+    <cms:if trnsmp_ovrly_clr_opt="gradient" >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+<cms:editable type='group' name='trnsmp_bg_clr_cstm_grp' collapsed='1' label='Background Custom Color' not_active=trnsmp_bg_clr_cust_chc order='14' >
+    <cms:editable type='message' name='trnsmp_bg_clr_cstm_msg' order='2'>
+        <h2>Custom Background Color</h2><h4>These colors will cover the background image and overlay colors. Use Transparancy as needed to see the images.</h4>
+    </cms:editable>
+    <cms:editable type='row' name='trnsmp_bg_clr_cstm_grdt_opt_row'  order='5'>
+        <cms:editable type='dropdown' name='trnsmp_bg_clr_cstm_grdt_opt' label='Solid or Gradient Color' desc=''
+            opt_values='Solid=0|Gradient=1' 
+            class='col-md-3'  
+            order='2'
+        />
+        <cms:func _into='trnsmp_bg_clr_cstm_grdt_chc' trnsmp_bg_clr_cstm_grdt_opt=''>
+            <cms:if trnsmp_bg_clr_cstm_grdt_opt="1" >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func> 
+    </cms:editable>
+    <cms:editable name='trnsmp_bg_clr_cstm_row' type='row' order='10'>
+        <cms:editable type='color' name='trnsmp_bg_clr_cstm_one' label='Color 1' desc='Solid Color or First of Gradient'
+            color='#000000'
+            alpha='1'
+            width='50%'
+            height='100px'
+            class='col-md-6'
+            order='2'
+        >#00000000</cms:editable>
+        <cms:editable type='color' name='trnsmp_bg_clr_cstm_two' label='Color 2' desc='Second Color of Gradient - Ramp'
+            color='#000000'
+            alpha='1'
+            width='50%'
+            height='100px'
+            class='col-md-6'
+            not_active=trnsmp_bg_clr_cstm_grdt_chc 
+            order='4' 
+        >#00000000</cms:editable>
+        <cms:editable type='dropdown'  name='trnsmp_bg_clr_cust_grad_split_opt' label='Gradient Split Style' desc='vision division of gradient'
+            opt_values='dropdowns/gradient-split.htm'
+            dynamic='opt_values'
+            separator='@'
+            class='col-md-4'
+            not_active=trnsmp_bg_clr_cstm_grdt_chc 
+            order='6'
+        />
+        <cms:editable type='checkbox' name='trnsmp_bg_clr_cstm_grad_rvrs_opt' label='Reverse Background Gradient Colors' 
+            opt_values='Swap=1' 
+            class='col-md-3' 
+            not_active=trnsmp_bg_clr_cstm_grdt_chc  
+            order='8'
+        />
+    </cms:editable>
+</cms:editable>
+<cms:editable type='group' name='trnsmp_ovrly_clr_cstm_grp' collapsed='1' label='Color Overlay' not_active=trnsmp_bg_ovrly_cust_chc order='16' >
+    <cms:editable type='message' name='trnsmp_ovrly_clr_cstm_msg' order='2'>
+        <h2>Custom Image Overlay Color</h2><h4>These colors will cover any image. Set Transparancy below 100% To Reveal any Image</h4>
+    </cms:editable>
+    <cms:editable name='trnsmp_ovrly_clr_cstm_grdt_opt_row' type='row' order='5'>
+        <cms:editable type='dropdown' name='trnsmp_ovrly_clr_grdt_opt' label='Image Overlay' desc=''
+            opt_values='Solid=0|Gradient=1' 
+            class='col-md-3'  
+            order='2'
+        />
+
+        <cms:func _into='trnsmp_ovrly_clr_grdt_chc' trnsmp_ovrly_clr_grdt_opt=''>
+            <cms:if trnsmp_ovrly_clr_grdt_opt="1" >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func> 
+    </cms:editable>
+    <cms:editable name='trnsmp_ovrly_cstm_row' type='row' order='10'>
+        <cms:editable type='color'
+            name='trnsmp_ovrly_clr_cstm_one'
+            label='Color 1'
+            desc='Solid Color or First of Gradient'
+            color='#000000'
+            alpha='1'
+            width='50%'
+            height='100px'
+            class='col-md-6'
+            order='2'
+        >#00000000</cms:editable>
+        <cms:editable type='color'
+            name='trnsmp_ovrly_clr_cstm_two'
+            label='Color 2'
+            desc='Second Color of Gradient - Ramp'
+            color='#000000'
+            alpha='1'
+            width='50%'
+            height='100px'
+            class='col-md-6'
+            not_active=trnsmp_ovrly_clr_grdt_chc
+            order='4' 
+        >#00000000</cms:editable>
+        <cms:editable type='dropdown'  name='trnsmp_ovrly_cust_grad_split_opt' label='Gradient Split Style' desc='vision division of gradient'
+            opt_values='dropdowns/gradient-split.htm'
+            dynamic='opt_values'
+            separator='@'
+            class='col-md-3'
+            not_active=trnsmp_ovrly_clr_grdt_chc 
+            order='6'
+        />
+        <cms:editable type='checkbox' name='trnsmp_ovrly_clr_cstm_grdt_rvrs_opt' label='Reverse Overlay Gradient Colors' 
+            opt_values='Swap=1' 
+            class='col-md-3' 
+            not_active=trnsmp_ovrly_clr_grdt_chc  
+            order='8'
+        />
+    </cms:editable>
+</cms:editable>

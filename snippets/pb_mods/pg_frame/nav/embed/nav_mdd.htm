@@ -1,0 +1,42 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type="group" name="ccs_nav_mdd_gen_grp" label="General Settings" order="10">
+    <cms:editable type='message' name='ccs_nav_mdd_gen_msg' order='5'>
+        <h2>NAVBAR:: Multiple Dropdown</h2>
+        <p>Up to 2 subcategories from the main menu header. Final subcategory may be the content page, or a subcategory where content pages are listed.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_nav_mdd_gen_row' order='10'>
+        <cms:editable type='dropdown' name='ccs_nav_mdd_bg_clr_opt' label='Navigation Bar Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-12' order='10' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_nav_mdd_stky_row' order='20'>
+        <cms:editable type='message' name='ccs_nav_mdd_stl_msg' class='col-md-9' order='10'>
+            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin-top:10px;">
+                <strong>Sticky Positioning Warning:</strong><br> "Stick Navbar To Top" should not be used if your Top Bar is also set to sticky.
+            </div>
+        </cms:editable>
+        <cms:editable type='checkbox' name='ccs_nav_mdd_stky' label='Stick Navbar To Top' desc='Navigation stays on screen when scrolling on larger screens' opt_values='Yes=1' class='col-md-3' order='20' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type="group" name="ccs_nav_mdd_nav_txt_grp" label="Style Navigation Bar Text" order="20">
+    <cms:editable type='message' name='ccs_nav_mdd_nav_msg' order='5'>
+        <h3>Style Navigation Bar Text</h3>
+        <p>Change colors and sizes if other than site default is desired. All style settings may also be changed at element level.</p>
+        <div style="background-color: #e9ecef; border-left: 4px solid #6c757d; padding: 10px 15px; margin-top:10px;">
+            <em><strong>Note:</strong> Navbar Dropdown Menus and Float-Over styles can only be edited in global settings, or at element level.</em>
+        </div>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_nav_mdd_nav_txt_row' order='10'>
+        <cms:editable type='dropdown' name='ccs_nav_mdd_nav_text' label='Navbar Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='10' />
+        <cms:editable type='dropdown' name='ccs_nav_mdd_nav_fs' label='Navbar Text Size' opt_values='dropdowns/text-size_sml.htm' dynamic='opt_values' class='col-md-4' order='20' />
+        <cms:editable type='dropdown' name='ccs_nav_mdd_nav_fwt' label='Navbar Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4' order='30' />  
+        <cms:editable type='dropdown' name='ccs_nav_mdd_nav_fst' label='Navbar Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-4' order='40' />
+        <cms:editable type='dropdown' name='ccs_nav_mdd_nav_font' label='Navbar Line Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4' order='50' />
+        <cms:editable type='dropdown' name='ccs_nav_mdd_nav_ls' label='Navbar Letter Spacing' opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-md-4' order='60' />
+    </cms:editable>
+</cms:editable>

@@ -1,0 +1,48 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_lnk_gen_stng_grp' label='2-Column Footer Settings' order='20'>
+    <cms:editable type='message' name='ccs_ftr_lnk_gen_stng_msg' order='2'>
+        <h2>Site Footer</h2>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ftr_lnk_gen_set_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_pad_y' label='Top and Bottom Padding' opt_values='dropdowns/util-pad.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='6' />
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_bg_clr_opt' label='Footer Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='7' />
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_txt_clr_opt' label='Footer Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='12' />
+    </cms:editable>    
+    
+    <cms:editable type='row' name='ccs_ftr_lnk_frmt_row' order='10'>
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_txt_sz' label='Text Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='16' />
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_txt_fnt_wt' label='Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='18' />
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_txt_ltr_spc' label='Letter Spacing' opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20' />
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_txt_fnt_st' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='22' />
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_txt_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='24' />
+    </cms:editable>
+    
+    <cms:editable type='message' name='ccs_ftr_lnk_lnk_msg' order='25'>
+        <br><hr>
+        <h3>Footer Site Links</h3>
+    </cms:editable>
+
+    <cms:repeatable name='ccs_ftr_lnk_lnks_rpt' label='Footer Site Links' stacked_layout='1' order='30'>
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_lnk_typ' label='Link Type' opt_values='dropdowns/link-type.htm' dynamic='opt_values' order='10' />
+        
+        <cms:func _into='ccs_ftr_lnk_hide_site' ccs_ftr_lnk_lnk_typ=''><cms:if ccs_ftr_lnk_lnk_typ='site'>0<cms:else />1</cms:if></cms:func>
+        <cms:func _into='ccs_ftr_lnk_hide_cst' ccs_ftr_lnk_lnk_typ=''><cms:if ccs_ftr_lnk_lnk_typ='custom'>0<cms:else />1</cms:if></cms:func>
+        <cms:func _into='ccs_ftr_lnk_hide_pho' ccs_ftr_lnk_lnk_typ=''><cms:if ccs_ftr_lnk_lnk_typ='phone'>0<cms:else />1</cms:if></cms:func>
+        <cms:func _into='ccs_ftr_lnk_hide_eml' ccs_ftr_lnk_lnk_typ=''><cms:if ccs_ftr_lnk_lnk_typ='email'>0<cms:else />1</cms:if></cms:func>
+        <cms:func _into='ccs_ftr_lnk_hide_tgt' ccs_ftr_lnk_lnk_typ=''><cms:if ccs_ftr_lnk_lnk_typ='custom'>0<cms:else />1</cms:if></cms:func>
+
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_lnk_site' label='Select Internal Page' opt_values='dropdowns/links.htm' dynamic='opt_values' not_active=ccs_ftr_lnk_hide_site order='20' />
+        <cms:editable type='text' name='ccs_ftr_lnk_lnk_cst' label='Custom URL' desc='Input the entire URL (e.g., https://yoursite.com/)' width='400' not_active=ccs_ftr_lnk_hide_cst order='21' />
+        
+        <cms:editable type='text' name='ccs_ftr_lnk_lnk_pho' label='Phone Number' width='200' not_active=ccs_ftr_lnk_hide_pho order='22' />
+        <cms:editable type='text' name='ccs_ftr_lnk_lnk_ext' label='Extension (Optional)' width='100' not_active=ccs_ftr_lnk_hide_pho order='23' />
+        
+        <cms:editable type='text' name='ccs_ftr_lnk_lnk_eml' label='Email Address' width='300' not_active=ccs_ftr_lnk_hide_eml order='24' />
+        <cms:editable type='text' name='ccs_ftr_lnk_lnk_sub' label='Email Subject (Optional)' width='300' not_active=ccs_ftr_lnk_hide_eml order='25' />
+
+        <cms:editable type='text' name='ccs_ftr_lnk_ttl' label='Link Title' width='200' maxlength="40" order='30' />
+        <cms:editable type='dropdown' name='ccs_ftr_lnk_tgt' label='Page Opens In' opt_values='dropdowns/link-target.htm' dynamic='opt_values' not_active=ccs_ftr_lnk_hide_tgt order='50' />
+    </cms:repeatable>
+</cms:editable>

@@ -1,0 +1,50 @@
+<div class="overflow-hidden">
+    <h4 class="fw-<cms:show hdr_frm_ttl_fnt_wt /> text-<cms:show hdr_frm_ttl_txt_clr /> font-<cms:show hdr_frm_ttl_font /> fst-<cms:show hdr_frm_ttl_fnt_st />">
+        <cms:show hdr_frm_title />
+    </h4>
+    <p class="fw-<cms:show hdr_frm_ttl_fnt_wt /> text-<cms:show hdr_frm_ttl_txt_clr /> font-<cms:show hdr_frm_ttl_font /> fst-<cms:show hdr_frm_ttl_fnt_st />">
+        <cms:show hdr_frm_para />
+    </p>
+    <cms:form class="" method="post">
+        <cms:if k_success >
+            <h3>Form successfully submitted</h3>
+            <cms:each k_success sep='\n'>
+                <cms:show item /><br>
+            </cms:each>
+        </cms:if>
+        <cms:if k_error >
+            <h3></h3>
+            <cms:each k_error >
+                <li><cms:show item /></li>
+            </cms:each>
+        </cms:if>
+        <div class="row align-items-cente">
+            <cms:show_repeatable 'hdr_form_rptbl' >
+                <cms:php>
+                    global $FUNCS, $CTX;
+                    $name = $FUNCS->get_clean_url( $CTX->get('title') );
+                    $CTX->set( 'name', $name ); 
+                </cms:php>
+                <div class="input-group input-group-sm">
+                    <label for="<cms:show title />" class="form-label fs-8 text-<cms:show hdr_form_txt_clr /> font-<cms:show hdr_form_font /> fw-<cms:show hdr_form_fnt_wt /> fst-<cms:show hdr_form_fnt_st /> mt-2" >
+                        <cms:show title />
+                    </label>
+                    <cms:input type="text" name="<cms:show name />" id="<cms:show name />" class="form-control-sm w-100" 
+                    required="<cms:show fld_req_opt />" 
+                    validator="<cms:show req_vals_opt />" 
+                    validator_msg="<cms:show err_msg />" 
+                    />  
+                </div>
+                <cms:set input_error="<cms:get "k_error_<cms:show name/>" />" />
+                <cms:if input_error >
+                    <p id="<cms:show name/>_error" class="text-light bg-800"><cms:show input_error /></p>
+                </cms:if>
+            </cms:show_repeatable>
+        </div>
+        <div class="col-10 mt-4 mt-sm-3 text-<cms:show hdr_frm_c2a_plc />">
+            <button class="btn btn-sm btn<cms:show hdr_frm_c2a_clr_out_chk />-<cms:show hdr_frm_c2a_clr />" type="submit">
+            <cms:show hdr_frm_c2a_txt />
+            </button>
+        </div>
+    </cms:form>
+</div>

@@ -1,0 +1,71 @@
+<cms:func _into='ccs_hro_bot_rail_chc' ccs_hro_bot_rail_opt=''>
+    <cms:if ccs_hro_bot_rail_opt='1'>
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+
+<cms:editable type='group' name='ccs_hro_bot_rail_grp' label="Bottom Rail Options" not_active=ccs_hro_bot_rail_chc order='210'>
+    <cms:editable type='message' name='ccs_hro_bot_rail_msg' order='809'>
+        <hr><br>
+        <h2>The Bottom Rail Rests on the Bottom of the Hero Section</h2>
+        <h4>To Remove, uncheck the option above</h4>
+        <p></p>
+    </cms:editable>
+    <cms:editable type='row' name='ccs_hro_bot_rail_row' order='810'>
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_sz' label='Full or Half Width' desc='horizontal size of rail at bottom'
+            opt_values='Full=12 |Half=6'
+            class='col-md-4'
+            order='811'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_thk' label='Height of Rail' desc='thickness'
+			opt_values='Normal=3|Thin=2|Thick=4|Only Text Background=0'
+			class='col-md-4'
+			order='812'
+		/>
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_shd' label='Background Shade' 
+            opt_values='dropdowns/shades_gray.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='813'  
+        />
+    </cms:editable>
+    <cms:editable type='row' name='ccs_hro_bot_rail_txt_row' order='809'>
+        <cms:editable type='text' name='ccs_hro_bot_rail_ln_txt_ln' label='Text' desc='line of text'
+            maxlength='130'
+            class='col-md-4'
+            order='814' 
+        />
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_txt_clr' label='Text Color' 
+            opt_values='dropdowns/solid-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='816'  
+        />
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_txt_sz' label='Text Size' 
+            opt_values='Default= | Small=8 | X-Small=9'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='819'  
+        />
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_fnt_wt' label='Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='822'  
+        />
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_fnt_st' label='Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='825'  
+        />
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_font' label='Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='827'  
+        />
+    </cms:editable>
+</cms:editable>

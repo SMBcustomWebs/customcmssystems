@@ -1,0 +1,125 @@
+<cms:set var_eyb="ccs_hro_swpr_sl_<cms:show cur_slide_num />_eyb" />
+<cms:capture into='cur_eye_txt'><cms:get var_eyb /></cms:capture>
+
+<cms:set var_hd="ccs_hro_swpr_sl_<cms:show cur_slide_num />_hd" />
+<cms:capture into='cur_hd_txt'><cms:get var_hd /></cms:capture>
+
+<cms:set var_sub="ccs_hro_swpr_sl_<cms:show cur_slide_num />_sub" />
+<cms:capture into='cur_sub_txt'><cms:get var_sub /></cms:capture>
+
+<cms:set var_typo_ovr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_typo_ovr" />
+<cms:capture into='cur_typo_ovr'><cms:get var_typo_ovr /></cms:capture>
+
+<cms:set use_loc_typo='0' />
+<cms:if hero_swpr_glbl_typo_mode == 'local'>
+    <cms:set use_loc_typo='1' />
+<cms:else />
+    <cms:if cur_typo_ovr == '1'>
+        <cms:set use_loc_typo='1' />
+    </cms:if>
+</cms:if>
+
+<cms:if cur_eye_txt>
+    <cms:capture into='eyebrow_classes'>
+        <cms:if use_loc_typo == '1'>
+            <cms:set var_loc_eye_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_sz" /><cms:capture into='loc_eye_sz'><cms:get var_loc_eye_sz /></cms:capture>
+            <cms:set var_loc_eye_wt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_wt" /><cms:capture into='loc_eye_wt'><cms:get var_loc_eye_wt /></cms:capture>
+            <cms:set var_loc_eye_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_clr" /><cms:capture into='loc_eye_clr'><cms:get var_loc_eye_clr /></cms:capture>
+            <cms:set var_loc_eye_fst="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_fst" /><cms:capture into='loc_eye_fst'><cms:get var_loc_eye_fst /></cms:capture>
+            <cms:set var_loc_eye_fam="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_fam" /><cms:capture into='loc_eye_fam'><cms:get var_loc_eye_fam /></cms:capture>
+            <cms:set var_loc_eye_lspc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_lspc" /><cms:capture into='loc_eye_lspc'><cms:get var_loc_eye_lspc /></cms:capture>
+            
+            <cms:if loc_eye_sz>fs-<cms:show loc_eye_sz /> </cms:if>
+            <cms:if loc_eye_wt>fw-<cms:show loc_eye_wt /> </cms:if>
+            <cms:if loc_eye_clr>text-<cms:show loc_eye_clr /> </cms:if>
+            <cms:if loc_eye_fst>fst-<cms:show loc_eye_fst /> </cms:if>
+            <cms:if loc_eye_fam>font-<cms:show loc_eye_fam /> </cms:if>
+            <cms:if loc_eye_lspc>ls-<cms:show loc_eye_lspc /> </cms:if>
+        <cms:else />
+            <cms:if ccs_hro_swpr_glbl_eye_sz>fs-<cms:show ccs_hro_swpr_glbl_eye_sz /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_eye_wt>fw-<cms:show ccs_hro_swpr_glbl_eye_wt /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_eye_clr>text-<cms:show ccs_hro_swpr_glbl_eye_clr /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_eye_fst>fst-<cms:show ccs_hro_swpr_glbl_eye_fst /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_eye_fam>font-<cms:show ccs_hro_swpr_glbl_eye_fam /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_eye_lspc>ls-<cms:show ccs_hro_swpr_glbl_eye_lspc /> </cms:if>
+        </cms:if>
+    </cms:capture>
+    
+    <div class="w-100 mb-2">
+        <div class="position-relative d-inline-block">
+            <h4 class="<cms:show eyebrow_classes /> mb-0">
+                <cms:show cur_eye_txt />
+            </h4>
+        </div>
+    </div>
+</cms:if>
+
+<cms:if cur_hd_txt>
+    <cms:capture into='headline_classes'>
+        <cms:if use_loc_typo == '1'>
+            <cms:set var_loc_hd_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_sz" /><cms:capture into='loc_hd_sz'><cms:get var_loc_hd_sz /></cms:capture>
+            <cms:set var_loc_hd_wt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_wt" /><cms:capture into='loc_hd_wt'><cms:get var_loc_hd_wt /></cms:capture>
+            <cms:set var_loc_hd_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_clr" /><cms:capture into='loc_hd_clr'><cms:get var_loc_hd_clr /></cms:capture>
+            <cms:set var_loc_hd_fst="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_fst" /><cms:capture into='loc_hd_fst'><cms:get var_loc_hd_fst /></cms:capture>
+            <cms:set var_loc_hd_fam="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_fam" /><cms:capture into='loc_hd_fam'><cms:get var_loc_hd_fam /></cms:capture>
+            <cms:set var_loc_hd_lspc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_lspc" /><cms:capture into='loc_hd_lspc'><cms:get var_loc_hd_lspc /></cms:capture>
+            
+            <cms:if loc_hd_sz>fs-<cms:show loc_hd_sz /> </cms:if>
+            <cms:if loc_hd_wt>fw-<cms:show loc_hd_wt /> </cms:if>
+            <cms:if loc_hd_clr>text-<cms:show loc_hd_clr /> </cms:if>
+            <cms:if loc_hd_fst>fst-<cms:show loc_hd_fst /> </cms:if>
+            <cms:if loc_hd_fam>font-<cms:show loc_hd_fam /> </cms:if>
+            <cms:if loc_hd_lspc>ls-<cms:show loc_hd_lspc /> </cms:if>
+        <cms:else />
+            <cms:if ccs_hro_swpr_glbl_hd_sz>fs-<cms:show ccs_hro_swpr_glbl_hd_sz /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_hd_wt>fw-<cms:show ccs_hro_swpr_glbl_hd_wt /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_hd_clr>text-<cms:show ccs_hro_swpr_glbl_hd_clr /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_hd_fst>fst-<cms:show ccs_hro_swpr_glbl_hd_fst /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_hd_fam>font-<cms:show ccs_hro_swpr_glbl_hd_fam /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_hd_lspc>ls-<cms:show ccs_hro_swpr_glbl_hd_lspc /> </cms:if>
+        </cms:if>
+    </cms:capture>
+
+    <div class="w-100 mb-3">
+        <div class="position-relative d-inline-block">
+            <h1 class="<cms:show headline_classes /> mb-0">
+                <cms:show cur_hd_txt />
+            </h1>
+        </div>
+    </div>
+</cms:if>
+
+<cms:if cur_sub_txt>
+    <cms:capture into='subheadline_classes'>
+        <cms:if use_loc_typo == '1'>
+            <cms:set var_loc_sub_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_sz" /><cms:capture into='loc_sub_sz'><cms:get var_loc_sub_sz /></cms:capture>
+            <cms:set var_loc_sub_wt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_wt" /><cms:capture into='loc_sub_wt'><cms:get var_loc_sub_wt /></cms:capture>
+            <cms:set var_loc_sub_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_clr" /><cms:capture into='loc_sub_clr'><cms:get var_loc_sub_clr /></cms:capture>
+            <cms:set var_loc_sub_fst="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_fst" /><cms:capture into='loc_sub_fst'><cms:get var_loc_sub_fst /></cms:capture>
+            <cms:set var_loc_sub_fam="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_fam" /><cms:capture into='loc_sub_fam'><cms:get var_loc_sub_fam /></cms:capture>
+            <cms:set var_loc_sub_lspc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_lspc" /><cms:capture into='loc_sub_lspc'><cms:get var_loc_sub_lspc /></cms:capture>
+            
+            <cms:if loc_sub_sz>fs-<cms:show loc_sub_sz /> </cms:if>
+            <cms:if loc_sub_wt>fw-<cms:show loc_sub_wt /> </cms:if>
+            <cms:if loc_sub_clr>text-<cms:show loc_sub_clr /> </cms:if>
+            <cms:if loc_sub_fst>fst-<cms:show loc_sub_fst /> </cms:if>
+            <cms:if loc_sub_fam>font-<cms:show loc_sub_fam /> </cms:if>
+            <cms:if loc_sub_lspc>ls-<cms:show loc_sub_lspc /> </cms:if>
+        <cms:else />
+            <cms:if ccs_hro_swpr_glbl_sub_sz>fs-<cms:show ccs_hro_swpr_glbl_sub_sz /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_sub_wt>fw-<cms:show ccs_hro_swpr_glbl_sub_wt /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_sub_clr>text-<cms:show ccs_hro_swpr_glbl_sub_clr /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_sub_fst>fst-<cms:show ccs_hro_swpr_glbl_sub_fst /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_sub_fam>font-<cms:show ccs_hro_swpr_glbl_sub_fam /> </cms:if>
+            <cms:if ccs_hro_swpr_glbl_sub_lspc>ls-<cms:show ccs_hro_swpr_glbl_sub_lspc /> </cms:if>
+        </cms:if>
+    </cms:capture>
+
+    <div class="w-100">
+        <div class="position-relative d-inline-block">
+            <h2 class="<cms:show subheadline_classes /> mb-0">
+                <cms:show cur_sub_txt />
+            </h2>
+        </div>
+    </div>
+</cms:if>

@@ -1,0 +1,13 @@
+<cms:if hdr_add_vid_src_opt='2' >
+    <a class="bg-video video-modal d-block mt-<cms:show hdr_add_vid_btn_mgn /> py-2" href="#!" data-bigPicture='{"vimeoSrc":"<cms:show hdr_add_vid_stm_vm />"}'>
+        <img src="<cms:show k_site_link />assets/images/icons/icon-play<cms:show hdr_add_vid_btn_clr />.svg" alt="video play button" width="80" />
+    </a>
+<cms:else_if hdr_add_vid_src_opt='1' />
+    <a class="bg-video video-modal d-block mt-<cms:show hdr_add_vid_btn_mgn /> py-2" href="#!" data-bigPicture='{"ytSrc":"<cms:show hdr_add_vid_stm_yt />"}'>
+        <img src="<cms:show k_site_link />assets/images/icons/icon-play<cms:show hdr_add_vid_btn_clr />.svg" alt="video play button" width="80" />
+    </a>
+<cms:else />
+    <a class="bg-video video-modal d-block mt-<cms:show hdr_add_vid_btn_mgn /> py-2" href="#!" data-bigPicture='{"vidSrc":"<cms:show hdr_add_vid_lcl_mp4 />"}'>
+        <img src="<cms:show k_site_link />assets/images/icons/icon-play<cms:show hdr_add_vid_btn_clr />.svg" alt="video play button" width="80" />
+    </a>
+</cms:if>

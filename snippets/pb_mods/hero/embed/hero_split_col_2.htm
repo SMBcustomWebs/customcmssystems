@@ -1,0 +1,155 @@
+<cms:editable type='group' name='ccs_hro_splt_c2_grp' label='Column 2 Payload (Right Side)' order='700'>
+
+    <cms:editable type='message' name='ccs_hro_splt_c2_msg' order='2'>
+        <hr><br>
+        <h2>Column 2 Content</h2>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_type_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_type' label='Media Type' desc='What goes in this column?' 
+            opt_values='Image Media=img | Video Media=vid | Text Content=txt' 
+            class='col-md-6 col-sm-12' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_img_hide' ccs_hro_splt_c2_type=''>
+        <cms:if ccs_hro_splt_c2_type='img'>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_img_row' not_active=ccs_hro_splt_c2_img_hide order='10'>
+        <cms:editable type='image' name='ccs_hro_splt_c2_img' label='Image Upload' desc='Recommended 1:1 or 4:3 ratio' width='1000' enforce_max='1' show_preview='1' preview_width='75' class='col-md-6' order='2' />
+        <cms:editable type='text' name='ccs_hro_splt_c2_img_alt' label='Image Description' class='col-md-6' order='4' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_vid_hide' ccs_hro_splt_c2_type=''>
+        <cms:if ccs_hro_splt_c2_type='vid'>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_vid_src_row' not_active=ccs_hro_splt_c2_vid_hide order='15'>
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_vid_src' label='Video Source' opt_values='Upload=0 | YouTube=1 | Vimeo=2' class='col-md-4' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_vid_upl_show' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_vid_src=''><cms:if ccs_hro_splt_c2_type='vid' && ccs_hro_splt_c2_vid_src='0'>0<cms:else />1</cms:if></cms:func>
+    <cms:func _into='ccs_hro_splt_c2_vid_yt_show' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_vid_src=''><cms:if ccs_hro_splt_c2_type='vid' && ccs_hro_splt_c2_vid_src='1'>0<cms:else />1</cms:if></cms:func>
+    <cms:func _into='ccs_hro_splt_c2_vid_vm_show' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_vid_src=''><cms:if ccs_hro_splt_c2_type='vid' && ccs_hro_splt_c2_vid_src='2'>0<cms:else />1</cms:if></cms:func>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_vid_upl_row' not_active=ccs_hro_splt_c2_vid_upl_show order='20'>
+        <cms:editable type='file' name='ccs_hro_splt_c2_vid_mp4' label='mp4' width='200' class='col-md-4' order='2' />
+        <cms:editable type='file' name='ccs_hro_splt_c2_vid_webm' label='webm' width='200' class='col-md-4' order='4' />
+        <cms:editable type='file' name='ccs_hro_splt_c2_vid_ogv' label='ogv' width='200' class='col-md-4' order='6' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_vid_yt_row' not_active=ccs_hro_splt_c2_vid_yt_show order='25'>
+        <cms:editable type='text' name='ccs_hro_splt_c2_yt_id' label='YouTube Video ID' width='200' class='col-md-6 col-sm-12' order='2' />
+        <cms:editable type='checkbox' name='ccs_hro_splt_c2_yt_tm_chk' label='Time Controls' opt_values='Set Custom Start/Stop Loop Times=1' class='col-md-6 col-sm-12' order='4' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_yt_tm_hide' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_vid_src='' ccs_hro_splt_c2_yt_tm_chk=''>
+        <cms:if (ccs_hro_splt_c2_type='vid') && (ccs_hro_splt_c2_vid_src='1') && (ccs_hro_splt_c2_yt_tm_chk='1')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_vid_yt_tm_row' not_active=ccs_hro_splt_c2_yt_tm_hide order='30'>
+        <cms:editable type='text' name='ccs_hro_splt_c2_yt_str' label='Start Loop (sec)' desc='0 is default' width='100' class='col-md-2' order='2'>0</cms:editable>
+        <cms:editable type='text' name='ccs_hro_splt_c2_yt_stp' label='Stop Loop (sec)' width='100' class='col-md-2' order='4' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_vid_vm_row' not_active=ccs_hro_splt_c2_vid_vm_show order='35'>
+        <cms:editable type='text' name='ccs_hro_splt_c2_vm_id' label='Vimeo Video ID' width='200' class='col-md-6 col-sm-12' order='2' />
+        <cms:editable type='checkbox' name='ccs_hro_splt_c2_vm_tm_chk' label='Time Controls' opt_values='Set Custom Start Time=1' class='col-md-6 col-sm-12' order='4' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_vm_tm_hide' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_vid_src='' ccs_hro_splt_c2_vm_tm_chk=''>
+        <cms:if (ccs_hro_splt_c2_type='vid') && (ccs_hro_splt_c2_vid_src='2') && (ccs_hro_splt_c2_vm_tm_chk='1')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_vid_vm_tm_row' not_active=ccs_hro_splt_c2_vm_tm_hide order='40'>
+        <cms:editable type='text' name='ccs_hro_splt_c2_vm_str' label='Start Loop (sec)' desc='0 is default' width='100' class='col-md-2' order='2'>0</cms:editable>
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_txt_hide' ccs_hro_splt_c2_type=''>
+        <cms:if ccs_hro_splt_c2_type='txt'>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_txt_row' not_active=ccs_hro_splt_c2_txt_hide order='45'>
+        <cms:editable type='text' name='ccs_hro_splt_c2_eye_txt' label='Eyebrow Text' maxlength='40' class='col-md-4' order='2' />
+        <cms:editable type='text' name='ccs_hro_splt_c2_hd_txt' label='Headline Text' maxlength='80' class='col-md-4' order='4' />
+        <cms:editable type='text' name='ccs_hro_splt_c2_sub_txt' label='Subheadline Text' maxlength='150' class='col-md-4' order='6' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_frm_chk_row' not_active=ccs_hro_splt_c2_txt_hide order='50'>
+        <cms:editable type='checkbox' name='ccs_hro_splt_c2_frm_chk' label='Inline Form' opt_values='Yes, add an inline submission form below the text=1' class='col-md-12' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_frm_hide' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_frm_chk=''>
+        <cms:if (ccs_hro_splt_c2_type='txt') && (ccs_hro_splt_c2_frm_chk='1')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_frm_row' not_active=ccs_hro_splt_c2_frm_hide order='55'>
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_frm_opt' label="Type of Form" opt_values='Simple (Join Email)=1 | Simple Extended (Name & Email)=2 | Basic (Contact Us)=3' class='col-md-6' order='2' />
+        <cms:editable type='text' name='ccs_hro_splt_c2_frm_cta_txt' label='Submit Button Text' maxlength='30' class='col-md-6' order='4'>Submit</cms:editable>
+    </cms:editable>
+
+    <cms:editable type='message' name='ccs_hro_splt_c2_cta_msg' not_active=ccs_hro_splt_c2_txt_hide order='60'>
+        <hr><br>
+        <h3>Column 2 Call-to-Action</h3>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_cta_rmv_row' not_active=ccs_hro_splt_c2_txt_hide order='65'>
+        <cms:editable type='checkbox' name='ccs_hro_splt_c2_cta_rmv' label='Button Disable' opt_values='Remove Call-to-Action button in this column=1' class='col-md-12' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_cta_hide' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_cta_rmv=''>
+        <cms:if (ccs_hro_splt_c2_type!='txt') || (ccs_hro_splt_c2_cta_rmv='1')>1<cms:else />0</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_cta_core_row' not_active=ccs_hro_splt_c2_cta_hide order='70'>
+        <cms:editable type='text' name='ccs_hro_splt_c2_cta_txt' label='Button Text' maxlength='30' class='col-md-6 col-sm-12' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_cta_lnk' label='Button Link' opt_values='dropdowns/links.htm' dynamic='opt_values' class='col-md-6 col-sm-12' order='4' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_cta_cstm_hide' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_cta_rmv='' ccs_hro_splt_c2_cta_lnk=''>
+        <cms:if (ccs_hro_splt_c2_type!='txt') || (ccs_hro_splt_c2_cta_rmv='1') || (ccs_hro_splt_c2_cta_lnk!='custom')>1<cms:else />0</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_cta_cstm_row' not_active=ccs_hro_splt_c2_cta_cstm_hide order='75'>
+        <cms:editable type='text' name='ccs_hro_splt_c2_cta_cst_lnk' label='Custom URL Destination' width='400' class='col-md-12' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_cta_clr_row' not_active=ccs_hro_splt_c2_cta_hide order='80'>
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_cta_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_cta_is_link' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_cta_rmv='' ccs_hro_splt_c2_cta_clr=''>
+        <cms:if (ccs_hro_splt_c2_type!='txt') || (ccs_hro_splt_c2_cta_rmv='1') || (ccs_hro_splt_c2_cta_clr!='link')>1<cms:else />0</cms:if>
+    </cms:func>
+    <cms:func _into='ccs_hro_splt_c2_cta_not_link' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_cta_rmv='' ccs_hro_splt_c2_cta_clr=''>
+        <cms:if (ccs_hro_splt_c2_type!='txt') || (ccs_hro_splt_c2_cta_rmv='1') || (ccs_hro_splt_c2_cta_clr='link')>1<cms:else />0</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_cta_lnk_clr_row' not_active=ccs_hro_splt_c2_cta_is_link order='85'>
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_cta_lnk_clr' label='Link Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_cta_fmt_row' not_active=ccs_hro_splt_c2_cta_not_link order='90'>
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_cta_fill' label='Fill Style' opt_values='dropdowns/button-fill.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_cta_st' label='Button Shape' opt_values='dropdowns/button-style.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_cta_sz' label='Button Size' opt_values='dropdowns/button-size.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_cta_w' label='Button Width' opt_values='dropdowns/button-width.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='8' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_cta_icon_pos_row' not_active=ccs_hro_splt_c2_cta_not_link order='95'>
+        <cms:editable type='dropdown' name='ccs_hro_splt_c2_cta_icon_pos' label='Icon Position' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_splt_c2_cta_icon_hide' ccs_hro_splt_c2_type='' ccs_hro_splt_c2_cta_rmv='' ccs_hro_splt_c2_cta_clr='' ccs_hro_splt_c2_cta_icon_pos=''>
+        <cms:if (ccs_hro_splt_c2_type!='txt') || (ccs_hro_splt_c2_cta_rmv='1') || (ccs_hro_splt_c2_cta_clr='link') || (ccs_hro_splt_c2_cta_icon_pos='')>1<cms:else />0</cms:if>
+    </cms:func>
+
+    <cms:editable type='message' name='ccs_hro_splt_c2_cta_icon_msg' not_active=ccs_hro_splt_c2_cta_icon_hide order='100'>
+        <p class="mb-0 mt-3 text-muted" style="font-size:12px;">Find icons at <a href="https://fontawesome.com/v6/search?m=free" target="_blank">Font Awesome v6</a>.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_splt_c2_cta_icon_fa_row' not_active=ccs_hro_splt_c2_cta_icon_hide order='105'>
+        <cms:editable type='text' name='ccs_hro_splt_c2_cta_icon_fa' label='Font Awesome Icon Class' maxlength='50' width='300' class='col-md-6 col-sm-12' order='2' />
+    </cms:editable>
+
+</cms:editable>

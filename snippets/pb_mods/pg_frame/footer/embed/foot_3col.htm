@@ -1,0 +1,82 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_3cl_gen_grp' label='3 Column Footer Settings' order='10'>
+    <cms:editable type='message' name='ccs_ftr_3cl_gen_stng_msg' order='2'>
+        <h2>Site Footer Settings</h2>
+        <p><strong>Note: All settings below are optional.</strong> Your footer will automatically inherit the site's default styles. You only need to change these settings if you specifically want to override the default padding or background colors.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ftr_3cl_set_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_ftr_3cl_pad_y' label='Top and Bottom Padding' opt_values='dropdowns/util-pad.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='4' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ftr_3cl_clr_row' order='10'>
+         <cms:editable type='dropdown' name='ccs_ftr_3cl_bg_clr' label='Footer Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='5' />
+         <cms:editable type='dropdown' name='ccs_ftr_3cl_txt_clr' label='Footer Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='6' />
+    </cms:editable>
+    
+    <cms:editable type='message' name='ccs_ftr_3cl_typ_msg' order='12'>
+        <br><hr><br>
+        <h3>Typography Settings</h3>
+        <p><strong>Optional Override:</strong> Leave these fields set to "Default" to use your global website fonts and text colors. Only adjust these if you need a custom look specifically for this footer.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ftr_3cl_fmt_row' order='15'>    
+        <cms:editable type='dropdown' name='ccs_ftr_3cl_txt_sz' label='Text Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ftr_3cl_txt_fnt_wt' label='Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20' />
+        <cms:editable type='dropdown' name='ccs_ftr_3cl_txt_ltr_spc' label='Letter Spacing' opt_values='dropdowns/hdr_ltr-spc.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='30' />
+        <cms:editable type='dropdown' name='ccs_ftr_3cl_txt_fnt_st' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='40' />
+        <cms:editable type='dropdown' name='ccs_ftr_3cl_txt_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='50' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_3cl_lgo_grp' label='Footer Branding' order='20'>
+    <cms:editable type='message' name='ccs_ftr_3cl_img_msg' order='18'>
+        <h3>Footer Branding</h3>
+        <p>Upload your logo image. The system will automatically resize it, but for best results, it should have a <strong>maximum dimension of 300 pixels wide by 300 pixels high.</strong></p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ftr_3cl_lgo_row' order='19'>
+        <cms:editable type='image' name='ccs_ftr_3cl_lgo' label='Footer Logo' width='300' height='300' enforce_max='1' show_preview='1' preview_width='75' class='col-md-6' order='10' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_3cl_mn_grp' label='Primary Links (Middle Column)' order='30'>
+    <cms:editable type='message' name='ccs_ftr_3cl_mn_msg' order='20'>
+        <h3>Primary Links</h3>
+        <p>Select an internal page or choose "Custom" to enter an external URL. External URLs will automatically open in a new tab.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:repeatable name='ccs_ftr_3cl_mn_rpt' label='Primary Footer Links' stacked_layout='1' order='22'>
+        <cms:editable type='dropdown' name='ccs_ftr_3cl_mn_dd' label='Select Page or Custom Link' opt_values='dropdowns/links.htm' dynamic='opt_values' order='10' />
+        
+        <cms:func _into='ccs_ftr_3cl_mn_hd_cst' ccs_ftr_3cl_mn_dd=''><cms:if ccs_ftr_3cl_mn_dd='custom'>0<cms:else />1</cms:if></cms:func>
+        
+        <cms:editable type='text' name='ccs_ftr_3cl_mn_cst' label='Custom URL' desc='Input the entire URL (e.g., https://yoursite.com/)' width='400' not_active=ccs_ftr_3cl_mn_hd_cst order='20' />
+        
+        <cms:editable type='text' name='ccs_ftr_3cl_mn_txt' label='Link Title' width='200' maxlength="40" order='30' />
+    </cms:repeatable>
+</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_3cl_rl_grp' label='Related Links (Right Column)' order='40'>
+    <cms:editable type='message' name='ccs_ftr_3cl_rl_msg' order='25'>
+        <h3>Related Links</h3>
+        <p>Define a header title for this column, then add your internal pages or custom links.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='text' name='ccs_ftr_3cl_rl_ttl' label='Related Links Header' default='Related Links' order='28' />
+    
+    <cms:repeatable name='ccs_ftr_3cl_rl_rpt' label='Related Footer Links' stacked_layout='1' order='30'>
+        <cms:editable type='dropdown' name='ccs_ftr_3cl_rl_dd' label='Select Page or Custom Link' opt_values='dropdowns/links.htm' dynamic='opt_values' order='10' />
+        
+        <cms:func _into='ccs_ftr_3cl_rl_hd_cst' ccs_ftr_3cl_rl_dd=''><cms:if ccs_ftr_3cl_rl_dd='custom'>0<cms:else />1</cms:if></cms:func>
+        
+        <cms:editable type='text' name='ccs_ftr_3cl_rl_cst' label='Custom URL' desc='Input the entire URL (e.g., https://yoursite.com/)' width='400' not_active=ccs_ftr_3cl_rl_hd_cst order='20' />
+        
+        <cms:editable type='text' name='ccs_ftr_3cl_rl_txt' label='Link Title' width='200' maxlength="40" order='30' />
+    </cms:repeatable>
+</cms:editable>

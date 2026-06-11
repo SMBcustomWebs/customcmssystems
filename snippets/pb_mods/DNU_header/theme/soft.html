@@ -1,0 +1,20 @@
+<section class="bg-<cms:show hdr_bg_shade /> pt-4 pt-md-6 pt-lg-8">
+    <div class="container">
+        <div class="row align-items-center shadow-lg">
+            <div class="<cms:show hdr_txtbx_sz />">
+                <cms:if hdr_swp_sides>
+                    <cms:embed 'pb_mods/header/theme/hdr_50-50_b.html' />
+                <cms:else />
+                    <cms:embed 'pb_mods/header/theme/hdr_50-50_a.html' />
+                </cms:if>
+            </div>                       
+            <div class="<cms:show hdr_txtbx_sz />">
+                <cms:if hdr_swp_sides>
+                    <cms:embed 'pb_mods/header/theme/hdr_50-50_a.html' />
+                <cms:else />
+                    <cms:embed 'pb_mods/header/theme/hdr_50-50_b.html' />
+                </cms:if>
+            </div>
+        </div>
+    </div>
+</section>

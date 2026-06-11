@@ -1,0 +1,103 @@
+<cms:editable type='row' name='hdr_frm_row' not_active=hdr_txt_frm order='401' >
+    <cms:editable type='message' name='hero_frmt_gen_ht_msg' order='402'>
+            <h2>Settings for the general size of this Hero Section</h2><h4>Height is the size, padding creates separation from the edges.</h4>
+        </cms:editable>
+    <cms:editable type="text" name="hdr_frm_title" label="Form Title" desc="Please enter first name" 
+        order='405' 
+    />
+    <cms:editable type="text" name="hdr_frm_para" label="Form Byline" desc="" order='408' />
+    <cms:editable type='dropdown' name='hdr_frm_ttl_txt_clr' label='Form Title Color' 
+        opt_values='dropdowns/colors.htm'
+        dynamic='opt_values'
+        order='410'  
+    />
+ 
+    <cms:editable type='dropdown' name='hdr_frm_ttl_fnt_wt' label='Form Title Font Weight' 
+        opt_values='dropdowns/font-weight.htm'
+        dynamic='opt_values'
+        order='414'  
+    />
+    <cms:editable type='dropdown' name='hdr_frm_ttl_fnt_st' label='Form Title Font Style' 
+        opt_values='dropdowns/font-style.htm'
+        dynamic='opt_values'
+        order='415'  
+    />
+    <cms:editable type='dropdown' name='hdr_frm_ttl_font' label='Form Title Font Family' 
+        opt_values='dropdowns/font-family.htm'
+        dynamic='opt_values'
+        order='418'  
+    />
+    
+    <cms:repeatable name="hdr_form_rptbl" label="Form Entries"  order="420"> 
+        <cms:editable type="text" name="title" label="Label for the input field" order='421' />
+        <cms:editable type='dropdown' name='hdr_form_txt_clr' label='Label Text Color' 
+            opt_values='dropdowns/colors.htm'
+            dynamic='opt_values'
+            order='422'  
+        />
+        
+        <cms:editable type='dropdown' name='hdr_form_fnt_wt' label='Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            order='424'  
+        />
+        <cms:editable type='dropdown' name='hdr_form_fnt_st' label='Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            order='425'  
+        />
+        <cms:editable type='dropdown' name='hdr_form_font' label='Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            order='426'  
+        />
+        <cms:editable type="checkbox" name="fld_req_opt" label="Required?"  opt_values='Yes=1' order='435'  />
+        <cms:func _into='fld_req' fld_req_opt=''>
+            <cms:if "<cms:is '1' in=fld_req_opt />">
+                show
+                <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:editable type='dropdown' name='hdr_frm_req_vals_opt' label="Type of Validation" 
+            opt_values='Alpha Numberic=alpha_num|Positive Numbers Only=non_negative_decimal|Minimum Length=min_len|Maximum Length=max_len'
+            not_active=fld_req
+            order='440'
+        />
+        <cms:func _into='req_vals' hdr_frm_req_vals_opt=''>
+            <cms:if (hdr_frm_req_vals_opt="min_len") || (hdr_frm_req_vals_opt="max_len" ) >
+                show
+                <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:editable type="text" name="req_vals" label="Valid Number" 
+            max_length='5'
+            width='175'
+            not_active=req_vals
+            order='445' />
+        <cms:editable type="text" name="err_msg" label="Error Message"  order='450' />
+    </cms:repeatable>
+
+
+    <cms:editable type='text' name='hdr_frm_c2a_txt' label='Submit Button Text'
+        maxlength='60'
+        width='275'
+        order='460' 
+     >Submit</cms:editable>
+    
+    <cms:editable type='dropdown' name='hdr_frm_c2a_plc' label='Button Placement' 
+        opt_values='dropdowns/h-align.htm'
+        dynamic='opt_values'
+        order='467'  
+    />
+    <cms:editable type='dropdown' name='hdr_frm_c2a_clr' label='Button Color' 
+        opt_values='dropdowns/colors.htm'
+        dynamic='opt_values'
+        order='467'  
+    />
+    <cms:editable type='dropdown' name='hdr_frm_c2a_clr_out_chk' label='Solid Color or Outline' desc=''
+        opt_values='Solid=|Outline= -outline'
+        order='468'
+        />
+    </cms:editable>

@@ -1,0 +1,22 @@
+<cms:set var_img="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_img" />
+<cms:set loc_img="<cms:get var_img />" />
+
+<cms:set var_img_alt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_img_alt" />
+<cms:set loc_img_alt="<cms:get var_img_alt />" />
+
+<cms:set var_img_fit="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_img_fit" />
+<cms:set loc_img_fit="<cms:get var_img_fit />" />
+
+<cms:set var_img_pos="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_img_pos" />
+<cms:set loc_img_pos="<cms:get var_img_pos />" />
+
+<cms:if loc_img_fit == ''><cms:set loc_img_fit='contain' /></cms:if>
+<cms:if loc_img_pos == ''><cms:set loc_img_pos='center' /></cms:if>
+
+<cms:if loc_img != ''>
+    <img class="img-fluid object-fit-<cms:show loc_img_fit />" 
+         style="max-height: 60vh; <cms:if loc_img_fit == 'contain'>width: auto;<cms:else />width: 100%; object-position: <cms:show loc_img_pos />;</cms:if>"
+         src="<cms:show loc_img />" 
+         alt="<cms:show loc_img_alt />" 
+    />
+</cms:if>

@@ -1,0 +1,48 @@
+<cms:set var_rail_opt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_opt" />
+<cms:set loc_rail_opt="<cms:get var_rail_opt />" />
+
+<cms:if loc_rail_opt == '1'>
+    
+    <cms:set var_rail_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_ln_sz" />
+    <cms:set loc_rail_sz="<cms:get var_rail_sz />" />
+
+    <cms:set var_rail_thk="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_thk" />
+    <cms:set loc_rail_thk="<cms:get var_rail_thk />" />
+
+    <cms:set var_rail_shd="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_ln_shd" />
+    <cms:set loc_rail_shd="<cms:get var_rail_shd />" />
+
+    <cms:set var_rail_txt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_ln_txt_ln" />
+    <cms:set loc_rail_txt="<cms:get var_rail_txt />" />
+
+    <cms:set var_rail_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_ln_txt_clr" />
+    <cms:set loc_rail_clr="<cms:get var_rail_clr />" />
+
+    <cms:set var_rail_txt_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_ln_txt_sz" />
+    <cms:set loc_rail_txt_sz="<cms:get var_rail_txt_sz />" />
+
+    <cms:set var_rail_fnt_st="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_ln_fnt_st" />
+    <cms:set loc_rail_fnt_st="<cms:get var_rail_fnt_st />" />
+
+    <cms:set var_rail_fnt_wt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_ln_fnt_wt" />
+    <cms:set loc_rail_fnt_wt="<cms:get var_rail_fnt_wt />" />
+
+    <cms:set var_rail_font="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_ln_font" />
+    <cms:set loc_rail_font="<cms:get var_rail_font />" />
+
+    <div class="row justify-content-center w-100 position-absolute bottom-0 start-0 m-0 z-3">
+        <div class="col-<cms:if loc_rail_sz != ''><cms:show loc_rail_sz /><cms:else />12</cms:if> align-self-bottom position-relative px-0">
+            <div class="<cms:if loc_rail_shd != ''>bg-<cms:show loc_rail_shd /> </cms:if>text-center <cms:if loc_rail_thk != ''>py-<cms:show loc_rail_thk /><cms:else />py-2</cms:if>">
+				<cms:if (k_user_access_level ge '7') && (inline_is_active=='1')>
+					<cms:capture into='edit_rail'>ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_ctrl_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_txt_row</cms:capture>
+					<div class="position-absolute bottom-100 start-50 translate-middle-x mb-2 z-3">
+						<cms:popup_edit "<cms:show edit_rail />" link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Bottom Rail"><i class="fa-regular fa-window-minimize"></i></button>' />
+					</div>
+				</cms:if>
+                <div class="<cms:if loc_rail_clr != ''>text-<cms:show loc_rail_clr /> </cms:if><cms:if loc_rail_txt_sz != ''>fs-<cms:show loc_rail_txt_sz /> </cms:if><cms:if loc_rail_fnt_st != ''>fst-<cms:show loc_rail_fnt_st /> </cms:if><cms:if loc_rail_fnt_wt != ''>fw-<cms:show loc_rail_fnt_wt /> </cms:if><cms:if loc_rail_font != ''>font-<cms:show loc_rail_font /> </cms:if>pt-1 mb-0">
+                    <cms:show loc_rail_txt />
+                </div>
+            </div>
+        </div>
+    </div>
+</cms:if>

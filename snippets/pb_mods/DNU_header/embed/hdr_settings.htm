@@ -1,0 +1,83 @@
+<cms:editable type='dropdown' name='hdr_bg_shade' label='Background Shading' desc=''
+    opt_values='dropdowns/all-colors.htm'
+    dynamic='opt_values'
+    order='2'
+/>
+<cms:editable type='dropdown' name='hdr_img_vid_opt' label='Header is Image or Video' desc=''
+    opt_values='Image=1|Video=2'
+    order='3'
+/>
+
+<cms:editable type='checkbox' name='hdr_sing_crsl_opt' label='Carousell' desc='leave unchecked for single'
+    opt_values='Carousell=1'
+    order='4'
+/>
+<cms:editable type='dropdown' name='hdr_txtbx_sz' label='Size of Text Area' desc='width of text area'
+    opt_values='dropdowns/hdr_txt-box_size.htm'
+    dynamic='opt_values'
+    order='5'
+/>
+
+<cms:func _into='hdr_video' hdr_img_vid_opt=''>
+    <cms:if hdr_img_vid_opt='2' >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+<cms:func _into='hdr_slider' hdr_sing_crsl_opt=''>
+    <cms:if "<cms:is '1' in=hdr_sing_crsl_opt />" >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+<cms:func _into='hdr_slider_imgs' hdr_sing_crsl_opt='' hdr_img_vid_opt=''>
+    <cms:if ("<cms:is '1' in=hdr_sing_crsl_opt />") &&
+            (hdr_img_vid_opt='1') >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+<cms:func _into='hdr_slider_vids' hdr_sing_crsl_opt='' hdr_img_vid_opt=''>
+    <cms:if ("<cms:is '1' in=hdr_sing_crsl_opt />") &&
+            (hdr_img_vid_opt='2') >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+
+<cms:editable type='dropdown' name='hdr_swpr_delay' label='Length of Slider Delay' desc='in seconds'
+    opt_values='5=5000|7=7000|3=3000'
+    not_active=hdr_slider
+    order='8'
+/>
+<cms:editable type='dropdown' name='hdr_swpr_trns' label='Slide Transitions' desc='visual change'
+    opt_values='dropdowns/transitions.htm'
+    dynamic='opt_values'
+    not_active=hdr_slider
+    order='9'
+/>
+<cms:editable type='dropdown'  name='hdr_scrl_spd' label='Add Image Scrolling Effect' desc='increase or decrease scroll effect. Positive number scroll faster, negative scrolls slower.  May affect top and bottom margins'
+    opt_values='No Scrolling Effect=0|-6|-5|-4|-3|-2|-1|1|2|3|4|5|6'
+    order='40'
+/>
+<cms:editable type='dropdown' name='hdr_img_oly' label='Image Overylay Shade' desc="darken the image by adding dark overlay"
+    opt_values='None=-|light=2|medium=1|heavy=0'
+    order='41'  
+/>
+
+<cms:editable type='checkbox' name='hdr_video_add' label='Add External Playing Video' desc='Adds a video and play button'
+    opt_values='Add Video=1'
+
+    order='42'
+/>
+<cms:func _into='hdr_add_video' hdr_video_add=''>
+    <cms:if "<cms:is '1' in=hdr_video_add />" >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>

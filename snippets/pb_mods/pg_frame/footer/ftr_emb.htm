@@ -1,0 +1,7 @@
+<cms:pages masterpage='globals.php' limit='1'>
+    <cms:set inline_edit_active="<cms:get_session 'inline_edit_on' />" />
+
+    <cms:show_pagebuilder 'gl_ftr_pb' no_cache="<cms:if k_user_access_level ge '7' && inline_edit_active>1</cms:if>">
+        <cms:show k_content />
+    </cms:show_pagebuilder>
+</cms:pages>

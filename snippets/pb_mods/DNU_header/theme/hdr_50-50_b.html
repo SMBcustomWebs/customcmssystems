@@ -1,0 +1,42 @@
+<div class="text-<cms:show hdr_txt_halg />">
+    <cms:if hdr_txt_blk_opt='1'> <!-- image  chosen -->
+        <img src="<cms:show hdr_txt_blk_img />" alt="<cms:show hdr_txt_blk_img_alt />" />
+        <cms:if hdr_video_add>
+            <cms:embed 'pb_mods/header/theme/hdr_add_vid.html' />
+        </cms:if>
+    <cms:else_if hdr_txt_blk_opt='2' /> <!-- form chosen -->
+
+        <cms:embed 'pb_mods/header/theme/hdr_form.html' />
+
+        <cms:if hdr_video_add>
+            <cms:embed 'pb_mods/header/theme/hdr_add_vid.html' />
+        </cms:if>
+    <cms:else />  <!-- Entered Text chosen -->
+        <div class="py-2">
+            <cms:embed 'pb_mods/header/theme/hdr_txt.html' />
+        </div>
+    </cms:if>
+    <cms:if hdr_c2a_lnk='custom'>
+        <cms:set c2a_lnk="<cms:show hdr_c2a_cst_lnk />" />
+    <cms:else />
+        <cms:set c2a_lnk="<cms:show hdr_c2a_lnk />" />
+    </cms:if>
+    <cms:if "<cms:not hdr_c2a_opt />" >
+        <a class="btn btn<cms:show hdr_c2a_clr_out_chk />-<cms:show hdr_c2a_clr /> btn<cms:show hdr_c2a_sz /> mt-4" href="<cms:show c2a_lnk />">
+            <cms:show hdr_c2a_txt />
+        </a>
+        <cms:if hdr_c2a_mult_opt>
+        <cms:show_repeatable 'hdr_mult_c2a_rpt' > 
+            <cms:if hdr_c2a_mult_pdg='1'>
+                <br>
+            </cms:if>
+            <a class="mx-<cms:show hdr_c2a_mult_pdg /> btn btn<cms:show hdr_c2a_mult_clr_out_chk />-<cms:show hdr_c2a_mult_clr /> btn<cms:show hdr_c2a_mult_sz /> mt-4" href="<cms:show c2a_lnk />">
+                <cms:show hdr_c2a_mult_txt />
+            </a>
+        </cms:show_repeatable>
+        </cms:if>
+    </cms:if>
+    <cms:if hdr_c2a_social >
+        <cms:embed 'pb_mods/header/theme/hdr_social.html' />
+    </cms:if>
+</div>

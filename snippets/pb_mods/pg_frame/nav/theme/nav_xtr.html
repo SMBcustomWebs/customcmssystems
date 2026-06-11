@@ -1,0 +1,173 @@
+<nav class="navbar navbar-top navbar-expand-lg bg-<cms:show ccs_nav_xtr_bg_clr_opt /> <cms:if ccs_nav_xtr_stky>sticky-top top-0 start-0 z-3</cms:if>" aria-label="Primary Navigation">
+    <div class="container">
+        
+        <cms:pages masterpage='globals.php' limit='1'>
+            <div class="row">
+                <cms:if ccs_gl_site_name_txt_lgo_opt='1' >
+                    <h1 class="mb-0 <cms:show ccs_gl_site_name_txt_sz /> text-<cms:show ccs_gl_site_name_txt_clr />">
+                        <a href="<cms:show k_site_link />" class="<cms:show ccs_gl_site_name_txt_sz /> text-<cms:show ccs_gl_site_name_txt_clr />">
+                            <cms:show ccs_gl_site_name />
+                        </a>
+                    </h1>
+                <cms:else />
+                    <a class="navbar navbar-brand" href="<cms:show k_site_link />" aria-label="<cms:show ccs_gl_site_name /> Home">
+                        <img src="<cms:show ccs_gl_site_logo_hoz />" alt="<cms:show ccs_gl_site_name /> horizontal logo" class="w-100" style="max-width: 264px;" />
+                    </a>
+                 </cms:if>
+                 
+                <cms:if ccs_gl_tgln_opt>
+                    <p class="mt-1 mb-0 pb-0 text-<cms:show ccs_gl_tgln_clr /> fs-<cms:show ccs_gl_tgln_txt_sz /> fw-<cms:show ccs_gl_tgln_fnt_wt /> font-<cms:show ccs_gl_tgln_fnt_fm /> fst-<cms:show ccs_gl_tgln_fnt_st /> ls-<cms:show ccs_gl_tgln_ltr_spc />">
+                        <cms:show ccs_gl_tgln />
+                    </p>
+                </cms:if>   
+                
+                <cms:if ccs_gl_edt_ok>
+                    <div class="row">
+                        <div class="col">
+                            <cms:popup_edit 'ccs_gl_site_biz_lgo_msg|ccs_gl_site_biz_lgo_row|ccs_gl_site_name_txt_lgo_opt|ccs_gl_site_logo_hoz|ccs_gl_site_logo_sqr|ccs_gl_site_favicon|ccs_gl_site_biz_mta_row|ccs_gl_site_name|ccs_gl_site_name_txt_sz|ccs_gl_site_name_txt_clr' link_text="<span class='bg-800 link-warning' title='Edit logos, site name and tagline'>| [EDIT LOGOS] | </span>" />
+                            <cms:popup_edit 'ccs_gl_site_tgl_row|ccs_gl_tgln|ccs_gl_tgln_opt|ccs_gl_tgln_clr|ccs_gl_tgln_fmt_msg|ccs_gl_site_tgl_row|ccs_gl_tgln_txt_sz|ccs_gl_tgln_fnt_wt|ccs_gl_tgln_ltr_spc|ccs_gl_tgln_fnt_st|ccs_gl_tgln_fnt_fm' link_text="<span class='bg-800 link-warning' title='Edit Tagline'> | [EDIT Tagline] |</span>" />
+                        </div>
+                    </div>
+              </cms:if>
+            </div>
+        </cms:pages>
+        
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarStandard" aria-controls="navbarStandard" aria-expanded="false" aria-label="Toggle navigation" data-hamburger-icon="data-hamburger-icon">
+            <span class="hamburger hamburger--emphatic" aria-hidden="true"><span class="hamburger-box"><span class="hamburger-inner"></span></span></span>
+        </button>
+        
+        <cms:set ccs_nav_typography = "<cms:call 'format_typography' _text=ccs_nav_xtr_nav_text _size=ccs_nav_xtr_nav_fs _font=ccs_nav_xtr_nav_font _fwt=ccs_nav_xtr_nav_fwt _fst=ccs_nav_xtr_nav_fst _ls=ccs_nav_xtr_nav_ls />" />
+
+        <div class="row collapse navbar-collapse <cms:show ccs_nav_typography />" id="navbarStandard">
+            
+            <cms:if ccs_gl_edt_ok>
+                <div>
+                    <cms:popup_edit 'ccs_nav_xtr_gen_grp|ccs_nav_xtr_gen_msg|ccs_nav_xtr_gen_row|ccs_nav_xtr_bg_clr_opt|ccs_nav_xtr_stky_row|ccs_nav_xtr_stl_msg|ccs_nav_xtr_stky' link_text="<span class='bg-800 link-warning' title='Edit Navbar Settings'>| [EDIT NAV BAR SETTINGS] |</span>" />
+                    
+                    <cms:popup_edit 'ccs_nav_xtr_nav_txt_grp|ccs_nav_xtr_nav_msg|ccs_nav_xtr_nav_txt_row|ccs_nav_xtr_nav_text|ccs_nav_xtr_nav_fs|ccs_nav_xtr_nav_fwt|ccs_nav_xtr_nav_fst|ccs_nav_xtr_nav_font|ccs_nav_xtr_nav_ls' link_text="<span class='bg-800 link-warning' title='Format Navigation text'>| [EDIT NAV BAR TEXT] |</span>" />
+                    
+                    <cms:popup_edit 'ccs_nav_xtr_fld_grp|ccs_nav_xtr_fld_msg|ccs_nav_xtr_fld_row|ccs_nav_xtr_fld_clr|ccs_nav_xtr_fld_sz|ccs_nav_xtr_fld_wt|ccs_nav_xtr_fld_fm' link_text="<span class='bg-800 link-warning' title='Format Folder Headers'>| [EDIT FOLDER HEADERS] |</span>" />
+                    
+                    <cms:pages masterpage='globals.php' limit='1'>
+                        <cms:popup_edit 'ccs_gl_site_nav_mnu_dd_msg|ccs_gl_site_nav_mnu_dd_row|ccs_gl_site_nav_dd_txt_clr|ccs_gl_site_nav_dd_bg' link_text="<span class='bg-800 link-warning' title='Format dropdown menu colors'>| [EDIT NAV Dropdown] |</span>" />
+                        <cms:popup_edit 'ccs_gl_site_nav_hvr_clr|ccs_gl_site_nav_dd_hvr_clr|ccs_gl_site_nav_dd_hvr_bg' link_text="<span class='bg-800 link-warning' title='Format floatover colors'>| [EDIT NAV Mouse-over] |</span>" />
+                    </cms:pages>
+                </div>
+            </cms:if>
+            
+            <ul class="navbar-nav navbar-nav-top justify-content-end flex-1 me-lg-n2" data-top-nav-dropdowns="data-top-nav-dropdowns">
+                
+                <cms:if k_logged_in >
+                    <li class="nav-item">
+                        <a class="nav-link <cms:show ccs_nav_typography />" href="<cms:show k_logout_link />">Logout</a>
+                    </li>
+                <cms:else />
+                    <li class="nav-item">
+                        <a class="nav-link <cms:show ccs_nav_typography />" href="<cms:login_link redirect='1' />">Login</a>
+                    </li>
+                </cms:if>
+                
+                <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >
+                    <li class="nav-item">
+                        <a class="nav-link <cms:show ccs_nav_typography />" href="<cms:link masterpage='globals.php' />">Edit&nbsp;Globals</a>
+                    </li>
+                </cms:if>
+                
+                <cms:templates orderby='weight' order='asc' >
+                    <cms:if k_template_order gt '1000' && k_template_order lt '1999'>
+                        
+                        <cms:set ccs_xtr_loop_template = k_template_name />
+                        <cms:set ccs_xtr_template_title = k_template_title />
+                        <cms:set ccs_xtr_is_clonable = k_template_is_clonable />
+                        <cms:set ccs_xtr_has_dynamic_folders = k_template_has_dynamic_folders />
+                        
+                        <cms:set my_nav_counter="<cms:add my_nav_counter '1' />" 'global' />
+                        <cms:set is_even="<cms:mod my_nav_counter '2' />" />
+                        
+                        <cms:if ccs_xtr_is_clonable>
+                            <li class="nav-item dropdown megamenu d-inline-flex align-items-center" >
+                                
+                                <a class="nav-link pe-1 <cms:show ccs_nav_typography /> <cms:if k_template_name == ccs_active_page_master>active</cms:if>" href="<cms:show k_template_link />" <cms:if k_template_name == ccs_active_page_master>aria-current="page"</cms:if>>
+                                    <cms:show ccs_xtr_template_title />
+                                </a>
+                                
+                                <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 <cms:show ccs_nav_typography /> <cms:if k_template_name == ccs_active_page_master>active</cms:if>" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false" >
+                                    <span class="fas fa-chevron-down dropdown-toggle-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Toggle Submenu</span>
+                                </a>
+
+                                <cms:pages masterpage='globals.php' limit='1'>
+                                    <div class="dropdown-menu navbar-dropdown-caret dropdown-menu-card py-0 overflow-hidden w-100 bg-<cms:show ccs_gl_site_nav_dd_bg />">
+                                        <div class="border-0">
+                                            <div class="row w-100 m-0">
+                                                
+                                                <div class="col-4 d-none d-lg-block position-relative <cms:if is_even=='0'>order-last</cms:if>" style="min-height: 250px;">
+                                                    <div class="bg-holder overlay overlay-1" style="background-image:url('<cms:show k_site_link />/assets/images/megamenu.jpg')"></div>
+                                                    <div class="row justify-content-center h-100 py-9 position-relative">
+                                                        <div class="col-8 align-self-center text-center">
+                                                            <p class="fs-8 lh-lg text-white fw-bold text-uppercase">
+                                                                Explore <cms:show ccs_xtr_template_title />
+                                                            </p>
+                                                            <a class="btn btn-outline-white btn-sm" href="<cms:show k_template_link />">
+                                                                View All
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-lg-8 py-3 py-lg-5 ps-lg-5">
+                                                    <div class="row justify-lg-content-start g-0">
+                                                        
+                                                        <cms:pages masterpage=ccs_xtr_loop_template>
+                                                            <cms:if k_page_foldername == ''>
+                                                                <div class="col-6 col-sm-4 mb-4 pe-3">
+                                                                    <a class="dropdown-link d-block text-<cms:show ccs_gl_site_nav_dd_txt_clr /> <cms:show ccs_nav_typography /> <cms:if k_page_name == k_current_page_name>active</cms:if>" href="<cms:show k_page_link />" <cms:if k_page_name == k_current_page_name>aria-current="page"</cms:if>>
+                                                                        <div class="dropdown-item-wrapper fw-bold">
+                                                                            <cms:show k_page_title />
+                                                                        </div>
+                                                                    </a>
+                                                                </div>
+                                                            </cms:if>
+                                                        </cms:pages>
+                                                        
+                                                        <cms:if ccs_xtr_has_dynamic_folders>
+                                                            <cms:folders hierarchical='1' masterpage=ccs_xtr_loop_template depth='1'>
+                                                                <cms:set ccs_xtr_folder_scope = k_folder_name />
+                                                                <div class="col-6 col-sm-4 mb-4 pe-3">
+                                                                    <a class="dropdown-link d-block mb-2 text-<cms:show ccs_nav_xtr_fld_clr /> fs-<cms:show ccs_nav_xtr_fld_sz /> fw-<cms:show ccs_nav_xtr_fld_wt /> font-<cms:show ccs_nav_xtr_fld_fm /> text-uppercase" href="<cms:show k_folder_link />" style="letter-spacing: 0.5px;">
+                                                                        <cms:show k_folder_title />
+                                                                    </a>
+                                                                    
+                                                                    <cms:pages masterpage=ccs_xtr_loop_template folder=ccs_xtr_folder_scope include_subfolders='0'>
+                                                                        <a class="dropdown-link d-block text-<cms:show ccs_gl_site_nav_dd_txt_clr /> <cms:show ccs_nav_typography /> <cms:if k_page_name == k_current_page_name>active</cms:if>" href="<cms:show k_page_link />" style="opacity: 0.85;" <cms:if k_page_name == k_current_page_name>aria-current="page"</cms:if>>
+                                                                            <div class="dropdown-item-wrapper ps-1 py-1">
+                                                                                <cms:show k_page_title />
+                                                                            </div>
+                                                                        </a>
+                                                                    </cms:pages>
+                                                                </div>
+                                                            </cms:folders>
+                                                        </cms:if>
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </cms:pages>
+                            </li>
+                        <cms:else />
+                            <li class="nav-item">
+                                <a class="nav-link <cms:show ccs_nav_typography /> <cms:if k_template_name == ccs_active_page_master>active</cms:if>" href="<cms:show k_template_link />" <cms:if k_template_name == ccs_active_page_master>aria-current="page"</cms:if>>
+                                    <cms:show ccs_xtr_template_title />
+                                </a>
+                            </li>
+                        </cms:if>
+                        
+                    </cms:if>
+                </cms:templates>
+            </ul>
+        </div>
+    </div>
+</nav>

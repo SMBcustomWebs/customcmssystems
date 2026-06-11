@@ -1,0 +1,118 @@
+<h2>PB DUMP</h2>
+  <cms:dump_all />
+<br>
+
+
+<!--sets text box size if custom -->
+<cms:if list2_cat_md_sq_txt_hdg_txtbx_sz_opt='custom'>
+    <cms:capture into='txtbx_size_cap' scope="global">
+        <cms:show_repeatable 'list2_cat_md_sq_txt_hdg_txtbx_cstm_sz_rpt'>
+            col-<cms:show list2_cat_md_sq_txt_hdg_txtbx_cstm_col_sz />-<cms:show list2_cat_md_sq_txt_hdg_txtbx_cstm_col_val />
+        </cms:show_repeatable>
+    </cms:capture>
+    <cms:set txtbx_size="<cms:show txtbx_size_cap />" scope="global"/>
+<cms:else />
+    <cms:set txtbx_size="col <cms:show list2_cat_md_sq_txt_hdg_txtbx_sz_opt />" scope="global" />
+</cms:if>
+<section class="text-<cms:show list2_cat_md_sq_txt_hdg_txt_halg />" >
+    
+    <div class="container bg-<cms:show list2_cat_md_sq_txt_bdy_bg_clr />">
+        <div class="row justify-content-<cms:show list2_cat_md_sq_txt_hdg_txtbx_halg /> py-<cms:show list2_cat_md_sq_txt_hdg_txtbx_pd />">
+            <div class="<cms:show txtbx_size />"><!-- pulled from embed custom settings -->
+                <cms:if "<cms:not list2_cat_sm_crc_rmhdr_opt />" ><!-- section header -->
+                    <cms:show_repeatable 'list2_cat_md_sq_txt_hdg_txt_rpt'>
+                        <<cms:show list2_cat_md_sq_txt_hdg_txt_hdg_sz /> class="text-<cms:show list2_cat_md_sq_txt_hdg_txt_clr /> fs-<cms:show list2_cat_md_sq_txt_hdg_txt_sz /> fw-<cms:show list2_cat_md_sq_txt_hdg_txt_fnt_wt /> fst-<cms:show list2_cat_md_sq_txt_hdg_txt_fnt_st /> font-<cms:show list2_cat_md_sq_txt_hdg_txt_font /> ls-<cms:show list2_cat_md_sq_txt_hdg_txt_ltr_spc /> lh-<cms:show list2_cat_md_sq_txt_hdg_txt_ln_ht />  ">
+                            <cms:show list2_cat_md_sq_txt_hdg_txt_ln />
+                        </<cms:show list2_cat_md_sq_txt_hdg_txt_hdg_sz />>
+                    </cms:show_repeatable>
+                    <cms:if list2_cat_md_sq_txt_hdg_hr!='none'>
+                        <hr class="<cms:show list2_cat_md_sq_txt_hdg_hr /> text-<cms:show list2_cat_md_sq_txt_hdg_hr_clr /> my-<cms:show list2_cat_md_sq_txt_hdg_hr_pd /> mx-auto" />
+                    </cms:if>
+                </cms:if>    
+            </div>
+        </div>
+        <div class="row">
+            <!-- start repeate -->
+            
+            <div class="col-sm-6 mb-7">
+                <div class="row pe-xl-4">
+                    <div class="col-lg-5">
+                        <img class="mb-3 w-100" src="<cms:show k_site_link />assets/images/portraits/225x313/4.jpg" alt="" />
+                    </div>
+                    <div class="col">
+                        <h5 class="mb-3">
+                            <a href="<cms:link masterpage="<cms:show k_template_name />" />" >
+                            ANTHONY CASALENA - <cms:show ccs_abt_lst_tpl />
+                            </a>
+                        </h5>
+                        <h6 class="mb-4 ls-2 fw-normal">
+                            FOUNDER &amp; CEO
+                        </h6>
+                        <p class="fw-light text-500">
+                            Anthony Casalena is the Founder and CEO of Squarespace, which he started from his dorm room in 2003. During the company’s early years, Anthony acted as the sole engineer, designer, and support representative for the entire Squarespace platform.
+                        </p>
+                        <a class="link-1100" href="#!">
+                            <span class="me-1 fab fa-twitter" style="font-size:19px"></span>
+                            <span class="fw-thin">@acasalena</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- end repeat -->
+            <div class="col-sm-6 mb-7">
+            <div class="row ps-xl-4">
+            <div class="col-lg-5"> <img class="mb-3 w-100" src="<cms:show k_site_link />assets/images/portraits/225x313/2.jpg" alt="" /></div>
+            <div class="col">
+            <h5 class="mb-3">NICOLE ANASENES</h5>
+            <h6 class="mb-4 ls-2 fw-normal">CFO &amp; COO</h6>
+            <p class="fw-light text-500">Nicole brings to Squarespace 20 years of experience building new businesses and transforming legacy business models. Most recently, she served as Chief Financial Officer at Infor, one of the largest providers of enterprise applications in the world. Prior to Infor, Nicole spent 17 years in various.</p>
+            </div>
+            </div>
+            </div>
+            <div class="col-sm-6 mb-7">
+            <div class="row pe-xl-4">
+            <div class="col-lg-5"> <img class="mb-3 w-100" src="<cms:show k_site_link />assets/images/portraits/225x313/1.jpg" alt="" /></div>
+            <div class="col">
+            <h5 class="mb-3">MICHELE HANSEN</h5>
+            <h6 class="mb-4 ls-2 fw-normal">SVP, ENGINEERING</h6>
+            <p class="fw-light text-500">Michele Hansen, SVP of Engineering, oversees Squarespace’s vast engineering organization which drives the core programming for the company. Before joining Squarespace, Michele served in senior leadership roles.</p>
+            </div>
+            </div>
+            </div>
+            <div class="col-sm-6 mb-7">
+            <div class="row ps-xl-4">
+            <div class="col-lg-5"> <img class="mb-3 w-100" src="<cms:show k_site_link />assets/images/portraits/225x313/3.jpg" alt="" /></div>
+            <div class="col">
+            <h5 class="mb-3">ANDREW BARTHOLOMEW</h5>
+            <h6 class="mb-4 ls-2 fw-normal">SVP, STRATEGY</h6>
+            <p class="fw-light text-500">As the leader of Squarespace’s Strategy division, Andrew is responsible for developing the analytical frameworks that shape the company’s business. Since joining Squarespace, he has grown the division into a team that covers everything from business strategy and customer insights to analytics and data science.</p><a class="link-1100" href="#!"><span class="me-1 fab fa-twitter" style="font-size:19px"></span><span class="fw-thin">@acasalena</span></a>
+            </div>
+            </div>
+            </div>
+            <div class="col-sm-6 mb-7">
+            <div class="row pe-xl-4">
+            <div class="col-lg-5"> <img class="mb-3 w-100" src="<cms:show k_site_link />assets/images/portraits/225x313/6.jpg" alt="" /></div>
+            <div class="col">
+            <h5 class="mb-3">RAPHAEL FONTES</h5>
+            <h6 class="mb-4 ls-2 fw-normal">VP, CUSTOMER OPERATIONS</h6>
+            <p class="fw-light text-500">Rapha leads Squarespace Ireland and oversees the company’s global Customer Operations teams that support millions of Squarespace users. Prior to this role, Raphael spent eight years at Google developing and managing different operations teams in Brazil, Argentina, Poland and Ireland.</p>
+            </div>
+            </div>
+            </div>
+            <div class="col-sm-6 mb-7">
+            <div class="row ps-xl-4">
+            <div class="col-lg-5"> <img class="mb-3 w-100" src="<cms:show k_site_link />assets/images/portraits/225x313/5.jpg" alt="" /></div>
+            <div class="col">
+            <h5 class="mb-3">ALICE MERRIWEATHER</h5>
+            <h6 class="mb-4 ls-2 fw-normal">CMO</h6>
+            <p class="fw-light text-500">As the Chief Marketing Officer of Squarespace, Alice leads the company’s world-class marketing and PR teams as CMO at Foursquare where she successfully repositioned the company’s brand to accelerate growth in both the consumer and enterprise location intelligence businesses.</p><a class="link-1100" href="#!"><span class="me-1 fab fa-twitter" style="font-size:19px"></span><span class="fw-thin">@acasalena</span></a>
+            </div>
+            </div>
+            </div>
+        </div>
+    </div>
+<!-- end of .container-->
+
+</section>
+<!-- <section> close ============================-->
+<!-- ============================================-->

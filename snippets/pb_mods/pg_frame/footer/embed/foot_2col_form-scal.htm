@@ -1,0 +1,112 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_frm_gen_grp' label='General Footer Settings' order='10'>
+    <cms:editable type='message' name='ccs_ftr_frm_gen_msg' order='5'>
+        <h2>Form & Links Footer Settings</h2>
+        <p><strong>Note: All settings below are optional.</strong> Your footer will automatically inherit the site's default styles. You only need to change these settings if you specifically want to override the default padding or background colors.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ftr_frm_clr_row' order='15'>
+        <cms:editable type='dropdown' name='ccs_ftr_frm_pad_y' label='Top and Bottom Padding' opt_values='dropdowns/util-pad.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ftr_frm_bg_clr' label='Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20' />
+        <cms:editable type='dropdown' name='ccs_ftr_frm_txt_clr' label='General Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='30' />
+    </cms:editable>
+
+    <cms:editable type='message' name='ccs_ftr_frm_typ_msg' order='18'>
+        <br><hr><br>
+        <h3>Typography Settings</h3>
+        <p><strong>Optional Override:</strong> Leave these fields set to "Default" to use your global website fonts and text colors. Only adjust these if you need a custom look specifically for this footer.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ftr_frm_fmt_row' order='20'>
+        <cms:editable type='dropdown' name='ccs_ftr_frm_txt_sz' label='Text Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ftr_frm_txt_fnt_wt' label='Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20' />
+        <cms:editable type='dropdown' name='ccs_ftr_frm_txt_ltr_spc' label='Letter Spacing' opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='30' />
+        <cms:editable type='dropdown' name='ccs_ftr_frm_txt_fnt_st' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='40' />
+        <cms:editable type='dropdown' name='ccs_ftr_frm_txt_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='50' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_frm_nws_grp' label='Newsletter & Text Settings' order='20'>
+    <cms:editable type='message' name='ccs_ftr_frm_nws_msg' order='5'>
+        <h3>Newsletter Form</h3>
+        <p>Configure the text and button for the email signup form located in the left column. Note: Social media icons and App links are pulled automatically from your Global Settings page.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ftr_frm_nws_txt_row' order='10'>
+        <cms:editable type='text' name='ccs_ftr_frm_nws_hd' label='Headline' default='Latest Trends, Styles & Promotions. Are you on the list?' class='col-md-12' order='10' />
+        <cms:editable type='textarea' name='ccs_ftr_frm_nws_dsc' label='Disclaimer Text' default='By entering your email address, you agree to receive offers, promotions, and other commercial messages. You may unsubscribe at any time.' height='80' class='col-md-12' order='20' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ftr_frm_nws_inp_row' order='20'>
+        <cms:editable type='text' name='ccs_ftr_frm_nws_plh' label='Form Input Placeholder' default='Enter your email' class='col-md-4' order='10' />
+        <cms:editable type='text' name='ccs_ftr_frm_nws_btn' label='Button Text' default='Sign up!' class='col-md-4' order='20' />
+        <cms:editable type='dropdown' name='ccs_ftr_frm_nws_btn_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-4' order='30' />
+    </cms:editable>
+	<cms:editable type='row' name='ccs_ftr_frm_nws_ret_row' order='25'>
+        <cms:editable type='text' name='ccs_ftr_frm_nws_msg_ok' label='Success Message' desc='Max 80 characters.' maxlength='80' default='Thank you! You are on the list.' class='col-md-6' order='10' />
+        <cms:editable type='text' name='ccs_ftr_frm_nws_msg_err' label='Error Message' desc='Max 80 characters.' maxlength='80' default='Invalid entry or system error. Please try again.' class='col-md-6' order='20' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_frm_c1_grp' label='Link Column 1' order='30'>
+    <cms:editable type='message' name='ccs_ftr_frm_c1_msg' order='5'>
+        <h3>Footer Links: Column 1</h3>
+        <p>Define the header, then select internal pages or choose "Custom" to enter external URLs. External URLs will automatically open in a new tab.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='text' name='ccs_ftr_frm_c1_ttl' label='Column 1 Header' default='Company' order='10' />
+    
+    <cms:repeatable name='ccs_ftr_frm_c1_rpt' label='Column 1 Links' stacked_layout='1' order='20'>
+        <cms:editable type='dropdown' name='ccs_ftr_frm_c1_dd' label='Select Page or Custom Link' opt_values='dropdowns/links.htm' dynamic='opt_values' order='10' />
+        
+        <cms:func _into='ccs_ftr_frm_c1_hide_cst' ccs_ftr_frm_c1_dd=''><cms:if ccs_ftr_frm_c1_dd='custom'>0<cms:else />1</cms:if></cms:func>
+        
+        <cms:editable type='text' name='ccs_ftr_frm_c1_cst' label='Custom URL' desc='Input the entire URL (e.g., https://yoursite.com/)' width='400' not_active=ccs_ftr_frm_c1_hide_cst order='20' />
+        
+        <cms:editable type='text' name='ccs_ftr_frm_c1_txt' label='Link Title' width='200' maxlength="40" order='30' />
+    </cms:repeatable>
+</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_frm_c2_grp' label='Link Column 2' order='40'>
+    <cms:editable type='message' name='ccs_ftr_frm_c2_msg' order='5'>
+        <h3>Footer Links: Column 2</h3>
+        <p>Define the header, then select internal pages or choose "Custom" to enter external URLs. External URLs will automatically open in a new tab.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='text' name='ccs_ftr_frm_c2_ttl' label='Column 2 Header' default='Customer Support' order='10' />
+    
+    <cms:repeatable name='ccs_ftr_frm_c2_rpt' label='Column 2 Links' stacked_layout='1' order='20'>
+        <cms:editable type='dropdown' name='ccs_ftr_frm_c2_dd' label='Select Page or Custom Link' opt_values='dropdowns/links.htm' dynamic='opt_values' order='10' />
+        
+        <cms:func _into='ccs_ftr_frm_c2_hide_cst' ccs_ftr_frm_c2_dd=''><cms:if ccs_ftr_frm_c2_dd='custom'>0<cms:else />1</cms:if></cms:func>
+        
+        <cms:editable type='text' name='ccs_ftr_frm_c2_cst' label='Custom URL' desc='Input the entire URL (e.g., https://yoursite.com/)' width='400' not_active=ccs_ftr_frm_c2_hide_cst order='20' />
+        
+        <cms:editable type='text' name='ccs_ftr_frm_c2_txt' label='Link Title' width='200' maxlength="40" order='30' />
+    </cms:repeatable>
+</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_frm_c3_grp' label='Link Column 3' order='50'>
+    <cms:editable type='message' name='ccs_ftr_frm_c3_msg' order='5'>
+        <h3>Footer Links: Column 3</h3>
+        <p>Define the header, then select internal pages or choose "Custom" to enter external URLs. External URLs will automatically open in a new tab.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='text' name='ccs_ftr_frm_c3_ttl' label='Column 3 Header' default='Quicklinks' order='10' />
+    
+    <cms:repeatable name='ccs_ftr_frm_c3_rpt' label='Column 3 Links' stacked_layout='1' order='20'>
+        <cms:editable type='dropdown' name='ccs_ftr_frm_c3_dd' label='Select Page or Custom Link' opt_values='dropdowns/links.htm' dynamic='opt_values' order='10' />
+        
+        <cms:func _into='ccs_ftr_frm_c3_hide_cst' ccs_ftr_frm_c3_dd=''><cms:if ccs_ftr_frm_c3_dd='custom'>0<cms:else />1</cms:if></cms:func>
+        
+        <cms:editable type='text' name='ccs_ftr_frm_c3_cst' label='Custom URL' desc='Input the entire URL (e.g., https://yoursite.com/)' width='400' not_active=ccs_ftr_frm_c3_hide_cst order='20' />
+        
+        <cms:editable type='text' name='ccs_ftr_frm_c3_txt' label='Link Title' width='200' maxlength="40" order='30' />
+    </cms:repeatable>
+</cms:editable>

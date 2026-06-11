@@ -1,0 +1,42 @@
+<cms:set var_vid_src="ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_src" />
+<cms:capture into='cur_vid_src'><cms:get var_vid_src /></cms:capture>
+
+<cms:set var_yt_id="ccs_hro_swpr_sl_<cms:show cur_slide_num />_yt_id" />
+<cms:capture into='cur_yt_id'><cms:get var_yt_id /></cms:capture>
+
+<cms:set var_yt_str="ccs_hro_swpr_sl_<cms:show cur_slide_num />_yt_str" />
+<cms:capture into='cur_yt_str'><cms:get var_yt_str /></cms:capture>
+
+<cms:set var_yt_stp="ccs_hro_swpr_sl_<cms:show cur_slide_num />_yt_stp" />
+<cms:capture into='cur_yt_stp'><cms:get var_yt_stp /></cms:capture>
+
+<cms:set var_vm_id="ccs_hro_swpr_sl_<cms:show cur_slide_num />_vm_id" />
+<cms:capture into='cur_vm_id'><cms:get var_vm_id /></cms:capture>
+
+<cms:set var_vid_mp4="ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_mp4" />
+<cms:capture into='cur_vid_mp4'><cms:get var_vid_mp4 /></cms:capture>
+
+<cms:set var_vid_webm="ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_webm" />
+<cms:capture into='cur_vid_webm'><cms:get var_vid_webm /></cms:capture>
+
+<cms:set var_vid_ogv="ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_ogv" />
+<cms:capture into='cur_vid_ogv'><cms:get var_vid_ogv /></cms:capture>
+
+<cms:set var_vid_opc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_opc" />
+<cms:capture into='cur_vid_opc'><cms:get var_vid_opc /></cms:capture>
+
+<cms:set act_vid_opc="<cms:if cur_vid_opc><cms:show cur_vid_opc /><cms:else />1.0</cms:if>" />
+
+<div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden" style="opacity: <cms:show act_vid_opc />;">
+    <cms:if cur_vid_src='1'>
+        <div class="bg-youtube w-100 h-100" data-youtube-embed='{"videoId":"<cms:show cur_yt_id />","startSeconds":"<cms:show cur_yt_str />","endSeconds":"<cms:show cur_yt_stp />"}'></div>
+    <cms:else_if cur_vid_src='2' />
+        <div class="bg-vimeo w-100 h-100" data-vimeo-embed='{"videoId":"<cms:show cur_vm_id />"}'></div>
+    <cms:else />
+        <video class="bg-video w-100 h-100 object-fit-cover" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline">
+            <source src="<cms:show cur_vid_mp4 />" type="video/mp4" />
+            <source src="<cms:show cur_vid_webm />" type="video/webm" />
+            <source src="<cms:show cur_vid_ogv />" type="video/ogg" />
+        </video>
+    </cms:if>
+</div>

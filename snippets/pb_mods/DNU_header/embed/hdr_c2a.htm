@@ -1,0 +1,116 @@
+<cms:editable type='checkbox' name='hdr_c2a_opt' label='No Call To Action' desc=''
+    opt_values='No Call To Action Button=1'
+    order='310'
+/>
+<cms:func _into='no_c2a' hdr_c2a_opt=''>
+    <cms:if "<cms:is '1' in=hdr_c2a_opt />">
+        hide
+        <cms:else />
+        show
+    </cms:if>
+</cms:func> 
+<cms:editable type='row' name='hdr_c2a_row' label='Call To Action Options' not_active=no_c2a order='311'>
+    <cms:editable type='text' name='hdr_c2a_txt' label='Call To Action Button Text'
+        maxlength='60'
+        width='275'
+        order='312' 
+    />
+
+    <cms:editable type='dropdown' name='hdr_c2a_sz' label='Button Size' 
+        opt_values='Normal=|Small=-sm|Smaller=-xs|Large=-lg'
+        order='320'  
+    />
+    <cms:editable type='dropdown' name='hdr_c2a_blk_sz' label='Set Width' desc='percentage of text block or default'
+        opt_values='Default=|Full=100|1/4=25|Half=50|3/4=75'
+        order='321'
+    />
+    <cms:editable type='dropdown' name='hdr_c2a_clr' label='Button Color' 
+        opt_values='dropdowns/colors.htm'
+        dynamic='opt_values'
+        order='324'  
+    />
+    <cms:editable type='dropdown' name='hdr_c2a_clr_out_chk' label='Solid Color or Outline' desc=''
+        opt_values='Solid= |Outline= -outline'
+        order='326'
+    />
+    <cms:editable type='dropdown' name='hdr_c2a_lnk' label='Button Link' 
+        opt_values='dropdowns/links.htm'
+        dynamic='opt_values'
+        order='328'  
+    />
+    <cms:func _into='hdr_c2a_cstm' hdr_c2a_lnk=''>
+        <cms:if hdr_c2a_lnk='custom'>
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='text' name='hdr_c2a_cst_lnk' label='Custom Button Link'  desc='enter full url' not_active=hdr_c2a_cstm
+        order='335' 
+    />
+    
+    <cms:editable type='checkbox' name='hdr_c2a_mult_opt' label='Add More Linked Buttons' desc='adds multiple buttons'
+        opt_values='Yes=1'
+        not_active=no_hdr_video_add
+        order='338'
+    />
+    <cms:func _into='hdr_c2a_mult' hdr_c2a_mult_opt=''>
+        <cms:if "<cms:is '1' in=hdr_c2a_mult_opt />">
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+
+    <cms:repeatable name='hdr_mult_c2a_rpt' label='Multiple Button Options' not_active=hdr_c2a_mult  order='340'>
+        <cms:editable type='text' name='hdr_c2a_mult_txt' label='Call To Action Button Text'
+            maxlength='60'
+            width='275'
+            order='342' 
+        />
+        <cms:editable type='dropdown' name='hdr_c2a_mult_sz' label='Button Size' 
+            opt_values='Normal=|Small=-sm|Smaller=-xs|Large=-lg'
+            order='345'  
+        />
+        <cms:editable type='dropdown' name='hdr_c2a_mult_blk_sz' label='Set Width' desc='percentage of text block or default'
+            opt_values='Default=|Full=100|1/4=25|Half=50|3/4=75'
+            not_active=hdr_c2a_mult
+            order='346'
+        />
+        <cms:editable type='dropdown' name='hdr_c2a_mult_clr' label='Button Color' 
+            opt_values='dropdowns/colors.htm'
+            dynamic='opt_values'
+            order='348'  
+        />
+        <cms:editable type='dropdown' name='hdr_c2a_mult_clr_out_chk' label='Solid Color or Outline' desc=''
+            opt_values='Solid= |Outline= -outline'
+            order='350'
+        />
+
+        <cms:editable type='dropdown' name='hdr_c2a_mult_lnk' label='Button Link' 
+            opt_values='dropdowns/links.htm'
+            dynamic='opt_values'
+            order='352'  
+        />
+        <cms:func _into='hdr_c2a_mult_cstm' hdr_c2a_mult_lnk=''>
+            <cms:if hdr_c2a_mult_lnk='custom'>
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:editable type='text' name='hdr_c2a_mult_cst_lnk' label='Custom Button Link'  desc='enter full url' not_active=hdr_c2a_mult_cstm
+            order='356' 
+        />
+    </cms:repeatable>
+    <cms:editable type='dropdown' name='hdr_c2a_mult_pdg' label='space between buttons' desc='space between buttons or new line for each'
+        opt_values='2|4|6|New Line=1'
+        not_active=hdr_c2a_mult
+        order='358'
+    />
+    
+</cms:editable>
+<cms:editable type='checkbox' name='hdr_c2a_social' label='Add Social Buttons to Header' desc='set at site settings'
+        opt_values='Add Socaial Buttons=1'
+        order='360'
+    />

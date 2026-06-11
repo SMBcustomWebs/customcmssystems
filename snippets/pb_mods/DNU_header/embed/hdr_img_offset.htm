@@ -1,0 +1,66 @@
+<cms:editable type='dropdown' name='hdr_offset_opt' label='Offset is Image or Video' desc=''
+    opt_values='Image=1|Video=2'
+    order='800'
+/>
+<cms:func _into='hdr_off_port_img' hdr_offset_opt='' >
+    <cms:if hdr_offset_opt='1' >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+<cms:func _into='hdr_off_port_vid' hdr_offset_opt='' >
+    <cms:if hdr_offset_opt='2' >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+    
+</cms:func>
+<cms:editable type='image' name='hdr_offset_img' label='Additional Offset Header Image' not_active=hdr_off_port_img desc='1:1 ratio'
+    width='420'
+    height='860'
+    enforce_max='1'
+    show_preview='1'
+    preview_width='75'
+    order='810'
+/>
+
+<cms:editable type="file" name="hdr_ofst_vib_mp4" label="Offset Header Video" desc='portrait orientation works best' width='30' not_active=hdr_off_port_vid order='815'  />
+
+<cms:editable type='checkbox' name='hdr_ofst_crsl_opt' label='Carousell' desc='leave unchecked for single'
+    opt_values='Carousell=1'
+    order='830'
+/>
+<cms:func _into='hdr_ofst_swpr_img' hdr_ofst_crsl_opt='' hdr_offset_opt='' >
+     <cms:if ("<cms:is '1' in=hdr_ofst_crsl_opt />") &&
+            (hdr_offset_opt='1') >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+<cms:func _into='hdr_ofst_swpr_vid' hdr_ofst_crsl_opt='' hdr_offset_opt='' >
+     <cms:if ("<cms:is '1' in=hdr_ofst_crsl_opt />") &&
+            (hdr_offset_opt='2') >
+        show
+    <cms:else />
+        hide
+    </cms:if>
+    
+</cms:func>
+
+<cms:repeatable name='hdr_ofst_img_swpr_rpt' label='Add Carousell Images' not_active=hdr_ofst_swpr_img order='832'>
+    <cms:editable type='image' name='hdr_swpr_ofst_img' label='Next Image' desc='portrait orientation'
+        width='420'
+        height='860'
+        enforce_max='1'
+        show_preview='1'
+        preview_width='75'
+        order='835'
+    />
+</cms:repeatable>
+
+<cms:repeatable name='hdr_ofst_mp4_swpr_rpt' label='Add Portrait Videos' not_active=hdr_ofst_swpr_vid order='850'>
+    <cms:editable type="file" name="hdr_swpr_offset_vib_mp4" label="Next Offset Header Video"  width='30' order='860'  />
+</cms:repeatable>

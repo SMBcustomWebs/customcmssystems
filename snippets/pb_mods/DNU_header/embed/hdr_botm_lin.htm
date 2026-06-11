@@ -1,0 +1,55 @@
+<cms:editable type='checkbox' name='hdr_bot_ral_opt'  label='Add Bottom Rail' desc='Line that sits on the bottom of the header'
+  opt_values='Yes Add Bottom Rail=1'
+  order='505'
+/>
+<cms:func _into='hdr_bot_ral' hdr_bot_ral_opt=''>
+    <cms:if "<cms:is '1' in=hdr_bot_ral_opt />">
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+<cms:editable type='row' name='hdr_bot_ral_grp' label="Bottom Rail Options" not_active=hdr_bot_ral order='508'>
+    <cms:editable type='dropdown'  name='hdr_btm_ln_sz' label='Full or Half Width' desc=''
+      opt_values='Full=12 |Half=6'
+      order='510'
+    />
+    <cms:editable type='dropdown' name='hdr_bot_ral_thk' label='Height of  Rail' desc='thickness'
+        opt_values='Thick=4|Thin=2|Thickest=6|Thinest=0'
+        order='511'
+    />
+    <cms:editable type='dropdown' name='hdr_btm_ln_shd' label='Background Shade' 
+        opt_values='dropdowns/shades_gray.htm'
+        dynamic='opt_values'
+        order='512'  
+    />
+    <cms:editable type='text' name='hdr_btm_lnt_txt_ln' label='Text'
+        maxlength='130'
+        order='514' 
+    />
+    <cms:editable type='dropdown' name='hdr_btm_ln_txt_clr' label='Text Color' 
+        opt_values='dropdowns/colors.htm'
+        dynamic='opt_values'
+        order='516'  
+    />
+    <cms:editable type='dropdown' name='hdr_btm_ln_txt_sz' label='Text Size' 
+        opt_values='dropdowns/text-size.htm'
+        dynamic='opt_values'
+        order='519'  
+    />
+    <cms:editable type='dropdown' name='hdr_btm_ln_fnt_wt' label='Font Weight' 
+        opt_values='dropdowns/font-weight.htm'
+        dynamic='opt_values'
+        order='522'  
+    />
+    <cms:editable type='dropdown' name='hdr_btm_ln_fnt_st' label='Font Style' 
+        opt_values='dropdowns/font-style.htm'
+        dynamic='opt_values'
+        order='525'  
+    />
+    <cms:editable type='dropdown' name='hdr_btm_ln_font' label='Font Family' 
+        opt_values='dropdowns/font-family.htm'
+        dynamic='opt_values'
+        order='527'  
+    />
+</cms:editable>

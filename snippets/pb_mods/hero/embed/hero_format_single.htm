@@ -1,0 +1,168 @@
+<cms:editable type="group" name="ccs_hro_frmt_gen_grp" label="General Settings" order="101" >  
+
+    <cms:editable type='message' name='ccs_hro_gen_layout_msg' order='2'>
+        <h2>Hero General Settings</h2>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_gen_layout_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_hro_vht' label='Main Height of Section' desc='Overall vertical space.'
+            opt_values='Full=100|Half=50|3/4=75|1/4=25'
+            class='col-sm-6 col-md-4'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_py_ht' label='Top and Bottom Padding' desc='Space from the Y edges.'
+            opt_values='dropdowns/padding.htm'
+            dynamic='opt_values'
+            class='col-sm-6 col-md-4'
+            order='4'
+        />
+ 		 <cms:editable type='dropdown' name='ccs_hro_bg_scrl_spd' label='Page Scrolling Effect' desc='Creates a 3D effect. Negative numbers push the image behind the page; positive numbers pull it to the front.'
+            opt_values='dropdowns/prlx-scrl.htm'
+            dynamic='opt_values'
+            class='col-sm-6 col-md-4'
+            order='6'
+        />
+    </cms:editable>
+	<cms:editable type='row' name='ccs_hro_frmt_gen_clr_row' order='10'>
+        <cms:editable type='message' name='ccs_hro_form_gen_clr_msg' order='2'>
+            <hr><br>
+            <h2></h2>
+            <h4>Any background solid Color will overtake all images or Overlay colors. Choose 'Custom...' for transparency to add color highlights to images.</h4>
+        </cms:editable>
+        
+        <cms:editable type='dropdown' name='ccs_hro_bg_clr_opt' label='Hero Background Color' desc='Base Layer'
+            opt_values='dropdowns/all-colors.htm'
+            dynamic='opt_values'
+            class='col-sm-6 col-md-4'
+            order='4'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_ovrly_clr_opt' label='Hero Overlay Color' desc='Top Layer'
+            opt_values='dropdowns/all-colors.htm'
+            dynamic='opt_values'
+            class='col-sm-6 col-md-4'
+            order='6'
+        />
+		<cms:func _into='ccs_hro_ovrly_clr_chc' ccs_hro_ovrly_clr_opt=''>
+			<cms:if ccs_hro_ovrly_clr_opt='gradient' || ccs_hro_ovrly_clr_opt='transparent' >1<cms:else />0</cms:if>
+		</cms:func>
+		<cms:editable type='dropdown' name='ccs_hro_ovrly_opc' label='Overlay Opacity' desc='Transparency of predefined color'
+            opt_values='dropdowns/img-transparency.htm'
+            dynamic='opt_values'
+            not_active=ccs_hro_ovrly_clr_chc
+            class='col-sm-6 col-md-4'
+            order='8'
+        />
+    </cms:editable>
+ 	<cms:editable type='message' name='ccs_hro_clr_div' order='14'>
+		<hr><br>
+		<h4>Header display and navigation</h4>
+	</cms:editable>
+	<cms:editable type='row' name='ccs_hro_cta_row' order='15'>
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_blk_opt' label='Text Block Information' desc='what is inside text block. All options below'
+            opt_values='Text=0|Image=1|Interactive Form=2'
+            class='col-sm-6 col-md-3'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_cta_opt' label='How Many Link Buttons?' desc='Choose 0 to 3 buttons'
+            opt_values='None=0|1|2|3'
+            class='col-sm-6 col-md-3'
+            order='4'
+        />
+	  <cms:editable type='dropdown' name='ccs_hro_cta_social' label='Add Social Links' desc='links set at Global Site Settings'
+            opt_values='No Social Links=0 | Add Social Buttons=1'
+            class='col-sm-6 col-md-3'
+            order='6'
+        />
+		<cms:func _into='ccs_hro_hide_social_align' ccs_hro_cta_social=''>
+			<cms:if ccs_hro_cta_social == '0'>1<cms:else />0</cms:if>
+		</cms:func>
+		<cms:editable type='dropdown' name='ccs_hro_cta_social_halg' label='Social Alignment' 
+			opt_values='Left=start | Center=center | Right=end' 
+			opt_selected='center' 
+			not_active=ccs_hro_hide_social_align
+			class='col-sm-6 col-md-3' 
+			order='8'
+		/>
+    </cms:editable>
+	<cms:editable type='message' name='ccs_hro_opt_div' order='19'>
+		<hr><br>
+		<h4>Hero extras</h4>
+	</cms:editable>
+    <cms:editable type='row' name='ccs_hro_interactivity_row' order='20'>
+        <cms:editable type='dropdown' name='ccs_hro_mdl_add_opt' label='External Playing Media' desc='Adds an interactive popup video or photo gallery modal.'
+            opt_values='No Add=0|Add Gallery=1|Add Video=2'
+            class='col-sm-6 col-md-4'
+            order='2'
+        />
+        
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_opt' label='Add Bottom Rail' desc='Adds a highlight line with an optional phrase to the bottom edge of the header.'
+            opt_values='No Bottom Rail=0 | Yes Add Bottom Rail=1'
+            class='col-sm-6 col-md-4'
+            order='6'
+        />
+    </cms:editable>
+    
+</cms:editable> 
+    
+    <cms:func _into='ccs_hro_txtblk_txt_chc' ccs_hro_txtblk_blk_opt=''>
+        <cms:if ccs_hro_txtblk_blk_opt="0" >0<cms:else />1</cms:if>
+    </cms:func>   
+    <cms:func _into='ccs_hro_txtblk_img_chc' ccs_hro_txtblk_blk_opt=''>
+        <cms:if ccs_hro_txtblk_blk_opt="1" >0<cms:else />1</cms:if>
+    </cms:func>
+    <cms:func _into='ccs_hro_txtblk_form_chc' ccs_hro_txtblk_blk_opt=''>
+        <cms:if ccs_hro_txtblk_blk_opt="2" >0<cms:else />1</cms:if>
+    </cms:func>
+
+    
+
+    <cms:func _into='ccs_hro_bg_clr_cust_chc' ccs_hro_bg_clr_opt=''>
+        <cms:if ccs_hro_bg_clr_opt="gradient" >0<cms:else />1</cms:if>
+    </cms:func> 
+    <cms:func _into='ccs_hro_bg_ovrly_cust_chc' ccs_hro_ovrly_clr_opt=''>
+        <cms:if ccs_hro_ovrly_clr_opt="gradient" >0<cms:else />1</cms:if>
+    </cms:func>
+
+<!--from textblock text -->
+<cms:func _into='ccs_hro_txtbx_bg_chc' ccs_hro_txtbx_bg_opt=''>
+        <cms:if ccs_hro_txtbx_bg_opt='1'>0<cms:else />1</cms:if>
+    </cms:func>
+
+
+
+
+<!--from cta-->
+<cms:func _into='ccs_hro_show_cta_1' ccs_hro_cta_opt=''>
+    <cms:if ccs_hro_cta_opt ge '1'>0<cms:else />1</cms:if>
+</cms:func>
+<cms:func _into='ccs_hro_show_cta_2' ccs_hro_cta_opt=''>
+    <cms:if ccs_hro_cta_opt ge '2'>0<cms:else />1</cms:if>
+</cms:func>
+<cms:func _into='ccs_hro_show_cta_3' ccs_hro_cta_opt=''>
+    <cms:if ccs_hro_cta_opt ge '3'>0<cms:else />1</cms:if>
+</cms:func>
+
+<!--from modal add-->
+<cms:func _into='ccs_hro_mdl_add_chc' ccs_hro_mdl_add_opt=''>
+    <cms:if ccs_hro_mdl_add_opt!='0'>
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+
+<cms:func _into='ccs_hro_mdl_imgs_chc' ccs_hro_mdl_add_opt=''>
+    <cms:if ccs_hro_mdl_add_opt='1'>
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>
+
+<cms:func _into='ccs_hro_mdl_vids_chc' ccs_hro_mdl_add_opt=''>
+    <cms:if ccs_hro_mdl_add_opt='2'>
+        show
+    <cms:else />
+        hide
+    </cms:if>
+</cms:func>

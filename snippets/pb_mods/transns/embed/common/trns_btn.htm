@@ -1,0 +1,460 @@
+
+
+
+
+<cms:editable type="group" name="trns_c2a1_grp" label="Navigation Link 1" not_active=trns_btn_chc order='40' > 
+    <cms:editable type='message' name='trns_c2a1_msg' class='col-md-12' order='4'>
+        <h2>Call-To-Action 1 Settings</h2>
+        <h4>Set for button or text link or none</h4>
+        <p>More settings open up below.</p>
+    </cms:editable>
+    <cms:editable type='row' name='trns_c2a1_btn_st_row' not_active=trns_frmt_c2a_btn_chc  order='5'>
+        <cms:editable type='dropdown' name='trns_c2a1_clr_out_chk' label='Solid Color or Outline' desc=''
+            opt_values='Solid= |Outline= -outline'
+            class='col-md-4 col-sm-6'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='trns_c2a1_st' label='Button Style' desc=''
+            opt_values='dropdowns/button-style.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='4'
+        />
+        <cms:func _into='trns_c2a1_icon_fa_chc' trns_c2a1_st=''>  
+            <cms:if (trns_c2a1_st !='') && (trns_c2a1_st !='rounded-capsule') >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:editable type='message' name='trns_c2a1_icon_msg' not_active=trns_c2a1_icon_fa_chc class='col-sm-12'  order='8'>
+            <h3>Font Awesome Icons v6. Enter the full code.  EX: fab fa-gitlab</h3>
+            <h4>See all options <a href="https://fontawesome.com/v6/search" target="_bland">here at https://fontawesome.com/v6/search</a> </h4>
+            <p>ONLY ADD THE CODE AS THE EXAMPLE ABOVE. DELETE ALL OTHER CODE BESIDES xxx xx-xxxxxx</p>
+        </cms:editable>
+        <cms:editable type='text' name='trns_c2a1_icon_fa' label='Enter full Font Awesome Icon' desc='EX: fa fa-heart'
+            width='275'
+            not_active=trns_c2a1_icon_fa_chc
+            class='col-sm-12'
+            order='10'
+        />
+    </cms:editable> 
+    <cms:editable type='row' name='trns_c2a1_txt_row' order='10'>
+        <cms:editable type='text' name='trns_c2a1_txt' label='Call-To-Acton Text'
+            maxlength='60'
+            width='275'
+            class='col-md-4 col-sm-6'
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='trns_c2a1_clr' label='Call-To-Acton Color' 
+            opt_values='dropdowns/btn-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a1_lnk_sz' label='Call-To-Acton Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            opt_selected='-sm'
+            class='col-md-4 col-sm-6'
+            order='6'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a1_lnk_font' label='Call-To-Acton Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='8'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a1_lnk_fnt_wt' label='Call-To-Acton Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='10'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a1_lnk_fnt_st' label='Call-To-Acton Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='12'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a1_lnk_ltr_spc' label='Call-To-Acton Letter Spacing' 
+            opt_values='dropdowns/hdr_ltr-spc.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='14'  
+        />
+    </cms:editable>
+    <cms:editable type='row' name='trns_c2a1_lnk_row'  order='20'>
+        <cms:editable type='dropdown' name='trns_c2a1_lnk' label='Button Link' 
+            opt_values='dropdowns/links.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='2'  
+        />
+    </cms:editable>
+    <cms:func _into='trns_c2a1_cstm' trns_c2a1_lnk=''>
+        <cms:if trns_c2a1_lnk='custom'>
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='row' name='trns_c2a1_clk_row' not_active=trns_c2a1_cstm order='25'>
+        <cms:editable type='message' name='trns_c2a1_cust_lnk_msg' class='col-sm-12' order='5'>
+            <h2>Enter the full url for cutsom link.</h2>
+            <h4>Will open in a seperate tab</h4>
+            <p></p>
+        </cms:editable>
+        <cms:editable type='text' name='trns_c2a1_cst_lnk' label='Custom Button Link'  desc='enter full url' 
+            class='col-sm-12'
+            order='6' 
+        />
+    </cms:editable>
+</cms:editable>
+
+
+<cms:editable type="group" name="trns_c2a2_grp" label="Navigation Link 2" not_active=trns_c2a2_chc order='40' > 
+    <cms:editable type='message' name='trns_c2a2_msg' class='col-md-12' order='4'>
+        <h2>Call-To-Action 2 Settings</h2>
+        <h4>Set for button or text link or none</h4>
+        <p>More settings open up below.</p>
+    </cms:editable>
+    <cms:editable type='row' name='trns_c2a2_btn_st_row' not_active=trns_frmt_c2a_btn_chc  order='5'>
+        <cms:editable type='dropdown' name='trns_c2a2_clr_out_chk' label='Solid Color or Outline' desc=''
+            opt_values='Solid= |Outline= -outline'
+            class='col-md-4 col-sm-6'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='trns_c2a2_st' label='Link Style' desc=''
+            opt_values='dropdowns/button-style.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='4'
+        />
+    </cms:editable> 
+    <cms:editable type='dropdown' name='trns_c2a2_icn_opt' label='Link Icon' desc=''
+        opt_values='dropdowns/button-icon.htm'
+        dynamic='opt_values'
+        class='col-md-4 col-sm-6'
+        order='5'
+    />
+    <cms:func _into='trns_c2a2_icn_chc' trns_c2a2_icn_opt=''>  
+        <cms:if trns_c2a2_icn_opt !=''>
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='message' name='trns_c2a2_icon_msg' not_active=trns_c2a2_icn_chc class='col-sm-12'  order='8'>
+        <h3>Font Awesome Icons v6. Enter the full code.  EX: fab fa-gitlab</h3>
+        <h4>See all options <a href="https://fontawesome.com/v6/search" target="_bland">here at https://fontawesome.com/v6/search</a> </h4>
+        <p>ONLY ADD THE CODE AS THE EXAMPLE ABOVE. DELETE ALL OTHER CODE BESIDES xxx xx-xxxxxx</p>
+    </cms:editable>
+    <cms:editable type='text' name='trns_c2a2_icon_fa' label='Enter full Font Awesome Icon' desc='EX: fa fa-heart'
+        width='275'
+        not_active=trns_c2a2_icon_icn_chc
+        class='col-sm-12'
+        order='10'
+    />
+    <cms:editable type='row' name='trns_c2a2_txt_row' order='10'>
+        <cms:editable type='text' name='trns_c2a2_txt' label='Call-To-Acton Text'
+            maxlength='60'
+            width='275'
+            class='col-md-4 col-sm-6'
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='trns_c2a2_clr' label='Call-To-Acton Color' 
+            opt_values='dropdowns/btn-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a2_lnk_sz' label='Call-To-Acton Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            opt_selected='-sm'
+            class='col-md-4 col-sm-6'
+            order='6'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a2_lnk_font' label='Call-To-Acton Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='8'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a2_lnk_fnt_wt' label='Call-To-Acton Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='10'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a2_lnk_fnt_st' label='Call-To-Acton Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='12'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a2_lnk_ltr_spc' label='Call-To-Acton Letter Spacing' 
+            opt_values='dropdowns/hdr_ltr-spc.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='14'  
+        />
+    </cms:editable>
+    <cms:editable type='row' name='trns_c2a2_lnk_row'  order='20'>
+        <cms:editable type='dropdown' name='trns_c2a2_lnk' label='Button Link' 
+            opt_values='dropdowns/links.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='2'  
+        />
+    </cms:editable>
+    <cms:func _into='trns_c2a2_cstm' trns_c2a2_lnk=''>
+        <cms:if trns_c2a2_lnk='custom'>
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='row' name='trns_c2a2_clk_row' not_active=trns_c2a2_cstm order='25'>
+        <cms:editable type='message' name='trns_c2a2_cust_lnk_msg' class='col-sm-12' order='5'>
+            <h2>Enter the full url for cutsom link.</h2>
+            <h4>Will open in a seperate tab</h4>
+            <p></p>
+        </cms:editable>
+        <cms:editable type='text' name='trns_c2a2_cst_lnk' label='Custom Button Link'  desc='enter full url' 
+            class='col-sm-12'
+            order='6' 
+        />
+    </cms:editable>
+</cms:editable>
+
+
+<cms:editable type="group" name="trns_c2a3_grp" label="Navigation Link 3" not_active=trns_c2a3_chc order='40' > 
+    <cms:editable type='message' name='trns_c2a3_msg' class='col-md-12' order='4'>
+        <h2>Call-To-Action 3 Settings</h2>
+        <h4>Set for button or text link or none</h4>
+        <p>More settings open up below.</p>
+    </cms:editable>
+    <cms:editable type='row' name='trns_c2a3_btn_st_row' not_active=trns_frmt_c2a_btn_chc  order='5'>
+        <cms:editable type='dropdown' name='trns_c2a3_clr_out_chk' label='Solid Color or Outline' desc=''
+            opt_values='Solid= |Outline= -outline'
+            class='col-md-4 col-sm-6'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='trns_c2a3_st' label='Link Style' desc=''
+            opt_values='dropdowns/button-style.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='4'
+        />
+    </cms:editable> 
+    <cms:editable type='dropdown' name='trns_c2a3_icn_opt' label='Link Icon' desc=''
+        opt_values='dropdowns/button-icon.htm'
+        dynamic='opt_values'
+        class='col-md-4 col-sm-6'
+        order='5'
+    />
+    <cms:func _into='trns_c2a3_icn_chc' trns_c2a3_icn_opt=''>  
+        <cms:if trns_c2a2_icn_opt !=''>
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:editable type='message' name='trns_c2a3_icon_msg' not_active=trns_c2a3_icn_chc class='col-sm-12'  order='8'>
+            <h3>Font Awesome Icons v6. Enter the full code.  EX: fab fa-gitlab</h3>
+            <h4>See all options <a href="https://fontawesome.com/v6/search" target="_bland">here at https://fontawesome.com/v6/search</a> </h4>
+            <p>ONLY ADD THE CODE AS THE EXAMPLE ABOVE. DELETE ALL OTHER CODE BESIDES xxx xx-xxxxxx</p>
+        </cms:editable>
+        <cms:editable type='text' name='trns_c2a3_icon_fa' label='Enter full Font Awesome Icon' desc='EX: fa fa-heart'
+            width='275'
+            not_active=trns_c2a3_icon_fa_chc
+            class='col-sm-12'
+            order='10'
+        />
+    </cms:editable> 
+    <cms:editable type='row' name='trns_c2a3_txt_row' order='10'>
+        <cms:editable type='text' name='trns_c2a3_txt' label='Call-To-Acton Text'
+            maxlength='60'
+            width='275'
+            class='col-md-4 col-sm-6'
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='trns_c2a3_clr' label='Call-To-Acton Color' 
+            opt_values='dropdowns/btn-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a3_lnk_sz' label='Call-To-Acton Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            opt_selected='-sm'
+            class='col-md-4 col-sm-6'
+            order='6'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a3_lnk_font' label='Call-To-Acton Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='8'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a3_lnk_fnt_wt' label='Call-To-Acton Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='10'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a3_lnk_fnt_st' label='Call-To-Acton Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='12'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a3_lnk_ltr_spc' label='Call-To-Acton Letter Spacing' 
+            opt_values='dropdowns/hdr_ltr-spc.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='14'  
+        />
+    </cms:editable>
+    <cms:editable type='row' name='trns_c2a3_lnk_row'  order='20'>
+        <cms:editable type='dropdown' name='trns_c2a3_lnk' label='Button Link' 
+            opt_values='dropdowns/links.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='2'  
+        />
+    </cms:editable>
+    <cms:func _into='trns_c2a3_cstm' trns_c2a3_lnk=''>
+        <cms:if trns_c2a3_lnk='custom'>
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='row' name='trns_c2a3_clk_row' not_active=trns_c2a3_cstm order='25'>
+        <cms:editable type='message' name='trns_c2a3_cust_lnk_msg' class='col-sm-12' order='5'>
+            <h2>Enter the full url for cutsom link.</h2>
+            <h4>Will open in a seperate tab</h4>
+            <p></p>
+        </cms:editable>
+        <cms:editable type='text' name='trns_c2a3_cst_lnk' label='Custom Button Link'  desc='enter full url' 
+            class='col-sm-12'
+            order='6' 
+        />
+    </cms:editable>
+</cms:editable>
+
+
+
+<cms:editable type="group" name="trns_c2a4_grp" label="Navigation Link 4" not_active=trns_c2a4_chc order='40' > 
+    <cms:editable type='message' name='trns_c2a4_msg' class='col-md-12' order='4'>
+        <h2>Call-To-Action 4 Settings</h2>
+        <h4>Set for button or text link or none</h4>
+        <p>More settings open up below.</p>
+    </cms:editable>
+    <cms:editable type='row' name='trns_c2a4_btn_st_row' not_active=trns_frmt_c2a_btn_chc  order='5'>
+        <cms:editable type='dropdown' name='trns_c2a4_clr_out_chk' label='Solid Color or Outline' desc=''
+            opt_values='Solid= |Outline= -outline'
+            class='col-md-4 col-sm-6'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='trns_c2a4_st' label='Button Style' desc=''
+            opt_values='dropdowns/button-style.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='4'
+        />
+        <cms:func _into='trns_c2a4_icon_fa_chc' trns_c2a4_st=''>  
+            <cms:if (trns_c2a4_st !='') && (trns_c2a4_st !='rounded-capsule') >
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:editable type='message' name='trns_c2a4_icon_msg' not_active=trns_c2a4_icon_fa_chc class='col-sm-12'  order='8'>
+            <h3>Font Awesome Icons v6. Enter the full code.  EX: fab fa-gitlab</h3>
+            <h4>See all options <a href="https://fontawesome.com/v6/search" target="_bland">here at https://fontawesome.com/v6/search</a> </h4>
+            <p>ONLY ADD THE CODE AS THE EXAMPLE ABOVE. DELETE ALL OTHER CODE BESIDES xxx xx-xxxxxx</p>
+        </cms:editable>
+        <cms:editable type='text' name='trns_c2a4_icon_fa' label='Enter full Font Awesome Icon' desc='EX: fa fa-heart'
+            width='275'
+            not_active=trns_c2a4_icon_fa_chc
+            class='col-sm-12'
+            order='10'
+        />
+    </cms:editable> 
+    <cms:editable type='row' name='trns_c2a4_txt_row' order='10'>
+        <cms:editable type='text' name='trns_c2a4_txt' label='Call-To-Acton Text'
+            maxlength='60'
+            width='275'
+            class='col-md-4 col-sm-6'
+            order='2' 
+        />
+        <cms:editable type='dropdown' name='trns_c2a4_clr' label='Call-To-Acton Color' 
+            opt_values='dropdowns/btn-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='4'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a4_lnk_sz' label='Call-To-Acton Text Size' 
+            opt_values='dropdowns/text-size.htm'
+            dynamic='opt_values'
+            opt_selected='-sm'
+            class='col-md-4 col-sm-6'
+            order='6'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a4_lnk_font' label='Call-To-Acton Font Family' 
+            opt_values='dropdowns/font-family.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='8'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a4_lnk_fnt_wt' label='Call-To-Acton Font Weight' 
+            opt_values='dropdowns/font-weight.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='10'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a4_lnk_fnt_st' label='Call-To-Acton Font Style' 
+            opt_values='dropdowns/font-style.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='12'  
+        />
+        <cms:editable type='dropdown' name='trns_c2a4_lnk_ltr_spc' label='Call-To-Acton Letter Spacing' 
+            opt_values='dropdowns/hdr_ltr-spc.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='14'  
+        />
+    </cms:editable>
+    <cms:editable type='row' name='trns_c2a4_lnk_row'  order='20'>
+        <cms:editable type='dropdown' name='trns_c2a4_lnk' label='Button Link' 
+            opt_values='dropdowns/links.htm'
+            dynamic='opt_values'
+            class='col-md-4 col-sm-6'
+            order='2'  
+        />
+    </cms:editable>
+    <cms:func _into='trns_c2a4_cstm' trns_c2a4_lnk=''>
+        <cms:if trns_c2a4_lnk='custom'>
+            show
+        <cms:else />
+            hide
+        </cms:if>
+    </cms:func>
+    <cms:editable type='row' name='trns_c2a4_clk_row' not_active=trns_c2a4_cstm order='25'>
+        <cms:editable type='message' name='trns_c2a4_cust_lnk_msg' class='col-sm-12' order='5'>
+            <h2>Enter the full url for cutsom link.</h2>
+            <h4>Will open in a seperate tab</h4>
+            <p></p>
+        </cms:editable>
+        <cms:editable type='text' name='trns_c2a4_cst_lnk' label='Custom Button Link'  desc='enter full url' 
+            class='col-sm-12'
+            order='6' 
+        />
+    </cms:editable>
+</cms:editable>

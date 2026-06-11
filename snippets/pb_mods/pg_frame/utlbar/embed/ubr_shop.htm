@@ -1,0 +1,84 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_shop_gen_grp" label="General Utility Properties" order="10">
+    
+    <cms:editable type='message' name='ccs_ubr_shop_init_msg' order='1'>
+        <h2>Utility Bar: E-Commerce / Shop</h2>
+        <p>Displays quick links on the left and customer portal/cart icons on the right.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_shop_gen_row' order='2'>
+        <cms:editable type='dropdown' name='ccs_ubr_shop_bg_clr_opt' label='Bar Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' opt_selected='1100' class='col-md-4' order='1' />
+        <cms:editable type='dropdown' name='ccs_ubr_shop_txt_clr' label='Default Content Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' opt_selected='400' class='col-md-4' order='2' />
+        <cms:editable type='dropdown' name='ccs_ubr_shop_dspr' label='Responsive Visibility Mask' opt_values='Disappear on Mobile=d-none d-md-block|Disappear on Small=d-none d-sm-block|Keep Static Visible= ' opt_selected='d-none d-md-block' class='col-md-4' order='3' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_shop_stky_row' order='3'>
+        <cms:editable type='message' name='ccs_ubr_shop_stky_msg' class='col-md-9' order='1'>
+            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin-top:10px;">
+                <strong>Sticky Positioning Warning:</strong><br> "Stick Bar To Top" should not be used if your Main Navigation Menu is also set to sticky.
+            </div>
+        </cms:editable>
+        <cms:editable type='checkbox' name='ccs_ubr_shop_stky' label='Stick Bar To Top' desc='stays visible on scroll' opt_values='Yes=1' class='col-md-3' order='2' />
+    </cms:editable>
+</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_shop_sc1_grp" label="Left Column :: General Quick Links" order="20">
+    
+    <cms:editable type='message' name='ccs_ubr_shop_sc1_msg' order='1'>
+        <h3>Quick Links (Left Column)</h3>
+        <p>Configure informational list links running down the left alignment track.</p>
+        <br><hr>
+    </cms:editable>
+    
+    <cms:repeatable name='ccs_ubr_shop_sc1_rpt' label='Left Track Menu Nodes' order='2'>
+        
+        <cms:editable type='text' name='ccs_ubr_shop_sc1_ttl' label='Link Visible Title' width='180' maxlength='30' order='1' />
+        <cms:editable type='text' name='ccs_ubr_shop_sc1_icn' label='Icon Class (Leave blank if none)' width='180' maxlength='50' order='2' />
+        
+        <cms:editable type='dropdown' name='ccs_ubr_shop_sc1_lnk' label='Route Destination' opt_values='dropdowns/links.htm' dynamic='opt_values' order='3' />
+        
+        <cms:func _into='ccs_ubr_shop_sc1_is_custom' ccs_ubr_shop_sc1_lnk=''><cms:if ccs_ubr_shop_sc1_lnk='custom'>0<cms:else />1</cms:if></cms:func>
+        
+        <cms:editable type='text' name='ccs_ubr_shop_sc1_cst' label='Custom URL Destination' desc='Input the entire URL (e.g., https://mysite.com/)' width='400' not_active=ccs_ubr_shop_sc1_is_custom order='4' />
+        
+        <cms:config_list_view>
+            <cms:field 'k_content'>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 6px 0;">
+                    <div>
+                        <strong style="font-size: 14px; color: #007bff;"><cms:show ccs_ubr_shop_sc1_ttl /></strong>
+                        <span style="color: #6c757d; font-size: 12px; margin-left: 10px;">
+                            <cms:if ccs_ubr_shop_sc1_lnk == 'custom'>&rarr; <cms:show ccs_ubr_shop_sc1_cst /><cms:else />&rarr; <cms:show ccs_ubr_shop_sc1_lnk /></cms:if>
+                        </span>
+                    </div>
+                </div>
+            </cms:field>
+        </cms:config_list_view>
+        
+    </cms:repeatable>
+</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_shop_sc2_grp" label="Right Column :: Customer Portal & E-Commerce Handles" order="30">
+    
+    <cms:editable type='message' name='ccs_ubr_shop_sc2_msg' order='1'>
+        <h3>Portal Links & Icons</h3>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_shop_portal_row' order='2'>
+        <cms:editable type='text' name='ccs_ubr_shop_auth_txt' label='Authentication Portal Link Text' default='Sign in / Join' class='col-md-4' order='1' />
+        
+        <cms:editable type='dropdown' name='ccs_ubr_shop_auth_lnk' label='Authentication Target' opt_values='dropdowns/links.htm' dynamic='opt_values' class='col-md-4' order='2' />
+        
+        <cms:func _into='ccs_ubr_shop_auth_is_custom' ccs_ubr_shop_auth_lnk=''><cms:if ccs_ubr_shop_auth_lnk='custom'>0<cms:else />1</cms:if></cms:func>
+        
+        <cms:editable type='text' name='ccs_ubr_shop_auth_cst' label='Custom Portal URL' desc='Input the entire URL (e.g., https://mysite.com/)' not_active=ccs_ubr_shop_auth_is_custom class='col-md-4' order='3' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_shop_sys_icons' label='System Interaction Icon Rules' order='3'>
+        <cms:editable type='text' name='ccs_ubr_shop_icn_profile' label='Profile/Account Icon Class' default='icon-Talk-Man' class='col-md-4' order='1'/>
+        <cms:editable type='text' name='ccs_ubr_shop_icn_wishlist' label='Wishlist Icon Class' default='icon-Heart' class='col-md-4' order='2'/>
+        <cms:editable type='text' name='ccs_ubr_shop_icn_cart' label='Shopping Cart Icon Class' default='icon-Add-Cart' class='col-md-4' order='3'/>
+    </cms:editable>
+</cms:editable>

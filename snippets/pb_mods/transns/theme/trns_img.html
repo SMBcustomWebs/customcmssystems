@@ -1,0 +1,10 @@
+<section class="bg-<cms:show trnsimg_bg_clr_opt /> bg-opacity-<cms:show trnsimg_bg_clr_trns />  py-<cms:show trnsimg_py_ht /> has-parallax">
+    <cms:popup_edit 'trnsimg_py_ht|trnsimg_bg_scrl_spd' link_text="<span class='bg-800 link-warning ms-0' title='Edit Height and scrolling effects'> [EDIT SECTION SETTINGS] | </span>" />
+    <div class="container-fluid" data-rellax-speed="<cms:show trnsimg_bg_scrl_spd />" data-parallax="data-parallax" >
+      <div class="row">
+        <div class="col px-0"> <img class="w-100 h-50" src="<cms:show trnsimg_bg_img />" alt="<cms:show trnsimg_bg_img_alt />" style="opacity:<cms:show trnsmp_img_trns />;"/></div>
+      </div>
+    </div>
+    <cms:popup_edit 'trnsimg_bg_img|trnsimg_bg_img_alt|trnsmp_img_trns' link_text="<span class='bg-800 link-warning ms-0' title='Edit image and alt description'> [EDIT IMAGE] | </span><br>" />
+    <cms:popup_edit 'trnsimg_bg_clr_opt|trnsimg_bg_clr_trns|' link_text="<span class='bg-800 link-warning ms-0' title='Edit background colors'> [EDIT COLORS] | </span>" />
+</section>

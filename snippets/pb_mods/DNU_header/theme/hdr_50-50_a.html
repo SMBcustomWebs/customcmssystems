@@ -1,0 +1,54 @@
+<div class="swiper-theme-container " data-swiper-theme-container="data-swiper-theme-container">
+    <div class="swiper" data-swiper='{"effect":"<cms:show hdr_swpr_trns />","loop":true,"autoplay":{"delay":<cms:show hdr_swpr_delay />,"disableOnInterection":true},"pagination":{"el":".swiper-pagination","clickable":true}}'>
+        <div class="swiper-wrapper">
+            <div class="swiper-slide pt-2">
+                <cms:if hdr_img_vid_opt='2'>
+                    <cms:if hdr_vid_src_opt='1'>
+                        <video class="img-fluid bg-video" autoplay="autoplay" loop="loop" muted="muted" >
+                            <source src="<cms:show hdr_vid_mp4 />" type="video/mp4" />
+                            <source src="<cms:show hdr_vid_webm />" type="video/webm" />
+                            <source src="<cms:show hdr_vid_ogv />" type="video/ogv" />
+                        </video>
+                    <cms:else />
+                        <div class="img-fluid bg-video" data-youtube-embed='{"videoId":"<cms:show hdr_vid_yt_strm />","startSeconds":"<cms:show hdr_vid_yt_strm_str />","endSeconds":"<cms:show hdr_vid_yt_strm_stp />"}'>
+                        </div>
+                    </cms:if>
+                <cms:else />
+                    <img class="img-fluid" src="<cms:show hdr_img />" />
+                </cms:if>
+            </div>
+            <cms:if hdr_sing_crsl_opt> <!-- start of repeating slides -->
+                <cms:if hdr_img_vid_opt='2' >
+                    <cms:set hdr_swpr_rpt='hdr_swpr_video_rpt' />
+                    <cms:set hdr_swpr_img="<cms:show hdr_img />" />
+                <cms:else />
+                    <cms:set hdr_swpr_rpt='hdr_img_swpr' />
+                </cms:if>
+                <cms:show_repeatable hdr_swpr_rpt >
+                    <div class="swiper-slide pt-2">
+                        <cms:if hdr_img_vid_opt='2'>
+                            <cms:if hdr_swpr_vid_src_opt='1'>
+                                <video class="img-fluid bg-video" autoplay="autoplay" loop="loop" muted="muted" >
+                                    <source src="<cms:show hdr_swpr_vid_mp4 />" type="video/mp4" />
+                                    <source src="<cms:show hdr_swpr_vid_webm />" type="video/webm" />
+                                    <source src="<cms:show hdr_swpr_vid_ogv />" type="video/ogv" />
+                                </video>
+                            <cms:else />
+                                <div class="img-fluid bg-video" data-youtube-embed='{"videoId":"<cms:show hdr_swpr_vid_yt_strm />","startSeconds":"<cms:show hdr_swpr_vid_yt_strm_str />","endSeconds":"<cms:show hdr_swpr_vid_yt_strm_stp />"}'>
+                                </div>
+                            </cms:if>
+                        <cms:else />
+                            <img class="img-fluid" src="<cms:show hdr_swpr_img />" />
+                        </cms:if>
+                    </div>
+                </cms:show_repeatable>
+            </cms:if>
+        </div>
+        <cms:if hdr_sing_crsl_opt>
+            <div class="swiper-nav">
+                <div class="swiper-button-next bg-600"> </div>
+                <div class="swiper-button-prev bg-600"></div>
+            </div>
+        </cms:if>
+    </div>
+</div>

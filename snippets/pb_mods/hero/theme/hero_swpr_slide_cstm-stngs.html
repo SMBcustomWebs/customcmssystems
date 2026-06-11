@@ -1,0 +1,182 @@
+<cms:set cur_slide_num=k_count scope='global' />
+
+<cms:set var_img="ccs_hro_swpr_sl_<cms:show cur_slide_num />_img" />
+<cms:set loc_img="<cms:get var_img />" />
+
+<cms:set var_img_opc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_img_opc" />
+<cms:set loc_img_opc="<cms:get var_img_opc />" />
+
+<cms:set var_is_vid="ccs_hro_swpr_sl_<cms:show cur_slide_num />_is_vid" />
+<cms:set loc_is_vid="<cms:get var_is_vid />" />
+
+<cms:set var_add_ovrly="ccs_hro_swpr_sl_<cms:show cur_slide_num />_add_ovrly" />
+<cms:set loc_add_ovrly="<cms:get var_add_ovrly />" />
+
+<cms:set var_ovrly_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_ovrly_clr_opt" />
+<cms:set loc_ovrly_clr="<cms:get var_ovrly_clr />" />
+
+<cms:set var_ovrly_opc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_ovrly_opc" />
+<cms:set loc_ovrly_opc="<cms:get var_ovrly_opc />" />
+
+<cms:set var_blk_opt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_blk_opt" />
+<cms:set loc_blk_opt="<cms:get var_blk_opt />" scope='global' />
+
+<cms:set var_scl_opt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_scl_opt" />
+<cms:set loc_scl_opt="<cms:get var_scl_opt />" scope='global' />
+
+<cms:set var_scl_halg="ccs_hro_swpr_sl_<cms:show cur_slide_num />_scl_halg" />
+<cms:set loc_scl_halg="<cms:get var_scl_halg />" scope='global' />
+
+<cms:if loc_add_ovrly == '1' && loc_ovrly_clr != 'transparent' && loc_ovrly_clr != 'none'>
+    <cms:set act_ovrly_clr=loc_ovrly_clr scope='global' />
+    <cms:set act_ovrly_opc=loc_ovrly_opc scope='global' />
+<cms:else />
+    <cms:set act_ovrly_clr='' scope='global' />
+    <cms:set act_ovrly_opc='' scope='global' />
+</cms:if>
+
+<cms:set var_lyt_ovr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_lyt_ovr" />
+<cms:set loc_lyt_ovr="<cms:get var_lyt_ovr />" />
+
+<cms:set use_local_txtbx='0' />
+<cms:if hero_swpr_glbl_txtbx_mode == 'local'>
+    <cms:set use_local_txtbx='1' />
+<cms:else />
+    <cms:if loc_lyt_ovr == '1'><cms:set use_local_txtbx='1' /></cms:if>
+</cms:if>
+
+<cms:if use_local_txtbx == '1'>
+    <cms:set var_bx_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_bx_sz" /><cms:set act_bx_sz="<cms:get var_bx_sz />" scope='global' />
+    <cms:set var_valg="ccs_hro_swpr_sl_<cms:show cur_slide_num />_valg" /><cms:set act_valg="<cms:get var_valg />" scope='global' />
+    <cms:set var_halg="ccs_hro_swpr_sl_<cms:show cur_slide_num />_halg" /><cms:set act_halg="<cms:get var_halg />" scope='global' />
+    <cms:set var_txt_alg="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txt_alg" /><cms:set act_txt_alg="<cms:get var_txt_alg />" scope='global' />
+    <cms:set var_py_ht="ccs_hro_swpr_sl_<cms:show cur_slide_num />_py_ht" /><cms:set act_py_ht="<cms:get var_py_ht />" scope='global' />
+    <cms:set var_bg_opt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtbx_bg_opt" /><cms:set act_bg_opt="<cms:get var_bg_opt />" scope='global' />
+    <cms:set var_bg_pd="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_bg_pd" /><cms:set act_bg_pd="<cms:get var_bg_pd />" scope='global' />
+    <cms:set var_bg_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_bg_clr" /><cms:set act_bg_clr="<cms:get var_bg_clr />" scope='global' />
+    <cms:set var_bg_opc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_bg_opc" /><cms:set act_bg_opc="<cms:get var_bg_opc />" scope='global' />
+    <cms:set var_brd_siz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_bg_brd_siz" /><cms:set act_brd_siz="<cms:get var_brd_siz />" scope='global' />
+    <cms:set var_brd_sty="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_bg_brd_sty" /><cms:set act_brd_sty="<cms:get var_brd_sty />" scope='global' />
+    <cms:set var_brd_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_bg_brd_clr" /><cms:set act_brd_clr="<cms:get var_brd_clr />" scope='global' />
+    <cms:set var_brd_rad="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_brd_rad" /><cms:set act_brd_rad="<cms:get var_brd_rad />" scope='global' />
+    <cms:set var_brd_spc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_brd_spc" /><cms:set act_brd_spc="<cms:get var_brd_spc />" scope='global' />
+<cms:else />
+    <cms:set act_bx_sz=swpr_txtbx_size scope='global' />
+    <cms:set act_valg=hero_swpr_txtbx_valg scope='global' />
+    <cms:set act_halg=hero_swpr_txtbx_halg scope='global' />
+    <cms:set act_txt_alg=hero_swpr_txt_halg scope='global' />
+    <cms:set act_py_ht=hero_swpr_py_ht scope='global' />
+    <cms:set act_bg_opt=hero_swpr_txtbx_bg_opt scope='global' />
+    <cms:set act_bg_pd=hero_swpr_txtblk_bg_pd scope='global' />
+    <cms:set act_bg_clr=hero_swpr_txtblk_bg_clr scope='global' />
+    <cms:set act_bg_opc=hero_swpr_txtblk_bg_opc scope='global' />
+    <cms:set act_brd_siz=hero_swpr_txtblk_bg_brd_siz scope='global' />
+    <cms:set act_brd_sty=hero_swpr_txtblk_bg_brd_sty scope='global' />
+    <cms:set act_brd_clr=hero_swpr_txtblk_bg_brd_clr scope='global' />
+    <cms:set act_brd_rad=hero_swpr_txtblk_brd_rad scope='global' />
+    <cms:set act_brd_spc=hero_swpr_txtblk_brd_spc scope='global' />
+</cms:if>
+
+<cms:set has_backdrop='0' scope='global' />
+<cms:if act_bg_opt == 'backdrop' || act_bg_opt == 'border'>
+    <cms:set has_backdrop='1' scope='global' />
+</cms:if>
+
+<cms:capture into='cur_box_classes' scope='global'>
+    <cms:if has_backdrop == '1'>
+        <cms:if act_bg_clr != ''>bg-<cms:show act_bg_clr /> </cms:if>
+        <cms:if act_bg_opt == 'border'>
+            border 
+            <cms:if act_brd_siz != ''>border-<cms:show act_brd_siz /> </cms:if>
+            <cms:if act_brd_sty != ''>border-<cms:show act_brd_sty /> </cms:if>
+            <cms:if act_brd_clr != ''>border-<cms:show act_brd_clr /> </cms:if> 
+            <cms:if act_brd_rad != ''>rounded-<cms:show act_brd_rad /></cms:if>
+        </cms:if>
+    </cms:if>
+</cms:capture>
+
+<cms:set var_typo_ovr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_typo_ovr" />
+<cms:set loc_typo_ovr="<cms:get var_typo_ovr />" />
+
+<cms:set use_local_typo='0' />
+<cms:if hero_swpr_glbl_typo_mode == 'local'>
+    <cms:set use_local_typo='1' />
+<cms:else />
+    <cms:if loc_typo_ovr == '1'><cms:set use_local_typo='1' /></cms:if>
+</cms:if>
+
+<cms:if use_local_typo == '1'>
+    <cms:set var_eye_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_clr" /><cms:set act_eye_clr="<cms:get var_eye_clr />" scope='global' />
+    <cms:set var_eye_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_sz" /><cms:set act_eye_sz="<cms:get var_eye_sz />" scope='global' />
+    <cms:set var_eye_wt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_wt" /><cms:set act_eye_wt="<cms:get var_eye_wt />" scope='global' />
+    <cms:set var_eye_fst="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_fst" /><cms:set act_eye_fst="<cms:get var_eye_fst />" scope='global' />
+    <cms:set var_eye_fam="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_fam" /><cms:set act_eye_fam="<cms:get var_eye_fam />" scope='global' />
+    <cms:set var_eye_lspc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_eye_lspc" /><cms:set act_eye_lspc="<cms:get var_eye_lspc />" scope='global' />
+
+    <cms:set var_hd_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_clr" /><cms:set act_hd_clr="<cms:get var_hd_clr />" scope='global' />
+    <cms:set var_hd_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_sz" /><cms:set act_hd_sz="<cms:get var_hd_sz />" scope='global' />
+    <cms:set var_hd_wt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_wt" /><cms:set act_hd_wt="<cms:get var_hd_wt />" scope='global' />
+    <cms:set var_hd_fst="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_fst" /><cms:set act_hd_fst="<cms:get var_hd_fst />" scope='global' />
+    <cms:set var_hd_fam="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_fam" /><cms:set act_hd_fam="<cms:get var_hd_fam />" scope='global' />
+    <cms:set var_hd_lspc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_hd_lspc" /><cms:set act_hd_lspc="<cms:get var_hd_lspc />" scope='global' />
+
+    <cms:set var_sub_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_clr" /><cms:set act_sub_clr="<cms:get var_sub_clr />" scope='global' />
+    <cms:set var_sub_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_sz" /><cms:set act_sub_sz="<cms:get var_sub_sz />" scope='global' />
+    <cms:set var_sub_wt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_wt" /><cms:set act_sub_wt="<cms:get var_sub_wt />" scope='global' />
+    <cms:set var_sub_fst="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_fst" /><cms:set act_sub_fst="<cms:get var_sub_fst />" scope='global' />
+    <cms:set var_sub_fam="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_fam" /><cms:set act_sub_fam="<cms:get var_sub_fam />" scope='global' />
+    <cms:set var_sub_lspc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_sub_lspc" /><cms:set act_sub_lspc="<cms:get var_sub_lspc />" scope='global' />
+<cms:else />
+    <cms:set act_eye_clr=ccs_hro_swpr_glbl_eye_clr scope='global' />
+    <cms:set act_eye_sz=ccs_hro_swpr_glbl_eye_sz scope='global' />
+    <cms:set act_eye_wt=ccs_hro_swpr_glbl_eye_wt scope='global' />
+    <cms:set act_eye_fst=ccs_hro_swpr_glbl_eye_fst scope='global' />
+    <cms:set act_eye_fam=ccs_hro_swpr_glbl_eye_fam scope='global' />
+    <cms:set act_eye_lspc=ccs_hro_swpr_glbl_eye_lspc scope='global' />
+    
+    <cms:set act_hd_clr=ccs_hro_swpr_glbl_hd_clr scope='global' />
+    <cms:set act_hd_sz=ccs_hro_swpr_glbl_hd_sz scope='global' />
+    <cms:set act_hd_wt=ccs_hro_swpr_glbl_hd_wt scope='global' />
+    <cms:set act_hd_fst=ccs_hro_swpr_glbl_hd_fst scope='global' />
+    <cms:set act_hd_fam=ccs_hro_swpr_glbl_hd_fam scope='global' />
+    <cms:set act_hd_lspc=ccs_hro_swpr_glbl_hd_lspc scope='global' />
+    
+    <cms:set act_sub_clr=ccs_hro_swpr_glbl_sub_clr scope='global' />
+    <cms:set act_sub_sz=ccs_hro_swpr_glbl_sub_sz scope='global' />
+    <cms:set act_sub_wt=ccs_hro_swpr_glbl_sub_wt scope='global' />
+    <cms:set act_sub_fst=ccs_hro_swpr_glbl_sub_fst scope='global' />
+    <cms:set act_sub_fam=ccs_hro_swpr_glbl_sub_fam scope='global' />
+    <cms:set act_sub_lspc=ccs_hro_swpr_glbl_sub_lspc scope='global' />
+</cms:if>
+
+<cms:set var_cta_ovr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_ovr" />
+<cms:set loc_cta_ovr="<cms:get var_cta_ovr />" />
+
+<cms:set use_local_cta='0' />
+<cms:if hero_swpr_glbl_cta_mode == 'local'>
+    <cms:set use_local_cta='1' />
+<cms:else />
+    <cms:if loc_cta_ovr == '1'><cms:set use_local_cta='1' /></cms:if>
+</cms:if>
+
+<cms:if use_local_cta == '1'>
+    <cms:set var_cta_halg="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_halg" /><cms:set act_cta_halg="<cms:get var_cta_halg />" scope='global' />
+    <cms:set var_cta_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_clr" /><cms:set act_cta_clr="<cms:get var_cta_clr />" scope='global' />
+    <cms:set var_cta_fill="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_fill" /><cms:set act_cta_fill="<cms:get var_cta_fill />" scope='global' />
+    <cms:set var_cta_st="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_st" /><cms:set act_cta_st="<cms:get var_cta_st />" scope='global' />
+    <cms:set var_cta_sz="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_sz" /><cms:set act_cta_sz="<cms:get var_cta_sz />" scope='global' />
+    <cms:set var_cta_w="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_w" /><cms:set act_cta_w="<cms:get var_cta_w />" scope='global' />
+    <cms:set var_cta_lnk_clr="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_lnk_clr" /><cms:set act_cta_lnk_clr="<cms:get var_cta_lnk_clr />" scope='global' />
+    <cms:set var_cta_icon_pos="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_icon_pos" /><cms:set act_cta_icon_pos="<cms:get var_cta_icon_pos />" scope='global' />
+    <cms:set var_cta_icon_fa="ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_icon_fa" /><cms:set act_cta_icon_fa="<cms:get var_cta_icon_fa />" scope='global' />
+<cms:else />
+    <cms:set act_cta_halg=ccs_hro_swpr_glbl_cta_halg scope='global' />
+    <cms:set act_cta_clr=ccs_hro_swpr_glbl_cta_clr scope='global' />
+    <cms:set act_cta_fill=ccs_hro_swpr_glbl_cta_fill scope='global' />
+    <cms:set act_cta_st=ccs_hro_swpr_glbl_cta_st scope='global' />
+    <cms:set act_cta_sz=ccs_hro_swpr_glbl_cta_sz scope='global' />
+    <cms:set act_cta_w=ccs_hro_swpr_glbl_cta_w scope='global' />
+    <cms:set act_cta_lnk_clr=ccs_hro_swpr_glbl_cta_lnk_clr scope='global' />
+    <cms:set act_cta_icon_pos=ccs_hro_swpr_glbl_cta_icon_pos scope='global' />
+    <cms:set act_cta_icon_fa=ccs_hro_swpr_glbl_cta_icon_fa scope='global' />
+</cms:if>

@@ -1,0 +1,41 @@
+<cms:embed 'pb_mods/hero/theme/hero_swpr_custom_settings.html' />
+
+<section class="swiper hero-swiper bg-<cms:show swpr_bg_clr />">
+    <div class="swiper-wrapper">
+        
+        <cms:repeat count=hero_swpr_slide_cnt startcount='1'>
+            
+            <cms:embed 'pb_mods/hero/theme/hero_swpr_slide_cstm-stngs.html' />
+
+            <div class="swiper-slide">
+                
+                <cms:if loc_img>
+                    <div class="slide-media-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: <cms:show loc_img_opc />;">
+                        <img src="<cms:show loc_img />" alt="Hero Background" style="width: 100%; height: 100%; object-fit: cover;" />
+                    </div>
+                </cms:if>
+
+                <cms:if loc_is_vid == '1'>
+                    <div class="slide-video-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; opacity: <cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_opc" />;">
+                        </div>
+                </cms:if>
+
+                <cms:if act_ovrly_clr>
+                    <div class="slide-overlay-layer bg-<cms:show act_ovrly_clr />" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3; opacity: <cms:show act_ovrly_opc />;"></div>
+                </cms:if>
+
+                <div class="slide-content-layer" style="position: relative; z-index: 4; height: 100%; width: 100%;">
+                    <cms:embed 'pb_mods/hero/theme/hero_swiper_container.html' />
+                </div>
+
+            </div>
+            
+        </cms:repeat>
+
+    </div>
+    
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    
+</section>

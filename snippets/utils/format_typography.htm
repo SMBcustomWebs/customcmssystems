@@ -1,0 +1,10 @@
+<cms:if "<cms:not "<cms:func_exists 'format_typography' />" />">
+    <cms:func 'format_typography' _text='' _size='' _font='' _fwt='' _fst='' _ls=''>
+        <cms:if _text> text-<cms:show _text /></cms:if>
+        <cms:if _size> fs-<cms:show _size /></cms:if>
+        <cms:if _font> font-<cms:show _font /></cms:if>
+        <cms:if _fwt> fw-<cms:show _fwt /></cms:if>
+        <cms:if _fst> fst-<cms:show _fst /></cms:if>
+        <cms:if _ls> ls-<cms:show _ls /></cms:if>
+    </cms:func>
+</cms:if>

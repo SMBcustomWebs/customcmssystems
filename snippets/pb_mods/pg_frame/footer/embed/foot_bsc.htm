@@ -1,0 +1,55 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type='group' name='ccs_ftr_bsc_gen_stng_grp' label='Basic Footer Settings' order='10'>
+
+    <cms:editable type='message' name='ccs_ftr_bsc_gen_stng_msg' order='3'>
+        <h2>Site Footer Settings</h2>
+        <p><strong>Note: All settings below are optional.</strong> Your footer will automatically inherit the site's default styles. You only need to change these settings if you specifically want to override the default height or background color.</p>
+        <br><hr>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ftr_bsc_gen_set_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_ftr_bsc_pad_y' label='Height of Footer' opt_values='dropdowns/util-pad.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+        <cms:editable type='dropdown' name='ccs_ftr_bsc_bg_clr_opt' label='Footer Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='6' />
+    </cms:editable>
+    
+    <cms:editable type='message' name='ccs_ftr_bsc_typ_msg' order='8'>
+        <br><hr><br>
+        <h3>Typography Settings</h3>
+        <p><strong>Optional Override:</strong> Leave these fields set to "Default" to use your global website fonts and text colors. Only adjust these if you need a custom look specifically for this footer.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ftr_bsc_txt_fmt_row' order='10'>
+        <cms:editable type='dropdown' name='ccs_ftr_bsc_text' label='Footer Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='4' />
+        <cms:editable type='dropdown' name='ccs_ftr_bsc_fs' label='Text Size' opt_values='dropdowns/text-size_sml.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='6'  />
+        <cms:editable type='dropdown' name='ccs_ftr_bsc_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='8'  />
+        <cms:editable type='dropdown' name='ccs_ftr_bsc_fwt' label='Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='10'  />
+        <cms:editable type='dropdown' name='ccs_ftr_bsc_fst' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='12'  />
+        <cms:editable type='dropdown' name='ccs_ftr_bsc_ls' label='Letter Spacing' opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='14'  />
+    </cms:editable>
+    
+    <cms:editable type='message' name='ccs_ftr_bsc_img_msg' order='18'>
+        <br><hr><br>
+        <h3>Footer Branding</h3>
+        <p>Upload your logo image and provide an SEO description. This will replace the text site name in the footer.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ftr_bsc_img_row' order='20'>
+        <cms:editable type='image' name='ccs_ftr_bsc_site_logo' label='Footer Logo' width='254' height='40' enforce_max='1' show_preview='1' preview_width='45' class='col-md-4' order='19' />
+        <cms:editable type='text' name='ccs_ftr_bsc_site_logo_alt' label='Image Alt Description' desc='for SEO and screen readers' class='col-md-12' order='20' />
+    </cms:editable>
+
+    <cms:editable type='message' name='ccs_ftr_bsc_lnk_msg' order='25'>
+        <br><hr><br>
+        <h3>Footer Site Links</h3>
+        <p>Select an internal page or choose "Custom" to enter an external URL. External URLs will automatically open in a new tab.</p>
+        <br>
+    </cms:editable>
+
+    <cms:repeatable name='ccs_ftr_bsc_lnks_rpt' label='Footer Site Links' stacked_layout='1' order='30'>
+        <cms:editable type='dropdown' name='ccs_ftr_bsc_lnk_dd' label='Select Page or Custom Link' opt_values='dropdowns/links.htm' dynamic='opt_values' order='10' />
+        <cms:func _into='ccs_ftr_bsc_hide_cst' ccs_ftr_bsc_lnk_dd=''><cms:if ccs_ftr_bsc_lnk_dd='custom'>0<cms:else />1</cms:if></cms:func>
+        <cms:editable type='text' name='ccs_ftr_bsc_lnk_cst' label='Custom URL' desc='Input the entire URL (e.g., https://yoursite.com/)' width='400' not_active=ccs_ftr_bsc_hide_cst order='20' />
+        <cms:editable type='text' name='ccs_ftr_bsc_ttl' label='Link Title' width='200' maxlength="40" order='30' />
+    </cms:repeatable>
+</cms:editable>

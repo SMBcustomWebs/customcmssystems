@@ -1,0 +1,63 @@
+<footer class="py-<cms:show ccs_ftr_lnk_pad_y /> bg-<cms:show ccs_ftr_lnk_bg_clr_opt /> fs-<cms:show ccs_ftr_lnk_txt_sz /> fst-<cms:show ccs_ftr_lnk_txt_fnt_st /> fw-<cms:show ccs_ftr_lnk_txt_fnt_wt /> ls-<cms:show ccs_ftr_lnk_txt_ltr_spc /> font-<cms:show ccs_ftr_lnk_txt_font /> text-<cms:show ccs_ftr_lnk_txt_clr_opt />">
+    <cms:if ccs_gl_edt_ok>
+        <div class="container-fluid pt-2">
+            <cms:popup_edit 'ccs_ftr_lnk_gen_stng_grp|ccs_ftr_lnk_gen_stng_msg|ccs_ftr_lnk_gen_set_row|ccs_ftr_lnk_pad_y|ccs_ftr_lnk_bg_clr_opt|ccs_ftr_lnk_txt_clr_opt|ccs_ftr_lnk_frmt_row|ccs_ftr_lnk_txt_sz|ccs_ftr_lnk_txt_fnt_wt|ccs_ftr_lnk_txt_ltr_spc|ccs_ftr_lnk_txt_fnt_st|ccs_ftr_lnk_txt_font' link_text="<span class='bg-800 link-warning'>| [EDIT FOOTER FORMAT] |</span>" />
+        </div>
+    </cms:if>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <div class="my-2">
+                    &copy; Copyright <cms:date format='Y' /> <cms:get_field 'ccs_gl_site_name' masterpage='globals.php' />
+                </div>
+            </div> 
+            
+            <cms:show_repeatable 'ccs_ftr_lnk_lnks_rpt'>
+                
+                <cms:set final_icon="" scope='global' />
+
+                <cms:if ccs_ftr_lnk_lnk_typ == 'site'>
+                    <cms:set final_ftr_lnk="<cms:show ccs_ftr_lnk_lnk_site />" scope='global' />
+                    <cms:set final_ftr_tgt="" scope='global' />
+                
+                <cms:else_if ccs_ftr_lnk_lnk_typ == 'custom' />
+                    <cms:set final_ftr_lnk="<cms:show ccs_ftr_lnk_lnk_cst />" scope='global' />
+                    <cms:if ccs_ftr_lnk_tgt=='_blank'>
+                        <cms:set final_ftr_tgt="target='_blank'" scope='global' />
+                        <cms:set final_icon="<i class='fa-solid fa-arrow-up-right-from-square ms-1' style='font-size: 0.75em;' aria-hidden='true'></i>" scope='global' />
+                    <cms:else />
+                        <cms:set final_ftr_tgt="" scope='global' />
+                    </cms:if>
+                
+                <cms:else_if ccs_ftr_lnk_lnk_typ == 'phone' />
+                    <cms:capture into='final_ftr_lnk' scope='global'>tel:<cms:show ccs_ftr_lnk_lnk_pho /><cms:if "<cms:not_empty ccs_ftr_lnk_lnk_ext />">,<cms:show ccs_ftr_lnk_lnk_ext /></cms:if></cms:capture>
+                    <cms:set final_ftr_tgt="" scope='global' />
+                
+                <cms:else_if ccs_ftr_lnk_lnk_typ == 'email' />
+                    <cms:capture into='final_ftr_lnk' scope='global'>mailto:<cms:show ccs_ftr_lnk_lnk_eml /><cms:if "<cms:not_empty ccs_ftr_lnk_lnk_sub />">?subject=<cms:show ccs_ftr_lnk_lnk_sub /></cms:if></cms:capture>
+                    <cms:set final_ftr_tgt="" scope='global' />
+                </cms:if>
+
+                <cms:set ftr_lnk_col = "<cms:mod k_count '4' />" />
+                
+                <cms:if k_first_row || ftr_lnk_col == '1'>
+                    <div class="col-6 col-md-3">
+                </cms:if>
+                
+                <a class="link-<cms:show ccs_ftr_lnk_txt_clr_opt /> my-2 d-block" href="<cms:show final_ftr_lnk />" <cms:show final_ftr_tgt />> 
+                    <cms:show ccs_ftr_lnk_ttl /> <cms:show final_icon />
+                </a>
+                
+                <cms:if ftr_lnk_col == '0' || k_last_row>
+                    </div>
+                </cms:if>
+            </cms:show_repeatable>
+            
+            <cms:if ccs_gl_edt_ok>
+                <div class="col-12 mt-2">
+                    <cms:popup_edit 'ccs_ftr_lnk_gen_stng_grp|ccs_ftr_lnk_lnk_msg|ccs_ftr_lnk_lnks_rpt' link_text="<span class='bg-800 link-warning'>| [EDIT LINKS] |</span>" />
+                </div>
+            </cms:if>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,105 @@
+<footer class="py-<cms:show ccs_ftr_3cl_pad_y /> bg-<cms:show ccs_ftr_3cl_bg_clr /> fs-<cms:show ccs_ftr_3cl_txt_sz /> fst-<cms:show ccs_ftr_3cl_txt_fnt_st /> fw-<cms:show ccs_ftr_3cl_txt_fnt_wt /> ls-<cms:show ccs_ftr_3cl_txt_ltr_spc /> font-<cms:show ccs_ftr_3cl_txt_font /> text-<cms:show ccs_ftr_3cl_txt_clr />">
+    
+    <div class="container">
+        <cms:if ccs_gl_edt_ok>
+            <div class="row pt-2 mb-3">
+                <div class="col-12 text-center text-lg-start">
+                    <cms:popup_edit 'ccs_ftr_3cl_gen_grp|ccs_ftr_3cl_gen_stng_msg|ccs_ftr_3cl_set_row|ccs_ftr_3cl_pad_y|ccs_ftr_3cl_clr_row|ccs_ftr_3cl_bg_clr|ccs_ftr_3cl_txt_clr|ccs_ftr_3cl_typ_msg|ccs_ftr_3cl_fmt_row|ccs_ftr_3cl_txt_sz|ccs_ftr_3cl_txt_fnt_wt|ccs_ftr_3cl_txt_ltr_spc|ccs_ftr_3cl_txt_fnt_st|ccs_ftr_3cl_txt_font' link_text="<span class='bg-800 link-warning' title='Edit general footer format'>[EDIT FOOTER SETTINGS]</span>" />
+                </div>
+            </div>
+        </cms:if>
+
+        <div class="row justify-content-between">
+            <div class="col-lg-3 text-center text-lg-start mb-4 mb-lg-0"> 
+                <cms:if ccs_gl_edt_ok><div class="mb-2"><cms:popup_edit 'ccs_ftr_3cl_lgo_grp|ccs_ftr_3cl_img_msg|ccs_ftr_3cl_lgo_row|ccs_ftr_3cl_lgo' link_text="<span class='bg-800 link-warning' title='Edit Logo'>[EDIT LOGO]</span>" /></div></cms:if>
+                <img class="img-fluid mb-4 mx-auto mx-lg-0" src="<cms:show ccs_ftr_3cl_lgo />" alt="<cms:get_field 'ccs_gl_site_name' masterpage='globals.php' /> logo" style="max-width: 250px;" />
+               
+                <cms:pages masterpage='globals.php' limit='1'>
+                    <div class="ms-lg-n2">
+                        <cms:show_repeatable 'ccs_gl_social'>
+                            <a class="p-2 link-<cms:show ccs_ftr_3cl_txt_clr />" href="<cms:show ccs_gl_social_link />" target="_blank" title="<cms:show ccs_gl_social_name />">
+                                <span class="<cms:show ccs_gl_social_icon />" style="font-size:14.5px" aria-hidden="true"></span>
+                                <span class="visually-hidden"><cms:show ccs_gl_social_name /></span>
+                            </a>
+                        </cms:show_repeatable>
+                        <cms:if ccs_gl_edt_ok><div class="mt-1"><cms:popup_edit 'ccs_gl_site_scl_grp|ccs_gl_social_msg|ccs_gl_social' link_text="<span class='bg-800 link-warning' title='Edit social'>[EDIT SOCIAL]</span>" /></div></cms:if>
+                    </div>
+                    
+                    <div class="ms-lg-n2 mt-3">
+                        <cms:show_repeatable 'ccs_gl_hdqt_pho_rpt' >
+                            <a class="p-2 link-<cms:show ccs_ftr_3cl_txt_clr /> d-block" href="tel:<cms:show ccs_gl_hdqt_pho />">
+                                <span class="<cms:show ccs_gl_hdqt_pho_fa_icon /> fs-10" aria-hidden="true"></span>
+                                <span class="visually-hidden">Phone: </span>
+                                <span class="ms-2"><cms:show ccs_gl_hdqt_pho /></span>
+                            </a>
+                        </cms:show_repeatable>
+                        <cms:if ccs_gl_edt_ok><div class="mt-1"><cms:popup_edit 'ccs_gl_site_cntc_grp|ccs_gl_hdqt_pho_rpt' link_text="<span class='bg-800 link-warning' title='Edit Contact'>[EDIT CONTACT]</span>" /></div></cms:if>
+                    </div>
+                </cms:pages>
+            </div>
+            
+            <div class="col-1 text-center d-none d-lg-block" style="border-right: 1px solid rgba(255,255, 255,0.1);"></div>
+            
+            <div class="col-lg-3 ps-lg-4 mb-4 mb-lg-0 text-center text-lg-start">
+                <cms:if ccs_gl_edt_ok><div class="mb-3"><cms:popup_edit 'ccs_ftr_3cl_mn_grp|ccs_ftr_3cl_mn_msg|ccs_ftr_3cl_mn_rpt' link_text="<span class='bg-800 link-warning' title='Edit Links'>[EDIT PRIMARY LINKS]</span>" /></div></cms:if>
+                <div class="row">
+                    <cms:show_repeatable 'ccs_ftr_3cl_mn_rpt'>
+                        <cms:set final_icon="" scope='global' />
+                        
+                        <cms:if ccs_ftr_3cl_mn_dd == 'custom'>
+                            <cms:set final_lnk="<cms:show ccs_ftr_3cl_mn_cst />" scope='global' />
+                            <cms:set final_tgt="target='_blank'" scope='global' />
+                            <cms:set final_icon="<i class='fa-solid fa-arrow-up-right-from-square ms-1' style='font-size: 0.75em;' aria-hidden='true'></i>" scope='global' />
+                        <cms:else />
+                            <cms:set final_lnk="<cms:show ccs_ftr_3cl_mn_dd />" scope='global' />
+                            <cms:set final_tgt="" scope='global' />
+                        </cms:if>
+                        
+                        <div class="col-6 mb-2">
+                            <a class="d-block link-<cms:show ccs_ftr_3cl_txt_clr /> ps-0" href="<cms:show final_lnk />" <cms:show final_tgt />>
+                                <cms:show ccs_ftr_3cl_mn_txt /> <cms:show final_icon />
+                            </a>
+                        </div>
+                    </cms:show_repeatable>
+                </div>
+            </div>
+            
+            <div class="col-1 text-center d-none d-lg-block" style="border-right: 1px solid rgba(255,255, 255,0.1);"></div>
+            
+            <div class="col-lg-3 ps-lg-4 text-center text-lg-start">
+                <cms:if ccs_gl_edt_ok><div class="mb-3"><cms:popup_edit 'ccs_ftr_3cl_rl_grp|ccs_ftr_3cl_rl_msg|ccs_ftr_3cl_rl_ttl|ccs_ftr_3cl_rl_rpt' link_text="<span class='bg-800 link-warning' title='Edit Related'>[EDIT RELATED LINKS]</span>" /></div></cms:if>
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="mb-3 mt-lg-0 text-uppercase text-<cms:show ccs_ftr_3cl_txt_clr /> fs-<cms:show ccs_ftr_3cl_txt_sz /> font-<cms:show ccs_ftr_3cl_txt_font /> fw-<cms:show ccs_ftr_3cl_txt_fnt_wt /> ls-<cms:show ccs_ftr_3cl_txt_ltr_spc />">
+                            <cms:show ccs_ftr_3cl_rl_ttl />
+                        </h6>
+                        <hr class="short text-700 mx-auto mx-lg-0" />
+                    </div>
+                    <div class="col-12">
+                        <cms:show_repeatable 'ccs_ftr_3cl_rl_rpt'>
+                            <cms:set final_icon="" scope='global' />
+                            
+                            <cms:if ccs_ftr_3cl_rl_dd == 'custom'>
+                                <cms:set final_lnk="<cms:show ccs_ftr_3cl_rl_cst />" scope='global' />
+                                <cms:set final_tgt="target='_blank'" scope='global' />
+                                <cms:set final_icon="<i class='fa-solid fa-arrow-up-right-from-square ms-1' style='font-size: 0.75em;' aria-hidden='true'></i>" scope='global' />
+                            <cms:else />
+                                <cms:set final_lnk="<cms:show ccs_ftr_3cl_rl_dd />" scope='global' />
+                                <cms:set final_tgt="" scope='global' />
+                            </cms:if>
+                            
+                            <a class="d-block mb-2 link-<cms:show ccs_ftr_3cl_txt_clr /> ps-0" href="<cms:show final_lnk />" <cms:show final_tgt />>
+                                <cms:show ccs_ftr_3cl_rl_txt /> <cms:show final_icon />
+                            </a>
+                        </cms:show_repeatable>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="row justify-content-center text-400 mt-4">
+            &copy; Copyright <cms:date format='Y' /> <cms:get_field 'ccs_gl_site_name' masterpage='globals.php' />
+        </div>
+    </div>
+</footer>

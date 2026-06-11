@@ -1,0 +1,154 @@
+<section class="bg-<cms:show hdr_bg_shade /> p-0 text-<cms:show hdr_txt_halg /> has-parallax">
+    <div class="swiper-theme-container home-slider" data-swiper-theme-container="data-swiper-theme-container">
+        <div class="swiper" data-swiper='{"effect":"<cms:show hdr_swpr_trns />","loop":true,"autoplay":{"delay":<cms:show hdr_swpr_delay />,"disableOnInterection":true},"pagination":{"el":".swiper-pagination","clickable":true}}'>
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="bg-holder <cms:if hdr_img_oly ne'-'>overlay overlay-<cms:show hdr_img_oly /></cms:if>" style="background-image:url(<cms:show hdr_img />);" data-rellax-speed="<cms:show hdr_scrl_spd />" data-parallax="data-parallax">
+                        <cms:if hdr_img_vid_opt='2'>
+                            <cms:embed 'pb_mods/header/theme/hdr_bg_vid.html' />
+                        </cms:if>
+                    </div>
+                    <div class="container">
+                        <div class="row justify-content-<cms:show hdr_txt_bx_alg /> align-items-<cms:show hdr_txt_valg /> py-<cms:show hdr_pd_ht />">
+                            <div class="<cms:show hdr_txtbx_sz />"> 
+                               <div class="<cms:if hdr_txt_bg_opt >shop-slider-card p-<cms:show hdr_txt_bg_pd /></cms:if> ">
+                                    <cms:if hdr_txt_blk_opt='1'> <!-- image  chosen -->
+                                        <img src="<cms:show hdr_txt_blk_img />" alt="<cms:show hdr_txt_blk_img_alt />" />
+                                        <cms:if hdr_video_add>
+                                            <cms:embed 'pb_mods/header/theme/hdr_add_vid.html' />
+                                        </cms:if>
+                                    <cms:else_if hdr_txt_blk_opt='2' /> <!-- form chosen -->
+                                        <cms:if "<cms:not hdr_sing_crsl_opt />" >
+                                            <cms:embed 'pb_mods/header/theme/hdr_form.html' />
+                                        </cms:if>
+                                        <cms:if hdr_video_add>
+                                            <cms:embed 'pb_mods/header/theme/hdr_add_vid.html' />
+                                        </cms:if>
+                                    <cms:else />  <!-- Entered Text chosen -->
+                                        <div class="py-4">
+                                            <cms:embed 'pb_mods/header/theme/hdr_txt.html' />
+                                        </div>
+                                    </cms:if>
+                                    <cms:if hdr_c2a_lnk='custom'>
+                                        <cms:set c2a_lnk="<cms:show hdr_c2a_cst_lnk />" />
+                                    <cms:else />
+                                        <cms:set c2a_lnk="<cms:show hdr_c2a_lnk />" />
+                                    </cms:if>
+                                    <cms:if "<cms:not hdr_c2a_opt />" >
+                                        <a class="btn btn<cms:show hdr_c2a_clr_out_chk />-<cms:show hdr_c2a_clr /> btn<cms:show hdr_c2a_sz /> mt-4" href="<cms:show c2a_lnk />">
+                                            <cms:show hdr_c2a_txt />
+                                        </a>
+                                        <cms:if hdr_c2a_mult_opt>
+                                            <cms:show_repeatable 'hdr_mult_c2a_rpt' > 
+                                                <cms:if hdr_c2a_mult_pdg='1'>
+                                                    <br>
+                                                </cms:if>
+                                                <a class="mx-<cms:show hdr_c2a_mult_pdg /> btn btn<cms:show hdr_c2a_mult_clr_out_chk />-<cms:show hdr_c2a_mult_clr /> btn<cms:show hdr_c2a_mult_sz /> mt-4" href="<cms:show c2a_lnk />">
+                                                    <cms:show hdr_c2a_mult_txt />
+                                                </a>
+                                            </cms:show_repeatable>
+                                        </cms:if>
+                                    </cms:if>
+                                </div>
+                                <cms:if hdr_c2a_social >
+                                    <cms:embed 'pb_mods/header/theme/hdr_social.html' />
+                                </cms:if>
+                            </div>
+                        </div>
+                        <cms:if hdr_bot_ral_opt>
+                            <div class="col-12 align-self-bottom">
+                                <div class="bg-<cms:show hdr_btm_ln_shd /> text-center py-<cms:show hdr_bot_ral_thk /> ">
+                                    <div class="text-<cms:show hdr_btm_ln_txt_clr /> fs-<cms:show hdr_btm_ln_txt_sz /> fst-<cms:show hdr_btm_ln_fnt_st /> font-<cms:show hdr_btm_ln_font /> pt-1 mb-0">
+                                        <cms:show hdr_btm_lnt_txt_ln />
+                                    </div>
+                                </div>
+                            </div>
+                        </cms:if>
+                    </div>
+                </div>
+                <cms:if hdr_sing_crsl_opt> <!-- start of repeating slides -->
+                    <cms:if hdr_img_vid_opt='2' >
+                        <cms:set hdr_swpr_rpt='hdr_swpr_video_rpt' />
+                        <cms:set hdr_swpr_img="<cms:show hdr_img />" />
+                    <cms:else />
+                        <cms:set hdr_swpr_rpt='hdr_img_swpr' />
+                    </cms:if>
+                    <cms:show_repeatable hdr_swpr_rpt > 
+                        <div class="swiper-slide">
+                            <div class="position-relative">
+                                <div class="bg-holder <cms:if hdr_img_oly ne'-'>overlay overlay-<cms:show hdr_img_oly /></cms:if>" style="background-image:url(<cms:show hdr_swpr_img />);" data-rellax-speed="<cms:show hdr_scrl_spd />" data-parallax="data-parallax">
+                                    <cms:if hdr_img_vid_opt='2'>
+                                        <cms:embed 'pb_mods/header/theme/hdr_bg_swpr_vid.html' />
+                                    </cms:if>
+                                </div>
+                                <div class="container">
+                                    <div class="row justify-content-<cms:show hdr_txt_bx_alg /> align-items-<cms:show hdr_txt_valg /> py-<cms:show hdr_pd_ht />">
+                                        <div class="<cms:show hdr_txtbx_sz />"> 
+                                           <div class="<cms:if hdr_txt_bg_opt >shop-slider-card p-<cms:show hdr_txt_bg_pd /></cms:if> ">
+                                                <cms:if hdr_txt_blk_opt='1'> <!-- image  chosen -->
+                                                    <img src="<cms:show hdr_txt_blk_img />" alt="<cms:show hdr_txt_blk_img_alt />" />
+                                                    <cms:if hdr_video_add>
+                                                        <cms:embed 'pb_mods/header/theme/hdr_add_vid.html' />
+                                                    </cms:if>
+                                                <cms:else_if hdr_txt_blk_opt='2' /> <!-- form chosen -->
+                                                    <cms:if "<cms:not hdr_sing_crsl_opt />" >
+                                                        <cms:embed 'pb_mods/header/theme/hdr_form.html' />
+                                                    </cms:if>
+                                                    <cms:if hdr_video_add>
+                                                        <cms:embed 'pb_mods/header/theme/hdr_add_vid.html' />
+                                                    </cms:if>
+                                                <cms:else />  <!-- Entered Text chosen -->
+                                                    <div class="py-4">
+                                                        <cms:embed 'pb_mods/header/theme/hdr_txt.html' />
+                                                    </div>
+                                                </cms:if>
+                                                <cms:if hdr_c2a_lnk='custom'>
+                                                    <cms:set c2a_lnk="<cms:show hdr_c2a_cst_lnk />" />
+                                                <cms:else />
+                                                    <cms:set c2a_lnk="<cms:show hdr_c2a_lnk />" />
+                                                </cms:if>
+                                                <cms:if "<cms:not hdr_c2a_opt />" >
+                                                    <a class="btn btn<cms:show hdr_c2a_clr_out_chk />-<cms:show hdr_c2a_clr /> btn<cms:show hdr_c2a_sz /> mt-4" href="<cms:show c2a_lnk />">
+                                                        <cms:show hdr_c2a_txt />
+                                                    </a>
+                                                    <cms:if hdr_c2a_mult_opt>
+                                                        <cms:show_repeatable 'hdr_mult_c2a_rpt' > 
+                                                            <cms:if hdr_c2a_mult_pdg='1'>
+                                                                <br>
+                                                            </cms:if>
+                                                            <a class="mx-<cms:show hdr_c2a_mult_pdg /> btn btn<cms:show hdr_c2a_mult_clr_out_chk />-<cms:show hdr_c2a_mult_clr /> btn<cms:show hdr_c2a_mult_sz /> mt-4" href="<cms:show c2a_lnk />">
+                                                                <cms:show hdr_c2a_mult_txt />
+                                                            </a>
+                                                        </cms:show_repeatable>
+                                                    </cms:if>
+                                                </cms:if>
+                                            </div>
+                                            <cms:if hdr_c2a_social >
+                                                <cms:embed 'pb_mods/header/theme/hdr_social.html' />
+                                            </cms:if>
+                                        </div>
+                                    </div>
+                                    <cms:if hdr_bot_ral_opt>
+                                        <div class="col-12 align-self-bottom">
+                                            <div class="bg-<cms:show hdr_btm_ln_shd /> text-center py-<cms:show hdr_bot_ral_thk /> ">
+                                                <div class="text-<cms:show hdr_btm_ln_txt_clr /> fs-<cms:show hdr_btm_ln_txt_sz /> fst-<cms:show hdr_btm_ln_fnt_st /> font-<cms:show hdr_btm_ln_font /> pt-1 mb-0">
+                                                    <cms:show hdr_btm_lnt_txt_ln />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </cms:if>
+                                </div>
+                            </div>
+                        </div>
+                    </cms:show_repeatable>
+                </cms:if>      
+            </div>
+            <cms:if hdr_sing_crsl_opt>
+                <div class="swiper-nav">
+                    <div class="swiper-button-next bg-600"> </div>
+                    <div class="swiper-button-prev bg-600"></div>
+                </div>
+            </cms:if>
+        </div>
+    </div>
+</section>

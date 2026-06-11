@@ -1,0 +1,15 @@
+<cms:show_repeatable 'hdr_txt_rpt' limit='1' order='asc' >
+    <cms:if k_first_row >
+        <<cms:show hdr_txt_hdg_sz /> class="mb-md-5 mb-sm-2 fw-<cms:show hdr_fnt_wt /> text-<cms:show hdr_txt_clr /> font-<cms:show hdr_font /> fst-<cms:show hdr_fnt_st /> ls-<cms:show hdr_ltr_spc /> fs-<cms:show hdr_txt_txt_sz />">
+            <cms:show hdr_txt_ln />
+        </<cms:show hdr_txt_hdg_sz />>
+        <cms:if hdr_video_add>
+            <cms:embed 'pb_mods/header/theme/hdr_add_vid.html' />
+        </cms:if>
+    </cms:if>
+</cms:show_repeatable>
+<cms:show_repeatable 'hdr_txt_rpt' offset='1' order='asc' >
+    <<cms:show hdr_txt_hdg_sz /> class="fw-<cms:show hdr_fnt_wt /> text-<cms:show hdr_txt_clr /> font-<cms:show hdr_font /> fst-<cms:show hdr_fnt_st /> ls-<cms:show hdr_ltr_spc /> fs-<cms:show hdr_txt_txt_sz />">
+        <cms:show hdr_txt_ln />
+    </<cms:show hdr_txt_hdg_sz />>
+</cms:show_repeatable>

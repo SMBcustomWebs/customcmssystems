@@ -1,0 +1,88 @@
+<section class="bg-<cms:show ccs_ubr_dir_bg_clr_opt /> py-<cms:show ccs_ubr_dir_py /> <cms:show ccs_ubr_dir_dspr />" id="directory-search" aria-label="Directory Search">
+    
+    <cms:if ccs_gl_edt_ok>
+        <div class="container-fluid pt-2">
+            <cms:popup_edit 'ccs_ubr_dir_gen_grp|ccs_ubr_dir_init_msg|ccs_ubr_dir_mode_row|ccs_ubr_dir_mode|ccs_ubr_dir_2fld_opt|ccs_ubr_dir_gen_row|ccs_ubr_dir_bg_clr_opt|ccs_ubr_dir_py|ccs_ubr_dir_dspr' link_text="<span class='bg-800 link-warning'>| [EDIT BAR SETTINGS] |</span>" />
+            <cms:popup_edit 'ccs_ubr_dir_lbl_grp|ccs_ubr_dir_lbl_msg|ccs_ubr_dir_lbl_row_1|ccs_ubr_dir_lbl_kw|ccs_ubr_dir_lbl_cat|ccs_ubr_dir_lbl_loc' link_text="<span class='bg-800 link-warning'>| [EDIT LABELS] |</span>" />
+            <cms:popup_edit 'ccs_ubr_dir_btn_grp|ccs_ubr_dir_btn_msg|ccs_ubr_dir_btn_txt_row|ccs_ubr_dir_btn_txt|ccs_ubr_dir_btn_clr|ccs_ubr_dir_btn_lnk_clr|ccs_ubr_dir_btn_fmt_row|ccs_ubr_dir_btn_fill|ccs_ubr_dir_btn_st|ccs_ubr_dir_btn_sz|ccs_ubr_dir_btn_w|ccs_ubr_dir_btn_icon_row|ccs_ubr_dir_btn_icon_pos|ccs_ubr_dir_btn_icon_msg|ccs_ubr_dir_btn_icon_fa' link_text="<span class='bg-800 link-warning'>| [EDIT BUTTON] |</span>" />
+        </div>
+    </cms:if>
+    
+    <div class="container">
+      
+      <cms:set ccs_get_kw="<cms:gpc 'keyword' method='get' />" scope="global" />
+      <cms:set ccs_get_cat="<cms:gpc 'category' method='get' />" scope="global" />
+      <cms:set ccs_get_loc="<cms:gpc 'location' method='get' />" scope="global" />
+
+      <cms:if ccs_ubr_dir_mode == '3'>
+          <cms:set col_kw="col-lg-3" />
+          <cms:set col_cat="col-lg-3" />
+      <cms:else />
+          <cms:set col_kw="col-lg-5" />
+          <cms:set col_cat="col-lg-4" />
+      </cms:if>
+
+      <cms:form method="POST" anchor="0" class="row align-items-end">
+          
+        <cms:if k_success >
+            <cms:set raw_cat="<cms:gpc 'category' method='post' />" />
+            <cms:set raw_loc="<cms:gpc 'location' method='post' />" />
+            <cms:redirect url="<cms:link 'directory_results.php' />?keyword=<cms:show frm_keyword urlencode='1' />&category=<cms:show raw_cat urlencode='1' />&location=<cms:show raw_loc urlencode='1' />" />
+        </cms:if>
+
+        <div class="<cms:show col_kw /> col-md-12 mb-3 mb-lg-0">
+          <label for="keyword" class="form-label mb-1"><cms:show ccs_ubr_dir_lbl_kw /></label>
+          <div class="input-group">
+              <cms:input type="text" name="keyword" id="keyword" class="form-control border-end-0" placeholder="e.g. Pizza, Plumber..." value=ccs_get_kw />
+              <span class="input-group-text bg-transparent border-start-0 ps-0 pe-2"><i class="fa-solid fa-magnifying-glass text-muted" aria-hidden="true"></i></span>
+          </div>
+        </div>
+
+        <div class="<cms:show col_cat /> col-md-12 mb-3 mb-lg-0">
+          <label for="category" class="form-label mb-1"><cms:show ccs_ubr_dir_lbl_cat /></label>
+          <div class="input-group">
+              <select name="category" id="category" class="form-select border-end-0">
+                  <option value="" <cms:if "<cms:not ccs_get_cat />">selected</cms:if>>All Categories</option>
+                  <cms:pages masterpage='categories.php' orderby='page_title' order='asc'>
+                      <option value="<cms:show k_page_name />" <cms:if k_page_name == ccs_get_cat>selected</cms:if>><cms:show k_page_title /></option>
+                  </cms:pages>
+              </select>
+              <span class="input-group-text bg-transparent border-start-0 ps-0 pe-2"><i class="fa-solid fa-layer-group text-muted" aria-hidden="true"></i></span>
+          </div>
+        </div>
+        
+        <cms:if ccs_ubr_dir_mode == '3'>
+            <div class="col-lg-3 col-md-12 mb-3 mb-lg-0">
+              <label for="location" class="form-label mb-1"><cms:show ccs_ubr_dir_lbl_loc /></label>
+              <div class="input-group">
+                  <select name="location" id="location" class="form-select border-end-0">
+                      <option value="" <cms:if "<cms:not ccs_get_loc />">selected</cms:if>>All Locations</option>
+                      <cms:pages masterpage='locations.php' orderby='page_title' order='asc'>
+                          <option value="<cms:show k_page_name />" <cms:if k_page_name == ccs_get_loc>selected</cms:if>><cms:show k_page_title /></option>
+                      </cms:pages>
+                  </select>
+                  <span class="input-group-text bg-transparent border-start-0 ps-0 pe-2"><i class="fa-solid fa-location-dot text-muted" aria-hidden="true"></i></span>
+              </div>
+            </div>
+        </cms:if>
+        
+        <div class="col-lg-3 col-md-12">
+            <cms:capture into='final_cta_class' scope='global'>
+                <cms:if ccs_ubr_dir_btn_clr == 'link'>
+                    btn btn-link link-<cms:show ccs_ubr_dir_btn_lnk_clr /> text-decoration-none <cms:show ccs_ubr_dir_btn_w /> <cms:show ccs_ubr_dir_btn_icon_pos />
+                </cms:if>
+                <cms:if ccs_ubr_dir_btn_clr != 'link'>
+                    btn <cms:if ccs_ubr_dir_btn_clr>btn<cms:show ccs_ubr_dir_btn_fill />-<cms:show ccs_ubr_dir_btn_clr /></cms:if> <cms:show ccs_ubr_dir_btn_st /> <cms:if ccs_ubr_dir_btn_sz>btn<cms:show ccs_ubr_dir_btn_sz /></cms:if> <cms:show ccs_ubr_dir_btn_w /> <cms:show ccs_ubr_dir_btn_icon_pos />
+                </cms:if>
+            </cms:capture>
+
+            <button type="submit" name="submit" id="submit" class="<cms:show final_cta_class />">
+                <cms:if ccs_ubr_dir_btn_icon_pos == 'btn-icon-left'><cms:if "<cms:not_empty ccs_ubr_dir_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_dir_btn_icon_fa /> me-2" aria-hidden="true"></i></span></cms:if></cms:if>
+                <cms:show ccs_ubr_dir_btn_txt />
+                <cms:if ccs_ubr_dir_btn_icon_pos == 'btn-icon-right'><cms:if "<cms:not_empty ccs_ubr_dir_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_dir_btn_icon_fa /> ms-2" aria-hidden="true"></i></span></cms:if></cms:if>
+            </button>
+        </div>
+        
+      </cms:form>
+    </div>
+</section>

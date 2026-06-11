@@ -1,0 +1,58 @@
+.sidebar-txt{height:35px;padding:10px;background-color:#3000A0;text-shadow:0 1px 0 rgba(0,0,0,.6);}
+#sidebar-top{border-bottom:1px solid #0a0a0a;box-shadow:0 1px 0 rgba(255,255,255,.04);}
+.sidebar-txt>p{height:14px;line-height:14px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#888;}
+.sidebar-txt>p>a{font-weight:normal;color:#ccc;}
+.sidebar-txt>p>a:hover,.sidebar-txt>p>a:focus{color:#eee;}
+.nav-heading-btn{display:inline-block;width:18px;height:19px;border-radius:2px;margin-right:8px;vertical-align:top;text-align:center;font-size:16px;color:#aaa;}
+#sidebar-toggle,.field-hint,.panel-heading,.table>thead,.popover-title{background-color:#1335FF;}
+
+.nav-heading-toggle{max-width:100%;height:19px;line-height:19px;padding:0;border:0;overflow:hidden;text-align:left;font-size:11px;font-weight:bold;text-transform:uppercase;white-space:nowrap;text-overflow:ellipsis;background:transparent;color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.6);}
+.nav-heading-toggle:hover,.nav-heading-toggle:focus{color:#FDFF9D;font-size:13px}
+.nav-heading-btn{display:inline-block;width:18px;height:19px;border-radius:2px;margin-right:8px;vertical-align:top;text-align:center;font-size:16px;color:#aaa;}
+.nav-heading-toggle:hover>.nav-heading-btn,.nav-heading-toggle:focus>.nav-heading-btn{background-color:#1a1a1a;color:#eee;box-shadow:0 1px 0 rgba(0,0,0,.4) inset,0 -1px 0 rgba(255,255,255,.1) inset;}
+
+.nav-heading-btn{display:inline-block;width:18px;height:19px;border-radius:2px;margin-right:8px;vertical-align:top;text-align:center;font-size:20px;color:#fff;}
+
+
+.nav-title{display:inline-block;max-width:100%;height:32px;line-height:32px;padding-left:26px;overflow:hidden;vertical-align:top;font-size:14px;font-weight:bold;white-space:nowrap;text-overflow:ellipsis;}
+
+.panel-heading{display:block;position:relative;padding:10px 15px;border:1px solid #c0c0c0;border-radius:3px 3px 0 0;margin-top:15px;color:#fff;font-size:14px;font-weight:bold;text-shadow:0 1px 0 #fff;}
+
+::selection {
+  background-color: #007AFF;
+  color: #e1e1e1;
+}
+
+.panel-heading.panel-primary{background-color:#11005D;}
+#sidebar-btns{position:absolute;right:0;bottom:24px;left:0;height:60px;padding:11px 10px 10px;border-top:1px solid #0a0a0a;background-color:#11005D;}
+
+#sidebar{position:absolute;top:0;bottom:0;left:0;width:240px;height:100%;border-right:1px solid #0a0a0a;background-color:#11005D;}
+
+#menu-wrap{position:relative;border-bottom:1px solid #0a0a0a;background-color:#3900A2;box-shadow:0 1px 0 rgba(255,255,255,.04);}
+
+#nav>li>a:hover,#nav>li>a:focus,.nav-group>ul>li>a:hover,.nav-group>ul>li>a:focus{background-color:#FDFF9D;color:#000;fill:#eee;}
+
+btn.btn-primary {background-color:#9900FF;}
+.append>.login-swap:hover,.append>.login-swap:focus,
+#nav>li>.nav-active,#nav>li>.nav-active:hover,#nav>li>.nav-active:focus,.nav-group>ul>li>.nav-active,.nav-group>ul>li>.nav-active:hover,.nav-group>ul>li>.nav-active:focus,
+.nav-count,.gallery-img-link.gallery-img-folder,
+.btn-menu.toggled,
+.table.table-primary>thead,
+.ctrl>input:checked+span.ctrl-option,.ctrl>input:active+span.ctrl-option,
+.ctrls-checkbox>label>input:checked+span.ctrl-option,.ctrls-checkbox>label>input:active+span.ctrl-option,
+.ctrls-radio>label>input:checked+span.ctrl-option,.ctrls-radio>label>input:active+span.ctrl-option,
+.checklist>li>label>input:checked+span.ctrl-option,.checklist>li>label>input:active+span.ctrl-option,
+.panel-heading.panel-primary{background-color:#9900FF;}
+
+.btn.btn-primary,
+.append>.login-swap:hover,.append>.login-swap:focus,
+#nav>li>.nav-active,#nav>li>.nav-active:hover,#nav>li>.nav-active:focus,.nav-group>ul>li>.nav-active,.nav-group>ul>li>.nav-active:hover,.nav-group>ul>li>.nav-active:focus,
+.nav-count,.gallery-img-link.gallery-img-folder,
+.btn-menu.toggled,
+.table.table-primary>thead,
+.ctrl>input:checked+span.ctrl-option,.ctrl>input:active+span.ctrl-option,
+.ctrls-checkbox>label>input:checked+span.ctrl-option,.ctrls-checkbox>label>input:active+span.ctrl-option,
+.ctrls-radio>label>input:checked+span.ctrl-option,.ctrls-radio>label>input:active+span.ctrl-option,
+.checklist>li>label>input:checked+span.ctrl-option,.checklist>li>label>input:active+span.ctrl-option,
+.panel-heading.panel-primary{background-color:#093;}
+

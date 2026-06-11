@@ -1,0 +1,10 @@
+<cms:if arg_1="name">
+    <cms:if "<cms:not "<cms:page_exists name=rt_page_name masterpage=k_template_name />" />" >
+        <cms:abort is_404='1' /> 
+    </cms:if>
+<cms:else />
+    <cms:if "<cms:not "<cms:page_exists id=rt_id masterpage=k_template_name />" />" >
+        <cms:abort is_404='1' /> 
+    </cms:if>
+</cms:if>
+

@@ -1,0 +1,95 @@
+<cms:editable type='hidden' name='section_caching'>never</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_ctct_gen_grp" label="General Settings" order="10">  
+    <cms:editable type='message' name='ccs_ubr_ctct_init_cstm_msg' order='10'>
+        <h2>Utility Bar: Contact</h2>
+        <p>Accent bar displaying basic global contact information and an optional Call-to-Action button.</p>
+        <br><hr>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_ctct_gen_ht_row' order='20'>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_py' label='Height Padding' opt_values='dropdowns/util-pad.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10'/>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_bg_clr_opt' label='Bar Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20'/>
+        <cms:editable type='checkbox' name='ccs_ubr_ctct_cta_opt' label='No Link Button' opt_values='Remove Call-to-Action Button=1' dynamic='opt_values' class='col-md-4 col-sm-6' order='30'/>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_ctct_stky_row' order='30'>
+        <cms:editable type='message' name='ccs_ubr_ctct_stky_msg' class='col-md-9' order='10'>
+            <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 10px 15px; margin-top:10px;">
+                <strong>Sticky Positioning Warning:</strong><br> "Stick Bar To Top" should not be used if your Main Navigation Menu is also set to sticky.
+            </div>
+        </cms:editable>
+        <cms:editable type='checkbox' name='ccs_ubr_ctct_stky' label='Stick Bar To Top' opt_values='Yes=1' class='col-md-3' order='20'/>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_ubr_ctct_clr_row' order='40'>
+        <cms:editable type='message' name='ccs_ubr_ctct_bg_clr_msg' order='10'>
+            <br><hr><br>
+            <h3>Visibility</h3>
+            <p>Control screen size rendering. Default is to disappear on screens from tablets down.</p>
+        </cms:editable>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_dspr' label='Screen Size Visibility' opt_values='dropdowns/display.htm' dynamic='opt_values' class='col-md-6 col-sm-12' order='20'/>
+     </cms:editable>
+</cms:editable>
+
+<cms:editable type="group" name="ccs_ubr_ctct_txt_grp" label="Text Formatting Settings" order="20">  
+    <cms:editable type='message' name='ccs_ubr_ctct_txt_msg' order='5'>
+        <h3>Typography Override</h3>
+        <p>Leave these fields set to "Default" to inherit your global site styles. Adjust only if you need a specific look for this bar.</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_ctct_txt_row' order='10'>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_txt_clr' label='Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10'/>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_txt_sz' label='Text Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20'/>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_txt_fnt_wt' label='Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='30'/>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_txt_fnt_st' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='40'/>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_txt_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='50'/>
+    </cms:editable>
+</cms:editable>
+
+<cms:func _into='ccs_ubr_ctct_cta_chc' ccs_ubr_ctct_cta_opt=''><cms:if ccs_ubr_ctct_cta_opt='1'>1<cms:else />0</cms:if></cms:func>
+
+<cms:editable type="group" name="ccs_ubr_ctct_cta_grp" label="Call To Action Button" not_active=ccs_ubr_ctct_cta_chc order="30">
+    <cms:editable type='message' name='ccs_ubr_ctct_cta_msg' order='5'>
+        <h3>Action Button Configurations</h3>
+        <p>Define the button text, appearance, and destination. Use the "Custom" link option to send users to an external website. If no call-to-action is desired, check the box on top</p>
+        <br><hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_ctct_cta_txt_row' order='10'>
+        <cms:editable type='text' name='ccs_ubr_ctct_cta_txt' label='Button Text' maxlength='60' class='col-md-4 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_cta_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='20' />
+        
+        <cms:func _into='ccs_ubr_ctct_cta_is_link' ccs_ubr_ctct_cta_clr=''><cms:if ccs_ubr_ctct_cta_clr='link'>0<cms:else />1</cms:if></cms:func>
+        <cms:func _into='ccs_ubr_ctct_cta_not_link' ccs_ubr_ctct_cta_clr=''><cms:if ccs_ubr_ctct_cta_clr='link'>1<cms:else />0</cms:if></cms:func>
+        
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_cta_lnk_clr' label='Link Text Color (If Link Chosen)' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' not_active=ccs_ubr_ctct_cta_is_link class='col-md-4 col-sm-6' order='30' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_ctct_cta_fmt_row' not_active=ccs_ubr_ctct_cta_not_link order='20'>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_cta_fill' label='Fill Style' opt_values='dropdowns/button-fill.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_cta_st' label='Button Shape' opt_values='dropdowns/button-style.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='20' />
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_cta_sz' label='Button Size' opt_values='dropdowns/button-size.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='30' />
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_cta_w' label='Button Width' opt_values='dropdowns/button-width.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='40' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_ctct_cta_icon_row' not_active=ccs_ubr_ctct_cta_not_link order='30'>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_cta_icon_pos' label='Icon Position' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10' />
+        
+        <cms:func _into='ccs_ubr_ctct_cta_no_icon' ccs_ubr_ctct_cta_icon_pos=''><cms:if ccs_ubr_ctct_cta_icon_pos=''>1<cms:else />0</cms:if></cms:func>
+        
+        <cms:editable type='message' name='ccs_ubr_ctct_cta_icon_msg' not_active=ccs_ubr_ctct_cta_no_icon class='col-md-4 col-sm-6' order='15'>
+            <p class="mb-0 mt-3 text-muted" style="font-size:12px;">Find icons at <a href="https://fontawesome.com/v6/search?m=free" target="_blank">Font Awesome v6</a>.</p>
+        </cms:editable>
+        <cms:editable type='text' name='ccs_ubr_ctct_cta_icon_fa' label='Font Awesome Icon Class' maxlength='50' width='300' not_active=ccs_ubr_ctct_cta_no_icon class='col-md-4 col-sm-12' order='20' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_ubr_ctct_cta_dest_row' order='40'>
+        <cms:editable type='dropdown' name='ccs_ubr_ctct_cta_lnk' label='Button Link' opt_values='dropdowns/links.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='10' />
+        
+        <cms:func _into='ccs_ubr_ctct_cta_is_custom' ccs_ubr_ctct_cta_lnk=''><cms:if ccs_ubr_ctct_cta_lnk='custom'>0<cms:else />1</cms:if></cms:func>
+        
+        <cms:editable type='text' name='ccs_ubr_ctct_cta_cst_lnk' label='Custom URL Destination' desc='Input the entire URL (e.g., https://mysite.com/)' width='400' not_active=ccs_ubr_ctct_cta_is_custom class='col-md-8 col-sm-6' order='20' />
+    </cms:editable>
+</cms:editable>

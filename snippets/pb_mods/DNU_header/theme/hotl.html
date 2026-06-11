@@ -1,0 +1,44 @@
+<section class="bg-<cms:show hdr_bg_shade /> p-0 text-<cms:show hdr_txt_halg /> has-parallax">
+<div class="swiper-theme-container home-slider" data-swiper-theme-container="data-swiper-theme-container">
+  <div class="swiper" data-swiper='{"effect":"<cms:show hdr_swpr_trns />","loop":true,"autoplay":{"delay":<cms:show hdr_swpr_delay />,"disableOnInterection":true},"pagination":{"el":".swiper-pagination","clickable":true}}'>
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+          <div class="position-relative p-0">
+                <div class="bg-holder <cms:if hdr_img_oly ne'-'>overlay overlay-<cms:show hdr_img_oly /></cms:if>" style="background-image:url(<cms:show hdr_img />);" data-rellax-speed="<cms:show hdr_scrl_spd />" data-parallax="data-parallax">
+                    <cms:if hdr_img_vid_opt='2'>
+                        <cms:embed 'pb_mods/header/theme/hdr_bg_vid.html' />
+                    </cms:if>
+                </div>
+                <cms:embed 'pb_mods/header/theme/hdr_vh-container_single.html' />
+            </div>
+      </div>
+    <cms:if hdr_sing_crsl_opt> <!-- start of repeating slides -->
+        <cms:if hdr_img_vid_opt='2' >
+            <cms:set hdr_swpr_rpt='hdr_swpr_video_rpt' />
+            <cms:set hdr_swpr_img="<cms:show hdr_img />" />
+        <cms:else />
+            <cms:set hdr_swpr_rpt='hdr_img_swpr' />
+        </cms:if>
+        <cms:show_repeatable hdr_swpr_rpt > 
+            <div class="swiper-slide">
+                <div class="position-relative">
+                    <div class="bg-holder <cms:if hdr_img_oly ne'-'>overlay overlay-<cms:show hdr_img_oly /></cms:if>" style="background-image:url(<cms:show hdr_swpr_img />);" data-rellax-speed="<cms:show hdr_scrl_spd />" data-parallax="data-parallax">
+                        <cms:if hdr_img_vid_opt='2'>
+                            <cms:embed 'pb_mods/header/theme/hdr_bg_swpr_vid.html' />
+                        </cms:if>
+                    </div>
+                    <cms:embed 'pb_mods/header/theme/hdr_vh-container_swpr.html' />
+                </div>
+            </div>
+        </cms:show_repeatable>
+    </cms:if>
+    </div>
+    <cms:if hdr_sing_crsl_opt>
+        <div class="swiper-nav">
+            <div class="swiper-button-next text-white bg-600"> </div>
+            <div class="swiper-button-prev bg-600"></div>
+        </div>
+    </cms:if>
+  </div>
+</div>
+</section>
