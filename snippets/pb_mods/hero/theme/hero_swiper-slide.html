@@ -1,28 +1,69 @@
 <cms:embed 'pb_mods/hero/theme/hero_swpr_custom_settings.html' />
-
-<section class="swiper hero-swiper bg-<cms:show swpr_bg_clr />">
-    <div class="swiper-wrapper">
+<section class="bg-<cms:show swpr_bg_clr /> p-0 has-parallax position-relative">
+    <!-- Restore the theme's required wrapper -->
+    <div class="swiper-theme-container home-slider" data-swiper-theme-container="data-swiper-theme-container">
+        <!-- Restore the dedicated swiper div and its JSON data -->
+        <div class="swiper hero-swiper" data-swiper='{"effect":"<cms:show hero_swpr_trns />","loop":true,"autoplay":{"delay":<cms:show hero_swpr_delay />,"disableOnInteraction":true},"pagination":{"el":".swiper-pagination","clickable":true},"observer":true,"observeParents":true}'>
+            
+            <div class="swiper-wrapper">
         
         <cms:repeat count=hero_swpr_slide_cnt startcount='1'>
             
             <cms:embed 'pb_mods/hero/theme/hero_swpr_slide_cstm-stngs.html' />
 
-            <div class="swiper-slide">
+            <div class="swiper-slide overflow-hidden">
                 
                 <cms:if loc_img>
-                    <div class="slide-media-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: <cms:show loc_img_opc />;">
-                        <img src="<cms:show loc_img />" alt="Hero Background" style="width: 100%; height: 100%; object-fit: cover;" />
-                    </div>
-                </cms:if>
+                    <div class="slide-media-layer" 
+						 data-parallax="data-parallax" 
+						 data-rellax-speed="<cms:show ccs_hro_swpr_bg_scrl_spd />"
+						 style="position: absolute; top: -30vh; left: 0; width: 100%; height: calc(100% + 60vh); z-index: 1; opacity: <cms:show loc_img_opc />;">
+						<img src="<cms:show loc_img />" alt="Hero Background" style="width: 100%; height: 100%; object-fit: cover;" />
+					</div>
+				</cms:if>
 
                 <cms:if loc_is_vid == '1'>
-                    <div class="slide-video-layer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; opacity: <cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_opc" />;">
-                        </div>
-                </cms:if>
+					<div class="slide-video-layer" 
+						 data-parallax="data-parallax" 
+						 data-rellax-speed="<cms:show ccs_hro_swpr_bg_scrl_spd />"
+						 style="position: absolute; top: -30vh; left: 0; width: 100%; height: calc(100% + 60vh); z-index: 2; opacity: <cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_opc" />;">
+
+						<cms:set cur_vid_src="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_src" />" />
+
+						<cms:if cur_vid_src == '1'>
+
+							<cms:set cur_yt_tm_opt="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_yt_tm_opt" />" />
+							<cms:set cur_yt_str="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_yt_str" />" />
+							<cms:set cur_yt_stp="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_yt_stp" />" />
+
+							<div class="bg-holder bg-youtube" data-youtube-embed='{"videoId":"<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_yt_id" />"<cms:if cur_yt_tm_opt=='1'>,"startSeconds":"<cms:show cur_yt_str />","endSeconds":"<cms:show cur_yt_stp />"</cms:if>}'></div>
+
+						<cms:else_if cur_vid_src == '0' />
+
+							<cms:set cur_upl_tm_opt="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_upl_tm_opt" />" />
+							<cms:set cur_upl_str="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_upl_str" />" />
+							<cms:set cur_upl_stp="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_upl_stp" />" />
+
+							<cms:capture into='cur_upl_frag'><cms:if cur_upl_tm_opt == '1'>#t=<cms:show cur_upl_str /><cms:if cur_upl_stp>,<cms:show cur_upl_stp /></cms:if></cms:if></cms:capture>
+
+							<video class="bg-video w-100 h-100" style="object-fit: cover;" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline">
+								<source src="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_mp4" /><cms:show cur_upl_frag />" type="video/mp4" />
+								<source src="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_webm" /><cms:show cur_upl_frag />" type="video/webm" />
+								<source src="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_vid_ogv" /><cms:show cur_upl_frag />" type="video/ogg" />
+							</video>
+
+						</cms:if>
+
+					</div>
+				</cms:if>
 
                 <cms:if act_ovrly_clr>
-                    <div class="slide-overlay-layer bg-<cms:show act_ovrly_clr />" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3; opacity: <cms:show act_ovrly_opc />;"></div>
-                </cms:if>
+                    <div class="slide-overlay-layer" 
+						 data-parallax="data-parallax" 
+						 data-rellax-speed="<cms:show ccs_hro_swpr_bg_scrl_spd />"
+						 style="position: absolute; top: -30vh; left: 0; width: 100%; height: calc(100% + 60vh); z-index: 3; background-color: <cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_ovrly_clr_opt" />; opacity: <cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_ovrly_opc" />;">
+					</div>
+									</cms:if>
 
                 <div class="slide-content-layer" style="position: relative; z-index: 4; height: 100%; width: 100%;">
                     <cms:embed 'pb_mods/hero/theme/hero_swiper_container.html' />
@@ -33,9 +74,6 @@
         </cms:repeat>
 
     </div>
-    
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-    
+ 
+	</div></div>
 </section>

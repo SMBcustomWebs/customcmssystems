@@ -37,7 +37,7 @@
 			<hr><br><h2>Slide 1: Add Video</h2>
 			<p>Give your background motion. Upload or stream a video background. Video will be muted on play.</p>
 		</cms:editable>
-        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_1_vid_src' label='Video Source' opt_values='Upload=0 | YouTube=1 | Vimeo=2' class='col-md-8' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_1_vid_src' label='Video Source' opt_values='Upload=0 | YouTube=1' class='col-md-8' order='4' />
         <cms:editable type='dropdown' name='ccs_hro_swpr_sl_1_vid_opc' label='Video Opacity' desc='Allows background colors to bleed through' opt_values='dropdowns/img-transparency.htm' dynamic='opt_values' class='col-md-4' order='6' />
     </cms:editable>
 
@@ -56,30 +56,46 @@
             1
         </cms:if>
     </cms:func>
-    
-    <cms:func _into='ccs_hro_swpr_sl_1_vm_vid_chc' ccs_hro_swpr_sl_1_is_vid='' ccs_hro_swpr_sl_1_vid_src=''>
-        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_1_is_vid />">
-            <cms:if ccs_hro_swpr_sl_1_vid_src != '2'>hide<cms:else />show</cms:if>
-        <cms:else />
-            1
-        </cms:if>
-    </cms:func>
+
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_1_upl_vid_row' not_active=ccs_hro_swpr_sl_1_upl_vid_chc order='230'>
         <cms:editable type='file' name='ccs_hro_swpr_sl_1_vid_mp4' label='MP4 Video' class='col-md-4' order='2' />
         <cms:editable type='file' name='ccs_hro_swpr_sl_1_vid_webm' label='WebM Video' class='col-md-4' order='4' />
         <cms:editable type='file' name='ccs_hro_swpr_sl_1_vid_ogv' label='OGV Video' class='col-md-4' order='6' />
+        <cms:editable type='checkbox' name='ccs_hro_swpr_sl_1_upl_tm_opt' label='Add Start/Stop Times' opt_values='Yes=1' class='col-md-3' order='8' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_swpr_sl_1_upl_tm_chc' ccs_hro_swpr_sl_1_is_vid='' ccs_hro_swpr_sl_1_vid_src='' ccs_hro_swpr_sl_1_upl_tm_opt=''>
+        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_1_is_vid />">
+            <cms:if ccs_hro_swpr_sl_1_vid_src == '0' && "<cms:is '1' in=ccs_hro_swpr_sl_1_upl_tm_opt />">show<cms:else />hide</cms:if>
+        <cms:else />
+            1
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_swpr_sl_1_upl_tm_row' not_active=ccs_hro_swpr_sl_1_upl_tm_chc order='235'>
+        <cms:editable type='text' name='ccs_hro_swpr_sl_1_upl_str' label='Start Time (seconds)' class='col-md-2' order='2' />
+        <cms:editable type='text' name='ccs_hro_swpr_sl_1_upl_stp' label='Stop Time (seconds)' class='col-md-2' order='4' />
     </cms:editable>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_1_yt_vid_row' not_active=ccs_hro_swpr_sl_1_yt_vid_chc order='240'>
-        <cms:editable type='text' name='ccs_hro_swpr_sl_1_yt_id' label='YouTube Video ID' class='col-md-4' order='2' />
-        <cms:editable type='text' name='ccs_hro_swpr_sl_1_yt_str' label='Start Time (seconds)' class='col-md-4' order='4' />
-        <cms:editable type='text' name='ccs_hro_swpr_sl_1_yt_stp' label='Stop Time (seconds)' class='col-md-4' order='6' />
+        <cms:editable type='text' name='ccs_hro_swpr_sl_1_yt_id' label='YouTube Video ID' class='col-md-6' order='2' />
+        <cms:editable type='checkbox' name='ccs_hro_swpr_sl_1_yt_tm_opt' label='Add Start/Stop Times' opt_values='Yes=1' class='col-md-6' order='4' />
     </cms:editable>
 
-    <cms:editable type='row' name='ccs_hro_swpr_sl_1_vm_vid_row' not_active=ccs_hro_swpr_sl_1_vm_vid_chc order='250'>
-        <cms:editable type='text' name='ccs_hro_swpr_sl_1_vm_id' label='Vimeo Video ID' class='col-md-12' order='2' />
+    <cms:func _into='ccs_hro_swpr_sl_1_yt_tm_chc' ccs_hro_swpr_sl_1_is_vid='' ccs_hro_swpr_sl_1_vid_src='' ccs_hro_swpr_sl_1_yt_tm_opt=''>
+        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_1_is_vid />">
+            <cms:if ccs_hro_swpr_sl_1_vid_src == '1' && "<cms:is '1' in=ccs_hro_swpr_sl_1_yt_tm_opt />">show<cms:else />hide</cms:if>
+        <cms:else />
+            1
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_swpr_sl_1_yt_tm_row' not_active=ccs_hro_swpr_sl_1_yt_tm_chc order='245'>
+        <cms:editable type='text' name='ccs_hro_swpr_sl_1_yt_str' label='Start Time (seconds)' class='col-md-2' order='2' />
+        <cms:editable type='text' name='ccs_hro_swpr_sl_1_yt_stp' label='Stop Time (seconds)' class='col-md-2' order='4' />
     </cms:editable>
+
 
     <cms:func _into='ccs_hro_swpr_sl_1_lyt_ovr_hide' hero_swpr_glbl_txtbx_mode=''>
         <cms:if hero_swpr_glbl_txtbx_mode == 'local'>hide<cms:else />show</cms:if>
@@ -360,14 +376,27 @@
     </cms:editable>
     
 	<cms:editable type='message' name='ccs_hro_swpr_sl_1_scl_msg' order='700'>
-        <hr><br><h2>Slide 1: Social Links</h2>
-        <p>Social Icons are managed in Global Site Settings.</p>
-    </cms:editable>
+		<hr><br><h2>Slide 1: Social Links</h2>
+		<p>Social Icons are managed in Global Site Settings.</p>
+	</cms:editable>
 
-    <cms:editable type='row' name='ccs_hro_swpr_sl_1_scl_row' order='710'>
-        <cms:editable type='checkbox' name='ccs_hro_swpr_sl_1_scl_opt' label='Show Social Links' opt_values='Yes=1' class='col-md-6' order='2' />
-        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_1_scl_halg' label='Social Alignment' opt_values='Left=start | Center=center | Right=end' opt_selected='center' class='col-md-6' order='4' />
-    </cms:editable>
+	<cms:editable type='row' name='ccs_hro_swpr_sl_1_scl_row' order='710'>
+		<cms:editable type='dropdown' name='ccs_hro_swpr_sl_1_scl_opt' label='Add Social Links' desc='links set at Global Site Settings'
+			opt_values='No Social Links=0 | Add Social Buttons=1'
+			class='col-md-6'
+			order='2'
+		/>
+		<cms:func _into='ccs_hro_swpr_sl_1_hide_social_align' ccs_hro_swpr_sl_1_scl_opt=''>
+			<cms:if ccs_hro_swpr_sl_1_scl_opt == '0'>1<cms:else />0</cms:if>
+		</cms:func>
+		<cms:editable type='dropdown' name='ccs_hro_swpr_sl_1_scl_halg' label='Social Alignment' 
+			opt_values='Left=start | Center=center | Right=end' 
+			opt_selected='center' 
+			not_active=ccs_hro_swpr_sl_1_hide_social_align
+			class='col-md-6' 
+			order='4'
+		/>
+	</cms:editable>
     
     <cms:editable type='message' name='ccs_hro_swpr_sl_1_bot_rail_msg' order='800'>
         <hr><br><h2>Slide 1: Bottom Rail Options</h2>

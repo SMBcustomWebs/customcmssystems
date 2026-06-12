@@ -14,11 +14,13 @@
                 
                 <cms:embed 'pb_mods/hero/theme/hero_swiper_cta.html' /> 
                 
-                <cms:if act_scl_opt == '1'>
-                    <div class="d-flex w-100 justify-content-<cms:if act_scl_halg != ''><cms:show act_scl_halg /><cms:else />center</cms:if> mt-3">
-                        <cms:embed 'pb_mods/hero/theme/hero_social.html' />
-                    </div>
-                </cms:if>
+                
+				<cms:if ccs_hro_swpr_sl_1_scl_opt == '1'>
+					<div class="d-flex w-100 justify-content-<cms:if ccs_hro_swpr_sl_1_scl_halg><cms:show ccs_hro_swpr_sl_1_scl_halg /><cms:else />center</cms:if> mt-3">
+						<cms:embed 'pb_mods/hero/theme/hero_social.html' />
+					</div>
+				</cms:if>
+               
 
             </div>
 
@@ -27,3 +29,17 @@
     </div>
 
 </div>
+<!-- Check if the bottom rail checkbox is checked for Slide 1 -->
+<cms:if ccs_hro_swpr_sl_1_bot_rail_opt == '1'>
+    <!-- Rail background wrapper styled with width, thickness, and background shade choices -->
+    <div class="position-absolute bottom-0 start-0 w-<cms:if ccs_hro_swpr_sl_1_bot_rail_ln_sz=='6'>50<cms:else />100</cms:if> bg-<cms:show ccs_hro_swpr_sl_1_bot_rail_ln_shd /> py-<cms:show ccs_hro_swpr_sl_1_bot_rail_thk /> px-4 z-index-2">
+        
+        <!-- Only render text if the text box isn't empty -->
+        <cms:if ccs_hro_swpr_sl_1_bot_rail_ln_txt_ln>
+            <p class="m-0 text-<cms:show ccs_hro_swpr_sl_1_bot_rail_ln_txt_clr /> fs-<cms:show ccs_hro_swpr_sl_1_bot_rail_ln_txt_sz /> fw-<cms:show ccs_hro_swpr_sl_1_bot_rail_ln_fnt_wt /> fst-<cms:show ccs_hro_swpr_sl_1_bot_rail_ln_fnt_st /> font-<cms:show ccs_hro_swpr_sl_1_bot_rail_ln_font />">
+                <cms:show ccs_hro_swpr_sl_1_bot_rail_ln_txt_ln />
+            </p>
+        </cms:if>
+
+    </div>
+</cms:if>

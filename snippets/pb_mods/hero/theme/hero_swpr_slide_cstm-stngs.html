@@ -20,6 +20,7 @@
 
 <cms:set var_blk_opt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_blk_opt" />
 <cms:set loc_blk_opt="<cms:get var_blk_opt />" scope='global' />
+<cms:set act_blk_opt=loc_blk_opt scope='global' />
 
 <cms:set var_scl_opt="ccs_hro_swpr_sl_<cms:show cur_slide_num />_scl_opt" />
 <cms:set loc_scl_opt="<cms:get var_scl_opt />" scope='global' />
@@ -76,7 +77,11 @@
     <cms:set act_brd_rad=hero_swpr_txtblk_brd_rad scope='global' />
     <cms:set act_brd_spc=ccs_hro_swpr_txtblk_brd_spc scope='global' />
 </cms:if>
-
+<cms:if act_bx_sz == 'custom'>
+    <cms:capture into='act_bx_sz' scope='global'>
+        <cms:show_repeatable 'hero_swpr_txtbx_cstm_sz_rpt'>col-<cms:show hero_swpr_txtbx_cstm_col_sz />-<cms:show hero_swpr_txtbx_cstm_col_val /> </cms:show_repeatable>
+    </cms:capture>
+</cms:if>
 <cms:set has_backdrop='0' scope='global' />
 <cms:if act_bg_opt == 'backdrop' || act_bg_opt == 'border'>
     <cms:set has_backdrop='1' scope='global' />

@@ -1,55 +1,49 @@
-<cms:editable type='group' name='ccs_hro_swpr_sl_4_grp' label='Slide 1 Configuration'  not_active=ccs_hro_swpr_sl_4_show order='400'>
+<cms:editable type='group' name='ccs_hro_swpr_sl_4_grp' label='Slide 4 Configuration'  not_active=ccs_hro_swpr_sl_4_show order='400'>
 	
-    <cms:func _into='ccs_hro_swpr_sl_4_bg_ovr_hide' hero_swpr_glbl_clr_mode=''>
-        <cms:if hero_swpr_glbl_clr_mode == 'local'>1<cms:else />0</cms:if>
-    </cms:func>
-
-    <cms:editable type='message' name='ccs_hro_swpr_sl_4_bg_clr_msg' order='100'>
-        <hr><br><h2>Slide 1: Background & Overlay Override</h2>
-    </cms:editable>
-
-    <cms:editable type='row' name='ccs_hro_swpr_sl_4_bg_ovr_row' not_active=ccs_hro_swpr_sl_4_bg_ovr_hide order='110'>
-        <cms:editable type='checkbox' name='ccs_hro_swpr_sl_4_bg_ovr' label='Override Global Colors' desc='Check to set a unique background and overlay for this slide.' opt_values='Yes=1' class='col-md-12' order='2' />
-    </cms:editable>
-
-    <cms:func _into='ccs_hro_swpr_sl_4_bg_hide' hero_swpr_glbl_clr_mode='' ccs_hro_swpr_sl_4_bg_ovr=''>
-        <cms:if hero_swpr_glbl_clr_mode == 'local'>
-            0
-        <cms:else_if hero_swpr_glbl_clr_mode == 'global' />
-            <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_bg_ovr />">0<cms:else />1</cms:if>
-        <cms:else />
-            1
-        </cms:if>
-    </cms:func>
-
-    <cms:editable type='row' name='ccs_hro_swpr_sl_4_bg_clr_row' not_active=ccs_hro_swpr_sl_4_bg_hide order='120'>
-        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_bg_clr_opt' label='Base Background Color' opt_values='dropdowns/all-colors.htm' dynamic='opt_values' class='col-md-4' order='2' />
-        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_ovrly_clr_opt' label='Image Overlay Color' opt_values='dropdowns/all-colors.htm' dynamic='opt_values' class='col-md-4' order='4' />
-        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_ovrly_opc' label='Overlay Opacity' opt_values='dropdowns/img-transparency.htm' dynamic='opt_values' class='col-md-4' order='6' />
-    </cms:editable>
-    
 	<cms:editable type='message' name='ccs_hro_swpr_sl_4_msg' order='200'>
-        <hr><br><h2>Slide 1: Background Media</h2>
+        <hr><br><h2>Slide 4: Background Media</h2>
     </cms:editable>
-
-    <cms:editable type='row' name='ccs_hro_swpr_sl_4_bg_row' order='210'>
+	<cms:editable type='row' name='ccs_hro_swpr_sl_4_bg_row' order='210'>
         <cms:editable type='image' name='ccs_hro_swpr_sl_4_img' label='Background Image (Poster)' desc='Upload a high-res image.' show_preview='1' preview_width='150' class='col-md-4' order='2' />
         <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_img_opc' label='Image Opacity' desc='Allows background colors to bleed through' opt_values='dropdowns/img-transparency.htm' dynamic='opt_values' class='col-md-4' order='4' />
-        <cms:editable type='checkbox' name='ccs_hro_swpr_sl_4_is_vid' label='Use Video Background' opt_values='Yes=1' class='col-md-4' order='6' />
+        <cms:editable type='checkbox' name='ccs_hro_swpr_sl_4_is_vid' label='Add Video Background' opt_values='Yes=1' class='col-md-4' order='6' />
+		<cms:editable type='checkbox' name='ccs_hro_swpr_sl_4_add_ovrly' label='Add Color Overlay' opt_values='Yes=1' class='col-md-4' order='8' />
+		
     </cms:editable>
+	<cms:func _into='ccs_hro_swpr_sl_4_ovrly_chc' ccs_hro_swpr_sl_4_add_ovrly=''>
+			<cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_add_ovrly />">show<cms:else />hide</cms:if>
+		</cms:func>
+    <cms:editable type='row' name='ccs_hro_swpr_sl_4_bg_clr_row' not_active=ccs_hro_swpr_sl_4_ovrly_chc order='212'>
+		
+		<cms:editable type='message' name='ccs_hro_swpr_sl_4_bg_clr_msg' order='2'>
+			<hr><br><h2>Slide 4: Image Overlay</h2>
+			<p>Set a color and opacity to tint this specific slide's image. (If 'Default' or 'Transparent' is chosen, the overlay will be hidden).</p>
+		</cms:editable>
+		
+        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_ovrly_clr_opt' label='Image Overlay Color' opt_values='dropdowns/all-colors.htm' dynamic='opt_values'  class='col-md-6' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_ovrly_opc' label='Overlay Opacity' opt_values='dropdowns/img-transparency.htm' dynamic='opt_values'  class='col-md-6' order='6' />
+    </cms:editable>
+    
+	
+
+    
 
     <cms:func _into='ccs_hro_swpr_sl_4_vid_chc' ccs_hro_swpr_sl_4_is_vid=''>
-        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_is_vid />">0<cms:else />1</cms:if>
+        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_is_vid />">show<cms:else />hide</cms:if>
     </cms:func>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_vid_row' not_active=ccs_hro_swpr_sl_4_vid_chc order='220'>
-        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_vid_src' label='Video Source' opt_values='Upload=0 | YouTube=1 | Vimeo=2' class='col-md-8' order='2' />
-        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_vid_opc' label='Video Opacity' desc='Allows background colors to bleed through' opt_values='dropdowns/img-transparency.htm' dynamic='opt_values' class='col-md-4' order='4' />
+		<cms:editable type='message' name='ccs_hro_swpr_sl_4_bg_vid_msg' order='2'>
+			<hr><br><h2>Slide 4: Add Video</h2>
+			<p>Give your background motion. Upload or stream a video background. Video will be muted on play.</p>
+		</cms:editable>
+        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_vid_src' label='Video Source' opt_values='Upload=0 | YouTube=1' class='col-md-8' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_vid_opc' label='Video Opacity' desc='Allows background colors to bleed through' opt_values='dropdowns/img-transparency.htm' dynamic='opt_values' class='col-md-4' order='6' />
     </cms:editable>
 
     <cms:func _into='ccs_hro_swpr_sl_4_upl_vid_chc' ccs_hro_swpr_sl_4_is_vid='' ccs_hro_swpr_sl_4_vid_src=''>
         <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_is_vid />">
-            <cms:if ccs_hro_swpr_sl_4_vid_src != '0'>1<cms:else />0</cms:if>
+            <cms:if ccs_hro_swpr_sl_4_vid_src != '0'>hide<cms:else />show</cms:if>
         <cms:else />
             1
         </cms:if>
@@ -57,42 +51,58 @@
     
     <cms:func _into='ccs_hro_swpr_sl_4_yt_vid_chc' ccs_hro_swpr_sl_4_is_vid='' ccs_hro_swpr_sl_4_vid_src=''>
         <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_is_vid />">
-            <cms:if ccs_hro_swpr_sl_4_vid_src != '1'>1<cms:else />0</cms:if>
+            <cms:if ccs_hro_swpr_sl_4_vid_src != '1'>hide<cms:else />show</cms:if>
         <cms:else />
             1
         </cms:if>
     </cms:func>
-    
-    <cms:func _into='ccs_hro_swpr_sl_4_vm_vid_chc' ccs_hro_swpr_sl_4_is_vid='' ccs_hro_swpr_sl_4_vid_src=''>
-        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_is_vid />">
-            <cms:if ccs_hro_swpr_sl_4_vid_src != '2'>1<cms:else />0</cms:if>
-        <cms:else />
-            1
-        </cms:if>
-    </cms:func>
+
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_upl_vid_row' not_active=ccs_hro_swpr_sl_4_upl_vid_chc order='230'>
         <cms:editable type='file' name='ccs_hro_swpr_sl_4_vid_mp4' label='MP4 Video' class='col-md-4' order='2' />
         <cms:editable type='file' name='ccs_hro_swpr_sl_4_vid_webm' label='WebM Video' class='col-md-4' order='4' />
         <cms:editable type='file' name='ccs_hro_swpr_sl_4_vid_ogv' label='OGV Video' class='col-md-4' order='6' />
+        <cms:editable type='checkbox' name='ccs_hro_swpr_sl_4_upl_tm_opt' label='Add Start/Stop Times' opt_values='Yes=1' class='col-md-3' order='8' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_swpr_sl_4_upl_tm_chc' ccs_hro_swpr_sl_4_is_vid='' ccs_hro_swpr_sl_4_vid_src='' ccs_hro_swpr_sl_4_upl_tm_opt=''>
+        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_is_vid />">
+            <cms:if ccs_hro_swpr_sl_4_vid_src == '0' && "<cms:is '1' in=ccs_hro_swpr_sl_4_upl_tm_opt />">show<cms:else />hide</cms:if>
+        <cms:else />
+            1
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_swpr_sl_4_upl_tm_row' not_active=ccs_hro_swpr_sl_4_upl_tm_chc order='235'>
+        <cms:editable type='text' name='ccs_hro_swpr_sl_4_upl_str' label='Start Time (seconds)' class='col-md-2' order='2' />
+        <cms:editable type='text' name='ccs_hro_swpr_sl_4_upl_stp' label='Stop Time (seconds)' class='col-md-2' order='4' />
     </cms:editable>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_yt_vid_row' not_active=ccs_hro_swpr_sl_4_yt_vid_chc order='240'>
-        <cms:editable type='text' name='ccs_hro_swpr_sl_4_yt_id' label='YouTube Video ID' class='col-md-4' order='2' />
-        <cms:editable type='text' name='ccs_hro_swpr_sl_4_yt_str' label='Start Time (seconds)' class='col-md-4' order='4' />
-        <cms:editable type='text' name='ccs_hro_swpr_sl_4_yt_stp' label='Stop Time (seconds)' class='col-md-4' order='6' />
+        <cms:editable type='text' name='ccs_hro_swpr_sl_4_yt_id' label='YouTube Video ID' class='col-md-6' order='2' />
+        <cms:editable type='checkbox' name='ccs_hro_swpr_sl_4_yt_tm_opt' label='Add Start/Stop Times' opt_values='Yes=1' class='col-md-6' order='4' />
     </cms:editable>
 
-    <cms:editable type='row' name='ccs_hro_swpr_sl_4_vm_vid_row' not_active=ccs_hro_swpr_sl_4_vm_vid_chc order='250'>
-        <cms:editable type='text' name='ccs_hro_swpr_sl_4_vm_id' label='Vimeo Video ID' class='col-md-12' order='2' />
+    <cms:func _into='ccs_hro_swpr_sl_4_yt_tm_chc' ccs_hro_swpr_sl_4_is_vid='' ccs_hro_swpr_sl_4_vid_src='' ccs_hro_swpr_sl_4_yt_tm_opt=''>
+        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_is_vid />">
+            <cms:if ccs_hro_swpr_sl_4_vid_src == '1' && "<cms:is '1' in=ccs_hro_swpr_sl_4_yt_tm_opt />">show<cms:else />hide</cms:if>
+        <cms:else />
+            1
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_swpr_sl_4_yt_tm_row' not_active=ccs_hro_swpr_sl_4_yt_tm_chc order='245'>
+        <cms:editable type='text' name='ccs_hro_swpr_sl_4_yt_str' label='Start Time (seconds)' class='col-md-2' order='2' />
+        <cms:editable type='text' name='ccs_hro_swpr_sl_4_yt_stp' label='Stop Time (seconds)' class='col-md-2' order='4' />
     </cms:editable>
+
 
     <cms:func _into='ccs_hro_swpr_sl_4_lyt_ovr_hide' hero_swpr_glbl_txtbx_mode=''>
-        <cms:if hero_swpr_glbl_txtbx_mode == 'local'>1<cms:else />0</cms:if>
+        <cms:if hero_swpr_glbl_txtbx_mode == 'local'>hide<cms:else />show</cms:if>
     </cms:func>
 
     <cms:editable type='message' name='ccs_hro_swpr_sl_4_txt_msg' order='300'>
-        <hr><br><h2>Slide 1: Content Payload</h2>
+        <hr><br><h2>Slide 4: Content Payload</h2>
         <p>This will appear on the slide. Payloads are unique per slide. Leave blank to show nothing.</p>
     </cms:editable>
 
@@ -101,11 +111,11 @@
     </cms:editable>
 
     <cms:func _into='ccs_hro_swpr_sl_4_hide_txt' ccs_hro_swpr_sl_4_blk_opt=''>
-        <cms:if ccs_hro_swpr_sl_4_blk_opt == '1'>1<cms:else />0</cms:if>
+        <cms:if ccs_hro_swpr_sl_4_blk_opt == '1'>hide<cms:else />show</cms:if>
     </cms:func>
 
     <cms:func _into='ccs_hro_swpr_sl_4_hide_img' ccs_hro_swpr_sl_4_blk_opt=''>
-        <cms:if ccs_hro_swpr_sl_4_blk_opt == '1'>0<cms:else />1</cms:if>
+        <cms:if ccs_hro_swpr_sl_4_blk_opt == '1'>show<cms:else />hide</cms:if>
     </cms:func>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_eye_row' not_active=ccs_hro_swpr_sl_4_hide_txt order='320'>
@@ -144,7 +154,7 @@
     </cms:editable>
 
     <cms:editable type='message' name='ccs_hro_swpr_sl_4_lyt_msg' order='400'>
-        <hr><br><h2>Slide 1: Layout Overrides</h2>
+        <hr><br><h2>Slide 4: Layout Overrides</h2>
     </cms:editable>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_lyt_ovr_row' not_active=ccs_hro_swpr_sl_4_lyt_ovr_hide order='410'>
@@ -152,14 +162,12 @@
     </cms:editable>
 
     <cms:func _into='ccs_hro_swpr_sl_4_lyt_hide' hero_swpr_glbl_txtbx_mode='' ccs_hro_swpr_sl_4_lyt_ovr=''>
-        <cms:if hero_swpr_glbl_txtbx_mode == 'local'>
-            0
-        <cms:else_if ccs_hro_swpr_sl_4_lyt_ovr == '1' />
-            0
-        <cms:else />
-            1
-        </cms:if>
-    </cms:func>
+		<cms:if hero_swpr_glbl_txtbx_mode == 'local' || "<cms:is '1' in=ccs_hro_swpr_sl_4_lyt_ovr />">
+			show
+		<cms:else />
+			hide
+		</cms:if>
+	</cms:func>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_layout_row' not_active=ccs_hro_swpr_sl_4_lyt_hide order='420'>
         <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_bx_sz' label='Box Width' opt_values='100%=col-12 | 80%=col-md-10 | 66%=col-md-8 | 50%=col-md-6 | 33%=col-md-4' class='col-md-2' order='4' />
@@ -174,16 +182,12 @@
     </cms:editable>
 
     <cms:func _into='ccs_hro_swpr_sl_4_txtbx_bg_hide' hero_swpr_glbl_txtbx_mode='' ccs_hro_swpr_sl_4_lyt_ovr='' ccs_hro_swpr_sl_4_txtbx_bg_opt=''>
-        <cms:if ccs_hro_swpr_sl_4_txtbx_bg_opt == 'none'>
-            1
-        <cms:else_if hero_swpr_glbl_txtbx_mode == 'local' />
-            0
-        <cms:else_if ccs_hro_swpr_sl_4_lyt_ovr == '1' />
-            0
-        <cms:else />
-            1
-        </cms:if>
-    </cms:func>
+		<cms:if ccs_hro_swpr_sl_4_txtbx_bg_opt != 'none' && (hero_swpr_glbl_txtbx_mode == 'local' || "<cms:is '1' in=ccs_hro_swpr_sl_4_lyt_ovr />")>
+			show
+		<cms:else />
+			hide
+		</cms:if>
+	</cms:func>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_txtbx_bg_row' not_active=ccs_hro_swpr_sl_4_txtbx_bg_hide order='440'>
         <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_txtblk_bg_pd' label='Inner Padding' desc='Inside the box' opt_values='dropdowns/padding.htm' dynamic='opt_values' class='col-md-4' order='2' />
@@ -192,30 +196,32 @@
     </cms:editable>
 
     <cms:func _into='ccs_hro_swpr_sl_4_txtbx_brd_hide' hero_swpr_glbl_txtbx_mode='' ccs_hro_swpr_sl_4_lyt_ovr='' ccs_hro_swpr_sl_4_txtbx_bg_opt=''>
-        <cms:if ccs_hro_swpr_sl_4_txtbx_bg_opt != 'border'>
-            1
-        <cms:else_if hero_swpr_glbl_txtbx_mode == 'local' />
-            0
-        <cms:else_if ccs_hro_swpr_sl_4_lyt_ovr == '1' />
-            0
-        <cms:else />
-            1
-        </cms:if>
-    </cms:func>
+		<cms:if ccs_hro_swpr_sl_4_txtbx_bg_opt == 'border' && (hero_swpr_glbl_txtbx_mode == 'local' || "<cms:is '1' in=ccs_hro_swpr_sl_4_lyt_ovr />")>
+			show
+		<cms:else />
+			hide
+		</cms:if>
+	</cms:func>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_txtbx_brd_row' not_active=ccs_hro_swpr_sl_4_txtbx_brd_hide order='450'>
         <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_txtblk_bg_brd_siz' label='Border Size' opt_values='dropdowns/border-size.htm' dynamic='opt_values' class='col-md-3' order='2' />
         <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_txtblk_bg_brd_sty' label='Border Style' opt_values='dropdowns/border-style.htm' dynamic='opt_values' class='col-md-3' order='4' />
         <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_txtblk_bg_brd_clr' label='Border Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-3' order='6' />
-        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_txtblk_brd_spc' label='Border Radius' opt_values='0 | 1 | 2 | 3 | 4 | 5 | circle | pill' class='col-md-3' order='8' />
+        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_txtblk_brd_rad' label='Border Radius' opt_values='dropdowns/border-radius.htm' dynamic='opt_values' class='col-md-3' order='8' />
+		<cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_txtblk_brd_spc' label='Border Distance' desc='space around the border'
+			opt_values='dropdowns/outline-offset.htm'
+			dynamic='opt_values'
+			class='col-md-4'
+			order='10'
+		/>
     </cms:editable>
 
     <cms:func _into='ccs_hro_swpr_sl_4_typo_ovr_hide' hero_swpr_glbl_typo_mode=''>
-        <cms:if hero_swpr_glbl_typo_mode == 'local'>1<cms:else />0</cms:if>
+        <cms:if hero_swpr_glbl_typo_mode == 'local'>hide<cms:else />show</cms:if>
     </cms:func>
     
 	<cms:editable type='message' name='ccs_hro_swpr_sl_4_typo_msg' order='500'>
-        <hr><br><h2>Slide 1: Typography Overrides</h2>
+        <hr><br><h2>Slide 4: Typography Overrides</h2>
     </cms:editable>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_typo_ovr_row' not_active=ccs_hro_swpr_sl_4_typo_ovr_hide order='510'>
@@ -229,7 +235,7 @@
             <cms:if hero_swpr_glbl_typo_mode == 'local'>
                 0
             <cms:else_if hero_swpr_glbl_typo_mode == 'global' />
-                <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_typo_ovr />">0<cms:else />1</cms:if>
+                <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_typo_ovr />">show<cms:else />hide</cms:if>
             <cms:else />
                 1
             </cms:if>
@@ -273,7 +279,7 @@
     </cms:editable>
 
     <cms:editable type='message' name='ccs_hro_swpr_sl_4_cta_msg' order='600'>
-        <hr><br><h2>Slide 1: Link Button</h2>
+        <hr><br><h2>Slide 4: Link Button</h2>
     </cms:editable>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_cta_ctrl_row' order='610'>
@@ -281,11 +287,11 @@
     </cms:editable>
 
     <cms:func _into='ccs_hro_swpr_sl_4_cta_payload_hide' ccs_hro_swpr_sl_4_cta_rmv=''>
-        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_cta_rmv />">1<cms:else />0</cms:if>
+        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_cta_rmv />">hide<cms:else />show</cms:if>
     </cms:func>
 
     <cms:func _into='ccs_hro_swpr_sl_4_cta_ovr_hide' hero_swpr_glbl_cta_mode=''>
-        <cms:if hero_swpr_glbl_cta_mode == 'local'>1<cms:else />0</cms:if>
+        <cms:if hero_swpr_glbl_cta_mode == 'local'>hide<cms:else />show</cms:if>
     </cms:func>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_cta_row' not_active=ccs_hro_swpr_sl_4_cta_payload_hide order='620'>
@@ -314,7 +320,7 @@
         <cms:else_if hero_swpr_glbl_cta_mode == 'local' />
             0
         <cms:else_if hero_swpr_glbl_cta_mode == 'global' />
-            <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_cta_ovr />">0<cms:else />1</cms:if>
+            <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_cta_ovr />">show<cms:else />hide</cms:if>
         <cms:else />
             1
         </cms:if>
@@ -333,7 +339,7 @@
         <cms:else_if hero_swpr_glbl_cta_mode == 'local' />
             0
         <cms:else_if hero_swpr_glbl_cta_mode == 'global' />
-            <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_cta_ovr />">0<cms:else />1</cms:if>
+            <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_cta_ovr />">show<cms:else />hide</cms:if>
         <cms:else />
             1
         </cms:if>
@@ -354,7 +360,7 @@
         <cms:else_if hero_swpr_glbl_cta_mode == 'local' />
             0
         <cms:else_if hero_swpr_glbl_cta_mode == 'global' />
-            <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_cta_ovr />">0<cms:else />1</cms:if>
+            <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_cta_ovr />">show<cms:else />hide</cms:if>
         <cms:else />
             1
         </cms:if>
@@ -370,17 +376,30 @@
     </cms:editable>
     
 	<cms:editable type='message' name='ccs_hro_swpr_sl_4_scl_msg' order='700'>
-        <hr><br><h2>Slide 1: Social Links</h2>
-        <p>Social Icons are managed in Global Site Settings.</p>
-    </cms:editable>
+		<hr><br><h2>Slide 4: Social Links</h2>
+		<p>Social Icons are managed in Global Site Settings.</p>
+	</cms:editable>
 
-    <cms:editable type='row' name='ccs_hro_swpr_sl_4_scl_row' order='710'>
-        <cms:editable type='checkbox' name='ccs_hro_swpr_sl_4_scl_opt' label='Show Social Links' opt_values='Yes=1' class='col-md-6' order='2' />
-        <cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_scl_halg' label='Social Alignment' opt_values='Left=start | Center=center | Right=end' opt_selected='center' class='col-md-6' order='4' />
-    </cms:editable>
+	<cms:editable type='row' name='ccs_hro_swpr_sl_4_scl_row' order='710'>
+		<cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_scl_opt' label='Add Social Links' desc='links set at Global Site Settings'
+			opt_values='No Social Links=0 | Add Social Buttons=1'
+			class='col-md-6'
+			order='2'
+		/>
+		<cms:func _into='ccs_hro_swpr_sl_4_hide_social_align' ccs_hro_swpr_sl_4_scl_opt=''>
+			<cms:if ccs_hro_swpr_sl_4_scl_opt == '0'>1<cms:else />0</cms:if>
+		</cms:func>
+		<cms:editable type='dropdown' name='ccs_hro_swpr_sl_4_scl_halg' label='Social Alignment' 
+			opt_values='Left=start | Center=center | Right=end' 
+			opt_selected='center' 
+			not_active=ccs_hro_swpr_sl_4_hide_social_align
+			class='col-md-6' 
+			order='4'
+		/>
+	</cms:editable>
     
     <cms:editable type='message' name='ccs_hro_swpr_sl_4_bot_rail_msg' order='800'>
-        <hr><br><h2>Slide 1: Bottom Rail Options</h2>
+        <hr><br><h2>Slide 4: Bottom Rail Options</h2>
         <p>The Bottom Rail Rests on the bottom edge of the slider.</p>
     </cms:editable>
 
@@ -389,7 +408,7 @@
     </cms:editable>
 
     <cms:func _into='ccs_hro_swpr_sl_4_bot_rail_chc' ccs_hro_swpr_sl_4_bot_rail_opt=''>
-        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_bot_rail_opt />">0<cms:else />1</cms:if>
+        <cms:if "<cms:is '1' in=ccs_hro_swpr_sl_4_bot_rail_opt />">show<cms:else />hide</cms:if>
     </cms:func>
 
     <cms:editable type='row' name='ccs_hro_swpr_sl_4_bot_rail_row' not_active=ccs_hro_swpr_sl_4_bot_rail_chc order='820'>
