@@ -557,12 +557,19 @@ a {
 .outline-double { outline-style: double !important; }
 .outline-none { outline-style: none !important; }
 
-/* 2. Outline Widths */
-.outline-1 { outline-width: 1px !important; }
-.outline-2 { outline-width: 2px !important; }
-.outline-3 { outline-width: 3px !important; }
-.outline-4 { outline-width: 4px !important; }
-.outline-5 { outline-width: 5px !important; }
+/* 2. Outline Widths (Updated to match border-size.htm) */
+.outline-medium { outline-width: medium !important; }
+.outline-thin { outline-width: thin !important; }
+.outline-thick { outline-width: thick !important; }
+.outline-1px { outline-width: 1px !important; }
+.outline-2px { outline-width: 2px !important; }
+.outline-3px { outline-width: 3px !important; }
+.outline-4px { outline-width: 4px !important; }
+.outline-5px { outline-width: 5px !important; }
+.outline-6px { outline-width: 6px !important; }
+.outline-8px { outline-width: 8px !important; }
+.outline-10px { outline-width: 10px !important; }
+.outline-12px { outline-width: 12px !important; }
 
 /* 3. Outline Offsets (Positive / Outward) */
 .outline-offset-0 { outline-offset: 0 !important; }
@@ -588,4 +595,26 @@ a {
 .outline-dark { outline-color: var(--posh-dark) !important; }
 .outline-white { outline-color: var(--posh-white) !important; }
 .outline-black { outline-color: var(--posh-black) !important; }
+
+
+/* -------------------------------------------------------------------------- */
+/* BACKGROUND OPACITY EXPANSION PACK (DECIMAL ESCAPES)                        */
+/* -------------------------------------------------------------------------- */
+
+.bg-opacity-0\.0 { --posh-bg-opacity: 0.0 !important; }
+.bg-opacity-0\.1 { --posh-bg-opacity: 0.1 !important; }
+.bg-opacity-0\.2 { --posh-bg-opacity: 0.2 !important; }
+.bg-opacity-0\.25 { --posh-bg-opacity: 0.25 !important; }
+.bg-opacity-0\.3 { --posh-bg-opacity: 0.3 !important; }
+.bg-opacity-0\.4 { --posh-bg-opacity: 0.4 !important; }
+.bg-opacity-0\.5 { --posh-bg-opacity: 0.5 !important; }
+.bg-opacity-0\.6 { --posh-bg-opacity: 0.6 !important; }
+.bg-opacity-0\.7 { --posh-bg-opacity: 0.7 !important; }
+.bg-opacity-0\.75 { --posh-bg-opacity: 0.75 !important; }
+.bg-opacity-0\.8 { --posh-bg-opacity: 0.8 !important; }
+.bg-opacity-0\.9 { --posh-bg-opacity: 0.9 !important; }
+.bg-opacity-1\.0 { --posh-bg-opacity: 1.0 !important; }
+.bg-opacity-1 { --posh-bg-opacity: 1 !important; }
+
+
 <?php COUCH::invoke(); ?>

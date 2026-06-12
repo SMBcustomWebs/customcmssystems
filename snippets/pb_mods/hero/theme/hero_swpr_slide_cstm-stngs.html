@@ -61,7 +61,7 @@
     <cms:set var_brd_rad="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_brd_rad" /><cms:set act_brd_rad="<cms:get var_brd_rad />" scope='global' />
     <cms:set var_brd_spc="ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_brd_spc" /><cms:set act_brd_spc="<cms:get var_brd_spc />" scope='global' />
 <cms:else />
-    <cms:set act_bx_sz=swpr_txtbx_size scope='global' />
+    <cms:set act_bx_sz=hero_swpr_txtbx_sz_opt scope='global' />
     <cms:set act_valg=hero_swpr_txtbx_valg scope='global' />
     <cms:set act_halg=hero_swpr_txtbx_halg scope='global' />
     <cms:set act_txt_alg=hero_swpr_txt_halg scope='global' />
@@ -74,7 +74,7 @@
     <cms:set act_brd_sty=hero_swpr_txtblk_bg_brd_sty scope='global' />
     <cms:set act_brd_clr=hero_swpr_txtblk_bg_brd_clr scope='global' />
     <cms:set act_brd_rad=hero_swpr_txtblk_brd_rad scope='global' />
-    <cms:set act_brd_spc=hero_swpr_txtblk_brd_spc scope='global' />
+    <cms:set act_brd_spc=ccs_hro_swpr_txtblk_brd_spc scope='global' />
 </cms:if>
 
 <cms:set has_backdrop='0' scope='global' />
@@ -90,8 +90,9 @@
             <cms:if act_brd_sty != ''>outline-<cms:show act_brd_sty /> </cms:if>
             <cms:if act_brd_clr != ''>outline-<cms:show act_brd_clr /> </cms:if> 
             <cms:if act_brd_spc != ''>outline-offset-<cms:show act_brd_spc /> </cms:if>
-            <cms:if act_brd_rad != ''>rounded-<cms:show act_brd_rad /></cms:if>
+            <cms:if act_brd_rad != ''>rounded-<cms:show act_brd_rad /> </cms:if>
         </cms:if>
+        <cms:if act_bg_opc != ''>bg-opacity-<cms:show act_bg_opc /> </cms:if>
     </cms:if>
 </cms:capture>
 
