@@ -1,21 +1,10 @@
-<div style="background:#000; color:#0f0; padding:20px; z-index:9999; position:relative; font-family:monospace;">
-    <h4>DEBUG: SLIDE <cms:show cur_slide_num /></h4>
-    Local Override Checkbox (loc_lyt_ovr): [<cms:show loc_lyt_ovr />]<br>
-    Is Local Textbox Active (use_local_txtbx): [<cms:show use_local_txtbx />]<br>
-    Background Option (act_bg_opt): [<cms:show act_bg_opt />]<br>
-    Background Color (act_bg_clr): [<cms:show act_bg_clr />]<br>
-    Background Opacity (act_bg_opc): [<cms:show act_bg_opc />]<br>
-    Border Size (act_brd_siz): [<cms:show act_brd_siz />]<br>
-    Has Backdrop Logic Fired? (has_backdrop): [<cms:show has_backdrop />]<br>
-    Final Output Classes (cur_box_classes): [<cms:show cur_box_classes />]<br>
-</div>
 <div class="container h-100">
     
     <div class="row min-vh-<cms:if hero_swpr_vht != ''><cms:show hero_swpr_vht /><cms:else />100</cms:if> align-items-<cms:show act_valg /> justify-content-<cms:show act_halg /> py-<cms:if act_py_ht != ''><cms:show act_py_ht /><cms:else />5</cms:if> h-100">
         
-        <div class="<cms:show act_bx_sz />" >
+        <div class="<cms:show act_bx_sz />">
             
-            <div class="<cms:show cur_box_classes /> text-<cms:show act_txt_alg /> <cms:if has_backdrop == '1'>p-<cms:if act_bg_pd != ''><cms:show act_bg_pd /><cms:else />0</cms:if></cms:if> position-relative z-3" style="<cms:if has_backdrop == '1'><cms:if act_bg_opc != ''>--bs-bg-opacity: <cms:show act_bg_opc />; </cms:if></cms:if><cms:show cur_box_inline_styles />">
+            <div class="<cms:show cur_box_classes /> text-<cms:show act_txt_alg /> <cms:if has_backdrop == '1'>p-<cms:if act_bg_pd != ''><cms:show act_bg_pd /><cms:else />0</cms:if></cms:if> position-relative z-3">
                 
                 <cms:if act_blk_opt == '1'>
                     <cms:embed 'pb_mods/hero/theme/hero_swiper_txtbx_img.html' />
@@ -24,7 +13,7 @@
                 </cms:if>
                 
                 <cms:embed 'pb_mods/hero/theme/hero_swiper_cta.html' /> 
-            	
+                
                 <cms:if act_scl_opt == '1'>
                     <div class="d-flex w-100 justify-content-<cms:if act_scl_halg != ''><cms:show act_scl_halg /><cms:else />center</cms:if> mt-3">
                         <cms:embed 'pb_mods/hero/theme/hero_social.html' />

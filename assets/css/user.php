@@ -545,4 +545,47 @@ a {
         margin-right: -20px !important;
     }
 }
+
+/* -------------------------------------------------------------------------- */
+/* OUTLINE (FLOATING BORDER) EXPANSION PACK                                   */
+/* -------------------------------------------------------------------------- */
+
+/* 1. Outline Styles */
+.outline-solid { outline-style: solid !important; }
+.outline-dotted { outline-style: dotted !important; }
+.outline-dashed { outline-style: dashed !important; }
+.outline-double { outline-style: double !important; }
+.outline-none { outline-style: none !important; }
+
+/* 2. Outline Widths */
+.outline-1 { outline-width: 1px !important; }
+.outline-2 { outline-width: 2px !important; }
+.outline-3 { outline-width: 3px !important; }
+.outline-4 { outline-width: 4px !important; }
+.outline-5 { outline-width: 5px !important; }
+
+/* 3. Outline Offsets (Positive / Outward) */
+.outline-offset-0 { outline-offset: 0 !important; }
+.outline-offset-25 { outline-offset: 0.25rem !important; }
+.outline-offset-50 { outline-offset: 0.50rem !important; }
+.outline-offset-75 { outline-offset: 0.75rem !important; }
+
+/* 4. Outline Offsets (Negative / Inward) */
+.outline-offset--25 { outline-offset: -0.25rem !important; }
+.outline-offset--50 { outline-offset: -0.50rem !important; }
+.outline-offset--75 { outline-offset: -0.75rem !important; }
+
+/* 5. Outline Colors */
+.outline-primary { outline-color: var(--posh-primary) !important; }
+.outline-secondary { outline-color: var(--posh-secondary) !important; }
+.outline-tertiary { outline-color: var(--posh-tertiary) !important; }
+.outline-quaternary { outline-color: var(--posh-quaternary) !important; }
+.outline-success { outline-color: var(--posh-success) !important; }
+.outline-info { outline-color: var(--posh-info) !important; }
+.outline-warning { outline-color: var(--posh-warning) !important; }
+.outline-danger { outline-color: var(--posh-danger) !important; }
+.outline-light { outline-color: var(--posh-light) !important; }
+.outline-dark { outline-color: var(--posh-dark) !important; }
+.outline-white { outline-color: var(--posh-white) !important; }
+.outline-black { outline-color: var(--posh-black) !important; }
 <?php COUCH::invoke(); ?>

@@ -86,10 +86,10 @@
     <cms:if has_backdrop == '1'>
         <cms:if act_bg_clr != ''>bg-<cms:show act_bg_clr /> </cms:if>
         <cms:if act_bg_opt == 'border'>
-            border 
-            <cms:if act_brd_siz != ''>border-<cms:show act_brd_siz /> </cms:if>
-            <cms:if act_brd_sty != ''>border-<cms:show act_brd_sty /> </cms:if>
-            <cms:if act_brd_clr != ''>border-<cms:show act_brd_clr /> </cms:if> 
+            <cms:if act_brd_siz != ''>outline-<cms:show act_brd_siz /> </cms:if>
+            <cms:if act_brd_sty != ''>outline-<cms:show act_brd_sty /> </cms:if>
+            <cms:if act_brd_clr != ''>outline-<cms:show act_brd_clr /> </cms:if> 
+            <cms:if act_brd_spc != ''>outline-offset-<cms:show act_brd_spc /> </cms:if>
             <cms:if act_brd_rad != ''>rounded-<cms:show act_brd_rad /></cms:if>
         </cms:if>
     </cms:if>
