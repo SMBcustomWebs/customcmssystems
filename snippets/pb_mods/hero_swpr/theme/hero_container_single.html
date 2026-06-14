@@ -1,0 +1,100 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+	<div class="position-absolute top-0 start-0 mt-3 ms-3 z-3 d-flex flex-column gap-2">
+		<cms:popup_edit 'ccs_hro_gen_layout_msg|ccs_hro_vht|ccs_hro_py_ht|ccs_hro_bg_scrl_spd' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Height and Layout" title="Edit Height and Layout"><i class="fa-solid fa-arrows-up-down"></i></button>' />
+		<cms:popup_edit 
+			'ccs_hro_frmt_gen_grp|ccs_hro_gen_xt_row|ccs_hro_gen_xtr_scrl_msg|ccs_hro_bg_scrl_spd' link_text='<button class="btn btn-sm btn-dark shadow-sm rounded-circle" type="button" aria-label="Edit Scrolling Effect" title="Edit Scrolling Effect"><i class="fa-solid fa-up-down"></i></button>'
+		/>
+        <cms:popup_edit 'ccs_hro_bg_clr_opt|ccs_hro_form_gen_clr_msg|ccs_hro_bg_clr_cstm_grp|ccs_hro_bg_clr_cstm_msg|ccs_hro_bg_clr_cstm_grdt_opt_row|ccs_hro_bg_clr_cstm_grdt_opt|ccs_hro_bg_clr_cstm_row|ccs_hro_bg_clr_cstm_one|ccs_hro_bg_clr_cstm_two|ccs_hro_bg_clr_cust_grad_split_opt|ccs_hro_bg_clr_cstm_grad_rvrs_opt' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Background Color" title="Edit Background Color"><i class="fa-solid fa-fill-drip"></i></button>' />
+		
+        <cms:if is_video_tile='1'>
+            <cms:popup_edit 'ccs_hro_bg_vid_grp|ccs_hro_bg_vid_msg|ccs_hro_bg_vid_row|ccs_hro_bg_vid_src_opt|ccs_hro_bg_vid_ytb_row|ccs_hro_bg_ytb_id|ccs_hro_bg_ytb_str|ccs_hro_bg_ytb_stp|ccs_hro_bg_vid_vmo_row|ccs_hro_bg_vmo_id|ccs_hro_bg_vid_lcl_row|ccs_hro_bg_vid_upl_vid_mp4|ccs_hro_bg_vid_upl_vid_webm|ccs_hro_bg_vid_upl_vid_ogv|ccs_hro_bg_img_grp|ccs_hro_bg_img_msg|ccs_hro_bg_img_row|ccs_hro_bg_img|ccs_hro_bg_alt|ccs_hro_bg_img_pos_row|ccs_hro_bg_img_pos|ccs_hro_bg_img_opc' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Background Video" title="Edit Background Video"><i class="fa-solid fa-video"></i></button>' />
+        <cms:else />
+            <cms:popup_edit 'ccs_hro_bg_img_grp|ccs_hro_bg_img_msg|ccs_hro_bg_img_row|ccs_hro_bg_img|ccs_hro_bg_alt|ccs_hro_bg_img_pos_row|ccs_hro_bg_img_pos|ccs_hro_bg_img_opc' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Background Image" title="Edit Background Image"><i class="fa-regular fa-image"></i></button>' />
+        </cms:if>
+
+		<cms:popup_edit 'ccs_hro_ovrly_clr_opt|ccs_hro_ovrly_opc|ccs_hro_ovrly_clr_cstm_grp|ccs_hro_ovrly_clr_cstm_msg|ccs_hro_ovrly_clr_cstm_grdt_opt_row|ccs_hro_ovrly_clr_grdt_opt|ccs_hro_ovrly_cstm_row|ccs_hro_ovrly_clr_cstm_one|ccs_hro_ovrly_clr_cstm_two|ccs_hro_ovrly_cust_grad_split_opt|ccs_hro_ovrly_clr_cstm_grdt_rvrs_opt' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Overlay Color" title="Edit Overlay Color"><i class="fa-solid fa-layer-group"></i></button>' />
+	</div>
+</cms:if>
+
+<div class="container position-relative">
+	<div class="row min-vh-<cms:show hro_ht /> align-items-<cms:show hro_valg /> justify-content-<cms:show hro_halg /> py-<cms:show hro_py /> <cms:if ccs_hro_bot_rail_opt='1'>pb-5 mb-4</cms:if>">
+		<div class="<cms:show ccs_hro_txt_sz /> position-relative">
+            
+            <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+                <div class="position-absolute top-0 start-0 mt-n3 ms-n3 z-3 d-flex flex-column gap-2">
+                    <cms:popup_edit 'ccs_hro_txtblk_grp|ccs_hro_txtblk_msg|ccs_hro_txtblk_sz_row|ccs_hro_txtbx_sz_opt|ccs_hro_txtblk_align_row|ccs_hro_txtbx_valg|ccs_hro_txtbx_halg|ccs_hro_txt_halg|ccs_hro_txtbx_cstm_sz_row|ccs_hro_txtbx_cstm_sz_msg|ccs_hro_txtbx_cstm_sz_rpt' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Text Box Layout" title="Edit Text Box Layout"><i class="fa-solid fa-object-group"></i></button>' />
+
+<cms:popup_edit 'ccs_hro_txtblk_grp|ccs_hro_txtblk_bg_row|ccs_hro_txtbx_bg_opt|ccs_hro_txtblk_pd_row|ccs_hro_txtblk_bg_pd|ccs_hro_txtbx_bg_grp|ccs_hro_txtbx_bg_clr_msg|ccs_hro_txtbx_bg_row|ccs_hro_txtblk_bg_clr|ccs_hro_txtblk_bg_brd_siz|ccs_hro_txtblk_bg_brd_sty|ccs_hro_txtblk_bg_brd_clr|ccs_hro_txtblk_brd_spc' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Text Box Background" title="Edit Text Box Background"><i class="fa-solid fa-paint-roller"></i></button>' />
+                    <cms:popup_edit 'ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_text_grp|ccs_hro_txt_msg|ccs_hro_eye_msg|ccs_hro_eyebrow_row|ccs_hro_eyebrow_txt|ccs_hro_eyebrow_clr|ccs_hro_eyebrow_sz|ccs_hro_eyebrow_wt|ccs_hro_eyebrow_fst|ccs_hro_eyebrow_font|ccs_hro_eyebrow_ls|ccs_hro_hd_msg|ccs_hro_headline_row|ccs_hro_headline_txt|ccs_hro_headline_clr|ccs_hro_headline_sz|ccs_hro_headline_wt|ccs_hro_headline_fst|ccs_hro_headline_font|ccs_hro_headline_ls|ccs_hro_sub_msg|ccs_hro_sub_row|ccs_hro_sub_txt|ccs_hro_sub_clr|ccs_hro_sub_sz|ccs_hro_sub_wt|ccs_hro_sub_fst|ccs_hro_sub_font|ccs_hro_sub_ls|ccs_hro_txtblk_img_grp|ccs_hro_txtblk_img|ccs_hro_txtblk_img_alt|ccs_hro_txtblk_img_fit_row|ccs_hro_txtblk_img_fit|ccs_hro_txtblk_img_pos_row|ccs_hro_txtblk_img_pos|ccs_hro_txtblk_form_grp|ccs_hro_txtblk_form_opt_row|ccs_hro_txtblk_form_msg|ccs_hro_txtblk_form_opt|ccs_hro_txtblk_form_smpl_row|ccs_hro_txtblk_frm_smpl_msg|ccs_hro_txtblk_form_smplx_row|ccs_hro_txtblk_frm_smplx_msg|ccs_hro_txtblk_form_cntct_row|ccs_hro_txtblk_frm_cntc_msg|ccs_hro_frm_ttl_msg|ccs_hro_txtblk_form_ttl_row|ccs_hro_txtblk_frm_title|ccs_hro_txtblk_frm_ttl_clr|ccs_hro_txtblk_frm_ttl_sz|ccs_hro_txtblk_frm_ttl_wt|ccs_hro_txtblk_frm_ttl_fst|ccs_hro_txtblk_frm_ttl_font|ccs_hro_txtblk_frm_ttl_ls|ccs_hro_frm_para_msg|ccs_hro_txtblk_form_para_row|ccs_hro_txtblk_frm_para|ccs_hro_txtblk_frm_para_clr|ccs_hro_txtblk_frm_para_sz|ccs_hro_txtblk_frm_para_wt|ccs_hro_txtblk_frm_para_fst|ccs_hro_txtblk_frm_para_font|ccs_hro_txtblk_frm_para_ls|ccs_hro_txtblk_frm_cta_row|ccs_hro_txtblk_frm_cta_msg|ccs_hro_txtblk_frm_cta_txt|ccs_hro_txtblk_frm_cta_plc|ccs_hro_txtblk_frm_cta_clr_row|ccs_hro_txtblk_frm_cta_clr|ccs_hro_txtblk_frm_cta_fmt_row|ccs_hro_txtblk_frm_cta_fill|ccs_hro_txtblk_frm_cta_st|ccs_hro_txtblk_frm_cta_sz|ccs_hro_txtblk_frm_cta_w|ccs_hro_txtblk_frm_cta_icon_pos_row|ccs_hro_txtblk_frm_cta_icon_pos|ccs_hro_txtblk_frm_cta_icon_fa_row|ccs_hro_txtblk_frm_cta_icon_fa' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Master Content Choice" title="Master Content Choice"><i class="fa-solid fa-code-branch"></i></button>' />
+                </div>
+            </cms:if>
+
+            <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+                <div class="position-absolute bottom-100 start-50 translate-middle-x mb-2 z-3">
+                    <cms:popup_edit 'ccs_hro_mdl_add_opt|ccs_hro_mdl_add_grp|ccs_hro_gen_xt_msg|ccs_hro_mdl_stg_row|ccs_hro_add_vid_btn_clr|ccs_hro_add_vid_btn_mgn|ccs_hro_mdl_plc|ccs_hro_mdl_img_row|ccs_hro_mdl_img_rpt|ccs_hro_mdl_vid_row|ccs_hro_mdl_vid_msg|ccs_hro_mdl_vid_src_opt|ccs_hro_mdl_ytb_id|ccs_hro_mdl_vim_id|ccs_hro_mdl_vid_upl_vid_mp4' link_text="<button class='btn btn-sm <cms:if ccs_hro_mdl_add_opt!='0'>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Popup Media' title='Edit Popup Media'><i class='fa-regular fa-circle-play'></i></button>" />
+                </div>
+            </cms:if>
+
+            <div class="<cms:if ccs_hro_txtbx_bg_opt='1'>shop-slider-card </cms:if>text-<cms:show hro_txt_align /> <cms:if ccs_hro_txtblk_bg_pd>p-<cms:show ccs_hro_txtblk_bg_pd /><cms:else />p-0</cms:if> position-relative">
+                
+                <cms:if ccs_hro_txtblk_blk_opt == '2'>
+                    <cms:embed 'pb_mods/hero/theme/hero_txtbx_form.html' />
+                <cms:else_if ccs_hro_txtblk_blk_opt == '1' />
+                    <cms:embed 'pb_mods/hero/theme/hero_txtbx_img.html' />
+                <cms:else />
+                    <cms:embed 'pb_mods/hero/theme/hero_txtbx_txt.html' />
+                </cms:if>
+                
+                <cms:if ccs_hro_txtblk_blk_opt != '2'>
+    
+				<cms:if ccs_hro_txtblk_blk_opt == '1'>
+					<div class="position-absolute bottom-0 start-0 w-100 z-3 <cms:if ccs_hro_bot_rail_opt='1'>mb-5 pb-4<cms:else />mb-3</cms:if>">
+						<cms:embed 'pb_mods/hero/theme/hero_cta.html' />
+					</div>
+
+				<cms:else />
+					<div class="position-relative w-100 z-3 mt-4 <cms:if ccs_hro_bot_rail_opt='1'>mb-5 pb-4</cms:if>">
+						<cms:embed 'pb_mods/hero/theme/hero_cta.html' />
+
+					</div>
+				</cms:if>
+
+			</cms:if>
+
+            <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+                <div class="position-absolute bottom-0 end-0 me-n4 z-3 d-flex flex-column gap-2 <cms:if ccs_hro_bot_rail_opt='1'>mb-5 pb-4<cms:else />mb-3</cms:if>">
+                    <cms:if ccs_hro_txtblk_blk_opt != '2'>
+                        <cms:popup_edit 'ccs_hro_txtblk_blk_opt|ccs_hro_cta_opt|ccs_hro_cta_grp|ccs_hro_cta_layout_row|ccs_hro_cta_grp_gap|ccs_hro_cta_grp_halg|ccs_hro_cta_grp_dir|ccs_hro_cta_1_msg_row|ccs_hro_cta_1_msg|ccs_hro_cta_1_core_row|ccs_hro_cta_1_txt|ccs_hro_cta_1_clr|ccs_hro_cta_1_lnk_clr_row|ccs_hro_cta_1_lnk_clr|ccs_hro_cta_1_fmt_row|ccs_hro_cta_1_fill|ccs_hro_cta_1_st|ccs_hro_cta_1_sz|ccs_hro_cta_1_w|ccs_hro_cta_1_icon_pos_row|ccs_hro_cta_1_icon_pos|ccs_hro_cta_1_icon_msg|ccs_hro_cta_1_icon_fa_row|ccs_hro_cta_1_icon_fa|ccs_hro_cta_1_dest_row|ccs_hro_cta_1_lnk|ccs_hro_cta_1_cstm_row|ccs_hro_cta_1_cst_lnk|ccs_hro_cta_2_msg_row|ccs_hro_cta_2_msg|ccs_hro_cta_2_core_row|ccs_hro_cta_2_txt|ccs_hro_cta_2_clr|ccs_hro_cta_2_lnk_clr_row|ccs_hro_cta_2_lnk_clr|ccs_hro_cta_2_fmt_row|ccs_hro_cta_2_fill|ccs_hro_cta_2_st|ccs_hro_cta_2_sz|ccs_hro_cta_2_w|ccs_hro_cta_2_icon_pos_row|ccs_hro_cta_2_icon_pos|ccs_hro_cta_2_icon_msg|ccs_hro_cta_2_icon_fa_row|ccs_hro_cta_2_icon_fa|ccs_hro_cta_2_dest_row|ccs_hro_cta_2_lnk|ccs_hro_cta_2_cstm_row|ccs_hro_cta_2_cst_lnk|ccs_hro_cta_3_msg_row|ccs_hro_cta_3_msg|ccs_hro_cta_3_core_row|ccs_hro_cta_3_txt|ccs_hro_cta_3_clr|ccs_hro_cta_3_lnk_clr_row|ccs_hro_cta_3_lnk_clr|ccs_hro_cta_3_fmt_row|ccs_hro_cta_3_fill|ccs_hro_cta_3_st|ccs_hro_cta_3_sz|ccs_hro_cta_3_w|ccs_hro_cta_3_icon_pos_row|ccs_hro_cta_3_icon_pos|ccs_hro_cta_3_icon_msg|ccs_hro_cta_3_icon_fa_row|ccs_hro_cta_3_icon_fa|ccs_hro_cta_3_dest_row|ccs_hro_cta_3_lnk|ccs_hro_cta_3_cstm_row|ccs_hro_cta_3_cst_lnk' hide_fields='ccs_hro_txtblk_blk_opt' link_text="<button class='btn btn-sm <cms:if ccs_hro_cta_opt!='0'>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Link Buttons' title='Edit Link Buttons'><i class='fa-solid fa-link'></i></button>" />
+                    </cms:if>
+					
+                    <cms:popup_edit 'ccs_hro_frmt_gen_grp|ccs_hro_cta_row|ccs_hro_cta_social|ccs_hro_cta_social_halg' link_text="<button class='btn btn-sm <cms:if ccs_hro_cta_social!='0'>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Toggle Social Links' title='Toggle Social Links'><i class='fa-solid fa-share-nodes'></i></button>" />
+                    
+                    
+
+                </div>
+            </cms:if>
+
+            </div> 
+			
+		</div> 
+		
+	</div> 
+	</div>
+	
+    <cms:if ccs_hro_bot_rail_opt='1'>
+        <div class="row justify-content-center w-100 position-absolute bottom-0 start-0 m-0 z-3">
+            <div class="col-<cms:if ccs_hro_bot_rail_ln_sz><cms:show ccs_hro_bot_rail_ln_sz /><cms:else />12</cms:if> align-self-bottom position-relative px-0">
+                <div class="<cms:if ccs_hro_bot_rail_ln_shd>bg-<cms:show ccs_hro_bot_rail_ln_shd /> </cms:if>text-center <cms:if ccs_hro_bot_rail_thk>py-<cms:show ccs_hro_bot_rail_thk /><cms:else />py-2</cms:if>">
+                    <div class="<cms:if ccs_hro_bot_rail_ln_txt_clr>text-<cms:show ccs_hro_bot_rail_ln_txt_clr /> </cms:if><cms:if ccs_hro_bot_rail_ln_txt_sz>fs-<cms:show ccs_hro_bot_rail_ln_txt_sz /> </cms:if><cms:if ccs_hro_bot_rail_ln_fnt_st>fst-<cms:show ccs_hro_bot_rail_ln_fnt_st /> </cms:if><cms:if ccs_hro_bot_rail_ln_fnt_wt>fw-<cms:show ccs_hro_bot_rail_ln_fnt_wt /> </cms:if><cms:if ccs_hro_bot_rail_ln_font>font-<cms:show ccs_hro_bot_rail_ln_font /> </cms:if>pt-1 mb-0">
+                        <cms:show ccs_hro_bot_rail_ln_txt_ln />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </cms:if>
+
+    <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+        <div class="position-absolute bottom-0 start-50 translate-middle-x mb-2 z-3">
+            <cms:popup_edit 'ccs_hro_bot_rail_opt|ccs_hro_bot_rail_grp|ccs_hro_bot_rail_msg|ccs_hro_bot_rail_row|ccs_hro_bot_rail_ln_sz|ccs_hro_bot_rail_thk|ccs_hro_bot_rail_ln_shd|ccs_hro_bot_rail_txt_row|ccs_hro_bot_rail_ln_txt_ln|ccs_hro_bot_rail_ln_txt_clr|ccs_hro_bot_rail_ln_txt_sz|ccs_hro_bot_rail_ln_fnt_wt|ccs_hro_bot_rail_ln_fnt_st|ccs_hro_bot_rail_ln_font' link_text="<button class='btn btn-sm <cms:if ccs_hro_bot_rail_opt='1'>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Bottom Rail' title='Edit Bottom Rail'><i class='fa-regular fa-window-minimize'></i></button>" />
+        </div>
+    </cms:if>

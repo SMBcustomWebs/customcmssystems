@@ -1,0 +1,188 @@
+<cms:editable type='group' name='ccs_hro_cta_grp' label='Hero Link Button Options' not_active=ccs_hro_show_cta_1 order='190'>
+    
+    <cms:editable type='row' name='ccs_hro_cta_layout_row' not_active=ccs_hro_show_cta_1 order='5'>
+		<cms:editable type='dropdown' name='ccs_hro_cta_grp_halg' label='Horizontal Alignment' opt_values='dropdowns/h-align.htm' dynamic='opt_values' class='col-md-12' order='4' />
+	</cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_layout_adv_row' not_active=ccs_hro_show_cta_2 order='7'>
+		<cms:editable type='dropdown' name='ccs_hro_cta_grp_gap' label='Space Between Buttons' opt_values='1|2|3|4|5' class='col-md-6' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_grp_dir' label='Button Flow Direction' opt_values='Horizontal Row (Default)= | Vertical Stack=flex-column' class='col-md-6' order='6' />
+	</cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_1_msg_row' not_active=ccs_hro_show_cta_1 order='10'>
+        <cms:editable type='message' name='ccs_hro_cta_1_msg' order='2'>
+            <hr><br>
+            <h3>Button 1 Settings</h3>
+        </cms:editable>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_1_core_row' not_active=ccs_hro_show_cta_1 order='15'>
+        <cms:editable type='text' name='ccs_hro_cta_1_txt' label='Button Text' maxlength='30' class='col-md-6 col-sm-12' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_1_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-6 col-sm-12' order='4' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_cta_1_is_link' ccs_hro_cta_opt='' ccs_hro_cta_1_clr=''>
+        <cms:if (ccs_hro_cta_opt ge '1') && (ccs_hro_cta_1_clr='link')>0<cms:else />1</cms:if>
+    </cms:func>
+    <cms:func _into='ccs_hro_cta_1_not_link' ccs_hro_cta_opt='' ccs_hro_cta_1_clr=''>
+        <cms:if (ccs_hro_cta_opt ge '1') && (ccs_hro_cta_1_clr!='link')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_cta_1_lnk_clr_row' not_active=ccs_hro_cta_1_is_link order='20'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_1_lnk_clr' label='Link Text Color (If Link Chosen)' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_1_fmt_row' not_active=ccs_hro_cta_1_not_link order='25'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_1_fill' label='Fill Style' opt_values='dropdowns/button-fill.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_1_st' label='Button Shape' opt_values='dropdowns/button-style.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_1_sz' label='Button Size' opt_values='dropdowns/button-size.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_1_w' label='Button Width' opt_values='dropdowns/button-width.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='8' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_1_icon_pos_row' not_active=ccs_hro_cta_1_not_link order='30'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_1_icon_pos' label='Icon Position' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_cta_1_icon_show' ccs_hro_cta_opt='' ccs_hro_cta_1_clr='' ccs_hro_cta_1_icon_pos=''>
+        <cms:if (ccs_hro_cta_opt ge '1') && (ccs_hro_cta_1_clr!='link') && (ccs_hro_cta_1_icon_pos!='')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='message' name='ccs_hro_cta_1_icon_msg' not_active=ccs_hro_cta_1_icon_show order='35'>
+        <p class="mb-0 mt-3 text-muted" style="font-size:12px;">Find icons at <a href="https://fontawesome.com/v6/search?m=free" target="_blank">Font Awesome v6</a>.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_1_icon_fa_row' not_active=ccs_hro_cta_1_icon_show order='40'>
+        <cms:editable type='text' name='ccs_hro_cta_1_icon_fa' label='Font Awesome Icon Class' maxlength='50' width='300' class='col-md-6 col-sm-12' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_1_dest_row' not_active=ccs_hro_show_cta_1 order='45'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_1_lnk' label='Button Link' opt_values='dropdowns/links.htm' dynamic='opt_values' class='col-md-6 col-sm-12' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_cta_1_is_custom' ccs_hro_cta_opt='' ccs_hro_cta_1_lnk=''>
+        <cms:if (ccs_hro_cta_opt ge '1') && (ccs_hro_cta_1_lnk='custom')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_cta_1_cstm_row' not_active=ccs_hro_cta_1_is_custom order='50'>
+        <cms:editable type='text' name='ccs_hro_cta_1_cst_lnk' label='Custom URL Destination' desc='Input the entire URL (e.g., https://mysite.com/)' width='400' class='col-md-12' order='2' />
+    </cms:editable>
+
+
+    <cms:editable type='row' name='ccs_hro_cta_2_msg_row' not_active=ccs_hro_show_cta_2 order='55'>
+        <cms:editable type='message' name='ccs_hro_cta_2_msg' order='2'>
+            <hr><br>
+            <h3>Button 2 Settings</h3>
+        </cms:editable>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_2_core_row' not_active=ccs_hro_show_cta_2 order='60'>
+        <cms:editable type='text' name='ccs_hro_cta_2_txt' label='Button Text' maxlength='30' class='col-md-6 col-sm-12' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_2_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-6 col-sm-12' order='4' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_cta_2_is_link' ccs_hro_cta_opt='' ccs_hro_cta_2_clr=''>
+        <cms:if (ccs_hro_cta_opt ge '2') && (ccs_hro_cta_2_clr='link')>0<cms:else />1</cms:if>
+    </cms:func>
+    <cms:func _into='ccs_hro_cta_2_not_link' ccs_hro_cta_opt='' ccs_hro_cta_2_clr=''>
+        <cms:if (ccs_hro_cta_opt ge '2') && (ccs_hro_cta_2_clr!='link')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_cta_2_lnk_clr_row' not_active=ccs_hro_cta_2_is_link order='65'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_2_lnk_clr' label='Link Text Color (If Link Chosen)' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_2_fmt_row' not_active=ccs_hro_cta_2_not_link order='70'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_2_fill' label='Fill Style' opt_values='dropdowns/button-fill.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_2_st' label='Button Shape' opt_values='dropdowns/button-style.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_2_sz' label='Button Size' opt_values='dropdowns/button-size.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_2_w' label='Button Width' opt_values='dropdowns/button-width.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='8' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_2_icon_pos_row' not_active=ccs_hro_cta_2_not_link order='75'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_2_icon_pos' label='Icon Position' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_cta_2_icon_show' ccs_hro_cta_opt='' ccs_hro_cta_2_clr='' ccs_hro_cta_2_icon_pos=''>
+        <cms:if (ccs_hro_cta_opt ge '2') && (ccs_hro_cta_2_clr!='link') && (ccs_hro_cta_2_icon_pos!='')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='message' name='ccs_hro_cta_2_icon_msg' not_active=ccs_hro_cta_2_icon_show order='80'>
+        <p class="mb-0 mt-3 text-muted" style="font-size:12px;">Find icons at <a href="https://fontawesome.com/v6/search?m=free" target="_blank">Font Awesome v6</a>.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_2_icon_fa_row' not_active=ccs_hro_cta_2_icon_show order='85'>
+        <cms:editable type='text' name='ccs_hro_cta_2_icon_fa' label='Font Awesome Icon Class' maxlength='50' width='300' class='col-md-6 col-sm-12' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_2_dest_row' not_active=ccs_hro_show_cta_2 order='90'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_2_lnk' label='Button Link' opt_values='dropdowns/links.htm' dynamic='opt_values' class='col-md-6 col-sm-12' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_cta_2_is_custom' ccs_hro_cta_opt='' ccs_hro_cta_2_lnk=''>
+        <cms:if (ccs_hro_cta_opt ge '2') && (ccs_hro_cta_2_lnk='custom')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_cta_2_cstm_row' not_active=ccs_hro_cta_2_is_custom order='95'>
+        <cms:editable type='text' name='ccs_hro_cta_2_cst_lnk' label='Custom URL Destination' desc='Input the entire URL (e.g., https://mysite.com/)' width='400' class='col-md-12' order='2' />
+    </cms:editable>
+
+
+    <cms:editable type='row' name='ccs_hro_cta_3_msg_row' not_active=ccs_hro_show_cta_3 order='100'>
+        <cms:editable type='message' name='ccs_hro_cta_3_msg' order='2'>
+            <hr><br>
+            <h3>Button 3 Settings</h3>
+        </cms:editable>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_3_core_row' not_active=ccs_hro_show_cta_3 order='105'>
+        <cms:editable type='text' name='ccs_hro_cta_3_txt' label='Button Text' maxlength='30' class='col-md-6 col-sm-12' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_3_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-6 col-sm-12' order='4' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_cta_3_is_link' ccs_hro_cta_opt='' ccs_hro_cta_3_clr=''>
+        <cms:if (ccs_hro_cta_opt ge '3') && (ccs_hro_cta_3_clr='link')>0<cms:else />1</cms:if>
+    </cms:func>
+    <cms:func _into='ccs_hro_cta_3_not_link' ccs_hro_cta_opt='' ccs_hro_cta_3_clr=''>
+        <cms:if (ccs_hro_cta_opt ge '3') && (ccs_hro_cta_3_clr!='link')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_cta_3_lnk_clr_row' not_active=ccs_hro_cta_3_is_link order='110'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_3_lnk_clr' label='Link Text Color (If Link Chosen)' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_3_fmt_row' not_active=ccs_hro_cta_3_not_link order='115'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_3_fill' label='Fill Style' opt_values='dropdowns/button-fill.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_3_st' label='Button Shape' opt_values='dropdowns/button-style.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_3_sz' label='Button Size' opt_values='dropdowns/button-size.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_cta_3_w' label='Button Width' opt_values='dropdowns/button-width.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='8' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_3_icon_pos_row' not_active=ccs_hro_cta_3_not_link order='120'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_3_icon_pos' label='Icon Position' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_cta_3_icon_show' ccs_hro_cta_opt='' ccs_hro_cta_3_clr='' ccs_hro_cta_3_icon_pos=''>
+        <cms:if (ccs_hro_cta_opt ge '3') && (ccs_hro_cta_3_clr!='link') && (ccs_hro_cta_3_icon_pos!='')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='message' name='ccs_hro_cta_3_icon_msg' not_active=ccs_hro_cta_3_icon_show order='125'>
+        <p class="mb-0 mt-3 text-muted" style="font-size:12px;">Find icons at <a href="https://fontawesome.com/v6/search?m=free" target="_blank">Font Awesome v6</a>.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_3_icon_fa_row' not_active=ccs_hro_cta_3_icon_show order='130'>
+        <cms:editable type='text' name='ccs_hro_cta_3_icon_fa' label='Font Awesome Icon Class' maxlength='50' width='300' class='col-md-6 col-sm-12' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_cta_3_dest_row' not_active=ccs_hro_show_cta_3 order='135'>
+        <cms:editable type='dropdown' name='ccs_hro_cta_3_lnk' label='Button Link' opt_values='dropdowns/links.htm' dynamic='opt_values' class='col-md-6 col-sm-12' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_cta_3_is_custom' ccs_hro_cta_opt='' ccs_hro_cta_3_lnk=''>
+        <cms:if (ccs_hro_cta_opt ge '3') && (ccs_hro_cta_3_lnk='custom')>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_cta_3_cstm_row' not_active=ccs_hro_cta_3_is_custom order='140'>
+        <cms:editable type='text' name='ccs_hro_cta_3_cst_lnk' label='Custom URL Destination' desc='Input the entire URL (e.g., https://mysite.com/)' width='400' class='col-md-12' order='2' />
+    </cms:editable>
+
+</cms:editable>

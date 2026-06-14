@@ -1,0 +1,82 @@
+<cms:ignore> --- 1. Layout & Spacing Fallbacks --- </cms:ignore>
+<cms:if ccs_hro_vht><cms:set hro_ht=ccs_hro_vht scope='global' /><cms:else /><cms:set hro_ht='50' scope='global' /></cms:if>
+<cms:if ccs_hro_py_ht><cms:set hro_py=ccs_hro_py_ht scope='global' /><cms:else /><cms:set hro_py='6' scope='global' /></cms:if>
+<cms:if ccs_hro_txtbx_valg><cms:set hro_valg=ccs_hro_txtbx_valg scope='global' /><cms:else /><cms:set hro_valg='center' scope='global' /></cms:if>
+<cms:if ccs_hro_txtbx_halg><cms:set hro_halg=ccs_hro_txtbx_halg scope='global' /><cms:else /><cms:set hro_halg='center' scope='global' /></cms:if>
+<cms:if ccs_hro_txt_halg><cms:set hro_txt_align=ccs_hro_txt_halg scope='global' /><cms:else /><cms:set hro_txt_align='center' scope='global' /></cms:if>
+
+<cms:ignore> --- 2. Color Fallbacks --- </cms:ignore>
+<cms:if ccs_hro_bg_clr_opt><cms:set hro_bg_clr=ccs_hro_bg_clr_opt scope='global' /><cms:else /><cms:set hro_bg_clr='transparent' scope='global' /></cms:if>
+<cms:if ccs_hro_ovrly_clr_opt><cms:set hro_ovrly_clr=ccs_hro_ovrly_clr_opt scope='global' /><cms:else /><cms:set hro_ovrly_clr='transparent' scope='global' /></cms:if>
+<cms:if ccs_hro_ovrly_opc><cms:set hro_ovrly_opc=ccs_hro_ovrly_opc scope='global' /><cms:else /><cms:set hro_ovrly_opc='0.5' scope='global' /></cms:if>
+
+<cms:ignore> --- 3. Text Box Size Fallback --- </cms:ignore>
+<cms:if ccs_hro_txtbx_sz_opt='custom'>
+    <cms:capture into='ccs_hro_txt_sz' scope='global'>
+        <cms:show_repeatable 'ccs_hro_txtbx_cstm_sz_rpt'>
+			col-<cms:if ccs_hro_txtbx_cstm_col_sz><cms:show ccs_hro_txtbx_cstm_col_sz />-</cms:if><cms:show ccs_hro_txtbx_cstm_col_val /> 
+		</cms:show_repeatable>
+    </cms:capture>
+<cms:else />
+    <cms:if ccs_hro_txtbx_sz_opt>
+        <cms:set ccs_hro_txt_sz="col-<cms:show ccs_hro_txtbx_sz_opt />" scope='global' />
+    <cms:else />
+        <cms:set ccs_hro_txt_sz='col-md-8 col-lg-6' scope='global' />
+    </cms:if>
+</cms:if>
+
+<cms:ignore> --- 4. Generate a unique ID for Local CSS Scoping --- </cms:ignore>
+<cms:set local_hero_id="hro_<cms:random_name />" scope="global" />
+
+<cms:ignore> --- 5. Local CSS Explicit Layering Engine --- </cms:ignore>
+<cms:capture into='hero_local_css'>
+    
+    /* BASE LAYER 1: Background Color */
+    <cms:if hro_bg_clr='gradient'>
+        <cms:if ccs_hro_bg_clr_cstm_grdt_opt='1'>
+            #<cms:show local_hero_id /> .hro-base {
+                <cms:if ccs_hro_bg_clr_cstm_grad_rvrs_opt == '1'>
+                    background: linear-gradient(<cms:show ccs_hro_bg_clr_cust_grad_split_opt />deg, <cms:show ccs_hro_bg_clr_cstm_two />, <cms:show ccs_hro_bg_clr_cstm_one />) !important;
+                <cms:else />
+                    background: linear-gradient(<cms:show ccs_hro_bg_clr_cust_grad_split_opt />deg, <cms:show ccs_hro_bg_clr_cstm_one />, <cms:show ccs_hro_bg_clr_cstm_two />) !important;
+                </cms:if>
+            }
+        <cms:else />
+            #<cms:show local_hero_id /> .hro-base {
+                background-color: <cms:show ccs_hro_bg_clr_cstm_one /> !important;
+            }
+        </cms:if>
+    <cms:else_if (hro_bg_clr != 'transparent') && (hro_bg_clr != 'none') />
+        #<cms:show local_hero_id /> .hro-base {
+            background-color: var(--posh-<cms:show hro_bg_clr />) !important;
+        }
+    </cms:if>
+    
+    /* TOP LAYER 3: Overlay Tint */
+    <cms:if hro_ovrly_clr='gradient'>
+        <cms:if ccs_hro_ovrly_clr_grdt_opt='1'>
+            #<cms:show local_hero_id /> .hro-overlay {
+                <cms:if ccs_hro_ovrly_clr_cstm_grdt_rvrs_opt == '1'>
+                    background: linear-gradient(<cms:show ccs_hro_ovrly_cust_grad_split_opt />deg, <cms:show ccs_hro_ovrly_clr_cstm_two />, <cms:show ccs_hro_ovrly_clr_cstm_one />) !important;
+                <cms:else />
+                    background: linear-gradient(<cms:show ccs_hro_ovrly_cust_grad_split_opt />deg, <cms:show ccs_hro_ovrly_clr_cstm_one />, <cms:show ccs_hro_ovrly_clr_cstm_two />) !important;
+                </cms:if>
+            }
+        <cms:else />
+            #<cms:show local_hero_id /> .hro-overlay {
+                background-color: <cms:show ccs_hro_ovrly_clr_cstm_one /> !important;
+            }
+        </cms:if>
+    <cms:else_if (hro_ovrly_clr != 'transparent') && (hro_ovrly_clr != 'none') />
+        #<cms:show local_hero_id /> .hro-overlay {
+            background-color: rgba(var(--posh-<cms:show hro_ovrly_clr />-rgb), <cms:show hro_ovrly_opc />) !important;
+        }
+    </cms:if>
+
+</cms:capture>
+
+<cms:if hero_local_css>
+    <style>
+        <cms:show hero_local_css />
+    </style>
+</cms:if>

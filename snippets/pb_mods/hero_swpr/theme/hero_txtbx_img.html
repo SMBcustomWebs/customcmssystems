@@ -1,0 +1,49 @@
+<cms:if ccs_hro_txtblk_img>
+    <div class="position-relative w-100 d-flex flex-column align-items-center">
+        
+        <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+            <div class="position-absolute top-0 end-0 m-3 z-3">
+                <cms:popup_edit 'ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_img_grp|ccs_hro_txtblk_img|ccs_hro_txtblk_img_alt|ccs_hro_txtblk_img_fit_row|ccs_hro_txtblk_img_fit|ccs_hro_txtblk_img_pos_row|ccs_hro_txtblk_img_pos' hide_fields='ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_img_grp' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Quick Change Image" title="Quick Change Image"><i class="fa-regular fa-image"></i></button>' />
+            </div>
+        </cms:if>
+
+        <div class="position-relative w-100">
+            
+            <cms:if ccs_hro_mdl_add_opt != '0'>
+                <cms:if ccs_hro_mdl_plc == 'top'>
+                    <div class="position-absolute top-0 start-50 translate-middle-x mt-4 z-3">
+                        <cms:embed 'pb_mods/hero/theme/hero_modal-add.html' />
+                    </div>
+                </cms:if>
+                
+                <cms:if ccs_hro_mdl_plc == 'middle'>
+                    <div class="position-absolute top-50 start-50 translate-middle z-3">
+                        <cms:embed 'pb_mods/hero/theme/hero_modal-add.html' />
+                    </div>
+                </cms:if>
+
+                <cms:if ccs_hro_mdl_plc == 'bottom'>
+                    <div class="position-absolute bottom-0 start-50 translate-middle-x mb-4 z-3">
+                        <cms:embed 'pb_mods/hero/theme/hero_modal-add.html' />
+                    </div>
+                </cms:if>
+            </cms:if>
+
+            <cms:if ccs_hro_txtblk_img_fit == 'cover'>
+                <img class="img-fluid object-fit-cover w-100" 
+                     style="max-height: 60vh; object-position: <cms:if ccs_hro_txtblk_img_pos><cms:show ccs_hro_txtblk_img_pos /><cms:else />center</cms:if>;"
+                     src="<cms:show ccs_hro_txtblk_img />" 
+                     alt="<cms:show ccs_hro_txtblk_img_alt />" 
+                />
+            <cms:else />
+                <img class="img-fluid object-fit-contain" 
+                     style="max-height: 60vh; width: auto;"
+                     src="<cms:show ccs_hro_txtblk_img />" 
+                     alt="<cms:show ccs_hro_txtblk_img_alt />" 
+                />
+            </cms:if>
+            
+        </div>
+
+    </div>
+</cms:if>

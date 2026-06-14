@@ -1,0 +1,98 @@
+<cms:func _into='ccs_hro_txtblk_form_chc1' ccs_hro_txtblk_form_opt=''>
+    <cms:if ccs_hro_txtblk_form_opt!="4" >0<cms:else />1</cms:if>
+</cms:func>
+<cms:func _into='ccs_hro_txtblk_form_chc2' ccs_hro_txtblk_form_opt=''>
+    <cms:if ccs_hro_txtblk_form_opt="2" >0<cms:else />1</cms:if>
+</cms:func>
+<cms:func _into='ccs_hro_txtblk_form_chc3' ccs_hro_txtblk_form_opt=''>
+    <cms:if ccs_hro_txtblk_form_opt="3" >0<cms:else />1</cms:if>
+</cms:func>
+
+<cms:editable type='group' name='ccs_hro_txtblk_form_grp' label='Hero Text Block Form' not_active=ccs_hro_txtblk_form_chc order='170'>
+    
+    <cms:editable type='row' name='ccs_hro_txtblk_form_opt_row' order='5'>
+        <cms:editable type='message' name='ccs_hro_txtblk_form_msg' order='2'>
+            <h2>Choose the Type of Form</h2>
+        </cms:editable>
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_form_opt' label="Type of Form" order="4"
+            opt_values='Simple (Join Email)=1|Simple Extended (name and email)=2|Basic (Contact Us)=3'
+            class='col-md-4'
+        />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_hro_txtblk_form_smpl_row' not_active=ccs_hro_txtblk_form_chc1 order='10'>
+        <cms:editable type='message' name='ccs_hro_txtblk_frm_smpl_msg' order='2'>
+            <p>Form will show an email field.</p>
+        </cms:editable>
+    </cms:editable>    
+     <cms:editable type='row' name='ccs_hro_txtblk_form_smplx_row' not_active=ccs_hro_txtblk_form_chc2 order='15'>
+        <cms:editable type='message' name='ccs_hro_txtblk_frm_smplx_msg' order='2'>
+            <p>...and a name field.</p>
+        </cms:editable>
+    </cms:editable>  
+    <cms:editable type='row' name='ccs_hro_txtblk_form_cntct_row' not_active=ccs_hro_txtblk_form_chc3 order='20'>
+        <cms:editable type='message' name='ccs_hro_txtblk_frm_cntc_msg' order='2'>
+            <p>...and a name field and message field.</p>
+        </cms:editable>
+    </cms:editable> 
+    
+    <cms:editable type='message' name='ccs_hro_frm_ttl_msg' order='24'>
+        <hr><br><h3>Form Title Style</h3><p>Optional heading specifically for the form.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_txtblk_form_ttl_row' order='25'>
+        <cms:editable type="text" name="ccs_hro_txtblk_frm_title" label="Form Title" class='col-md-12' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_ttl_clr' label='Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-2' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_ttl_sz' label='Size' opt_values='dropdowns/heading-size.htm' dynamic='opt_values' class='col-md-2' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_ttl_wt' label='Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-2' order='8' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_ttl_fst' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-2' order='10' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_ttl_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-2' order='12' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_ttl_ls' label='Letter Spacing' opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-md-2' order='14' />
+    </cms:editable>
+
+    <cms:editable type='message' name='ccs_hro_frm_para_msg' order='29'>
+        <hr><br><h3>Form Byline Style</h3><p>Optional description below the form title.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_txtblk_form_para_row' order='30'>
+        <cms:editable type="text" name="ccs_hro_txtblk_frm_para" label="Form Byline" class='col-md-12' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_para_clr' label='Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-2' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_para_sz' label='Size' opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-2' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_para_wt' label='Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-2' order='8' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_para_fst' label='Font Style' opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-md-2' order='10' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_para_font' label='Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-2' order='12' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_para_ls' label='Letter Spacing' opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-md-2' order='14' />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_hro_txtblk_frm_cta_row' label='Form Submit Button' order='50'>
+        <cms:editable type='message' name='ccs_hro_txtblk_frm_cta_msg' order='2'>
+            <hr><br><h2>Submit Button Settings</h2>
+        </cms:editable>  
+        <cms:editable type='text' name='ccs_hro_txtblk_frm_cta_txt' label='Submit Button Text' maxlength='30' class='col-md-6 col-sm-12' order='4'>Submit</cms:editable>
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_cta_plc' label='Button Placement' opt_values='dropdowns/h-align.htm' dynamic='opt_values' class='col-md-6 col-sm-12' order='6' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_txtblk_frm_cta_clr_row' order='55'>
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_cta_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-6 col-sm-12' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_txtblk_frm_cta_fmt_row' order='60'>
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_cta_fill' label='Fill Style' opt_values='dropdowns/button-fill.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='2' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_cta_st' label='Button Shape' opt_values='dropdowns/button-style.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='4' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_cta_sz' label='Button Size' opt_values='dropdowns/button-size.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='6' />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_cta_w' label='Button Width' opt_values='dropdowns/button-width.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='8' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_txtblk_frm_cta_icon_pos_row' order='65'>
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_frm_cta_icon_pos' label='Icon Position' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_frm_cta_icon_show' ccs_hro_txtblk_frm_cta_icon_pos=''>
+        <cms:if ccs_hro_txtblk_frm_cta_icon_pos!=''>0<cms:else />1</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_txtblk_frm_cta_icon_fa_row' not_active=ccs_hro_frm_cta_icon_show order='70'>
+        <cms:editable type='text' name='ccs_hro_txtblk_frm_cta_icon_fa' label='Font Awesome Icon Class' maxlength='50' width='300' class='col-md-6 col-sm-12' order='2' />
+    </cms:editable>
+
+</cms:editable>

@@ -1,0 +1,96 @@
+
+
+<cms:editable type='group' name='ccs_hro_mdl_add_grp' label='Add External Popup Video or Gallery' desc='' not_active=ccs_hro_mdl_add_chc order='200' >
+    <cms:editable type='message' name='ccs_hro_gen_xt_msg' order='704'>
+        <hr><br>
+        <h2>Will show on header as a 'play' button and a modal will pop up</h2><h4></h4>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_hro_mdl_stg_row' label="Photo Gallery Popup settings" not_active=ccs_hro_mdl_add_chc order='705' >
+        <cms:editable type='dropdown' name='ccs_hro_add_vid_btn_clr' label='Play Button Shade' 
+            opt_values='Light=|Dark=-drk'
+            class='col-md-4'
+            order='706'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_add_vid_btn_mgn' label='Play Button Space' 
+            opt_values='2|4|6|0'
+            class='col-md-4'
+            order='707'
+        />
+		<cms:editable type='dropdown' name='ccs_hro_mdl_plc' label='Play Button Placement' desc='Placement adjusts automatically for Text, Image, and Form layouts.' 
+			opt_values='Middle=middle | Top=top | Bottom=bottom'
+			class='col-md-4'
+			order='708'
+		/>
+    </cms:editable> 
+    
+    <cms:editable type='row' name='ccs_hro_mdl_img_row' label="Photo Gallery Popup" not_active=ccs_hro_mdl_imgs_chc order='708' >    
+        <cms:repeatable name='ccs_hro_mdl_img_rpt' label='Image Gallery Upload' class='col-12' order='709'>
+            <cms:editable type='message' name='ccs_hro_gen_xt_msg_rpt' order='710'>
+                <p>"Add Row" For<br>Next image</p>
+            </cms:editable>
+            <cms:editable type='image' name='ccs_hro_mdl_img_gal_img' label='Add Images for Gallery'
+                width='640'
+                hight='520'
+                enforce_max='1'
+                show_preview='1'
+                preview_width='75'
+                order='711'
+            />
+            <cms:editable type='text' name='ccs_hro_mdl_img_gal_img_alt' label='Description' order='712'  />
+        </cms:repeatable>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_mdl_vid_row' label="Video Popup" not_active=ccs_hro_mdl_vids_chc order='730' >
+        <cms:editable type='message' name='ccs_hro_mdl_vid_msg' order='731'>
+            <br>
+            <h2>Streaming Video ID or Upload your own</h2><h4>IMPORTANT: If You Tube or Vimeo, only the ID is needed</h4>
+        </cms:editable>
+        <cms:editable type='dropdown' name='ccs_hro_mdl_vid_src_opt' label='Upload or Stream' 
+            opt_values='Upload=0|You Tube=1|Vimeo=2'
+            class='col-md-4'
+            order='735'
+        />
+        <cms:func _into='ccs_hro_mdl_vid_lcl_chc' ccs_hro_mdl_vid_src_opt=''>
+            <cms:if ccs_hro_mdl_vid_src_opt='0'>
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:func _into='ccs_hro_mdl_vid_ytb_chc' ccs_hro_mdl_vid_src_opt=''>
+            <cms:if ccs_hro_mdl_vid_src_opt='1'>
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+        <cms:func _into='ccs_hro_mdl_vid_vim_chc' ccs_hro_mdl_vid_src_opt=''>
+            <cms:if ccs_hro_mdl_vid_src_opt='2'>
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func> 
+      
+        <cms:editable type="text" name="ccs_hro_mdl_ytb_id" label="You Tube Video ID"
+            width="275"
+            not_active=ccs_hro_mdl_vid_ytb_chc
+            class='col-md-4'
+            order="740"
+        />
+        <cms:editable type="text" name="ccs_hro_mdl_vim_id" label="Vimeo Video ID"
+            width="275"
+            not_active=ccs_hro_mdl_vid_vim_chc
+            class='col-md-4'
+            order="742"
+        />     
+
+        <cms:editable type="file" name="ccs_hro_mdl_vid_upl_vid_mp4" label="mp4"
+            width='30' 
+            not_active=ccs_hro_mdl_vid_lcl_chc
+            class='col-md-4'
+            order='744'  
+        />
+    </cms:editable>
+</cms:editable>

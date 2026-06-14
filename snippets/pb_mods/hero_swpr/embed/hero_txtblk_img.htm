@@ -1,0 +1,26 @@
+<cms:editable type='group' name='ccs_hro_txtblk_img_grp' label='Hero Text Block Image' not_active=ccs_hro_txtblk_img_chc order='160'>
+    
+    <cms:editable type='image' name='ccs_hro_txtblk_img' label='Upload Image for Text' desc='1:1 ratio max h or w will be enforced at 500px'
+        width='500'
+        height='500'
+        enforce_max='1'
+        show_preview='1'
+        preview_width='75'
+        order='378'
+    />
+    
+    <cms:editable type='text' name='ccs_hro_txtblk_img_alt' label='Text Image Alt Description' desc='for screen readers' order='380' />
+    
+    <cms:editable type='row' name='ccs_hro_txtblk_img_fit_row' order='385'>
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_img_fit' label='Image Fit Behavior' opt_values='Scale to Fit Entire Image (Contain)=contain | Zoom to Fill Space (Cover)=cover' class='col-md-6' order='2' />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_img_anch_hide' ccs_hro_txtblk_img_fit=''>
+        <cms:if ccs_hro_txtblk_img_fit='contain'>1<cms:else />0</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_txtblk_img_pos_row' not_active=ccs_hro_img_anch_hide order='390'>
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_img_pos' label='Image Focus (Anchor)' opt_values='Middle=center | Top=top | Bottom=bottom' class='col-md-6' order='2' />
+    </cms:editable>
+
+</cms:editable>

@@ -1,0 +1,92 @@
+<cms:if ccs_hro_mdl_add_opt != '0' && ccs_hro_mdl_plc == 'top'>
+    <div class="mb-3 w-100 text-center position-relative z-3">
+        <cms:embed 'pb_mods/hero/theme/hero_modal-add.html' />
+    </div>
+</cms:if>
+
+<cms:if ccs_hro_eyebrow_txt>
+    <cms:capture into='eyebrow_classes'>
+        <cms:if ccs_hro_eyebrow_sz>fs-<cms:show ccs_hro_eyebrow_sz /> </cms:if>
+        <cms:if ccs_hro_eyebrow_wt>fw-<cms:show ccs_hro_eyebrow_wt /> </cms:if>
+        <cms:if ccs_hro_eyebrow_clr>text-<cms:show ccs_hro_eyebrow_clr /> </cms:if>
+        <cms:if ccs_hro_eyebrow_fst>fst-<cms:show ccs_hro_eyebrow_fst /> </cms:if>
+        <cms:if ccs_hro_eyebrow_font>font-<cms:show ccs_hro_eyebrow_font /> </cms:if>
+        <cms:if ccs_hro_eyebrow_ls>ls-<cms:show ccs_hro_eyebrow_ls /> </cms:if>
+    </cms:capture>
+    <div class="w-100 mb-2">
+        <div class="position-relative d-inline-block <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>pe-5</cms:if>">
+            
+            <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+                <div class="position-absolute top-50 start-100 translate-middle-y z-3">
+                    <cms:popup_edit 'ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_text_grp|ccs_hro_eye_msg|ccs_hro_eyebrow_row|ccs_hro_eyebrow_txt|ccs_hro_eyebrow_clr|ccs_hro_eyebrow_sz|ccs_hro_eyebrow_wt|ccs_hro_eyebrow_fst|ccs_hro_eyebrow_font|ccs_hro_eyebrow_ls' hide_fields='ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_text_grp' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Eyebrow" title="Edit Eyebrow"><i class="fa-solid fa-pen"></i></button>' />
+                </div>
+            </cms:if>
+            
+            <h4 class="<cms:show eyebrow_classes /> mb-0">
+                <cms:show ccs_hro_eyebrow_txt />
+            </h4>
+        </div>
+    </div>
+</cms:if>
+
+<cms:if ccs_hro_headline_txt>
+    <cms:capture into='headline_classes'>
+        <cms:if ccs_hro_headline_sz>fs-<cms:show ccs_hro_headline_sz /> </cms:if>
+        <cms:if ccs_hro_headline_wt>fw-<cms:show ccs_hro_headline_wt /> </cms:if>
+        <cms:if ccs_hro_headline_clr>text-<cms:show ccs_hro_headline_clr /> </cms:if>
+        <cms:if ccs_hro_headline_fst>fst-<cms:show ccs_hro_headline_fst /> </cms:if>
+        <cms:if ccs_hro_headline_font>font-<cms:show ccs_hro_headline_font /> </cms:if>
+        <cms:if ccs_hro_headline_ls>ls-<cms:show ccs_hro_headline_ls /> </cms:if>
+    </cms:capture>
+    <div class="w-100 mb-3">
+        <div class="position-relative d-inline-block <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>pe-5</cms:if>">
+            
+            <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+                <div class="position-absolute top-50 start-100 translate-middle-y z-3">
+                    <cms:popup_edit 'ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_text_grp|ccs_hro_hd_msg|ccs_hro_headline_row|ccs_hro_headline_txt|ccs_hro_headline_clr|ccs_hro_headline_sz|ccs_hro_headline_wt|ccs_hro_headline_fst|ccs_hro_headline_font|ccs_hro_headline_ls' hide_fields='ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_text_grp' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Headline" title="Edit Headline"><i class="fa-solid fa-heading"></i></button>' />
+                </div>
+            </cms:if>
+            
+            <h1 class="<cms:show headline_classes /> mb-0">
+                <cms:show ccs_hro_headline_txt />
+            </h1>
+        </div>
+    </div>
+</cms:if>
+
+<cms:if ccs_hro_mdl_add_opt != '0' && ccs_hro_mdl_plc == 'middle'>
+    <div class="mb-3 w-100 text-center position-relative z-3">
+        <cms:embed 'pb_mods/hero/theme/hero_modal-add.html' />
+    </div>
+</cms:if>
+
+<cms:if ccs_hro_sub_txt>
+    <cms:capture into='subheadline_classes'>
+        <cms:if ccs_hro_sub_sz>fs-<cms:show ccs_hro_sub_sz /> </cms:if>
+        <cms:if ccs_hro_sub_wt>fw-<cms:show ccs_hro_sub_wt /> </cms:if>
+        <cms:if ccs_hro_sub_clr>text-<cms:show ccs_hro_sub_clr /> </cms:if>
+        <cms:if ccs_hro_sub_fst>fst-<cms:show ccs_hro_sub_fst /> </cms:if>
+        <cms:if ccs_hro_sub_font>font-<cms:show ccs_hro_sub_font /> </cms:if>
+        <cms:if ccs_hro_sub_ls>ls-<cms:show ccs_hro_sub_ls /> </cms:if>
+    </cms:capture>
+    <div class="w-100">
+        <div class="position-relative d-inline-block <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>pe-5</cms:if>">
+            
+            <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+                <div class="position-absolute top-50 start-100 translate-middle-y z-3">
+                    <cms:popup_edit 'ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_text_grp|ccs_hro_sub_msg|ccs_hro_sub_row|ccs_hro_sub_txt|ccs_hro_sub_clr|ccs_hro_sub_sz|ccs_hro_sub_wt|ccs_hro_sub_fst|ccs_hro_sub_font|ccs_hro_sub_ls' hide_fields='ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_text_grp' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Subheadline" title="Edit Subheadline"><i class="fa-solid fa-align-left"></i></button>' />
+                </div>
+            </cms:if>
+            
+            <h2 class="<cms:show subheadline_classes /> mb-0">
+                <cms:show ccs_hro_sub_txt />
+            </h2>
+        </div>
+    </div>
+</cms:if>
+
+<cms:if ccs_hro_mdl_add_opt != '0' && ccs_hro_mdl_plc == 'bottom'>
+    <div class="mt-3 w-100 text-center position-relative z-3">
+        <cms:embed 'pb_mods/hero/theme/hero_modal-add.html' />
+    </div>
+</cms:if>

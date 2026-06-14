@@ -59,7 +59,9 @@
 
 <cms:if "<cms:gpc 'page' />" && "<cms:gpc 'post' />">
     <cms:pages masterpage="<cms:gpc 'page' />" id="<cms:gpc 'post' />" > 
-        
+		<cms:set target_template_order=k_template_order scope='global' />
+        <cms:set target_template_name=k_template_name scope='global' />
+		
         <cms:set bg_clr1="<cms:show ccs_hro_bg_clr_cstm_one />" "global" />
         <cms:set bg_clr2="<cms:show ccs_hro_bg_clr_cstm_two />" "global" />
         <cms:set bg_splt="<cms:show ccs_hro_bg_clr_cust_grad_split_opt />" "global" />
@@ -615,6 +617,22 @@ a {
 .bg-opacity-0\.9 { --posh-bg-opacity: 0.9 !important; }
 .bg-opacity-1\.0 { --posh-bg-opacity: 1.0 !important; }
 .bg-opacity-1 { --posh-bg-opacity: 1 !important; }
+
+/* -------------------------------------------------------------------------- */
+/* CUSTOM Z-INDEX OVERRIDES                                                   */
+/* -------------------------------------------------------------------------- */
+.z-10 { z-index: 10 !important; }
+
+
+/* -------------------------------------------------------------------------- */
+/* STRUCTURAL OVERRIDES (Site Pages only)                                    */
+/* -------------------------------------------------------------------------- */
+<cms:if (target_template_order ge '1000' && target_template_order le '1999') || target_template_name == 'index.php'>
+/* Removes the hardcoded 100vh quota so modular sections snap together */
+.content {
+    min-height: unset !important;
+}
+</cms:if>
 
 
 <?php COUCH::invoke(); ?>

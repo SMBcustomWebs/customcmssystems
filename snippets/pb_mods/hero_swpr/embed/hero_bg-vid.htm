@@ -1,0 +1,70 @@
+<cms:editable type='group' name='ccs_hro_bg_vid_grp' collapsed="0" label='Video Header Options' order='110'>
+    
+    <cms:editable type='message' name='ccs_hro_bg_vid_msg' order='2'>
+        <h2>Options for the Video Background</h2>
+        <h4>Upload, or get the Video ID from YouTube or Vimeo</h4>
+        <p>IMPORTANT: For streaming YouTube or Vimeo, only the video ID is needed. This can be found in the URL or share link.</p>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_hro_bg_vid_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_hro_bg_vid_src_opt' label='Upload or Stream' 
+            opt_values='Upload=0 | YouTube=1 | Vimeo=2'
+            class='col-md-4'
+            order='2'
+        />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_bg_vid_lcl_chc' ccs_hro_bg_vid_src_opt=''>
+        <cms:if ccs_hro_bg_vid_src_opt='0'>show<cms:else />hide</cms:if>
+    </cms:func>
+    <cms:func _into='ccs_hro_bg_vid_ytb_chc' ccs_hro_bg_vid_src_opt=''>
+        <cms:if ccs_hro_bg_vid_src_opt='1'>show<cms:else />hide</cms:if>
+    </cms:func> 
+    <cms:func _into='ccs_hro_bg_vid_vmo_chc' ccs_hro_bg_vid_src_opt=''>
+        <cms:if ccs_hro_bg_vid_src_opt='2'>show<cms:else />hide</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_bg_vid_ytb_row' not_active=ccs_hro_bg_vid_ytb_chc order='10'>
+        <cms:editable type="text" name="ccs_hro_bg_ytb_id" label="YouTube Video ID" desc='Video ID only'
+            width="275"
+            class='col-md-4'
+            order="2"
+        />
+        <cms:editable type="text" name="ccs_hro_bg_ytb_str" label="Start Stream Loop" desc="in seconds only"
+            maxlength='6'
+            width="30"
+            class='col-md-4'
+            order="4"
+        >5</cms:editable>
+        <cms:editable type="text" name="ccs_hro_bg_ytb_stp" label="Stop Stream Loop" desc="in seconds only"
+            maxlength='6'
+            width="30"
+            class='col-md-4'
+            order="6"
+        >20</cms:editable>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_bg_vid_vmo_row' not_active=ccs_hro_bg_vid_vmo_chc order='15'>
+        <cms:editable type="text" name="ccs_hro_bg_vmo_id" label="Vimeo Video ID" desc='Video ID only (e.g., 123456789)'
+            width="275"
+            class='col-md-4'
+            order="2"
+        />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_bg_vid_lcl_row' not_active=ccs_hro_bg_vid_lcl_chc order='20'>
+        <cms:editable type="file" name="ccs_hro_bg_vid_upl_vid_mp4" label="mp4"
+            width='30' 
+            order='2'  
+        />
+        <cms:editable type="file" name="ccs_hro_bg_vid_upl_vid_webm" label="webm" 
+            width='30'
+            order='4'
+        />
+        <cms:editable type="file" name="ccs_hro_bg_vid_upl_vid_ogv" label="ogv" 
+            width='30'
+            order='6'
+        />
+    </cms:editable>
+    
+</cms:editable>

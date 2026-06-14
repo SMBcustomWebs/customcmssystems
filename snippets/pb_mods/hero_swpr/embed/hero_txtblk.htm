@@ -1,0 +1,81 @@
+<cms:editable type='group' name='ccs_hro_txtblk_grp' label='Hero Text Block'  order='140'>
+    
+    <cms:editable type='message' name='ccs_hro_txtblk_msg' order='2'>
+        <h2>Hero Text Block</h2><h4>Below are the settings for the text block. The text block is the area that holds the text.</h4>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_hro_txtblk_sz_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_hro_txtbx_sz_opt' label='Size of Text Box' desc='choosing "Custom" will open up options below'
+            opt_values='dropdowns/hero_txt-box_size.htm'
+            dynamic='opt_values'
+            class='col-sm-6 col-md-4'
+            order='2'
+        />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_txtbx_sz_chc' ccs_hro_txtbx_sz_opt=''>
+        <cms:if ccs_hro_txtbx_sz_opt="custom" >0<cms:else />1</cms:if>
+    </cms:func> 
+
+    <cms:editable type='row' name='ccs_hro_txtblk_align_row' order='10'>
+        <cms:editable type='dropdown' name='ccs_hro_txtbx_valg' label='Align Textbox Vertical' desc='Top, Middle, Bottom'
+            opt_values='dropdowns/v-align.htm'
+            dynamic='opt_values'
+            class='col-sm-6 col-md-4'
+            order='2'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_txtbx_halg' label='Align Text Box Horizontal' desc='Left, Center, Right'
+            opt_values='dropdowns/h-align.htm'
+            dynamic='opt_values'
+            class='col-sm-6 col-md-4'
+            order='4'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_txt_halg' label='Align Inside Text' desc='Alignment of what is inside the text block'
+            opt_values='dropdowns/h-align.htm'
+            dynamic='opt_values'
+            class='col-sm-6 col-md-4'
+            order='6'
+        />
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_hro_txtblk_bg_row' order='15'>
+        <cms:editable type='dropdown' name='ccs_hro_txtbx_bg_opt' label='Add Background' desc='options will show below'
+            opt_values='No Background=0 | Add Background to Text Area=1'
+            class='col-sm-6 col-md-4'
+            order='2'
+        />
+    </cms:editable>
+
+    <cms:func _into='ccs_hro_txtbx_bg_chc' ccs_hro_txtbx_bg_opt=''>
+        <cms:if ccs_hro_txtbx_bg_opt='1'>0<cms:else />1</cms:if>
+    </cms:func>
+     
+    <cms:editable type='row' name='ccs_hro_txtblk_pd_row' order='20'>
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_bg_pd' label='Inner Padding' desc='space from text block edge'
+            opt_values='dropdowns/padding.htm'
+            dynamic='opt_values'
+            class='col-sm-6 col-md-4'
+            order='2'
+        />
+    </cms:editable>
+
+	<cms:editable type='row' name='ccs_hro_txtbx_cstm_sz_row' not_active=ccs_hro_txtbx_sz_chc order='143'>
+		<cms:editable type='message' name='ccs_hro_txtbx_cstm_sz_msg' order='2'>
+			<hr><br>
+			<h2>Custom Size Text Block</h2><h4><a href='https://getbootstrap.com/docs/5.1/layout/grid/' target="_blank">More Info on Bootstrap</a></h4>
+			<p>Screen Size adjusts for device screens. 12 columns means full width for that screen size.</p>
+		</cms:editable>
+		<cms:repeatable name='ccs_hro_txtbx_cstm_sz_rpt' label="Set column size per Bootstrap" order='4'>
+			<cms:editable type="dropdown" name='ccs_hro_txtbx_cstm_col_sz' label='Screen Size' 
+				opt_values='dropdowns/col-size.htm' 
+				dynamic='opt_values'
+				order='2'
+			/>
+			<cms:editable type="dropdown" name='ccs_hro_txtbx_cstm_col_val' label='Columns out of 12' 
+				opt_values='dropdowns/col-size-val.htm'  
+				dynamic='opt_values'
+				order='4'
+			/>
+		</cms:repeatable>       
+	</cms:editable>
+</cms:editable>

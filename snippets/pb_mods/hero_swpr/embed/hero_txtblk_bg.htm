@@ -1,0 +1,40 @@
+<cms:editable type='group' name='ccs_hro_txtbx_bg_grp' label='Text Block Background Settings' not_active=ccs_hro_txtbx_bg_chc order='180'>
+    
+    <cms:editable type='message' name='ccs_hro_txtbx_bg_clr_msg' order='393'>
+        <hr><br>
+        <h2>Text Block Background Color</h2><h4>Choose a color to help separate the Hero text from the background.</h4><p>This can help the text to pop when background images may wash away certain colors.</p>
+    </cms:editable>
+    
+    <cms:editable type='row' name='ccs_hro_txtbx_bg_row' order='394'>
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_bg_clr' label='Text Background Color' desc=''
+            opt_values='dropdowns/solid-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='396'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_bg_brd_siz' label='Border Style' desc='thick, thin, solid, dashed'
+            opt_values='dropdowns/border-size.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='397'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_bg_brd_sty' label='Border Style' desc='thick, thin, solid, dashed'
+            opt_values='dropdowns/border-style.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='399'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_bg_brd_clr' label='Border Color' desc=''
+            opt_values='dropdowns/solid-colors.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='402'
+        />
+        <cms:editable type='dropdown' name='ccs_hro_txtblk_brd_spc' label='Border Distance' desc='space around the border'
+            opt_values='0|.10|.25|.50|.60|.75|.85|1|1.10|1.25'
+            opt_selected='.50'
+            class='col-md-4'
+            order='404'
+        />
+    </cms:editable>
+</cms:editable>

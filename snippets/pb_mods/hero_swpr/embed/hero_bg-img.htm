@@ -1,0 +1,27 @@
+<cms:editable type='group' name='ccs_hro_bg_img_grp' label='Hero Backing Image' collapsed="1" order='120'>
+    
+    <cms:editable type='row' name='ccs_hro_bg_img_row' order='177'>
+        <cms:editable type='message' name='ccs_hro_bg_img_msg' order='176'>
+            <h2>Hero Background Image</h2><h4>This image sits above the Background Color and below the Overlay. Lower the opacity to allow the background color to bleed through.</h4>
+        </cms:editable>
+        <cms:editable type='image' name='ccs_hro_bg_img' label='Main Header Image' desc='16:9 ratio - 2560x1440, 1920x1080, etc'
+            width='2560'
+            height='1440'
+            enforce_max='1'
+            show_preview='1'
+            preview_width='75'
+            class='col-md-5'
+            order='179'
+        />
+        <cms:editable type='text' name='ccs_hro_bg_alt' label='Image Description' desc='For screen readers, SEO'
+            class='col-md-4'
+            order='180' 
+        />
+        <cms:editable type='dropdown' name='ccs_hro_bg_img_opc' label='Image Opacity' desc='Allows background color to bleed through'
+            opt_values='dropdowns/img-transparency.htm'
+            dynamic='opt_values'
+            class='col-md-3'
+            order='181'
+        />
+    </cms:editable>
+</cms:editable>

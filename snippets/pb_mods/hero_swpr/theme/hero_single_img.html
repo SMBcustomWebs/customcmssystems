@@ -1,0 +1,28 @@
+<cms:embed 'pb_mods/hero/theme/hero_custom_settings.html' />
+
+<section id="<cms:show local_hero_id />" class="p-0 has-parallax position-relative">
+    
+    <div class="bg-holder hro-base"></div>
+    
+    <cms:if ccs_hro_bg_img>
+        <div class="bg-holder" 
+             style="background-image:url(<cms:show ccs_hro_bg_img />); opacity: <cms:if ccs_hro_bg_img_opc><cms:show ccs_hro_bg_img_opc /><cms:else />1.0</cms:if>;" 
+             role="img" 
+             aria-label="<cms:show ccs_hro_bg_alt />" 
+             data-rellax-speed="<cms:show ccs_hro_bg_scrl_spd />" 
+             data-parallax="data-parallax">
+        </div>
+    </cms:if>
+
+    <cms:if (hro_ovrly_clr != 'transparent') && (hro_ovrly_clr != 'none') && (hro_ovrly_clr != '')>
+        <div class="bg-holder hro-overlay"></div>
+    </cms:if>
+    
+    <cms:embed 'pb_mods/hero/theme/hero_container_single.html' />
+
+    <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")> 
+        <div class="position-absolute bottom-0 start-0 m-3 z-3">
+            <cms:popup_edit '*' width='1050' height='1200' link_text='<button class="btn btn-danger shadow-sm" type="button" aria-label="Master Edit Settings" title="All Hero Settings"><i class="fa-solid fa-gear"></i> Master Edit</button>' />
+        </div>
+    </cms:if>
+</section>

@@ -1,0 +1,24 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    
+    
+        
+        
+
+        <cms:popup_edit "hero_swpr_frmt_gen_grp|hero_swpr_frmt_gen_ht_row|hero_swpr_slide_cnt|ccs_hro_swpr_sl_<cms:show k_count />_grp|ccs_hro_swpr_sl_<cms:show k_count />_bg_row|ccs_hro_swpr_sl_<cms:show k_count />_img|ccs_hro_swpr_sl_<cms:show k_count />_img_opc" 
+			hide_fields="hero_swpr_frmt_gen_grp|hero_swpr_frmt_gen_ht_row|hero_swpr_slide_cnt|ccs_hro_swpr_sl_<cms:show k_count />_bg_row" 
+			link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Slide Image" title="Edit Slide Image"><i class="fa-regular fa-image"></i></button>' 
+		/>
+
+        <cms:popup_edit "hero_swpr_frmt_gen_grp|hero_swpr_frmt_gen_ht_row|hero_swpr_slide_cnt|ccs_hro_swpr_sl_<cms:show k_count />_grp|ccs_hro_swpr_sl_<cms:show k_count />_bg_row|ccs_hro_swpr_sl_<cms:show k_count />_is_vid|ccs_hro_swpr_sl_<cms:show k_count />_bg_vid_msg|ccs_hro_swpr_sl_<cms:show k_count />_vid_row|ccs_hro_swpr_sl_<cms:show k_count />_vid_src|ccs_hro_swpr_sl_<cms:show k_count />_vid_opc|ccs_hro_swpr_sl_<cms:show k_count />_upl_vid_row|ccs_hro_swpr_sl_<cms:show k_count />_vid_mp4|ccs_hro_swpr_sl_<cms:show k_count />_vid_webm|ccs_hro_swpr_sl_<cms:show k_count />_vid_ogv|ccs_hro_swpr_sl_<cms:show k_count />_upl_tm_opt|ccs_hro_swpr_sl_<cms:show k_count />_upl_tm_row|ccs_hro_swpr_sl_<cms:show k_count />_upl_str|ccs_hro_swpr_sl_<cms:show k_count />_upl_stp|ccs_hro_swpr_sl_<cms:show k_count />_yt_vid_row|ccs_hro_swpr_sl_<cms:show k_count />_yt_id|ccs_hro_swpr_sl_<cms:show k_count />_yt_tm_opt|ccs_hro_swpr_sl_<cms:show k_count />_yt_tm_row|ccs_hro_swpr_sl_<cms:show k_count />_yt_str|ccs_hro_swpr_sl_<cms:show k_count />_yt_stp" 
+			hide_fields="hero_swpr_frmt_gen_grp|hero_swpr_frmt_gen_ht_row|hero_swpr_slide_cnt" 
+			link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Slide Video" title="Edit Slide Video"><i class="fa-solid fa-video"></i></button>' 
+		/>
+
+        <cms:popup_edit "ccs_hro_swpr_sl_<cms:show k_count />_grp|ccs_hro_swpr_sl_<cms:show k_count />_bg_row|ccs_hro_swpr_sl_<cms:show k_count />_add_ovrly|ccs_hro_swpr_sl_<cms:show k_count />_bg_clr_row|ccs_hro_swpr_sl_<cms:show k_count />_ovrly_clr_opt|ccs_hro_swpr_sl_<cms:show k_count />_ovrly_opc" 
+            hide_fields="ccs_hro_swpr_sl_<cms:show k_count />_grp" 
+            link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Slide Overlay" title="Edit Slide Overlay"><i class="fa-solid fa-fill-drip"></i></button>' 
+        />
+
+   
+
+</cms:if>

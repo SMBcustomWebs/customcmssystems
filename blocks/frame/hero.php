@@ -34,15 +34,7 @@
              
 
         </cms:tile>
-        
-        <cms:tile name='ccs_hro_swiper_img_tile' label='Hero - Image and Video Carousel' _pb_template='hero/theme/hero_swiper-slide' _pb_height='350'>
-            <cms:embed 'pb_mods/hero/embed/hero_format_swpr.htm' />
-            <cms:embed 'pb_mods/hero/embed/hero_swiper-slide.htm' />
-            <cms:embed 'pb_mods/hero/embed/hero_swiper-slide_2.htm' />
-            <cms:embed 'pb_mods/hero/embed/hero_swiper-slide_3.htm' />
-            <cms:embed 'pb_mods/hero/embed/hero_swiper-slide_4.htm' />
-            <cms:embed 'pb_mods/hero/embed/hero_swiper-slide_5.htm' />
-        </cms:tile>
+     
 
         <cms:tile name='ccs_hro_split_tile' label='Hero - Split Sides' _pb_template='hero/theme/hero_split' _pb_height='350'>
 			<cms:embed 'pb_mods/hero/embed/hero_format_split.htm' />
