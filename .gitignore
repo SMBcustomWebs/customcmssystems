@@ -29,6 +29,7 @@ assets/media/
 # 5. TEXT FILES IN ROOT
 # =========================================
 /*.txt
+/\!globals_bu.php
 
 # =========================================
 # 6. IDEs & EDITORS

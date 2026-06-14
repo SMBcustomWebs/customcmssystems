@@ -48,7 +48,7 @@
         </cms:if>
     <cms:else_if (hro_bg_clr != 'transparent') && (hro_bg_clr != 'none') />
         #<cms:show local_hero_id /> .hro-base {
-            background-color: var(--posh-<cms:show hro_bg_clr />) !important;
+            background-color: var(--ccs-<cms:show hro_bg_clr />) !important;
         }
     </cms:if>
     
@@ -69,7 +69,7 @@
         </cms:if>
     <cms:else_if (hro_ovrly_clr != 'transparent') && (hro_ovrly_clr != 'none') />
         #<cms:show local_hero_id /> .hro-overlay {
-            background-color: rgba(var(--posh-<cms:show hro_ovrly_clr />-rgb), <cms:show hro_ovrly_opc />) !important;
+            background-color: rgba(var(--ccs-<cms:show hro_ovrly_clr />-rgb), <cms:show hro_ovrly_opc />) !important;
         }
     </cms:if>
 

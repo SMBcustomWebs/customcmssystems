@@ -170,96 +170,96 @@
 </cms:php>
 
 :root {
-    --posh-primary: <cms:show primary /> !important;
-    --posh-primary-rgb: <cms:show primary_rgb /> !important;
+    --ccs-primary: <cms:show primary /> !important;
+    --ccs-primary-rgb: <cms:show primary_rgb /> !important;
     
-    --posh-secondary: <cms:show secondary /> !important;
-    --posh-secondary-rgb: <cms:show secondary_rgb /> !important;
+    --ccs-secondary: <cms:show secondary /> !important;
+    --ccs-secondary-rgb: <cms:show secondary_rgb /> !important;
     
-    --posh-tertiary: <cms:show tertiary /> !important;
-    --posh-tertiary-rgb: <cms:show tertiary_rgb /> !important;
+    --ccs-tertiary: <cms:show tertiary /> !important;
+    --ccs-tertiary-rgb: <cms:show tertiary_rgb /> !important;
     
-    --posh-quaternary: <cms:show quaternary /> !important;
-    --posh-quaternary-rgb: <cms:show quaternary_rgb /> !important;
+    --ccs-quaternary: <cms:show quaternary /> !important;
+    --ccs-quaternary-rgb: <cms:show quaternary_rgb /> !important;
     
-    --posh-success: <cms:show success /> !important;
-    --posh-success-rgb: <cms:show success_rgb /> !important;
+    --ccs-success: <cms:show success /> !important;
+    --ccs-success-rgb: <cms:show success_rgb /> !important;
     
-    --posh-info: <cms:show info /> !important;
-    --posh-info-rgb: <cms:show info_rgb /> !important;
+    --ccs-info: <cms:show info /> !important;
+    --ccs-info-rgb: <cms:show info_rgb /> !important;
     
-    --posh-warning: <cms:show warning /> !important;
-    --posh-warning-rgb: <cms:show warning_rgb /> !important;
+    --ccs-warning: <cms:show warning /> !important;
+    --ccs-warning-rgb: <cms:show warning_rgb /> !important;
     
-    --posh-danger: <cms:show danger /> !important;
-    --posh-danger-rgb: <cms:show danger_rgb /> !important;
+    --ccs-danger: <cms:show danger /> !important;
+    --ccs-danger-rgb: <cms:show danger_rgb /> !important;
     
-    --posh-light: <cms:show light /> !important;
-    --posh-light-rgb: <cms:show light_rgb /> !important;
+    --ccs-light: <cms:show light /> !important;
+    --ccs-light-rgb: <cms:show light_rgb /> !important;
     
-    --posh-dark: <cms:show dark /> !important;
-    --posh-dark-rgb: <cms:show dark_rgb /> !important;
+    --ccs-dark: <cms:show dark /> !important;
+    --ccs-dark-rgb: <cms:show dark_rgb /> !important;
     
-    --posh-white: <cms:show white /> !important;
-    --posh-white-rgb: <cms:show white_rgb /> !important;
+    --ccs-white: <cms:show white /> !important;
+    --ccs-white-rgb: <cms:show white_rgb /> !important;
     
-    --posh-black: <cms:show black /> !important;
-    --posh-black-rgb: <cms:show black_rgb /> !important;
+    --ccs-black: <cms:show black /> !important;
+    --ccs-black-rgb: <cms:show black_rgb /> !important;
     
-    --posh-body-color-rgb: <cms:show body_clr_rgb /> !important;
-    --posh-body-bg-rgb: <cms:show body_bg_rgb /> !important;
+    --ccs-body-color-rgb: <cms:show body_clr_rgb /> !important;
+    --ccs-body-bg-rgb: <cms:show body_bg_rgb /> !important;
 
-    --posh-100: <cms:show gray-100 /> !important;
-    --posh-200: <cms:show gray-200 /> !important;
-    --posh-300: <cms:show gray-300 /> !important;
-    --posh-400: <cms:show gray-400 /> !important;
-    --posh-500: <cms:show gray-500 /> !important;
-    --posh-600: <cms:show gray-600 /> !important;
-    --posh-700: <cms:show gray-700 /> !important;
-    --posh-800: <cms:show gray-800 /> !important;
-    --posh-900: <cms:show gray-900 /> !important;
-    --posh-1000: <cms:show gray-1000 /> !important;
-    --posh-1100: <cms:show gray-1100 /> !important;
-    --posh-1200: <cms:show gray-1200 /> !important;
+    --ccs-100: <cms:show gray-100 /> !important;
+    --ccs-200: <cms:show gray-200 /> !important;
+    --ccs-300: <cms:show gray-300 /> !important;
+    --ccs-400: <cms:show gray-400 /> !important;
+    --ccs-500: <cms:show gray-500 /> !important;
+    --ccs-600: <cms:show gray-600 /> !important;
+    --ccs-700: <cms:show gray-700 /> !important;
+    --ccs-800: <cms:show gray-800 /> !important;
+    --ccs-900: <cms:show gray-900 /> !important;
+    --ccs-1000: <cms:show gray-1000 /> !important;
+    --ccs-1100: <cms:show gray-1100 /> !important;
+    --ccs-1200: <cms:show gray-1200 /> !important;
     
-    --posh-body-font-family: <cms:show bff /> !important;
-    --posh-font-sans-serif: <cms:show fss /> !important;
-    --posh-font-monospace: <cms:show fmn /> !important;
+    --ccs-body-font-family: <cms:show bff /> !important;
+    --ccs-font-sans-serif: <cms:show fss /> !important;
+    --ccs-font-monospace: <cms:show fmn /> !important;
     
-    --posh-font-serif: <cms:show fsf /> !important;
-    --posh-font-cursive: <cms:show fcs /> !important;
-    --posh-font-decorate: <cms:show fdc /> !important;
+    --ccs-font-serif: <cms:show fsf /> !important;
+    --ccs-font-cursive: <cms:show fcs /> !important;
+    --ccs-font-decorate: <cms:show fdc /> !important;
 
-    --posh-body-font-size: <cms:show bfs />rem !important;
-    --posh-body-font-weight: <cms:show bfw /> !important;
-    --posh-body-line-height: <cms:show blh />  !important;
+    --ccs-body-font-size: <cms:show bfs />rem !important;
+    --ccs-body-font-weight: <cms:show bfw /> !important;
+    --ccs-body-line-height: <cms:show blh />  !important;
 
-    /* Correctly mapped to output exact var(--posh-[color]) syntax */
-    --posh-navbar-active-color: var(--posh-<cms:show ccs_site_nav_actv_clr />) !important;
-    --posh-link-hover-color: var(--posh-<cms:show ccs_site_nav_hvr_clr />) !important;
-    --posh-dropdown-color: var(--posh-<cms:show ccs_site_nav_mnu_dd_txt_clr />) !important;
-    --posh-dropdown-bg: var(--posh-<cms:show ccs_site_nav_mnu_dd_bg />) !important;
-    --posh-dropdown-link-hover-color: var(--posh-<cms:show ccs_site_nav_mnu_dd_hvr_clr />) !important;
-    --posh-dropdown-link-hover-bg: var(--posh-<cms:show ccs_site_nav_mnu_dd_hvr_bg />) !important;
+    /* Correctly mapped to output exact var(--ccs-[color]) syntax */
+    --ccs-navbar-active-color: var(--ccs-<cms:show ccs_site_nav_actv_clr />) !important;
+    --ccs-link-hover-color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />) !important;
+    --ccs-dropdown-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_txt_clr />) !important;
+    --ccs-dropdown-bg: var(--ccs-<cms:show ccs_site_nav_mnu_dd_bg />) !important;
+    --ccs-dropdown-link-hover-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_clr />) !important;
+    --ccs-dropdown-link-hover-bg: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_bg />) !important;
 
     <cms:if bg_grd="1" >
         <cms:if swap_bg_clr >
-            --posh-bg-gradient: linear-gradient(<cms:show bg_splt />deg, <cms:show bg_clr2 />, <cms:show bg_clr1 />)!important;
+            --ccs-bg-gradient: linear-gradient(<cms:show bg_splt />deg, <cms:show bg_clr2 />, <cms:show bg_clr1 />)!important;
         <cms:else />
-            --posh-bg-gradient: linear-gradient(<cms:show bg_splt />deg, <cms:show bg_clr1 />, <cms:show bg_clr2 />)!important;
+            --ccs-bg-gradient: linear-gradient(<cms:show bg_splt />deg, <cms:show bg_clr1 />, <cms:show bg_clr2 />)!important;
         </cms:if>
     <cms:else />
-        --posh-bg-gradient: linear-gradient(0deg,<cms:show bg_clr1 />, <cms:show bg_clr1 />)!important;
+        --ccs-bg-gradient: linear-gradient(0deg,<cms:show bg_clr1 />, <cms:show bg_clr1 />)!important;
     </cms:if>
 
     <cms:if ol_grd="1" >
         <cms:if swap_ol_clr >
-            --posh-ol-gradient:linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr2 />, <cms:show ol_clr1 />) !important;
+            --ccs-ol-gradient:linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr2 />, <cms:show ol_clr1 />) !important;
         <cms:else />
-            --posh-ol-gradient:linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr1 />, <cms:show ol_clr2 />) !important;
+            --ccs-ol-gradient:linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr1 />, <cms:show ol_clr2 />) !important;
         </cms:if>
     <cms:else />
-        --posh-ol-gradient:linear-gradient(0deg, <cms:show ol_clr1 />, <cms:show ol_clr1 />) !important;
+        --ccs-ol-gradient:linear-gradient(0deg, <cms:show ol_clr1 />, <cms:show ol_clr1 />) !important;
     </cms:if>
 }
 
@@ -329,25 +329,25 @@ a{
 }
 
 .link-white {
-  color: RGBA(var(--posh-white-rgb), var(--posh-link-opacity, 1)) !important;
-  -webkit-text-decoration-color: RGBA(var(--posh-white-rgb), var(--posh-link-underline-opacity, 1)) !important;
-  text-decoration-color: RGBA(var(--posh-white-rgb), var(--posh-link-underline-opacity, 1)) !important;
+  color: RGBA(var(--ccs-white-rgb), var(--ccs-link-opacity, 1)) !important;
+  -webkit-text-decoration-color: RGBA(var(--ccs-white-rgb), var(--ccs-link-underline-opacity, 1)) !important;
+  text-decoration-color: RGBA(var(--ccs-white-rgb), var(--ccs-link-underline-opacity, 1)) !important;
 }
 .link-light:hover, .link-white:focus {
-  color: RGBA(255, 255, 255, var(--posh-link-opacity, 1)) !important;
-  -webkit-text-decoration-color: RGBA(255, 255, 255, var(--posh-link-underline-opacity, 1)) !important;
-  text-decoration-color: RGBA(255, 255, 255, var(--posh-link-underline-opacity, 1)) !important;
+  color: RGBA(255, 255, 255, var(--ccs-link-opacity, 1)) !important;
+  -webkit-text-decoration-color: RGBA(255, 255, 255, var(--ccs-link-underline-opacity, 1)) !important;
+  text-decoration-color: RGBA(255, 255, 255, var(--ccs-link-underline-opacity, 1)) !important;
 }
 
 .link-black {
-  color: RGBA(var(--posh-black-rgb), var(--posh-link-opacity, 1)) !important;
-  -webkit-text-decoration-color: RGBA(var(--posh-black-rgb), var(--posh-link-underline-opacity, 1)) !important;
-  text-decoration-color: RGBA(var(--posh-black-rgb), var(--posh-link-underline-opacity, 1)) !important;
+  color: RGBA(var(--ccs-black-rgb), var(--ccs-link-opacity, 1)) !important;
+  -webkit-text-decoration-color: RGBA(var(--ccs-black-rgb), var(--ccs-link-underline-opacity, 1)) !important;
+  text-decoration-color: RGBA(var(--ccs-black-rgb), var(--ccs-link-underline-opacity, 1)) !important;
 }
 .link-black:hover, .link-black:focus {
-  color: RGBA(0, 0, 0, var(--posh-link-opacity, 1)) !important;
-  -webkit-text-decoration-color: RGBA(0, 0, 0, var(--posh-link-underline-opacity, 1)) !important;
-  text-decoration-color: RGBA(0, 0, 0, var(--posh-link-underline-opacity, 1)) !important;
+  color: RGBA(0, 0, 0, var(--ccs-link-opacity, 1)) !important;
+  -webkit-text-decoration-color: RGBA(0, 0, 0, var(--ccs-link-underline-opacity, 1)) !important;
+  text-decoration-color: RGBA(0, 0, 0, var(--ccs-link-underline-opacity, 1)) !important;
 }
 
 
@@ -356,12 +356,12 @@ a{
 -----------------------------------------------*/
 
 .btn-black {
-  color: var(--posh-gray-200);
+  color: var(--ccs-gray-200);
   background-color: #000;
   border-color: #000;
 }
 .btn-black:hover, .btn-black:focus {
-  color: var(--posh-gray-200);
+  color: var(--ccs-gray-200);
   background-color: #060606;
   border-color: #0e0e0e;
 }
@@ -419,48 +419,48 @@ a{
 -----------------------------------------------*/
 
 .nav-link:hover, .nav-link:focus {
-  color: var(--posh-nav-link-hover-color);
+  color: var(--ccs-nav-link-hover-color);
 }
 
 .navbar {
-  --posh-navbar-active-color: var(--posh-<cms:show ccs_site_nav_hvr_clr />);
+  --ccs-navbar-active-color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />);
 }
 
 .navbar-nav {
-  --posh-nav-link-font-size: <cms:show ccs_site_nav_mnu_ttl_sz />;
-  --posh-nav-link-font-weight:  <cms:show ccs_site_nav_mnu_ttl_wt />;
-  --posh-nav-link-color: var(--posh-<cms:show ccs_site_nav_mnu_ttl_clr />);
-  --posh-nav-link-hover-color: var(--posh-link-hover-color);
+  --ccs-nav-link-font-size: <cms:show ccs_site_nav_mnu_ttl_sz />;
+  --ccs-nav-link-font-weight:  <cms:show ccs_site_nav_mnu_ttl_wt />;
+  --ccs-nav-link-color: var(--ccs-<cms:show ccs_site_nav_mnu_ttl_clr />);
+  --ccs-nav-link-hover-color: var(--ccs-link-hover-color);
 }
 
 .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
-  color: var(--posh-navbar-active-color);
+  color: var(--ccs-navbar-active-color);
 }
 
 .dropdown-item {
-  color: var(--posh-<cms:show ccs_site_nav_mnu_dd_txt_clr />) !important;
+  color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_txt_clr />) !important;
 }
 .dropdown-menu {
-  background-color: var(--posh-<cms:show ccs_site_nav_mnu_dd_bg />) !important;
+  background-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_bg />) !important;
 }
 .dropdown-item-wrapper:hover, .dropdown-item-wrapper:focus {
-  color: var(--posh-<cms:show ccs_site_nav_mnu_dd_hvr_clr  />) !important;
+  color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_clr  />) !important;
 }
 .dropdown-item:hover {
-  color: var(--posh-<cms:show ccs_site_nav_mnu_dd_hvr_clr  />) !important;
-  background-color: var(--posh-<cms:show ccs_site_nav_mnu_dd_hvr_bg />) !important;
+  color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_clr  />) !important;
+  background-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_bg />) !important;
 }
 .nav-link.active {
-   color: var(--posh-<cms:show ccs_site_nav_actv_clr />) !important;
+   color: var(--ccs-<cms:show ccs_site_nav_actv_clr />) !important;
 }
 .nav-item:hover,
 .nav-link:hover {
-  color: var(--posh-<cms:show ccs_site_nav_hvr_clr />) !important;
+  color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />) !important;
 }
 
 ::selection {
-  background-color: var(--posh-<cms:show ccs_site_slct_bg />) !important;
-  color: var(--posh-<cms:show ccs_site_slct_clr />) !important;
+  background-color: var(--ccs-<cms:show ccs_site_slct_bg />) !important;
+  color: var(--ccs-<cms:show ccs_site_slct_clr />) !important;
 }
 
 <cms:if ol_grd="1" >

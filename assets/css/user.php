@@ -9,52 +9,52 @@
 /* 1. PRIMAVERA (SPRING) - Fresh greens, soft pinks, energetic and light      */
 /* ========================================================================== */
 [data-bs-theme="primavera"] {
-    --posh-primary: #FF8E9C;      /* Soft Coral Pink */
-    --posh-secondary: #85D3A9;    /* Spring Leaf Green */
-    --posh-tertiary: #A3D5FF;     /* Morning Sky Blue */
-    --posh-quaternary: #FFE8A1;   /* Pale Sunshine */
-    --posh-body-bg: #FCFCFA;      /* Ultra-light warm gray */
-    --posh-body-color: #2C3E50;   /* Deep slate for readability */
-    --posh-heading-color: #1A252F;
+    --ccs-primary: #FF8E9C;      /* Soft Coral Pink */
+    --ccs-secondary: #85D3A9;    /* Spring Leaf Green */
+    --ccs-tertiary: #A3D5FF;     /* Morning Sky Blue */
+    --ccs-quaternary: #FFE8A1;   /* Pale Sunshine */
+    --ccs-body-bg: #FCFCFA;      /* Ultra-light warm gray */
+    --ccs-body-color: #2C3E50;   /* Deep slate for readability */
+    --ccs-heading-color: #1A252F;
 }
 
 /* ========================================================================== */
 /* 2. ESTATE (SUMMER) - High contrast, vibrant, oceanic, and warm             */
 /* ========================================================================== */
 [data-bs-theme="estate"] {
-    --posh-primary: #FF9F1C;      /* Vibrant Sun Orange */
-    --posh-secondary: #2EC4B6;    /* Tropical Ocean Teal */
-    --posh-tertiary: #E71D36;     /* Bright Watermelon Red */
-    --posh-quaternary: #FFBF69;   /* Warm Sand */
-    --posh-body-bg: #FFFFFF;      /* Stark white for high contrast */
-    --posh-body-color: #011627;   /* Deepest Navy (near black) */
-    --posh-heading-color: #011627;
+    --ccs-primary: #FF9F1C;      /* Vibrant Sun Orange */
+    --ccs-secondary: #2EC4B6;    /* Tropical Ocean Teal */
+    --ccs-tertiary: #E71D36;     /* Bright Watermelon Red */
+    --ccs-quaternary: #FFBF69;   /* Warm Sand */
+    --ccs-body-bg: #FFFFFF;      /* Stark white for high contrast */
+    --ccs-body-color: #011627;   /* Deepest Navy (near black) */
+    --ccs-heading-color: #011627;
 }
 
 /* ========================================================================== */
 /* 3. AUTUNNO (AUTUMN) - Deep, rich, earthy, and sophisticated                */
 /* ========================================================================== */
 [data-bs-theme="autunno"] {
-    --posh-primary: #D95D39;      /* Burnt Maple Red */
-    --posh-secondary: #F0A202;    /* Golden Harvest Yellow */
-    --posh-tertiary: #826251;     /* Warm Bark Brown */
-    --posh-quaternary: #A89C94;   /* Foggy Gray */
-    --posh-body-bg: #F4F1ED;      /* Parchment off-white */
-    --posh-body-color: #3A1700;   /* Deep Espresso */
-    --posh-heading-color: #260F00;
+    --ccs-primary: #D95D39;      /* Burnt Maple Red */
+    --ccs-secondary: #F0A202;    /* Golden Harvest Yellow */
+    --ccs-tertiary: #826251;     /* Warm Bark Brown */
+    --ccs-quaternary: #A89C94;   /* Foggy Gray */
+    --ccs-body-bg: #F4F1ED;      /* Parchment off-white */
+    --ccs-body-color: #3A1700;   /* Deep Espresso */
+    --ccs-heading-color: #260F00;
 }
 
 /* ========================================================================== */
 /* 4. INVERNO (WINTER) - Crisp, icy, stark, and highly corporate              */
 /* ========================================================================== */
 [data-bs-theme="inverno"] {
-    --posh-primary: #3A86FF;      /* Frost Blue */
-    --posh-secondary: #8ECAE6;    /* Glacier Ice */
-    --posh-tertiary: #4A4E69;     /* Cold Steel Gray */
-    --posh-quaternary: #C1D3FE;   /* Pale Frost */
-    --posh-body-bg: #F8F9FA;      /* Cool Snow White */
-    --posh-body-color: #0B132B;   /* Deep Midnight Blue */
-    --posh-heading-color: #050A17;
+    --ccs-primary: #3A86FF;      /* Frost Blue */
+    --ccs-secondary: #8ECAE6;    /* Glacier Ice */
+    --ccs-tertiary: #4A4E69;     /* Cold Steel Gray */
+    --ccs-quaternary: #C1D3FE;   /* Pale Frost */
+    --ccs-body-bg: #F8F9FA;      /* Cool Snow White */
+    --ccs-body-color: #0B132B;   /* Deep Midnight Blue */
+    --ccs-heading-color: #050A17;
 }
 
 <cms:if "<cms:gpc 'page' />" && "<cms:gpc 'post' />">
@@ -214,95 +214,95 @@
 </cms:php>
 
 :root {
-    --posh-primary: <cms:show primary />;
-    --posh-primary-rgb: <cms:show primary_rgb />;
+    --ccs-primary: <cms:show primary />;
+    --ccs-primary-rgb: <cms:show primary_rgb />;
     
-    --posh-secondary: <cms:show secondary />;
-    --posh-secondary-rgb: <cms:show secondary_rgb />;
+    --ccs-secondary: <cms:show secondary />;
+    --ccs-secondary-rgb: <cms:show secondary_rgb />;
     
-    --posh-tertiary: <cms:show tertiary />;
-    --posh-tertiary-rgb: <cms:show tertiary_rgb />;
+    --ccs-tertiary: <cms:show tertiary />;
+    --ccs-tertiary-rgb: <cms:show tertiary_rgb />;
     
-    --posh-quaternary: <cms:show quaternary />;
-    --posh-quaternary-rgb: <cms:show quaternary_rgb />;
+    --ccs-quaternary: <cms:show quaternary />;
+    --ccs-quaternary-rgb: <cms:show quaternary_rgb />;
     
-    --posh-success: <cms:show success />;
-    --posh-success-rgb: <cms:show success_rgb />;
+    --ccs-success: <cms:show success />;
+    --ccs-success-rgb: <cms:show success_rgb />;
     
-    --posh-info: <cms:show info />;
-    --posh-info-rgb: <cms:show info_rgb />;
+    --ccs-info: <cms:show info />;
+    --ccs-info-rgb: <cms:show info_rgb />;
     
-    --posh-warning: <cms:show warning />;
-    --posh-warning-rgb: <cms:show warning_rgb />;
+    --ccs-warning: <cms:show warning />;
+    --ccs-warning-rgb: <cms:show warning_rgb />;
     
-    --posh-danger: <cms:show danger />;
-    --posh-danger-rgb: <cms:show danger_rgb />;
+    --ccs-danger: <cms:show danger />;
+    --ccs-danger-rgb: <cms:show danger_rgb />;
     
-    --posh-light: <cms:show light />;
-    --posh-light-rgb: <cms:show light_rgb />;
+    --ccs-light: <cms:show light />;
+    --ccs-light-rgb: <cms:show light_rgb />;
     
-    --posh-dark: <cms:show dark />;
-    --posh-dark-rgb: <cms:show dark_rgb />;
+    --ccs-dark: <cms:show dark />;
+    --ccs-dark-rgb: <cms:show dark_rgb />;
     
-    --posh-white: <cms:show white />;
-    --posh-white-rgb: <cms:show white_rgb />;
+    --ccs-white: <cms:show white />;
+    --ccs-white-rgb: <cms:show white_rgb />;
     
-    --posh-black: <cms:show black />;
-    --posh-black-rgb: <cms:show black_rgb />;
+    --ccs-black: <cms:show black />;
+    --ccs-black-rgb: <cms:show black_rgb />;
     
-    --posh-body-color-rgb: <cms:show body_clr_rgb />;
-    --posh-body-bg-rgb: <cms:show body_bg_rgb />;
+    --ccs-body-color-rgb: <cms:show body_clr_rgb />;
+    --ccs-body-bg-rgb: <cms:show body_bg_rgb />;
 
-    --posh-100: <cms:show gray-100 />;
-    --posh-200: <cms:show gray-200 />;
-    --posh-300: <cms:show gray-300 />;
-    --posh-400: <cms:show gray-400 />;
-    --posh-500: <cms:show gray-500 />;
-    --posh-600: <cms:show gray-600 />;
-    --posh-700: <cms:show gray-700 />;
-    --posh-800: <cms:show gray-800 />;
-    --posh-900: <cms:show gray-900 />;
-    --posh-1000: <cms:show gray-1000 />;
-    --posh-1100: <cms:show gray-1100 />;
-    --posh-1200: <cms:show gray-1200 />;
+    --ccs-100: <cms:show gray-100 />;
+    --ccs-200: <cms:show gray-200 />;
+    --ccs-300: <cms:show gray-300 />;
+    --ccs-400: <cms:show gray-400 />;
+    --ccs-500: <cms:show gray-500 />;
+    --ccs-600: <cms:show gray-600 />;
+    --ccs-700: <cms:show gray-700 />;
+    --ccs-800: <cms:show gray-800 />;
+    --ccs-900: <cms:show gray-900 />;
+    --ccs-1000: <cms:show gray-1000 />;
+    --ccs-1100: <cms:show gray-1100 />;
+    --ccs-1200: <cms:show gray-1200 />;
     
-    --posh-body-font-family: <cms:show bff />;
-    --posh-font-sans-serif: <cms:show fss />;
-    --posh-font-monospace: <cms:show fmn />;
+    --ccs-body-font-family: <cms:show bff />;
+    --ccs-font-sans-serif: <cms:show fss />;
+    --ccs-font-monospace: <cms:show fmn />;
     
-    --posh-font-serif: <cms:show fsf />;
-    --posh-font-cursive: <cms:show fcs />;
-    --posh-font-decorate: <cms:show fdc />;
+    --ccs-font-serif: <cms:show fsf />;
+    --ccs-font-cursive: <cms:show fcs />;
+    --ccs-font-decorate: <cms:show fdc />;
 
-    --posh-body-font-size: <cms:show bfs />rem;
-    --posh-body-font-weight: <cms:show bfw />;
-    --posh-body-line-height: <cms:show blh />;
+    --ccs-body-font-size: <cms:show bfs />rem;
+    --ccs-body-font-weight: <cms:show bfw />;
+    --ccs-body-line-height: <cms:show blh />;
 
-    --posh-navbar-active-color: var(--posh-<cms:show ccs_site_nav_actv_clr />);
-    --posh-link-hover-color: var(--posh-<cms:show ccs_site_nav_hvr_clr />);
-    --posh-dropdown-color: var(--posh-<cms:show ccs_site_nav_mnu_dd_txt_clr />);
-    --posh-dropdown-bg: var(--posh-<cms:show ccs_site_nav_mnu_dd_bg />);
-    --posh-dropdown-link-hover-color: var(--posh-<cms:show ccs_site_nav_mnu_dd_hvr_clr />);
-    --posh-dropdown-link-hover-bg: var(--posh-<cms:show ccs_site_nav_mnu_dd_hvr_bg />);
+    --ccs-navbar-active-color: var(--ccs-<cms:show ccs_site_nav_actv_clr />);
+    --ccs-link-hover-color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />);
+    --ccs-dropdown-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_txt_clr />);
+    --ccs-dropdown-bg: var(--ccs-<cms:show ccs_site_nav_mnu_dd_bg />);
+    --ccs-dropdown-link-hover-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_clr />);
+    --ccs-dropdown-link-hover-bg: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_bg />);
 
     <cms:if bg_grd="1" >
         <cms:if swap_bg_clr >
-            --posh-bg-gradient: linear-gradient(<cms:show bg_splt />deg, <cms:show bg_clr2 />, <cms:show bg_clr1 />) !important;
+            --ccs-bg-gradient: linear-gradient(<cms:show bg_splt />deg, <cms:show bg_clr2 />, <cms:show bg_clr1 />) !important;
         <cms:else />
-            --posh-bg-gradient: linear-gradient(<cms:show bg_splt />deg, <cms:show bg_clr1 />, <cms:show bg_clr2 />) !important;
+            --ccs-bg-gradient: linear-gradient(<cms:show bg_splt />deg, <cms:show bg_clr1 />, <cms:show bg_clr2 />) !important;
         </cms:if>
     <cms:else />
-        --posh-bg-gradient: linear-gradient(0deg,<cms:show bg_clr1 />, <cms:show bg_clr1 />) !important;
+        --ccs-bg-gradient: linear-gradient(0deg,<cms:show bg_clr1 />, <cms:show bg_clr1 />) !important;
     </cms:if>
 
     <cms:if ol_grd="1" >
         <cms:if swap_ol_clr >
-            --posh-ol-gradient:linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr2 />, <cms:show ol_clr1 />) !important;
+            --ccs-ol-gradient:linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr2 />, <cms:show ol_clr1 />) !important;
         <cms:else />
-            --posh-ol-gradient:linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr1 />, <cms:show ol_clr2 />) !important;
+            --ccs-ol-gradient:linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr1 />, <cms:show ol_clr2 />) !important;
         </cms:if>
     <cms:else />
-        --posh-ol-gradient:linear-gradient(0deg, <cms:show ol_clr1 />, <cms:show ol_clr1 />) !important;
+        --ccs-ol-gradient:linear-gradient(0deg, <cms:show ol_clr1 />, <cms:show ol_clr1 />) !important;
     </cms:if>
 }
 
@@ -364,37 +364,37 @@ a {
 }
 
 .link-white {
-  color: RGBA(var(--posh-white-rgb), var(--posh-link-opacity, 1)) !important;
-  -webkit-text-decoration-color: RGBA(var(--posh-white-rgb), var(--posh-link-underline-opacity, 1)) !important;
-  text-decoration-color: RGBA(var(--posh-white-rgb), var(--posh-link-underline-opacity, 1)) !important;
+  color: RGBA(var(--ccs-white-rgb), var(--ccs-link-opacity, 1)) !important;
+  -webkit-text-decoration-color: RGBA(var(--ccs-white-rgb), var(--ccs-link-underline-opacity, 1)) !important;
+  text-decoration-color: RGBA(var(--ccs-white-rgb), var(--ccs-link-underline-opacity, 1)) !important;
 }
 .link-light:hover, .link-white:focus {
-  color: RGBA(255, 255, 255, var(--posh-link-opacity, 1)) !important;
-  -webkit-text-decoration-color: RGBA(255, 255, 255, var(--posh-link-underline-opacity, 1)) !important;
-  text-decoration-color: RGBA(255, 255, 255, var(--posh-link-underline-opacity, 1)) !important;
+  color: RGBA(255, 255, 255, var(--ccs-link-opacity, 1)) !important;
+  -webkit-text-decoration-color: RGBA(255, 255, 255, var(--ccs-link-underline-opacity, 1)) !important;
+  text-decoration-color: RGBA(255, 255, 255, var(--ccs-link-underline-opacity, 1)) !important;
 }
 
 .link-black {
-  color: RGBA(var(--posh-black-rgb), var(--posh-link-opacity, 1)) !important;
-  -webkit-text-decoration-color: RGBA(var(--posh-black-rgb), var(--posh-link-underline-opacity, 1)) !important;
-  text-decoration-color: RGBA(var(--posh-black-rgb), var(--posh-link-underline-opacity, 1)) !important;
+  color: RGBA(var(--ccs-black-rgb), var(--ccs-link-opacity, 1)) !important;
+  -webkit-text-decoration-color: RGBA(var(--ccs-black-rgb), var(--ccs-link-underline-opacity, 1)) !important;
+  text-decoration-color: RGBA(var(--ccs-black-rgb), var(--ccs-link-underline-opacity, 1)) !important;
 }
 .link-black:hover, .link-black:focus {
-  color: RGBA(0, 0, 0, var(--posh-link-opacity, 1)) !important;
-  -webkit-text-decoration-color: RGBA(0, 0, 0, var(--posh-link-underline-opacity, 1)) !important;
-  text-decoration-color: RGBA(0, 0, 0, var(--posh-link-underline-opacity, 1)) !important;
+  color: RGBA(0, 0, 0, var(--ccs-link-opacity, 1)) !important;
+  -webkit-text-decoration-color: RGBA(0, 0, 0, var(--ccs-link-underline-opacity, 1)) !important;
+  text-decoration-color: RGBA(0, 0, 0, var(--ccs-link-underline-opacity, 1)) !important;
 }
 
 /*-----------------------------------------------
 |   Button Colors
 -----------------------------------------------*/
 .btn-black {
-  color: var(--posh-gray-200);
+  color: var(--ccs-gray-200);
   background-color: #000;
   border-color: #000;
 }
 .btn-black:hover, .btn-black:focus {
-  color: var(--posh-gray-200);
+  color: var(--ccs-gray-200);
   background-color: #060606;
   border-color: #0e0e0e;
 }
@@ -450,48 +450,48 @@ a {
 |   Navigation Menu
 -----------------------------------------------*/
 .nav-link:hover, .nav-link:focus {
-  color: var(--posh-nav-link-hover-color);
+  color: var(--ccs-nav-link-hover-color);
 }
 
 .navbar {
-  --posh-navbar-active-color: var(--posh-<cms:show ccs_site_nav_hvr_clr />);
+  --ccs-navbar-active-color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />);
 }
 
 .navbar-nav {
-  --posh-nav-link-font-size: <cms:show ccs_site_nav_mnu_ttl_sz />;
-  --posh-nav-link-font-weight:  <cms:show ccs_site_nav_mnu_ttl_wt />;
-  --posh-nav-link-color: var(--posh-<cms:show ccs_site_nav_mnu_ttl_clr />);
-  --posh-nav-link-hover-color: var(--posh-link-hover-color);
+  --ccs-nav-link-font-size: <cms:show ccs_site_nav_mnu_ttl_sz />;
+  --ccs-nav-link-font-weight:  <cms:show ccs_site_nav_mnu_ttl_wt />;
+  --ccs-nav-link-color: var(--ccs-<cms:show ccs_site_nav_mnu_ttl_clr />);
+  --ccs-nav-link-hover-color: var(--ccs-link-hover-color);
 }
 
 .navbar-nav .nav-link.active, .navbar-nav .nav-link.show {
-  color: var(--posh-navbar-active-color);
+  color: var(--ccs-navbar-active-color);
 }
 
 .dropdown-item {
-  color: var(--posh-<cms:show ccs_site_nav_mnu_dd_txt_clr />) !important;
+  color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_txt_clr />) !important;
 }
 .dropdown-menu {
-  background-color: var(--posh-<cms:show ccs_site_nav_mnu_dd_bg />) !important;
+  background-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_bg />) !important;
 }
 .dropdown-item-wrapper:hover, .dropdown-item-wrapper:focus {
-  color: var(--posh-<cms:show ccs_site_nav_mnu_dd_hvr_clr />) !important;
+  color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_clr />) !important;
 }
 .dropdown-item:hover {
-  color: var(--posh-<cms:show ccs_site_nav_mnu_dd_hvr_clr />) !important;
-  background-color: var(--posh-<cms:show ccs_site_nav_mnu_dd_hvr_bg />) !important;
+  color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_clr />) !important;
+  background-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_bg />) !important;
 }
 .nav-link.active {
-   color: var(--posh-<cms:show ccs_site_nav_actv_clr />) !important;
+   color: var(--ccs-<cms:show ccs_site_nav_actv_clr />) !important;
 }
 .nav-item:hover,
 .nav-link:hover {
-  color: var(--posh-<cms:show ccs_site_nav_hvr_clr />) !important;
+  color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />) !important;
 }
 
 ::selection {
-  background-color: var(--posh-<cms:show ccs_site_slct_bg />) !important;
-  color: var(--posh-<cms:show ccs_site_slct_clr />) !important;
+  background-color: var(--ccs-<cms:show ccs_site_slct_bg />) !important;
+  color: var(--ccs-<cms:show ccs_site_slct_clr />) !important;
 }
 
 <cms:if ol_grd="1" >
@@ -585,38 +585,38 @@ a {
 .outline-offset--75 { outline-offset: -0.75rem !important; }
 
 /* 5. Outline Colors */
-.outline-primary { outline-color: var(--posh-primary) !important; }
-.outline-secondary { outline-color: var(--posh-secondary) !important; }
-.outline-tertiary { outline-color: var(--posh-tertiary) !important; }
-.outline-quaternary { outline-color: var(--posh-quaternary) !important; }
-.outline-success { outline-color: var(--posh-success) !important; }
-.outline-info { outline-color: var(--posh-info) !important; }
-.outline-warning { outline-color: var(--posh-warning) !important; }
-.outline-danger { outline-color: var(--posh-danger) !important; }
-.outline-light { outline-color: var(--posh-light) !important; }
-.outline-dark { outline-color: var(--posh-dark) !important; }
-.outline-white { outline-color: var(--posh-white) !important; }
-.outline-black { outline-color: var(--posh-black) !important; }
+.outline-primary { outline-color: var(--ccs-primary) !important; }
+.outline-secondary { outline-color: var(--ccs-secondary) !important; }
+.outline-tertiary { outline-color: var(--ccs-tertiary) !important; }
+.outline-quaternary { outline-color: var(--ccs-quaternary) !important; }
+.outline-success { outline-color: var(--ccs-success) !important; }
+.outline-info { outline-color: var(--ccs-info) !important; }
+.outline-warning { outline-color: var(--ccs-warning) !important; }
+.outline-danger { outline-color: var(--ccs-danger) !important; }
+.outline-light { outline-color: var(--ccs-light) !important; }
+.outline-dark { outline-color: var(--ccs-dark) !important; }
+.outline-white { outline-color: var(--ccs-white) !important; }
+.outline-black { outline-color: var(--ccs-black) !important; }
 
 
 /* -------------------------------------------------------------------------- */
 /* BACKGROUND OPACITY EXPANSION PACK (DECIMAL ESCAPES)                        */
 /* -------------------------------------------------------------------------- */
 
-.bg-opacity-0\.0 { --posh-bg-opacity: 0.0 !important; }
-.bg-opacity-0\.1 { --posh-bg-opacity: 0.1 !important; }
-.bg-opacity-0\.2 { --posh-bg-opacity: 0.2 !important; }
-.bg-opacity-0\.25 { --posh-bg-opacity: 0.25 !important; }
-.bg-opacity-0\.3 { --posh-bg-opacity: 0.3 !important; }
-.bg-opacity-0\.4 { --posh-bg-opacity: 0.4 !important; }
-.bg-opacity-0\.5 { --posh-bg-opacity: 0.5 !important; }
-.bg-opacity-0\.6 { --posh-bg-opacity: 0.6 !important; }
-.bg-opacity-0\.7 { --posh-bg-opacity: 0.7 !important; }
-.bg-opacity-0\.75 { --posh-bg-opacity: 0.75 !important; }
-.bg-opacity-0\.8 { --posh-bg-opacity: 0.8 !important; }
-.bg-opacity-0\.9 { --posh-bg-opacity: 0.9 !important; }
-.bg-opacity-1\.0 { --posh-bg-opacity: 1.0 !important; }
-.bg-opacity-1 { --posh-bg-opacity: 1 !important; }
+.bg-opacity-0\.0 { --ccs-bg-opacity: 0.0 !important; }
+.bg-opacity-0\.1 { --ccs-bg-opacity: 0.1 !important; }
+.bg-opacity-0\.2 { --ccs-bg-opacity: 0.2 !important; }
+.bg-opacity-0\.25 { --ccs-bg-opacity: 0.25 !important; }
+.bg-opacity-0\.3 { --ccs-bg-opacity: 0.3 !important; }
+.bg-opacity-0\.4 { --ccs-bg-opacity: 0.4 !important; }
+.bg-opacity-0\.5 { --ccs-bg-opacity: 0.5 !important; }
+.bg-opacity-0\.6 { --ccs-bg-opacity: 0.6 !important; }
+.bg-opacity-0\.7 { --ccs-bg-opacity: 0.7 !important; }
+.bg-opacity-0\.75 { --ccs-bg-opacity: 0.75 !important; }
+.bg-opacity-0\.8 { --ccs-bg-opacity: 0.8 !important; }
+.bg-opacity-0\.9 { --ccs-bg-opacity: 0.9 !important; }
+.bg-opacity-1\.0 { --ccs-bg-opacity: 1.0 !important; }
+.bg-opacity-1 { --ccs-bg-opacity: 1 !important; }
 
 /* -------------------------------------------------------------------------- */
 /* CUSTOM Z-INDEX OVERRIDES                                                   */
