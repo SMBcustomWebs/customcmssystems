@@ -2,10 +2,14 @@
     <cms:set inline_edit_active="<cms:get_session 'inline_edit_on' />" />
 
     <cms:show_pagebuilder 'ccs_gl_tpb_pb' no_cache="<cms:if k_user_access_level ge '7' && inline_edit_active>1</cms:if>">
-        <cms:show k_content />
+        <cms:if k_count le '2'>
+            <cms:show k_content />
+        </cms:if>
     </cms:show_pagebuilder>
     
     <cms:show_pagebuilder 'ccs_gl_nav_pb' no_cache="<cms:if k_user_access_level ge '7' && inline_edit_active>1</cms:if>">
-        <cms:show k_content />
+        <cms:if k_count == '1'>
+            <cms:show k_content />
+        </cms:if>
     </cms:show_pagebuilder>
 </cms:pages>
