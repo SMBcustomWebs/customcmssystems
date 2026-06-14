@@ -33,71 +33,77 @@
     fs-<cms:show ccs_ubr_scal_txt_sz />
 </cms:capture>
 
-<section class="bg-<cms:show ccs_ubr_scal_bg_clr_opt /> py-<cms:show ccs_ubr_scal_py /> <cms:show ccs_ubr_scal_dspr /> <cms:if ccs_ubr_scal_stky>sticky-top top-0 start-0 z-3</cms:if>" aria-label="Announcement and Social Links">
+<section class="bg-<cms:show ccs_ubr_scal_bg_clr_opt /> py-<cms:show ccs_ubr_scal_py /> <cms:show ccs_ubr_scal_dspr /> <cms:if ccs_ubr_scal_stky>sticky-top top-0 start-0 z-3</cms:if> position-relative" aria-label="Announcement and Social Links">
     
     <cms:if ccs_gl_edt_ok>
-        <div class="container-fluid pt-2">
-            <cms:popup_edit 'ccs_ubr_scal_gen_grp|ccs_ubr_scal_init_cstm_msg|ccs_ubr_scal_gen_ht_row|ccs_ubr_scal_py|ccs_ubr_scal_cta_opt|ccs_ubr_scal_dspr|ccs_ubr_scal_stky_row|ccs_ubr_scal_stky_msg|ccs_ubr_scal_stky|ccs_ubr_scal_clr_row|ccs_ubr_scal_bg_clr_msg|ccs_ubr_scal_bg_clr_opt|ccs_ubr_scal_txt_clr|ccs_ubr_scal_layout' link_text="<span class='bg-800 link-warning' title='Edit format of this main bar'>| [EDIT BAR SETTINGS] | </span>" />
-        </div>
-    </cms:if>
+		<div class="position-absolute top-0 start-0 mt-1 ms-1 z-3">
+			<cms:popup_edit 'ccs_ubr_scal_gen_grp|ccs_ubr_scal_init_cstm_msg|ccs_ubr_scal_gen_ht_row|ccs_ubr_scal_py|ccs_ubr_scal_cta_opt|ccs_ubr_scal_dspr|ccs_ubr_scal_stky_row|ccs_ubr_scal_stky_msg|ccs_ubr_scal_stky|ccs_ubr_scal_clr_row|ccs_ubr_scal_bg_clr_msg|ccs_ubr_scal_bg_clr_opt|ccs_ubr_scal_txt_clr|ccs_ubr_scal_layout' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Bar Settings'><i class='fas fa-cog text-warning' style='font-size: 12px;'></i></span>" />
+		</div>
+	</cms:if>
     
     <div class="container">
         <div class="row align-items-center">
             
-            <div class="col-auto <cms:show txt_col_layout />">
-                <span class="mb-md-0 text-<cms:show ccs_ubr_scal_txt_clr /> fw-<cms:show ccs_ubr_scal_txt_fnt_wt /> font-<cms:show ccs_ubr_scal_txt_font /> fs-<cms:show ccs_ubr_scal_txt_sz />">
-                    <cms:show ccs_ubr_scal_txt_txt />
-                </span>
-                
+            <div class="col-auto <cms:show txt_col_layout /> position-relative ms-4">
                 <cms:if ccs_gl_edt_ok>
-                    <cms:popup_edit 'ccs_ubr_scal_txt_grp|ccs_ubr_scal_txt_cstm_msg|ccs_ubr_scal_txt_row|ccs_ubr_scal_txt_txt|ccs_ubr_scal_cta_cust_row|ccs_ubr_scal_txt_sz|ccs_ubr_scal_txt_fnt_wt|ccs_ubr_scal_txt_font' link_text="<span class='bg-800 link-warning ms-2' title='Edit the text and format'>[EDIT TEXT]</span>" />
-                </cms:if>
+    <span class="position-absolute z-3" style="top: -2px; left: -35px;">
+        <cms:popup_edit 'ccs_ubr_scal_txt_grp|ccs_ubr_scal_txt_cstm_msg|ccs_ubr_scal_txt_row|ccs_ubr_scal_txt_txt|ccs_ubr_scal_cta_cust_row|ccs_ubr_scal_txt_sz|ccs_ubr_scal_txt_fnt_wt|ccs_ubr_scal_txt_font' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Text'><i class='fas fa-font text-warning' style='font-size: 12px;'></i></span>" />
+    </span>
+</cms:if>
+
+<span class="mb-md-0 text-<cms:show ccs_ubr_scal_txt_clr /> fw-<cms:show ccs_ubr_scal_txt_fnt_wt /> font-<cms:show ccs_ubr_scal_txt_font /> fs-<cms:show ccs_ubr_scal_txt_sz />">
+    <cms:show ccs_ubr_scal_txt_txt />
+</span>
             </div>
             
-            <div class="col-auto <cms:show scl_col_layout />">
-                <cms:pages masterpage='globals.php' limit='1'>
-                    <cms:show_repeatable 'ccs_gl_social'>
-                        <a class="<cms:if k_first_row>pe-<cms:show ccs_ubr_scal_scl_px /><cms:else />px-<cms:show ccs_ubr_scal_scl_px /></cms:if> text-<cms:show ccs_ubr_scal_txt_clr />" href="<cms:show ccs_gl_social_link />" title="<cms:show ccs_gl_social_name />" target="_blank">
+            <div class="col-auto <cms:show scl_col_layout /> position-relative ms-5">
+                <cms:if ccs_gl_edt_ok>
+					<span class="position-absolute z-3 d-flex gap-3" style="top: -2px; left: -72px;">
+						<cms:popup_edit 'ccs_gl_site_scl_grp|ccs_gl_social_msg|ccs_gl_social' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Social Links'><i class='fas fa-share-nodes text-warning' style='font-size: 12px;'></i></span>" />
+
+						<cms:popup_edit 'ccs_ubr_scal_scl_grp|ccs_ubr_scal_scl_msg|ccs_ubr_scal_scl_row|ccs_ubr_scal_scl_px|ccs_ubr_scal_scl_sz' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Social Size'><i class='fas fa-expand text-warning' style='font-size: 12px;'></i></span>" />
+					</span>
+				</cms:if>
+
+				<cms:pages masterpage='globals.php' limit='1'>
+					<cms:show_repeatable 'ccs_gl_social'>
+						<a class="<cms:if k_first_row>pe-<cms:show ccs_ubr_scal_scl_px /><cms:else />px-<cms:show ccs_ubr_scal_scl_px /></cms:if> text-<cms:show ccs_ubr_scal_txt_clr />" href="<cms:show ccs_gl_social_link />" title="<cms:show ccs_gl_social_name />" target="_blank">
 							<span class="<cms:show ccs_gl_social_icon /> <cms:show ccs_ubr_scal_scl_sz />" aria-hidden="true"></span>
 							<span class="visually-hidden"><cms:show ccs_gl_social_name /></span>
 						</a>
-                    </cms:show_repeatable>
-                    
-                    <cms:if ccs_gl_edt_ok>
-                        <cms:popup_edit 'ccs_gl_site_scl_grp|ccs_gl_social_msg|ccs_gl_social' link_text="<span class='bg-800 link-warning ms-1' title='Edit Social Links in Globals'>[EDIT SOCIAL DATA]</span>" />
-                    </cms:if>
-                </cms:pages>
-                
-                <cms:if ccs_gl_edt_ok>
-                    <cms:popup_edit 'ccs_ubr_scal_scl_grp|ccs_ubr_scal_scl_msg|ccs_ubr_scal_scl_row|ccs_ubr_scal_scl_px|ccs_ubr_scal_scl_sz' link_text="<span class='bg-800 link-warning ms-1' title='Edit social icon size & spacing'>[EDIT SIZE]</span>" />
-                </cms:if>
+					</cms:show_repeatable>
+				</cms:pages>
             </div>
 
             <cms:if "<cms:not ccs_ubr_scal_cta_opt />">
-                <div class="col-auto order-3">
-                    <a href="<cms:show final_cta_lnk />" class="<cms:show final_cta_class />" <cms:show final_cta_tgt />>
-                        
-                        <cms:if ccs_ubr_scal_cta_icon_pos == 'btn-icon-left'>
-                            <cms:if "<cms:not_empty ccs_ubr_scal_cta_icon_fa />">
-                                <span class="btn-brand"><i class="<cms:show ccs_ubr_scal_cta_icon_fa /> me-2" aria-hidden="true"></i></span>
-                            </cms:if>
-                        </cms:if>
-                        
-                        <cms:show ccs_ubr_scal_cta_txt /> <cms:show final_cta_icon />
-                        
-                        <cms:if ccs_ubr_scal_cta_icon_pos == 'btn-icon-right'>
-                            <cms:if "<cms:not_empty ccs_ubr_scal_cta_icon_fa />">
-                                <span class="btn-brand"><i class="<cms:show ccs_ubr_scal_cta_icon_fa /> ms-2" aria-hidden="true"></i></span>
-                            </cms:if>
-                        </cms:if>
-                        
-                    </a>
-                    
-                    <cms:if ccs_gl_edt_ok>
-                        <cms:popup_edit 'ccs_ubr_scal_gen_grp|ccs_ubr_scal_gen_ht_row|ccs_ubr_scal_cta_opt|ccs_ubr_scal_cta_grp|ccs_ubr_scal_cta_msg|ccs_ubr_scal_cta_txt_row|ccs_ubr_scal_cta_txt|ccs_ubr_scal_cta_clr|ccs_ubr_scal_cta_lnk_clr|ccs_ubr_scal_cta_fmt_row|ccs_ubr_scal_cta_fill|ccs_ubr_scal_cta_st|ccs_ubr_scal_cta_sz|ccs_ubr_scal_cta_w|ccs_ubr_scal_cta_icon_row|ccs_ubr_scal_cta_icon_pos|ccs_ubr_scal_cta_icon_msg|ccs_ubr_scal_cta_icon_fa|ccs_ubr_scal_cta_dest_row|ccs_ubr_scal_cta_lnk|ccs_ubr_scal_cta_cst_lnk' link_text="<span class='bg-800 link-warning ms-3' title='Edit this call-to-action button'>[EDIT BUTTON]</span>" />
-                    </cms:if>
-                </div>
+    <div class="col-auto order-3">
+        
+        <span class="position-relative d-inline-block mt-2">
+            
+            <cms:if ccs_gl_edt_ok>
+                <span class="position-absolute z-3" style="top: -15px; left: -15px;">
+                    <cms:popup_edit 'ccs_ubr_scal_gen_grp|ccs_ubr_scal_gen_ht_row|ccs_ubr_scal_cta_opt|ccs_ubr_scal_cta_grp|ccs_ubr_scal_cta_msg|ccs_ubr_scal_cta_txt_row|ccs_ubr_scal_cta_txt|ccs_ubr_scal_cta_clr|ccs_ubr_scal_cta_lnk_clr|ccs_ubr_scal_cta_fmt_row|ccs_ubr_scal_cta_fill|ccs_ubr_scal_cta_st|ccs_ubr_scal_cta_sz|ccs_ubr_scal_cta_w|ccs_ubr_scal_cta_icon_row|ccs_ubr_scal_cta_icon_pos|ccs_ubr_scal_cta_icon_msg|ccs_ubr_scal_cta_icon_fa|ccs_ubr_scal_cta_dest_row|ccs_ubr_scal_cta_lnk|ccs_ubr_scal_cta_cst_lnk' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Button'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+                </span>
             </cms:if>
+            
+            <a href="<cms:show final_cta_lnk />" class="<cms:show final_cta_class />" <cms:show final_cta_tgt />>
+                <cms:if ccs_ubr_scal_cta_icon_pos == 'btn-icon-left'>
+                    <cms:if "<cms:not_empty ccs_ubr_scal_cta_icon_fa />">
+                        <span class="btn-brand"><i class="<cms:show ccs_ubr_scal_cta_icon_fa /> me-2" aria-hidden="true"></i></span>
+                    </cms:if>
+                </cms:if>
+                <cms:show ccs_ubr_scal_cta_txt /> <cms:show final_cta_icon />
+                <cms:if ccs_ubr_scal_cta_icon_pos == 'btn-icon-right'>
+                    <cms:if "<cms:not_empty ccs_ubr_scal_cta_icon_fa />">
+                        <span class="btn-brand"><i class="<cms:show ccs_ubr_scal_cta_icon_fa /> ms-2" aria-hidden="true"></i></span>
+                    </cms:if>
+                </cms:if>
+            </a>
+            
+        </span>
+        
+    </div>
+</cms:if>
 
         </div>
     </div>

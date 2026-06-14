@@ -1,13 +1,11 @@
 <section class="bg-<cms:show ccs_ubr_booking_bg_clr_opt /> py-<cms:show ccs_ubr_booking_py /> <cms:show ccs_ubr_booking_dspr /> <cms:if ccs_ubr_booking_stky>sticky-top top-0 start-0 z-3</cms:if>" id="book" aria-label="Accommodation Search">
     
     <cms:if ccs_gl_edt_ok>
-        <div class="container-fluid pt-2">
-            <cms:popup_edit 'ccs_ubr_booking_gen_grp|ccs_ubr_booking_init_msg|ccs_ubr_booking_gen_row|ccs_ubr_booking_bg_clr_opt|ccs_ubr_booking_py|ccs_ubr_booking_dspr|ccs_ubr_booking_stky_row|ccs_ubr_booking_stky_msg|ccs_ubr_booking_stky' link_text="<span class='bg-800 link-warning'>| [EDIT BAR SETTINGS] |</span>" />
-            <cms:popup_edit 'ccs_ubr_booking_lbl_grp|ccs_ubr_booking_lbl_msg|ccs_ubr_booking_lbl_row_1|ccs_ubr_booking_lbl_checkin|ccs_ubr_booking_lbl_checkout|ccs_ubr_booking_lbl_guest' link_text="<span class='bg-800 link-warning'>| [EDIT LABELS] |</span>" />
-            <cms:popup_edit 'ccs_ubr_booking_btn_grp|ccs_ubr_booking_btn_msg|ccs_ubr_booking_btn_txt_row|ccs_ubr_booking_btn_txt|ccs_ubr_booking_btn_clr|ccs_ubr_booking_btn_lnk_clr|ccs_ubr_booking_btn_fmt_row|ccs_ubr_booking_btn_fill|ccs_ubr_booking_btn_st|ccs_ubr_booking_btn_sz|ccs_ubr_booking_btn_w|ccs_ubr_booking_btn_icon_row|ccs_ubr_booking_btn_icon_pos|ccs_ubr_booking_btn_icon_msg|ccs_ubr_booking_btn_icon_fa' link_text="<span class='bg-800 link-warning'>| [EDIT BUTTON] |</span>" />
-            <cms:popup_edit 'ccs_ubr_booking_msg_grp|ccs_ubr_booking_err_msg|ccs_ubr_booking_msg_row|ccs_ubr_booking_error_msg' link_text="<span class='bg-800 link-warning'>| [EDIT ERRORS] |</span>" />
-        </div>
-    </cms:if>
+    <div class="position-absolute top-0 start-0 mt-1 ms-1 z-3 d-flex gap-1">
+        <cms:popup_edit 'ccs_ubr_booking_gen_grp|ccs_ubr_booking_init_msg|ccs_ubr_booking_gen_row|ccs_ubr_booking_bg_clr_opt|ccs_ubr_booking_py|ccs_ubr_booking_dspr|ccs_ubr_booking_stky_row|ccs_ubr_booking_stky_msg|ccs_ubr_booking_stky' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Bar Settings'><i class='fas fa-cog text-warning' style='font-size: 12px;'></i></span>" />
+    
+    </div>
+</cms:if>
     
     <div class="container">
       
@@ -29,8 +27,17 @@
 
         <style> .js-datepicker[readonly] { background-color: inherit; } </style>
 
-        <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
-          <label for="checkin" class="form-label mb-1"><cms:show ccs_ubr_booking_lbl_checkin /></label>
+        <div class="col-lg-3 col-md-6 mb-3 mb-lg-0 position-relative">
+    
+    <cms:if ccs_gl_edt_ok>
+        <div class="position-absolute z-3 d-flex gap-3" style="top: -1px; left: 20px;">
+            <cms:popup_edit 'ccs_ubr_booking_lbl_grp|ccs_ubr_booking_lbl_msg|ccs_ubr_booking_lbl_row_1|ccs_ubr_booking_lbl_checkin|ccs_ubr_booking_lbl_checkout|ccs_ubr_booking_lbl_guest' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Labels'><i class='fas fa-tags text-warning' style='font-size: 12px;'></i></span>" />
+            
+            <cms:popup_edit 'ccs_ubr_booking_msg_grp|ccs_ubr_booking_err_msg|ccs_ubr_booking_msg_row|ccs_ubr_booking_error_msg' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Errors'><i class='fas fa-triangle-exclamation text-warning' style='font-size: 12px;'></i></span>" />
+        </div>
+    </cms:if>
+
+    <label for="checkin" class="form-label mb-1"><cms:show ccs_ubr_booking_lbl_checkin /></label>
           <div class="input-group">
               <cms:input type="text" name="checkin" id="checkin" class="form-control border-end-0 js-datepicker" placeholder="Select..." value=ccs_get_checkin required='1' />
               <span class="input-group-text bg-transparent border-start-0 ps-0 pe-2"><i class="fa-regular fa-calendar-days fa-lg text-muted" aria-hidden="true"></i></span>
@@ -69,11 +76,19 @@
                 </cms:if>
             </cms:capture>
 
-            <button type="submit" name="submit" id="submit" class="<cms:show final_cta_class />">
-                <cms:if ccs_ubr_booking_btn_icon_pos == 'btn-icon-left'><cms:if "<cms:not_empty ccs_ubr_booking_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_booking_btn_icon_fa /> me-2" aria-hidden="true"></i></span></cms:if></cms:if>
-                <cms:show ccs_ubr_booking_btn_txt />
-                <cms:if ccs_ubr_booking_btn_icon_pos == 'btn-icon-right'><cms:if "<cms:not_empty ccs_ubr_booking_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_booking_btn_icon_fa /> ms-2" aria-hidden="true"></i></span></cms:if></cms:if>
-            </button>
+            <span class="position-relative d-inline-block">
+    <cms:if ccs_gl_edt_ok>
+        <span class="position-absolute z-3" style="top: -15px; left: -15px;">
+            <cms:popup_edit 'ccs_ubr_booking_btn_grp|ccs_ubr_booking_btn_msg|ccs_ubr_booking_btn_txt_row|ccs_ubr_booking_btn_txt|ccs_ubr_booking_btn_clr|ccs_ubr_booking_btn_lnk_clr|ccs_ubr_booking_btn_fmt_row|ccs_ubr_booking_btn_fill|ccs_ubr_booking_btn_st|ccs_ubr_booking_btn_sz|ccs_ubr_booking_btn_w|ccs_ubr_booking_btn_icon_row|ccs_ubr_booking_btn_icon_pos|ccs_ubr_booking_btn_icon_msg|ccs_ubr_booking_btn_icon_fa' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Button'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+        </span>
+    </cms:if>
+
+    <button type="submit" name="submit" id="submit" class="<cms:show final_cta_class />">
+        <cms:if ccs_ubr_booking_btn_icon_pos == 'btn-icon-left'><cms:if "<cms:not_empty ccs_ubr_booking_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_booking_btn_icon_fa /> me-2" aria-hidden="true"></i></span></cms:if></cms:if>
+        <cms:show ccs_ubr_booking_btn_txt />
+        <cms:if ccs_ubr_booking_btn_icon_pos == 'btn-icon-right'><cms:if "<cms:not_empty ccs_ubr_booking_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_booking_btn_icon_fa /> ms-2" aria-hidden="true"></i></span></cms:if></cms:if>
+    </button>
+</span>
         </div>
         
       </cms:form>

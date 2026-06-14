@@ -22,13 +22,11 @@
                 </cms:if>   
                 
                 <cms:if ccs_gl_edt_ok>
-                    <div class="row">
-                        <div class="col">
-                            <cms:popup_edit 'ccs_gl_site_biz_lgo_msg|ccs_gl_site_biz_lgo_row|ccs_gl_site_name_txt_lgo_opt|ccs_gl_site_logo_hoz|ccs_gl_site_logo_sqr|ccs_gl_site_favicon|ccs_gl_site_biz_mta_row|ccs_gl_site_name|ccs_gl_site_name_txt_sz|ccs_gl_site_name_txt_clr' link_text="<span class='bg-800 link-warning' title='Edit logos, site name and tagline'>| [EDIT LOGOS] | </span>" />
-                            <cms:popup_edit 'ccs_gl_site_tgl_row|ccs_gl_tgln|ccs_gl_tgln_opt|ccs_gl_tgln_clr|ccs_gl_tgln_fmt_msg|ccs_gl_site_tgl_row|ccs_gl_tgln_txt_sz|ccs_gl_tgln_fnt_wt|ccs_gl_tgln_ltr_spc|ccs_gl_tgln_fnt_st|ccs_gl_tgln_fnt_fm' link_text="<span class='bg-800 link-warning' title='Edit Tagline'> | [EDIT Tagline] |</span>" />
-                        </div>
-                    </div>
-              </cms:if>
+    				<div class="position-absolute top-0 start-0 mt-2 ms-n4 z-3 d-flex flex-column gap-1">
+						<cms:popup_edit 'ccs_gl_site_biz_lgo_msg|ccs_gl_site_biz_lgo_row|ccs_gl_site_name_txt_lgo_opt|ccs_gl_site_logo_hoz|ccs_gl_site_logo_sqr|ccs_gl_site_favicon|ccs_gl_site_biz_mta_row|ccs_gl_site_name|ccs_gl_site_name_txt_sz|ccs_gl_site_name_txt_clr' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit logos and site name'><i class='fas fa-image text-warning' style='font-size: 12px;'></i></span>" />
+						<cms:popup_edit 'ccs_gl_site_tgl_row|ccs_gl_tgln|ccs_gl_tgln_opt|ccs_gl_tgln_clr|ccs_gl_tgln_fmt_msg|ccs_gl_site_tgl_row|ccs_gl_tgln_txt_sz|ccs_gl_tgln_fnt_wt|ccs_gl_tgln_ltr_spc|ccs_gl_tgln_fnt_st|ccs_gl_tgln_fnt_fm' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Tagline'><i class='fas fa-pen text-warning' style='font-size: 12px;'></i></span>" />
+					</div>
+				</cms:if>
             </div>
         </cms:pages>
         
@@ -40,23 +38,23 @@
 
         <div class="row collapse navbar-collapse <cms:show ccs_nav_typography />" id="navbarStandard">
             
-            <cms:if ccs_gl_edt_ok>
-                <div>
-                    <cms:popup_edit 'ccs_nav_xtr_gen_grp|ccs_nav_xtr_gen_msg|ccs_nav_xtr_gen_row|ccs_nav_xtr_bg_clr_opt|ccs_nav_xtr_stky_row|ccs_nav_xtr_stl_msg|ccs_nav_xtr_stky' link_text="<span class='bg-800 link-warning' title='Edit Navbar Settings'>| [EDIT NAV BAR SETTINGS] |</span>" />
-                    
-                    <cms:popup_edit 'ccs_nav_xtr_nav_txt_grp|ccs_nav_xtr_nav_msg|ccs_nav_xtr_nav_txt_row|ccs_nav_xtr_nav_text|ccs_nav_xtr_nav_fs|ccs_nav_xtr_nav_fwt|ccs_nav_xtr_nav_fst|ccs_nav_xtr_nav_font|ccs_nav_xtr_nav_ls' link_text="<span class='bg-800 link-warning' title='Format Navigation text'>| [EDIT NAV BAR TEXT] |</span>" />
-                    
-                    <cms:popup_edit 'ccs_nav_xtr_fld_grp|ccs_nav_xtr_fld_msg|ccs_nav_xtr_fld_row|ccs_nav_xtr_fld_clr|ccs_nav_xtr_fld_sz|ccs_nav_xtr_fld_wt|ccs_nav_xtr_fld_fm' link_text="<span class='bg-800 link-warning' title='Format Folder Headers'>| [EDIT FOLDER HEADERS] |</span>" />
-                    
-                    <cms:pages masterpage='globals.php' limit='1'>
-                        <cms:popup_edit 'ccs_gl_site_nav_mnu_dd_msg|ccs_gl_site_nav_mnu_dd_row|ccs_gl_site_nav_dd_txt_clr|ccs_gl_site_nav_dd_bg' link_text="<span class='bg-800 link-warning' title='Format dropdown menu colors'>| [EDIT NAV Dropdown] |</span>" />
-                        <cms:popup_edit 'ccs_gl_site_nav_hvr_clr|ccs_gl_site_nav_dd_hvr_clr|ccs_gl_site_nav_dd_hvr_bg' link_text="<span class='bg-800 link-warning' title='Format floatover colors'>| [EDIT NAV Mouse-over] |</span>" />
-                    </cms:pages>
-                </div>
-            </cms:if>
             
-            <ul class="navbar-nav navbar-nav-top justify-content-end flex-1 me-lg-n2" data-top-nav-dropdowns="data-top-nav-dropdowns">
-                
+            
+             <ul class="navbar-nav navbar-nav-top justify-content-end flex-1 me-lg-n2 position-relative" data-top-nav-dropdowns="data-top-nav-dropdowns">
+                <cms:if ccs_gl_edt_ok>
+					<div class="position-absolute top-0 start-0 ms-3 z-3 d-flex gap-5" style="margin-top: -15px;">
+						<cms:popup_edit 'ccs_nav_xtr_gen_grp|ccs_nav_xtr_gen_msg|ccs_nav_xtr_gen_row|ccs_nav_xtr_bg_clr_opt|ccs_nav_xtr_stky_row|ccs_nav_xtr_stl_msg|ccs_nav_xtr_stky' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Navbar Settings'><i class='fas fa-cog text-warning' style='font-size: 12px;'></i></span>" />
+
+						<cms:popup_edit 'ccs_nav_xtr_nav_txt_grp|ccs_nav_xtr_nav_msg|ccs_nav_xtr_nav_txt_row|ccs_nav_xtr_nav_text|ccs_nav_xtr_nav_fs|ccs_nav_xtr_nav_fwt|ccs_nav_xtr_nav_fst|ccs_nav_xtr_nav_font|ccs_nav_xtr_nav_ls' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format Navigation text'><i class='fas fa-font text-warning' style='font-size: 12px;'></i></span>" />
+
+						<cms:popup_edit 'ccs_nav_xtr_fld_grp|ccs_nav_xtr_fld_msg|ccs_nav_xtr_fld_row|ccs_nav_xtr_fld_clr|ccs_nav_xtr_fld_sz|ccs_nav_xtr_fld_wt|ccs_nav_xtr_fld_fm' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format Folder Headers'><i class='fas fa-folder-open text-warning' style='font-size: 12px;'></i></span>" />
+
+						<cms:pages masterpage='globals.php' limit='1'>
+							<cms:popup_edit 'ccs_gl_site_nav_mnu_dd_msg|ccs_gl_site_nav_mnu_dd_row|ccs_gl_site_nav_dd_txt_clr|ccs_gl_site_nav_dd_bg' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format dropdown menu colors'><i class='fas fa-palette text-warning' style='font-size: 12px;'></i></span>" />
+							<cms:popup_edit 'ccs_gl_site_nav_hvr_clr|ccs_gl_site_nav_dd_hvr_clr|ccs_gl_site_nav_dd_hvr_bg' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format floatover colors'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+						</cms:pages>
+					</div>
+				</cms:if>
                 <cms:if k_logged_in >
                     <li class="nav-item">
                         <a class="nav-link <cms:show ccs_nav_typography />" href="<cms:show k_logout_link />">Logout</a>
