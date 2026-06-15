@@ -1,24 +1,32 @@
-<footer class="py-<cms:show ccs_ftr_bsc_pad_y /> bg-<cms:show ccs_ftr_bsc_bg_clr_opt />">
+<footer class="position-relative py-<cms:show ccs_ftr_bsc_pad_y /> bg-<cms:show ccs_ftr_bsc_bg_clr_opt />">
+    
     <cms:if ccs_gl_edt_ok>
-        <div class="container-fluid pt-2">
-            <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_gen_stng_msg|ccs_ftr_bsc_gen_set_row|ccs_ftr_bsc_pad_y|ccs_ftr_bsc_bg_clr_opt' link_text="<span class='bg-800 link-warning'>| [Background &amp; Height] |</span>" />
-            <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_typ_msg|ccs_ftr_bsc_txt_fmt_row|ccs_ftr_bsc_text|ccs_ftr_bsc_fs|ccs_ftr_bsc_font|ccs_ftr_bsc_fwt|ccs_ftr_bsc_fst|ccs_ftr_bsc_ls' link_text="<span class='bg-800 link-warning'>| [Format Text] |</span>" />
+        <div class="position-absolute top-50 start-0 translate-middle-y ms-3 z-3">
+            <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_gen_stng_msg|ccs_ftr_bsc_gen_set_row|ccs_ftr_bsc_pad_y|ccs_ftr_bsc_bg_clr_opt|ccs_ftr_bsc_typ_msg|ccs_ftr_bsc_txt_fmt_row|ccs_ftr_bsc_text|ccs_ftr_bsc_fs|ccs_ftr_bsc_font|ccs_ftr_bsc_fwt|ccs_ftr_bsc_fst|ccs_ftr_bsc_ls' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit footer settings"><i class="fas fa-cog text-warning" style="font-size: 12px;"></i></span>' />
         </div>
     </cms:if>
     
     <div class="container">
         <div class="row align-items-center justify-content-between">
-            <div class="col-auto link-<cms:show ccs_ftr_bsc_text /> font-<cms:show ccs_ftr_bsc_font /> fs-<cms:show ccs_ftr_bsc_fs /> fst-<cms:show ccs_ftr_bsc_fst /> fw-<cms:show ccs_ftr_bsc_fwt /> ls-<cms:show ccs_ftr_bsc_ls />">
+            <div class="col-auto position-relative link-<cms:show ccs_ftr_bsc_text /> font-<cms:show ccs_ftr_bsc_font /> fs-<cms:show ccs_ftr_bsc_fs /> fst-<cms:show ccs_ftr_bsc_fst /> fw-<cms:show ccs_ftr_bsc_fwt /> ls-<cms:show ccs_ftr_bsc_ls />">
+                <cms:if ccs_gl_edt_ok>
+                    <div class="position-absolute top-50 start-0 translate-middle-y" style="margin-left: -35px;">
+                        <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_img_msg|ccs_ftr_bsc_img_row|ccs_ftr_bsc_site_logo|ccs_ftr_bsc_site_logo_alt' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Logo Settings"><i class="fas fa-image text-warning" style="font-size: 12px;"></i></span>' />
+                    </div>
+                </cms:if>
                 <cms:if "<cms:not_empty ccs_ftr_bsc_site_logo />">
                     <img class="d-inline-block align-middle me-2" src="<cms:show ccs_ftr_bsc_site_logo />" alt="<cms:show ccs_ftr_bsc_site_logo_alt />" style="max-width: 150px;" />
                 </cms:if>
                 &copy; <cms:date format='Y' /> <cms:get_field 'ccs_gl_site_name' masterpage="globals.php" />
-                <cms:if ccs_gl_edt_ok>
-                    <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_img_msg|ccs_ftr_bsc_img_row|ccs_ftr_bsc_site_logo|ccs_ftr_bsc_site_logo_alt' link_text="<span class='bg-800 link-warning ms-2'>| [EDIT Logo] |</span>" /> 
-                </cms:if>
             </div>
             
-            <div class="col-auto">
+            <div class="col-auto position-relative">
+                <cms:if ccs_gl_edt_ok>                  
+                    <div class="position-absolute top-50 start-0 translate-middle-y" style="margin-left: -35px;">
+                        <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_lnk_msg|ccs_ftr_bsc_lnks_rpt' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Links"><i class="fas fa-link text-warning" style="font-size: 12px;"></i></span>' />
+                    </div>
+                </cms:if>
+                
                 <cms:show_repeatable 'ccs_ftr_bsc_lnks_rpt'>
                     
                     <cms:set final_icon="" scope='global' />
@@ -40,10 +48,6 @@
                         <span class="px-2 text-<cms:show ccs_ftr_bsc_text />" aria-hidden="true">|</span>
                     </cms:if>
                 </cms:show_repeatable>
-                
-                <cms:if ccs_gl_edt_ok>                  
-                    <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_lnk_msg|ccs_ftr_bsc_lnks_rpt' link_text="<span class='bg-800 link-warning ms-2'>| [EDIT Links] |</span>" /> 
-                </cms:if>
             </div>
             
             <div class="col-auto">
@@ -54,9 +58,7 @@
                             <span class="visually-hidden"><cms:show ccs_gl_social_name /></span>
                         </a>
                     </cms:show_repeatable>
-                    <cms:if ccs_gl_edt_ok>
-                        <cms:popup_edit 'ccs_gl_site_scl_grp|ccs_gl_social_msg|ccs_gl_social' link_text="<span class='bg-800 link-warning ms-2'>| [EDIT Social] |</span>" />
-                    </cms:if>
+ 
                 </cms:pages>                
             </div>
         </div>

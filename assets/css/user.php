@@ -2,60 +2,6 @@
 <cms:content_type 'text/css' />
 <cms:template parent='_donottouch_' hidden='1' />
 
-/* -------------------------------------------------------------------------- */
-/* Posh Button                                                                */
-/* -------------------------------------------------------------------------- */
-/* ========================================================================== */
-/* 1. PRIMAVERA (SPRING) - Fresh greens, soft pinks, energetic and light      */
-/* ========================================================================== */
-[data-bs-theme="primavera"] {
-    --ccs-primary: #FF8E9C;      /* Soft Coral Pink */
-    --ccs-secondary: #85D3A9;    /* Spring Leaf Green */
-    --ccs-tertiary: #A3D5FF;     /* Morning Sky Blue */
-    --ccs-quaternary: #FFE8A1;   /* Pale Sunshine */
-    --ccs-body-bg: #FCFCFA;      /* Ultra-light warm gray */
-    --ccs-body-color: #2C3E50;   /* Deep slate for readability */
-    --ccs-heading-color: #1A252F;
-}
-
-/* ========================================================================== */
-/* 2. ESTATE (SUMMER) - High contrast, vibrant, oceanic, and warm             */
-/* ========================================================================== */
-[data-bs-theme="estate"] {
-    --ccs-primary: #FF9F1C;      /* Vibrant Sun Orange */
-    --ccs-secondary: #2EC4B6;    /* Tropical Ocean Teal */
-    --ccs-tertiary: #E71D36;     /* Bright Watermelon Red */
-    --ccs-quaternary: #FFBF69;   /* Warm Sand */
-    --ccs-body-bg: #FFFFFF;      /* Stark white for high contrast */
-    --ccs-body-color: #011627;   /* Deepest Navy (near black) */
-    --ccs-heading-color: #011627;
-}
-
-/* ========================================================================== */
-/* 3. AUTUNNO (AUTUMN) - Deep, rich, earthy, and sophisticated                */
-/* ========================================================================== */
-[data-bs-theme="autunno"] {
-    --ccs-primary: #D95D39;      /* Burnt Maple Red */
-    --ccs-secondary: #F0A202;    /* Golden Harvest Yellow */
-    --ccs-tertiary: #826251;     /* Warm Bark Brown */
-    --ccs-quaternary: #A89C94;   /* Foggy Gray */
-    --ccs-body-bg: #F4F1ED;      /* Parchment off-white */
-    --ccs-body-color: #3A1700;   /* Deep Espresso */
-    --ccs-heading-color: #260F00;
-}
-
-/* ========================================================================== */
-/* 4. INVERNO (WINTER) - Crisp, icy, stark, and highly corporate              */
-/* ========================================================================== */
-[data-bs-theme="inverno"] {
-    --ccs-primary: #3A86FF;      /* Frost Blue */
-    --ccs-secondary: #8ECAE6;    /* Glacier Ice */
-    --ccs-tertiary: #4A4E69;     /* Cold Steel Gray */
-    --ccs-quaternary: #C1D3FE;   /* Pale Frost */
-    --ccs-body-bg: #F8F9FA;      /* Cool Snow White */
-    --ccs-body-color: #0B132B;   /* Deep Midnight Blue */
-    --ccs-heading-color: #050A17;
-}
 
 <cms:if "<cms:gpc 'page' />" && "<cms:gpc 'post' />">
     <cms:pages masterpage="<cms:gpc 'page' />" id="<cms:gpc 'post' />" > 
@@ -108,10 +54,6 @@
         <cms:set body_clr="<cms:show ccs_gl_site_body_clr_cust />" "global" />
         <cms:set body_bg="<cms:show ccs_gl_site_body_bg_cust />" "global" /> 
     <cms:else />
-        <cms:set primary="#007AFF" "global" />
-        <cms:set secondary="#292b2c" "global" />
-        <cms:set tertiary="#687BD9" "global" />
-        <cms:set quaternary="#68C2D9" "global" />
         <cms:set success="#4CD964" "global" />
         <cms:set info="#2EB7F5" "global" />
         <cms:set warning="#FF9500" "global" />
@@ -120,12 +62,55 @@
         <cms:set dark="#0c151a" "global" />
         <cms:set white="#fff" "global" />
         <cms:set black="#000" "global" />
-        <cms:if ccs_gl_site_thm_opt='light'>
-            <cms:set body_clr="#292b2c" "global" />
-            <cms:set body_bg="#fff" "global" />
-        <cms:else_if ccs_gl_site_thm_opt='dark' />
-            <cms:set body_clr="#e1e1e1" "global" />
-            <cms:set body_bg="#404040" "global" />
+
+        <cms:if ccs_gl_site_thm_opt == 'primavera'>
+            <cms:set primary="#FF8E9C" "global" />
+            <cms:set secondary="#85D3A9" "global" />
+            <cms:set tertiary="#A3D5FF" "global" />
+            <cms:set quaternary="#FFE8A1" "global" />
+            <cms:set body_bg="#FCFCFA" "global" />
+            <cms:set body_clr="#2C3E50" "global" />
+            
+        <cms:else_if ccs_gl_site_thm_opt == 'estate' />
+            <cms:set primary="#FF9F1C" "global" />
+            <cms:set secondary="#2EC4B6" "global" />
+            <cms:set tertiary="#E71D36" "global" />
+            <cms:set quaternary="#FFBF69" "global" />
+            <cms:set body_bg="#FFFFFF" "global" />
+            <cms:set body_clr="#011627" "global" />
+            
+        <cms:else_if ccs_gl_site_thm_opt == 'autunno' />
+            <cms:set primary="#D95D39" "global" />
+            <cms:set secondary="#F0A202" "global" />
+            <cms:set tertiary="#826251" "global" />
+            <cms:set quaternary="#A89C94" "global" />
+            <cms:set body_bg="#F4F1ED" "global" />
+            <cms:set body_clr="#3A1700" "global" />
+            
+        <cms:else_if ccs_gl_site_thm_opt == 'inverno' />
+            <cms:set primary="#3A86FF" "global" />
+            <cms:set secondary="#8ECAE6" "global" />
+            <cms:set tertiary="#4A4E69" "global" />
+            <cms:set quaternary="#C1D3FE" "global" />
+            <cms:set body_bg="#F8F9FA" "global" />
+            <cms:set body_clr="#0B132B" "global" />
+            
+        <cms:else />
+            <cms:set primary="#007AFF" "global" />
+            <cms:set secondary="#292b2c" "global" />
+            <cms:set tertiary="#687BD9" "global" />
+            <cms:set quaternary="#68C2D9" "global" />
+            
+            <cms:if ccs_gl_site_thm_opt == 'light'>
+                <cms:set body_clr="#292b2c" "global" />
+                <cms:set body_bg="#fff" "global" />
+            <cms:else_if ccs_gl_site_thm_opt == 'dark' />
+                <cms:set body_clr="#e1e1e1" "global" />
+                <cms:set body_bg="#404040" "global" />
+            <cms:else />
+                <cms:set body_clr="#292b2c" "global" />
+                <cms:set body_bg="#fff" "global" />
+            </cms:if>
         </cms:if>
     </cms:if>
 

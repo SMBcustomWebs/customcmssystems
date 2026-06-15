@@ -1,20 +1,19 @@
-<section class="py-<cms:show ccs_ftr_frm_pad_y /> bg-<cms:show ccs_ftr_frm_bg_clr /> fs-<cms:show ccs_ftr_frm_txt_sz /> fst-<cms:show ccs_ftr_frm_txt_fnt_st /> fw-<cms:show ccs_ftr_frm_txt_fnt_wt /> ls-<cms:show ccs_ftr_frm_txt_ltr_spc /> font-<cms:show ccs_ftr_frm_txt_font /> text-<cms:show ccs_ftr_frm_txt_clr />">
+<section class="position-relative py-<cms:show ccs_ftr_frm_pad_y /> bg-<cms:show ccs_ftr_frm_bg_clr /> fs-<cms:show ccs_ftr_frm_txt_sz /> fst-<cms:show ccs_ftr_frm_txt_fnt_st /> fw-<cms:show ccs_ftr_frm_txt_fnt_wt /> ls-<cms:show ccs_ftr_frm_txt_ltr_spc /> font-<cms:show ccs_ftr_frm_txt_font /> text-<cms:show ccs_ftr_frm_txt_clr />">
     
+    <cms:if ccs_gl_edt_ok>
+        <div class="position-absolute top-0 start-0 mt-3 ms-3 z-3">
+            <cms:popup_edit 'ccs_ftr_frm_gen_grp|ccs_ftr_frm_gen_msg|ccs_ftr_frm_clr_row|ccs_ftr_frm_pad_y|ccs_ftr_frm_bg_clr|ccs_ftr_frm_txt_clr|ccs_ftr_frm_typ_msg|ccs_ftr_frm_fmt_row|ccs_ftr_frm_txt_sz|ccs_ftr_frm_txt_fnt_wt|ccs_ftr_frm_txt_ltr_spc|ccs_ftr_frm_txt_fnt_st|ccs_ftr_frm_txt_font' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit footer settings"><i class="fas fa-cog text-warning" style="font-size: 12px;"></i></span>' />
+        </div>
+    </cms:if>
+
     <div class="container">
-        <cms:if ccs_gl_edt_ok>
-            <div class="row pt-2 mb-3">
-                <div class="col-12 text-center text-lg-start">
-                    <cms:popup_edit 'ccs_ftr_frm_gen_grp|ccs_ftr_frm_gen_msg|ccs_ftr_frm_clr_row|ccs_ftr_frm_pad_y|ccs_ftr_frm_bg_clr|ccs_ftr_frm_txt_clr|ccs_ftr_frm_typ_msg|ccs_ftr_frm_fmt_row|ccs_ftr_frm_txt_sz|ccs_ftr_frm_txt_fnt_wt|ccs_ftr_frm_txt_ltr_spc|ccs_ftr_frm_txt_fnt_st|ccs_ftr_frm_txt_font' link_text="<span class='bg-800 link-warning'>[EDIT FOOTER SETTINGS]</span>" />
-                </div>
-            </div>
-        </cms:if>
 
         <div class="row">
             
-            <div class="col-lg-6 pe-lg-8 pb-5 pb-lg-0">
+            <div class="col-lg-6 pe-lg-8 pb-5 pb-lg-0 position-relative">
                 <cms:if ccs_gl_edt_ok>
-                    <div class="mb-2">
-                        <cms:popup_edit 'ccs_ftr_frm_nws_grp|ccs_ftr_frm_nws_msg|ccs_ftr_frm_nws_txt_row|ccs_ftr_frm_nws_hd|ccs_ftr_frm_nws_dsc|ccs_ftr_frm_nws_inp_row|ccs_ftr_frm_nws_plh|ccs_ftr_frm_nws_btn|ccs_ftr_frm_nws_btn_clr|ccs_ftr_frm_nws_ret_row|ccs_ftr_frm_nws_msg_ok|ccs_ftr_frm_nws_msg_err' link_text="<span class='bg-800 link-warning'>[EDIT NEWSLETTER & MESSAGING]</span>" />
+                    <div class="position-absolute top-0 start-0 mt-1" style="margin-left: -35px;">
+                        <cms:popup_edit 'ccs_ftr_frm_nws_grp|ccs_ftr_frm_nws_msg|ccs_ftr_frm_nws_txt_row|ccs_ftr_frm_nws_hd|ccs_ftr_frm_nws_dsc|ccs_ftr_frm_nws_inp_row|ccs_ftr_frm_nws_plh|ccs_ftr_frm_nws_btn|ccs_ftr_frm_nws_btn_clr|ccs_ftr_frm_nws_ret_row|ccs_ftr_frm_nws_msg_ok|ccs_ftr_frm_nws_msg_err' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Newsletter"><i class="fas fa-envelope text-warning" style="font-size: 12px;"></i></span>' />
                     </div>
                 </cms:if>
                 <h5><cms:show ccs_ftr_frm_nws_hd /></h5>
@@ -109,8 +108,12 @@
                 </p>
             </div>
 
-            <div class="col-md-4 col-lg-2 pb-5 pb-md-0">
-                <cms:if ccs_gl_edt_ok><div class="mb-2"><cms:popup_edit 'ccs_ftr_frm_c1_grp|ccs_ftr_frm_c1_msg|ccs_ftr_frm_c1_ttl|ccs_ftr_frm_c1_rpt' link_text="<span class='bg-800 link-warning'>[EDIT COL 1]</span>" /></div></cms:if>
+            <div class="col-md-4 col-lg-2 pb-5 pb-md-0 position-relative">
+                <cms:if ccs_gl_edt_ok>
+                    <div class="position-absolute top-0 start-0" style="margin-left: -35px; margin-top: -2px;">
+                        <cms:popup_edit 'ccs_ftr_frm_c1_grp|ccs_ftr_frm_c1_msg|ccs_ftr_frm_c1_ttl|ccs_ftr_frm_c1_rpt' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Links"><i class="fas fa-list text-warning" style="font-size: 12px;"></i></span>' />
+                    </div>
+                </cms:if>
                 <h6 class="text-uppercase text-<cms:show ccs_ftr_frm_txt_clr /> fs-<cms:show ccs_ftr_frm_txt_sz /> font-<cms:show ccs_ftr_frm_txt_font /> fw-<cms:show ccs_ftr_frm_txt_fnt_wt /> ls-<cms:show ccs_ftr_frm_txt_ltr_spc />"><cms:show ccs_ftr_frm_c1_ttl /></h6>
                 <hr class="mt-3 short text-400" />
                 
@@ -132,8 +135,12 @@
                 </cms:show_repeatable>
             </div>
 
-            <div class="col-md-4 col-lg-2 pb-5 pb-md-0">
-                <cms:if ccs_gl_edt_ok><div class="mb-2"><cms:popup_edit 'ccs_ftr_frm_c2_grp|ccs_ftr_frm_c2_msg|ccs_ftr_frm_c2_ttl|ccs_ftr_frm_c2_rpt' link_text="<span class='bg-800 link-warning'>[EDIT COL 2]</span>" /></div></cms:if>
+            <div class="col-md-4 col-lg-2 pb-5 pb-md-0 position-relative">
+                <cms:if ccs_gl_edt_ok>
+                    <div class="position-absolute top-0 start-0" style="margin-left: -35px; margin-top: -2px;">
+                        <cms:popup_edit 'ccs_ftr_frm_c2_grp|ccs_ftr_frm_c2_msg|ccs_ftr_frm_c2_ttl|ccs_ftr_frm_c2_rpt' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Links"><i class="fas fa-list text-warning" style="font-size: 12px;"></i></span>' />
+                    </div>
+                </cms:if>
                 <h6 class="text-uppercase text-<cms:show ccs_ftr_frm_txt_clr /> fs-<cms:show ccs_ftr_frm_txt_sz /> font-<cms:show ccs_ftr_frm_txt_font /> fw-<cms:show ccs_ftr_frm_txt_fnt_wt /> ls-<cms:show ccs_ftr_frm_txt_ltr_spc />"><cms:show ccs_ftr_frm_c2_ttl /></h6>
                 <hr class="mt-3 short text-400" />
                 
@@ -155,8 +162,12 @@
                 </cms:show_repeatable>
             </div>
 
-            <div class="col-md-4 col-lg-2">
-                <cms:if ccs_gl_edt_ok><div class="mb-2"><cms:popup_edit 'ccs_ftr_frm_c3_grp|ccs_ftr_frm_c3_msg|ccs_ftr_frm_c3_ttl|ccs_ftr_frm_c3_rpt' link_text="<span class='bg-800 link-warning'>[EDIT COL 3]</span>" /></div></cms:if>
+            <div class="col-md-4 col-lg-2 position-relative">
+                <cms:if ccs_gl_edt_ok>
+                    <div class="position-absolute top-0 start-0" style="margin-left: -35px; margin-top: -2px;">
+                        <cms:popup_edit 'ccs_ftr_frm_c3_grp|ccs_ftr_frm_c3_msg|ccs_ftr_frm_c3_ttl|ccs_ftr_frm_c3_rpt' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Links"><i class="fas fa-list text-warning" style="font-size: 12px;"></i></span>' />
+                    </div>
+                </cms:if>
                 <h6 class="text-uppercase text-<cms:show ccs_ftr_frm_txt_clr /> fs-<cms:show ccs_ftr_frm_txt_sz /> font-<cms:show ccs_ftr_frm_txt_font /> fw-<cms:show ccs_ftr_frm_txt_fnt_wt /> ls-<cms:show ccs_ftr_frm_txt_ltr_spc />"><cms:show ccs_ftr_frm_c3_ttl /></h6>
                 <hr class="mt-3 short text-400" />
                 

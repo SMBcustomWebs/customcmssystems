@@ -1,7 +1,7 @@
 <footer class="py-<cms:show ccs_ftr_lnk_pad_y /> bg-<cms:show ccs_ftr_lnk_bg_clr_opt /> fs-<cms:show ccs_ftr_lnk_txt_sz /> fst-<cms:show ccs_ftr_lnk_txt_fnt_st /> fw-<cms:show ccs_ftr_lnk_txt_fnt_wt /> ls-<cms:show ccs_ftr_lnk_txt_ltr_spc /> font-<cms:show ccs_ftr_lnk_txt_font /> text-<cms:show ccs_ftr_lnk_txt_clr_opt />">
     <cms:if ccs_gl_edt_ok>
         <div class="container-fluid pt-2">
-            <cms:popup_edit 'ccs_ftr_lnk_gen_stng_grp|ccs_ftr_lnk_gen_stng_msg|ccs_ftr_lnk_gen_set_row|ccs_ftr_lnk_pad_y|ccs_ftr_lnk_bg_clr_opt|ccs_ftr_lnk_txt_clr_opt|ccs_ftr_lnk_frmt_row|ccs_ftr_lnk_txt_sz|ccs_ftr_lnk_txt_fnt_wt|ccs_ftr_lnk_txt_ltr_spc|ccs_ftr_lnk_txt_fnt_st|ccs_ftr_lnk_txt_font' link_text="<span class='bg-800 link-warning'>| [EDIT FOOTER FORMAT] |</span>" />
+            <cms:popup_edit 'ccs_ftr_lnk_gen_stng_grp|ccs_ftr_lnk_gen_stng_msg|ccs_ftr_lnk_gen_set_row|ccs_ftr_lnk_pad_y|ccs_ftr_lnk_bg_clr_opt|ccs_ftr_lnk_txt_clr_opt|ccs_ftr_lnk_frmt_row|ccs_ftr_lnk_txt_sz|ccs_ftr_lnk_txt_fnt_wt|ccs_ftr_lnk_txt_ltr_spc|ccs_ftr_lnk_txt_fnt_st|ccs_ftr_lnk_txt_font' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit footer format'><i class='fas fa-cog text-warning' style='font-size: 12px;'></i></span>" />
         </div>
     </cms:if>
     <div class="container">
@@ -41,7 +41,12 @@
                 <cms:set ftr_lnk_col = "<cms:mod k_count '4' />" />
                 
                 <cms:if k_first_row || ftr_lnk_col == '1'>
-                    <div class="col-6 col-md-3">
+                    <div class="col-6 col-md-3 position-relative">
+                        <cms:if k_first_row && ccs_gl_edt_ok>
+                            <div class="position-absolute top-0 start-0 mt-1" style="margin-left: -35px;">
+                                <cms:popup_edit 'ccs_ftr_lnk_gen_stng_grp|ccs_ftr_lnk_lnk_msg|ccs_ftr_lnk_lnks_rpt' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Links"><i class="fas fa-link text-warning" style="font-size: 12px;"></i></span>' />
+                            </div>
+                        </cms:if>
                 </cms:if>
                 
                 <a class="link-<cms:show ccs_ftr_lnk_txt_clr_opt /> my-2 d-block" href="<cms:show final_ftr_lnk />" <cms:show final_ftr_tgt />> 
@@ -52,12 +57,7 @@
                     </div>
                 </cms:if>
             </cms:show_repeatable>
-            
-            <cms:if ccs_gl_edt_ok>
-                <div class="col-12 mt-2">
-                    <cms:popup_edit 'ccs_ftr_lnk_gen_stng_grp|ccs_ftr_lnk_lnk_msg|ccs_ftr_lnk_lnks_rpt' link_text="<span class='bg-800 link-warning'>| [EDIT LINKS] |</span>" />
-                </div>
-            </cms:if>
+
         </div>
     </div>
 </footer>

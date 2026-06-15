@@ -283,199 +283,338 @@
                                 </div>
                                 <cms:popup_edit 'ccs_gl_site_biz_grp|ccs_gl_site_biz_lgo_msg|ccs_gl_site_biz_lgo_row|ccs_gl_site_name_txt_lgo_opt|ccs_gl_site_logo_hoz|ccs_gl_site_logo_sqr|ccs_gl_site_favicon' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-    <div class="card shadow-sm h-100 border-0">
-        <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold">Theme & Colors</h5>
-            <cms:popup_edit 'ccs_gl_site_custom_color_opt|ccs_gl_site_thm_opt|ccs_gl_site_site_cst_clr_grp|ccs_gl_site_primary_cust|ccs_gl_site_secondary_cust|ccs_gl_site_tertiary_cust|ccs_gl_site_success_cust|ccs_gl_site_warning_cust|ccs_gl_site_danger_cust' link_text="<button class='btn btn-sm btn-light rounded-circle shadow-sm' style='width:32px; height:32px;' title='Edit Theme & Colors'><i class='fas fa-palette text-primary'></i></button>" />
-        </div>
-        
-        <div class="card-body" data-bs-theme="<cms:show ccs_gl_site_thm_opt />">
-            
-            <div class="mb-3">
-                <span class="badge bg-dark text-uppercase px-2 py-1"><cms:show ccs_gl_site_thm_opt /> Theme</span>
-                <cms:if ccs_gl_site_custom_color_opt><span class="badge bg-primary text-uppercase px-2 py-1 ms-1">Custom Overrides Active</span></cms:if>
-            </div>
-            
-            <div class="mt-3">
-    <span class="d-block text-muted small fw-bold text-uppercase mb-2">Active Theme Palette</span>
-    <div class="d-flex flex-wrap gap-2">
-        <div title="Primary" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 32px; height: 32px; background-color: <cms:get_custom_field 'ccs_gl_site_primary_cust' masterpage='globals.php' />;"></div>
-        <div title="Secondary" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 32px; height: 32px; background-color: <cms:get_custom_field 'ccs_gl_site_secondary_cust' masterpage='globals.php' />;"></div>
-        <div title="Tertiary" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 32px; height: 32px; background-color: <cms:get_custom_field 'ccs_gl_site_tertiary_cust' masterpage='globals.php' />;"></div>
-        <div title="Quaternary" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 32px; height: 32px; background-color: <cms:get_custom_field 'ccs_gl_site_quaternary_cust' masterpage='globals.php' />;"></div>
-    </div>
-</div>
-<div class="mt-2">
-    <span class="d-block text-muted small fw-bold text-uppercase mb-2">Utility Colors</span>
-    <div class="d-flex flex-wrap gap-2">
-        <div title="Success" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:get_custom_field 'ccs_gl_site_success_cust' masterpage='globals.php' />;"></div>
-        <div title="Info" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:get_custom_field 'ccs_gl_site_info_cust' masterpage='globals.php' />;"></div>
-        <div title="Warning" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:get_custom_field 'ccs_gl_site_warning_cust' masterpage='globals.php' />;"></div>
-        <div title="Danger" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:get_custom_field 'ccs_gl_site_danger_cust' masterpage='globals.php' />;"></div>
-        <div title="Light" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:get_custom_field 'ccs_gl_site_light_cust' masterpage='globals.php' />;"></div>
-        <div title="Dark" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:get_custom_field 'ccs_gl_site_dark_cust' masterpage='globals.php' />;"></div>
-    </div>
-</div>
-    </div>
-</div></div>
-
-                <div class="col-lg-4">
-                    <div class="card shadow-sm h-100 border-0">
-                        <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0 fw-bold">Typography</h5>
-                            <cms:popup_edit 'ccs_gl_site_custom_font_opt|ccs_gl_site_site_fonts|ccs_gl_site_font_body_cust|ccs_gl_site_font_base_cust|ccs_gl_site_font_sans_cust|ccs_gl_site_font_mono_cust|ccs_gl_site_font_size_cust|ccs_gl_site_font_weight_cust|ccs_gl_site_line_height_cust' link_text="<button class='btn btn-sm btn-light rounded-circle shadow-sm' style='width:32px; height:32px;' title='Edit Typography'><i class='fas fa-font text-primary'></i></button>" />
-                        </div>
-                        <div class="card-body">
-                            <div class="p-3 bg-light rounded mb-2 overflow-hidden">
-                                <span class="d-block text-muted small fw-bold text-uppercase mb-1">Body Text (Sans-Serif)</span>
-                                <span class="fs-5" style="font-family: <cms:show ccs_gl_site_font_sans_cust />;">The quick brown fox jumps.</span>
-                            </div>
-                            <div class="p-3 bg-light rounded overflow-hidden">
-                                <span class="d-block text-muted small fw-bold text-uppercase mb-1">Headings (Serif)</span>
-                                <span class="fs-5 fw-bold" style="font-family: <cms:show ccs_gl_site_font_serf_cust />;">The quick brown fox.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <h4 class="text-muted fs-6 text-uppercase fw-bold mb-3 mt-5">Zone 3: Architecture & Integrations</h4>
-            <div class="row g-4">
-                
-                <div class="col-lg-4">
-                    <div class="card shadow-sm h-100 border-0">
-                        <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
-                            <h5 class="mb-0 fw-bold">Site Architecture</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="list-group list-group-flush">
-                                <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-bars text-muted me-2"></i> Navbar Block</span>
-                                    <cms:popup_edit 'ccs_gl_nav_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Assign</button>" />
-                                </div>
-                                <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-arrow-up text-muted me-2"></i> Top Utility Bar</span>
-                                    <cms:popup_edit 'ccs_gl_tpb_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Assign</button>" />
-                                </div>
-                                <div class="list-group-item px-0 d-flex justify-content-between align-items-center border-bottom-0">
-                                    <span><i class="fas fa-shoe-prints text-muted me-2"></i> Footer Block</span>
-                                    <cms:popup_edit 'ccs_gl_ftr_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Assign</button>" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Architecture -->
-				<div class="col-lg-4">
-					<div class="card shadow-sm h-100 border-0">
-						<div class="card-header bg-white border-bottom-0 pt-4 pb-0">
-							<h5 class="mb-0 fw-bold">Site Architecture</h5>
-						</div>
-						<div class="card-body">
-
-							<!-- Hidden Counters -->
-							<cms:set nav_count='0' scope='global' />
-							<cms:show_pagebuilder 'ccs_gl_nav_pb'><cms:set nav_count=k_count scope='global' /></cms:show_pagebuilder>
-
-							<cms:set ftr_count='0' scope='global' />
-							<cms:show_pagebuilder 'ccs_gl_ftr_pb'><cms:set ftr_count=k_count scope='global' /></cms:show_pagebuilder>
-
-							<cms:set tpb_count='0' scope='global' />
-							<cms:show_pagebuilder 'ccs_gl_tpb_pb'><cms:set tpb_count=k_count scope='global' /></cms:show_pagebuilder>
-
-							<div class="list-group list-group-flush">
-
-								<!-- Navbar Status -->
-								<div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+							<div class="p-3 bg-light rounded mt-3">
+								<div class="d-flex justify-content-between align-items-center">
 									<div>
-										<i class="fas fa-bars text-muted me-2"></i> Navbar 
-										<cms:if nav_count == '1'>
-											<span class="badge bg-success ms-1">1 Active</span>
-										<cms:else_if nav_count == '0' />
-											<span class="badge bg-danger ms-1">Missing</span>
-										<cms:else />
-											<span class="badge bg-danger ms-1"><cms:show nav_count /> Detected (Delete <cms:show "<cms:sub nav_count '1' />" />)</span>
-										</cms:if>
+										<span class="d-block small fw-bold text-uppercase text-muted mb-1">Micro-Branding</span>
+										<span class="d-block small">Favicon & Social Share</span>
 									</div>
-									<cms:popup_edit 'ccs_gl_nav_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Manage</button>" />
+									<cms:popup_edit 'ccs_gl_site_favicon|ccs_gl_site_social_share' link_text="<button class='btn btn-sm btn-outline-primary bg-white'>Edit</button>" />
 								</div>
-
-								<!-- Top Utility Bar Status -->
-								<div class="list-group-item px-0 d-flex justify-content-between align-items-center">
-									<div>
-										<i class="fas fa-arrow-up text-muted me-2"></i> Utility Bar
-										<cms:if tpb_count == '1' || tpb_count == '2'>
-											<span class="badge bg-success ms-1"><cms:show tpb_count /> Active</span>
-										<cms:else_if tpb_count == '0' />
-											<span class="badge bg-secondary ms-1">None (Optional)</span>
-										<cms:else />
-											<span class="badge bg-danger ms-1"><cms:show tpb_count /> Detected (Max 2)</span>
-										</cms:if>
-									</div>
-									<cms:popup_edit 'ccs_gl_tpb_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Manage</button>" />
-								</div>
-
-								<!-- Footer Status -->
-								<div class="list-group-item px-0 d-flex justify-content-between align-items-center border-bottom-0">
-									<div>
-										<i class="fas fa-shoe-prints text-muted me-2"></i> Footer
-										<cms:if ftr_count == '1'>
-											<span class="badge bg-success ms-1">1 Active</span>
-										<cms:else_if ftr_count == '0' />
-											<span class="badge bg-danger ms-1">Missing</span>
-										<cms:else />
-											<span class="badge bg-danger ms-1"><cms:show ftr_count /> Detected (Delete <cms:show "<cms:sub ftr_count '1' />" />)</span>
-										</cms:if>
-									</div>
-									<cms:popup_edit 'ccs_gl_ftr_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Manage</button>" />
-								</div>
-
 							</div>
 
-							<cms:if nav_count gt '1' || ftr_count gt '1' || tpb_count gt '2'>
-								<div class="alert alert-danger small py-2 mt-3 mb-0">
-									<i class="fas fa-triangle-exclamation me-1"></i> <strong>Layout Error:</strong> You have too many blocks active. Only the first valid block will be displayed on your live site.
-								</div>
+							
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+					<div class="card shadow-sm h-100 border-0">
+						<div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+							<h5 class="mb-0 fw-bold">Theme & Colors</h5>
+							<cms:popup_edit 'ccs_gl_site_custom_color_opt|ccs_gl_site_thm_opt|ccs_gl_site_site_cst_clr_grp|ccs_gl_site_primary_cust|ccs_gl_site_secondary_cust|ccs_gl_site_tertiary_cust|ccs_gl_site_success_cust|ccs_gl_site_warning_cust|ccs_gl_site_danger_cust' link_text="<button class='btn btn-sm btn-light rounded-circle shadow-sm' style='width:32px; height:32px;' title='Edit Theme & Colors'><i class='fas fa-palette text-primary'></i></button>" />
+						</div>
+
+						<div class="card-body" data-bs-theme="<cms:show ccs_gl_site_thm_opt />">
+
+							<div class="mb-3">
+								<span class="badge bg-dark text-uppercase px-2 py-1"><cms:show ccs_gl_site_thm_opt /> Theme</span>
+								<cms:if ccs_gl_site_custom_color_opt><span class="badge bg-primary text-uppercase px-2 py-1 ms-1">Custom Overrides Active</span></cms:if>
+							</div>
+
+							<cms:if ccs_gl_site_custom_color_opt>
+								<cms:set sw_primary=ccs_gl_site_primary_cust />
+								<cms:set sw_secondary=ccs_gl_site_secondary_cust />
+								<cms:set sw_tertiary=ccs_gl_site_tertiary_cust />
+								<cms:set sw_quaternary=ccs_gl_site_quaternary_cust />
+								<cms:set sw_success=ccs_gl_site_success_cust />
+								<cms:set sw_info=ccs_gl_site_info_cust />
+								<cms:set sw_warning=ccs_gl_site_warning_cust />
+								<cms:set sw_danger=ccs_gl_site_danger_cust />
+								<cms:set sw_light=ccs_gl_site_light_cust />
+								<cms:set sw_dark=ccs_gl_site_dark_cust />
+							<cms:else />
+								<cms:set sw_success="#4CD964" />
+								<cms:set sw_info="#2EB7F5" />
+								<cms:set sw_warning="#FF9500" />
+								<cms:set sw_danger="#FF3B30" />
+								<cms:set sw_light="#fafafa" />
+								<cms:set sw_dark="#0c151a" />
+
+								<cms:if ccs_gl_site_thm_opt == 'primavera'>
+									<cms:set sw_primary="#FF8E9C" /><cms:set sw_secondary="#85D3A9" /><cms:set sw_tertiary="#A3D5FF" /><cms:set sw_quaternary="#FFE8A1" />
+								<cms:else_if ccs_gl_site_thm_opt == 'estate' />
+									<cms:set sw_primary="#FF9F1C" /><cms:set sw_secondary="#2EC4B6" /><cms:set sw_tertiary="#E71D36" /><cms:set sw_quaternary="#FFBF69" />
+								<cms:else_if ccs_gl_site_thm_opt == 'autunno' />
+									<cms:set sw_primary="#D95D39" /><cms:set sw_secondary="#F0A202" /><cms:set sw_tertiary="#826251" /><cms:set sw_quaternary="#A89C94" />
+								<cms:else_if ccs_gl_site_thm_opt == 'inverno' />
+									<cms:set sw_primary="#3A86FF" /><cms:set sw_secondary="#8ECAE6" /><cms:set sw_tertiary="#4A4E69" /><cms:set sw_quaternary="#C1D3FE" />
+								<cms:else />
+									<cms:set sw_primary="#007AFF" /><cms:set sw_secondary="#292b2c" /><cms:set sw_tertiary="#687BD9" /><cms:set sw_quaternary="#68C2D9" />
+								</cms:if>
 							</cms:if>
 
+							<div class="mt-3">
+								<span class="d-block text-muted small fw-bold text-uppercase mb-2">Active Theme Palette</span>
+								<div class="d-flex flex-wrap gap-2">
+									<div title="Primary" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 32px; height: 32px; background-color: <cms:show sw_primary />;"></div>
+									<div title="Secondary" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 32px; height: 32px; background-color: <cms:show sw_secondary />;"></div>
+									<div title="Tertiary" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 32px; height: 32px; background-color: <cms:show sw_tertiary />;"></div>
+									<div title="Quaternary" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 32px; height: 32px; background-color: <cms:show sw_quaternary />;"></div>
+								</div>
+							</div>
+							<div class="mt-2">
+								<span class="d-block text-muted small fw-bold text-uppercase mb-2">Utility Colors</span>
+								<div class="d-flex flex-wrap gap-2">
+									<div title="Success" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:show sw_success />;"></div>
+									<div title="Info" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:show sw_info />;"></div>
+									<div title="Warning" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:show sw_warning />;"></div>
+									<div title="Danger" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:show sw_danger />;"></div>
+									<div title="Light" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:show sw_light />;"></div>
+									<div title="Dark" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:show sw_dark />;"></div>
+								</div>
+							</div>
+
+							<div class="mt-4 pt-3 border-top">
+								<cms:popup_edit 'ccs_gl_site_site_cst_slct_grp|ccs_gl_site_site_cst_slct_msg|ccs_gl_site_hglt_row|ccs_gl_site_hglt_clr|ccs_gl_site_hglt_bg' link_text="<button class='btn btn-sm btn-outline-secondary w-100'>Edit Text Highlight/Select Colors</button>" />
+							</div>
 						</div>
 					</div>
 				</div>
+			<div class="col-lg-4">
+				<div class="card shadow-sm h-100 border-0">
+					<div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+						<h5 class="mb-0 fw-bold">UI Playground</h5>
+						<button class='btn btn-sm btn-light rounded-circle shadow-sm disabled' style='width:32px; height:32px;' title='Preview Only'><i class='fas fa-shapes text-secondary'></i></button>
+					</div>
+					<div class="card-body d-flex flex-column justify-content-between">
 
-                <div class="col-lg-4">
-                    <div class="card shadow-sm h-100 border-0">
-                        <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
-                            <h5 class="mb-0 fw-bold">Integrations & Legal</h5>
+						<div>
+							<span class="d-block text-muted small fw-bold text-uppercase mb-3">Button Geometry & States</span>
+							<div class="d-flex flex-wrap gap-2">
+								<button class="btn shadow-sm" style="background-color: var(--ccs-primary); color: #fff; border-color: var(--ccs-primary); font-family: <cms:show dash_font_base />;">
+									Primary Action
+								</button>
+								<button class="btn bg-white shadow-sm" style="color: var(--ccs-secondary); border: 1px solid var(--ccs-secondary); font-family: <cms:show dash_font_base />;">
+									Secondary
+								</button>
+							</div>
+							<div class="mt-2 small text-muted fst-italic">
+								Hover over buttons to test interactive states.
+							</div>
+						</div>
+
+						<div class="mt-4 pt-3 border-top">
+							<span class="d-block text-muted small fw-bold text-uppercase mb-3">System Iconography</span>
+							<div class="d-flex flex-wrap gap-3 fs-5" style="color: var(--ccs-tertiary);">
+								<i class="fas fa-user" title="User"></i>
+								<i class="fas fa-envelope" title="Message"></i>
+								<i class="fas fa-phone-alt" title="Phone"></i>
+								<i class="fas fa-map-marker-alt" title="Location"></i>
+								<i class="fas fa-arrow-right" title="Arrow"></i>
+								<i class="fas fa-check-circle" title="Success"></i>
+								<i class="fas fa-star" title="Favorite"></i>
+								<i class="fas fa-cog" title="Settings"></i>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+            <div class="col-12 mt-4">
+				<div class="card shadow-sm border-0">
+					<div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+						<div class="d-flex align-items-center gap-3">
+							<h5 class="mb-0 fw-bold">Typography</h5>
+							<div>
+								<span class="badge bg-dark text-uppercase px-2 py-1">Standard Fonts</span>
+								<cms:if ccs_gl_site_custom_font_opt><span class="badge bg-primary text-uppercase px-2 py-1">Custom Overrides Active</span></cms:if>
+							</div>
+						</div>
+						<cms:popup_edit 'ccs_gl_site_custom_font_opt|ccs_gl_site_site_fonts|ccs_gl_site_font_body_cust|ccs_gl_site_font_base_cust|ccs_gl_site_font_sans_cust|ccs_gl_site_font_serf_cust|ccs_gl_site_font_mono_cust|ccs_gl_site_font_crsv_cust|ccs_gl_site_font_decr_cust|ccs_gl_site_font_size_cust|ccs_gl_site_font_weight_cust|ccs_gl_site_line_height_cust' link_text="<button class='btn btn-sm btn-light rounded-circle shadow-sm' style='width:32px; height:32px;' title='Edit Typography'><i class='fas fa-font text-primary'></i></button>" />
+					</div>
+
+					<div class="card-body">
+						<cms:if ccs_gl_site_custom_font_opt>
+							<cms:set dash_font_base=ccs_gl_site_font_base_cust />
+							<cms:set dash_font_sans=ccs_gl_site_font_sans_cust />
+							<cms:set dash_font_serif=ccs_gl_site_font_serf_cust />
+							<cms:set dash_font_mono=ccs_gl_site_font_mono_cust />
+							<cms:set dash_font_cursive=ccs_gl_site_font_crsv_cust />
+							<cms:set dash_font_decor=ccs_gl_site_font_decr_cust />
+							<cms:set dash_font_size=ccs_gl_site_font_size_cust />
+							<cms:set dash_line_height=ccs_gl_site_line_height_cust />
+						<cms:else />
+							<cms:set dash_font_base="'Montserrat', -apple-system, sans-serif" />
+							<cms:set dash_font_sans="'Raleway', -apple-system, sans-serif" />
+							<cms:set dash_font_serif="'Playfair Display', 'Libre Baskerville', Georgia, serif" />
+							<cms:set dash_font_mono="'SFMono-Regular', Menlo, Monaco, Consolas, monospace" />
+							<cms:set dash_font_cursive="'Bradley Hand', 'Lucida Handwriting', 'Brush Script MT', cursive" />
+							<cms:set dash_font_decor="'Sreda', 'Arvo', 'Candara', sans-serif" />
+							<cms:set dash_font_size="0.875" />
+							<cms:set dash_line_height="1.5" />
+						</cms:if>
+
+						<div class="row g-3">
+							<div class="col-md-4">
+								<div class="p-2 bg-light rounded mb-2 overflow-hidden h-50">
+									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Base / Body</span>
+									<span class="fs-6 d-block text-truncate" style="font-family: <cms:show dash_font_base />;">The quick brown fox jumps.</span>
+								</div>
+								<div class="p-2 bg-light rounded overflow-hidden h-50">
+									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Sans-Serif</span>
+									<span class="fs-6 d-block text-truncate" style="font-family: <cms:show dash_font_sans />;">The quick brown fox jumps.</span>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="p-2 bg-light rounded mb-2 overflow-hidden h-50">
+									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Headings (Serif)</span>
+									<span class="fs-6 fw-bold d-block text-truncate" style="font-family: <cms:show dash_font_serif />;">The quick brown fox.</span>
+								</div>
+								<div class="p-2 bg-light rounded overflow-hidden h-50">
+									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Monospace (Code)</span>
+									<span class="fs-6 d-block text-truncate" style="font-family: <cms:show dash_font_mono />;">The quick brown fox.</span>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="p-2 bg-light rounded mb-2 overflow-hidden h-50">
+									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Cursive / Script</span>
+									<span class="fs-5 d-block text-truncate" style="font-family: <cms:show dash_font_cursive />;">The quick brown fox.</span>
+								</div>
+								<div class="p-2 bg-light rounded overflow-hidden h-50">
+									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Decorative</span>
+									<span class="fs-6 d-block text-truncate" style="font-family: <cms:show dash_font_decor />;">The quick brown fox.</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="p-3 mt-3 border border-secondary border-opacity-25 rounded bg-white">
+							<span class="d-block text-muted small fw-bold text-uppercase mb-2" style="font-size: 0.7rem;">Spacing Preview (Size: <cms:show dash_font_size />rem | LH: <cms:show dash_line_height />)</span>
+							<div class="text-dark" style="font-family: <cms:show dash_font_base />; font-size: <cms:show dash_font_size />rem; line-height: <cms:show dash_line_height />;">
+								This paragraph demonstrates how your chosen base font, size, and line height interact. Notice how the vertical rhythm breathes as you adjust the line height setting.
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div></div>
+		  <h4 class="text-muted fs-6 text-uppercase fw-bold mb-3 mt-5">Zone 3: Architecture & Integrations</h4>
+<div class="row g-4">
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100 border-0">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <h5 class="mb-0 fw-bold">Site Architecture</h5>
+            </div>
+            <div class="card-body">
+
+                <cms:set nav_count='0' scope='global' />
+                <cms:show_pagebuilder 'ccs_gl_nav_pb'><cms:set nav_count=k_count scope='global' /></cms:show_pagebuilder>
+
+                <cms:set ftr_count='0' scope='global' />
+                <cms:show_pagebuilder 'ccs_gl_ftr_pb'><cms:set ftr_count=k_count scope='global' /></cms:show_pagebuilder>
+
+                <cms:set tpb_count='0' scope='global' />
+                <cms:show_pagebuilder 'ccs_gl_tpb_pb'><cms:set tpb_count=k_count scope='global' /></cms:show_pagebuilder>
+
+                <div class="list-group list-group-flush">
+
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-bars text-muted me-2"></i> Navbar 
+                            <cms:if nav_count == '1'>
+                                <span class="badge bg-success ms-1">1 Active</span>
+                            <cms:else_if nav_count == '0' />
+                                <span class="badge bg-danger ms-1">Missing</span>
+                            <cms:else />
+                                <span class="badge bg-danger ms-1"><cms:show nav_count /> Detected (Delete <cms:show "<cms:sub nav_count '1' />" />)</span>
+                            </cms:if>
                         </div>
-                        <div class="card-body">
-                            <div class="list-group list-group-flush">
-                                <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-envelope-open-text text-muted me-2"></i> Form Email Target</span>
-                                    <cms:popup_edit 'ccs_gl_integrations_grp|ccs_gl_form_email' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
-                                </div>
-                                <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
-                                    <span><i class="fas fa-code text-muted me-2"></i> Tracking Scripts</span>
-                                    <cms:popup_edit 'ccs_gl_integrations_grp|ccs_gl_header_scripts|ccs_gl_footer_scripts' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
-                                </div>
-                                <div class="list-group-item px-0 d-flex justify-content-between align-items-center border-bottom-0">
-                                    <span><i class="fas fa-shield-halved text-muted me-2"></i> Cookie & Privacy</span>
-                                    <cms:popup_edit 'ccs_gl_legal_grp|ccs_gl_cookie_consent|ccs_gl_privacy_link|ccs_gl_terms_link' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
-                                </div>
-                            </div>
-                        </div>
+                        <cms:popup_edit 'ccs_gl_nav_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Manage</button>" />
                     </div>
+
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <div>
+                            <i class="fas fa-arrow-up text-muted me-2"></i> Utility Bar
+                            <cms:if tpb_count == '1' || tpb_count == '2'>
+                                <span class="badge bg-success ms-1"><cms:show tpb_count /> Active</span>
+                            <cms:else_if tpb_count == '0' />
+                                <span class="badge bg-secondary ms-1">None (Optional)</span>
+                            <cms:else />
+                                <span class="badge bg-danger ms-1"><cms:show tpb_count /> Detected (Max 2)</span>
+                            </cms:if>
+                        </div>
+                        <cms:popup_edit 'ccs_gl_tpb_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Manage</button>" />
+                    </div>
+
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center border-bottom-0">
+                        <div>
+                            <i class="fas fa-shoe-prints text-muted me-2"></i> Footer
+                            <cms:if ftr_count == '1'>
+                                <span class="badge bg-success ms-1">1 Active</span>
+                            <cms:else_if ftr_count == '0' />
+                                <span class="badge bg-danger ms-1">Missing</span>
+                            <cms:else />
+                                <span class="badge bg-danger ms-1"><cms:show ftr_count /> Detected (Delete <cms:show "<cms:sub ftr_count '1' />" />)</span>
+                            </cms:if>
+                        </div>
+                        <cms:popup_edit 'ccs_gl_ftr_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Manage</button>" />
+                    </div>
+
                 </div>
+
+                <cms:if nav_count gt '1' || ftr_count gt '1' || tpb_count gt '2'>
+                    <div class="alert alert-danger small py-2 mt-3 mb-0">
+                        <i class="fas fa-triangle-exclamation me-1"></i> <strong>Layout Error:</strong> You have too many blocks active. Only the first valid block will be displayed on your live site.
+                    </div>
+                </cms:if>
 
             </div>
         </div>
+    </div>
 
-        <cms:embed 'pb_mods/pg_frame/footer/ftr_emb.htm' />    
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100 border-0">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <h5 class="mb-0 fw-bold">Global Data</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-address-book text-muted me-2"></i> Contact Info</span>
+                        <cms:popup_edit 'ccs_gl_contact_email|ccs_gl_contact_phone|ccs_gl_contact_address' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                    </div>
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-hashtag text-muted me-2"></i> Social Links</span>
+                        <cms:popup_edit 'ccs_gl_social_fb|ccs_gl_social_ig|ccs_gl_social_x|ccs_gl_social_li' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                    </div>
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center border-bottom-0">
+                        <span><i class="fas fa-clock text-muted me-2"></i> Business Hours</span>
+                         <cms:popup_edit 'ccs_gl_business_hours' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100 border-0">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <h5 class="mb-0 fw-bold">Integrations & Legal</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-envelope-open-text text-muted me-2"></i> Form Email Target</span>
+                        <cms:popup_edit 'ccs_gl_integrations_grp|ccs_gl_form_email' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                    </div>
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-code text-muted me-2"></i> Tracking Scripts</span>
+                        <cms:popup_edit 'ccs_gl_integrations_grp|ccs_gl_header_scripts|ccs_gl_footer_scripts' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                    </div>
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center border-bottom-0">
+                        <span><i class="fas fa-shield-halved text-muted me-2"></i> Cookie & Privacy</span>
+                        <cms:popup_edit 'ccs_gl_legal_grp|ccs_gl_cookie_consent|ccs_gl_privacy_link|ccs_gl_terms_link' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	</div>
+</div>        
+	<cms:embed 'pb_mods/pg_frame/footer/ftr_emb.htm' />    
     <cms:embed 'pb_mods/pg_frame/tail.htm' />
     
 <cms:else />
