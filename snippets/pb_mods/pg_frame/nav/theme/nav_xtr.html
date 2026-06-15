@@ -11,19 +11,53 @@
 
     <div class="container position-relative">
         
+        <cms:if ccs_gl_edt_ok>
+            <cms:capture into='local_brnd_popup'>
+                <cms:popup_edit 'ccs_nav_xtr_brnd_grp|ccs_nav_xtr_brnd_msg|ccs_nav_xtr_brnd_row|ccs_nav_xtr_brand_type|ccs_nav_xtr_logo_theme' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px; pointer-events: auto;' title='Edit Logo Settings'><i class='fas fa-image text-warning' style='font-size: 12px;'></i></span>" />
+            </cms:capture>
+        </cms:if>
+
         <cms:pages masterpage='globals.php' limit='1'>
             <div class="row">
-                <cms:if ccs_gl_site_name_txt_lgo_opt='1' >
+                
+                <cms:set final_brand_type = ccs_nav_xtr_brand_type />
+                <cms:if final_brand_type == 'global'>
+                    <cms:if ccs_gl_site_name_txt_lgo_opt == '1'>
+                        <cms:set final_brand_type = 'name' />
+                    <cms:else />
+                        <cms:set final_brand_type = 'hoz' /> 
+                    </cms:if>
+                </cms:if>
+
+                <cms:if final_brand_type == 'name' >
                     <h1 class="mb-0 <cms:show ccs_gl_site_name_txt_sz /> text-<cms:show ccs_gl_site_name_txt_clr />">
                         <a href="<cms:show k_site_link />" class="<cms:show ccs_gl_site_name_txt_sz /> text-<cms:show ccs_gl_site_name_txt_clr />">
                             <cms:show ccs_gl_site_name />
                         </a>
                     </h1>
                 <cms:else />
+                    <cms:if final_brand_type == 'hoz'>
+                        <cms:if ccs_nav_xtr_logo_theme == 'lgt'>
+                            <cms:set final_logo_src = ccs_gl_site_logo_hoz_lgt />
+                        <cms:else />
+                            <cms:set final_logo_src = ccs_gl_site_logo_hoz_drk />
+                        </cms:if>
+                    <cms:else />
+                        <cms:if ccs_nav_xtr_logo_theme == 'lgt'>
+                            <cms:set final_logo_src = ccs_gl_site_logo_sqr_lgt />
+                        <cms:else />
+                            <cms:set final_logo_src = ccs_gl_site_logo_sqr_drk />
+                        </cms:if>
+                    </cms:if>
+
                     <a class="navbar navbar-brand" href="<cms:show k_site_link />" aria-label="<cms:show ccs_gl_site_name /> Home">
-                        <img src="<cms:show ccs_gl_site_logo_hoz />" alt="<cms:show ccs_gl_site_name /> horizontal logo" class="w-100" style="max-width: 264px;" />
+                        <cms:if "<cms:not_empty final_logo_src />">
+                            <img src="<cms:show final_logo_src />" alt="<cms:show ccs_gl_site_name /> logo" class="w-100" style="max-width: 264px; height: auto; max-height: 80px;" />
+                        <cms:else />
+                            <span class="fs-4 fw-bold"><cms:show ccs_gl_site_name /></span>
+                        </cms:if>
                     </a>
-                 </cms:if>
+                </cms:if>
                  
                 <cms:if ccs_gl_tgln_opt>
                     <p class="mt-1 mb-0 pb-0 text-<cms:show ccs_gl_tgln_clr /> fs-<cms:show ccs_gl_tgln_txt_sz /> fw-<cms:show ccs_gl_tgln_fnt_wt /> font-<cms:show ccs_gl_tgln_fnt_fm /> fst-<cms:show ccs_gl_tgln_fnt_st /> ls-<cms:show ccs_gl_tgln_ltr_spc />">
@@ -33,7 +67,7 @@
                 
                 <cms:if ccs_gl_edt_ok>
     				<div class="position-absolute top-0 start-0 mt-2 ms-n4 z-3 d-flex flex-column gap-1" style="width: max-content; pointer-events: none;">
-						<cms:popup_edit 'ccs_gl_site_biz_lgo_msg|ccs_gl_site_biz_lgo_row|ccs_gl_site_name_txt_lgo_opt|ccs_gl_site_logo_hoz|ccs_gl_site_logo_sqr|ccs_gl_site_favicon|ccs_gl_site_biz_mta_row|ccs_gl_site_name|ccs_gl_site_name_txt_sz|ccs_gl_site_name_txt_clr' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px; pointer-events: auto;' title='Edit logos and site name'><i class='fas fa-image text-warning' style='font-size: 12px;'></i></span>" />
+						<cms:show local_brnd_popup />
 						<cms:popup_edit 'ccs_gl_site_tgl_row|ccs_gl_tgln|ccs_gl_tgln_opt|ccs_gl_tgln_clr|ccs_gl_tgln_fmt_msg|ccs_gl_site_tgl_row|ccs_gl_tgln_txt_sz|ccs_gl_tgln_fnt_wt|ccs_gl_tgln_ltr_spc|ccs_gl_tgln_fnt_st|ccs_gl_tgln_fnt_fm' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px; pointer-events: auto;' title='Edit Tagline'><i class='fas fa-pen text-warning' style='font-size: 12px;'></i></span>" />
 					</div>
 				</cms:if>

@@ -31,15 +31,19 @@
     </cms:editable>
 </cms:editable>
 
-<cms:editable type='group' name='ccs_ftr_3cl_lgo_grp' label='Footer Branding' order='20'>
-    <cms:editable type='message' name='ccs_ftr_3cl_img_msg' order='18'>
+<cms:editable type='group' name='ccs_ftr_3cl_brnd_grp' label='Footer Branding' order='20'>
+    <cms:editable type='message' name='ccs_ftr_3cl_brnd_msg' order='10'>
         <h3>Footer Branding</h3>
-        <p>Upload your logo image. The system will automatically resize it, but for best results, it should have a <strong>maximum dimension of 300 pixels wide by 300 pixels high.</strong></p>
+        <p>Select the brand display style for this footer.</p>
         <br><hr>
     </cms:editable>
 
-    <cms:editable type='row' name='ccs_ftr_3cl_lgo_row' order='19'>
-        <cms:editable type='image' name='ccs_ftr_3cl_lgo' label='Footer Logo' width='300' height='300' enforce_max='1' show_preview='1' preview_width='75' class='col-md-6' order='10' />
+    <cms:editable type='row' name='ccs_ftr_3cl_brnd_row' order='20'>
+        <cms:editable type='dropdown' name='ccs_ftr_3cl_brand_type' label='Brand Display Style' opt_values='dropdowns/brand-style.htm' dynamic='opt_values' class='col-md-6' order='10' />
+        
+        <cms:func _into='ccs_ftr_3cl_theme_cond' ccs_ftr_3cl_brand_type=''><cms:if ccs_ftr_3cl_brand_type == 'name'>hide<cms:else />show</cms:if></cms:func>
+        
+        <cms:editable type='dropdown' name='ccs_ftr_3cl_logo_theme' label='Logo Color Theme' opt_values='dropdowns/logo-theme.htm' dynamic='opt_values' not_active=ccs_ftr_3cl_theme_cond class='col-md-6' order='20' />
     </cms:editable>
 </cms:editable>
 

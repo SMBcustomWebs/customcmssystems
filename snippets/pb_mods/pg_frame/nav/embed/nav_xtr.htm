@@ -20,7 +20,21 @@
         <cms:editable type='checkbox' name='ccs_nav_xtr_stky' label='Stick Navbar To Top' desc='Navigation stays on screen when scrolling on larger screens' opt_values='Yes=1' class='col-md-3' order='20' />
     </cms:editable>
 </cms:editable>
+<cms:editable type="group" name="ccs_nav_xtr_brnd_grp" label="Navbar Branding" order="15">
+    <cms:editable type='message' name='ccs_nav_xtr_brnd_msg' order='10'>
+        <h3>Navbar Branding</h3>
+        <p>Select the brand display style for this navbar.</p>
+        <br><hr>
+    </cms:editable>
 
+    <cms:editable type='row' name='ccs_nav_xtr_brnd_row' order='20'>
+        <cms:editable type='dropdown' name='ccs_nav_xtr_brand_type' label='Brand Display Style' opt_values='dropdowns/brand-style.htm' dynamic='opt_values' class='col-md-6' order='10' />
+        
+        <cms:func _into='ccs_nav_xtr_theme_cond' ccs_nav_xtr_brand_type=''><cms:if ccs_nav_xtr_brand_type == 'name'>hide<cms:else />show</cms:if></cms:func>
+        
+        <cms:editable type='dropdown' name='ccs_nav_xtr_logo_theme' label='Logo Color Theme' opt_values='dropdowns/logo-theme.htm' dynamic='opt_values' not_active=ccs_nav_xtr_theme_cond class='col-md-6' order='20' />
+    </cms:editable>
+</cms:editable>
 <cms:editable type="group" name="ccs_nav_xtr_nav_txt_grp" label="Style Navigation Bar Text" order="20">
     <cms:editable type='message' name='ccs_nav_xtr_nav_msg' order='5'>
         <h3>Style Navigation Bar Text</h3>

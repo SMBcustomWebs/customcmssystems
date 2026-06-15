@@ -10,14 +10,44 @@
         <div class="row align-items-center justify-content-between">
             <div class="col-auto position-relative link-<cms:show ccs_ftr_bsc_text /> font-<cms:show ccs_ftr_bsc_font /> fs-<cms:show ccs_ftr_bsc_fs /> fst-<cms:show ccs_ftr_bsc_fst /> fw-<cms:show ccs_ftr_bsc_fwt /> ls-<cms:show ccs_ftr_bsc_ls />">
                 <cms:if ccs_gl_edt_ok>
-                    <div class="position-absolute top-50 start-0 translate-middle-y" style="margin-left: -35px;">
-                        <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_img_msg|ccs_ftr_bsc_img_row|ccs_ftr_bsc_site_logo|ccs_ftr_bsc_site_logo_alt' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Logo Settings"><i class="fas fa-image text-warning" style="font-size: 12px;"></i></span>' />
+                    <div class="position-absolute top-50 start-0 translate-middle-y z-3" style="margin-left: -35px; pointer-events: none; width: max-content;">
+                        <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_brnd_msg|ccs_ftr_bsc_brnd_row|ccs_ftr_bsc_brand_type|ccs_ftr_bsc_logo_theme' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px; pointer-events: auto;' title='Edit Logo Settings'><i class='fas fa-image text-warning' style='font-size: 12px;'></i></span>" />
                     </div>
                 </cms:if>
-                <cms:if "<cms:not_empty ccs_ftr_bsc_site_logo />">
-                    <img class="d-inline-block align-middle me-2" src="<cms:show ccs_ftr_bsc_site_logo />" alt="<cms:show ccs_ftr_bsc_site_logo_alt />" style="max-width: 150px;" />
-                </cms:if>
-                &copy; <cms:date format='Y' /> <cms:get_field 'ccs_gl_site_name' masterpage="globals.php" />
+                
+                <cms:pages masterpage='globals.php' limit='1'>
+                    <cms:set final_brand_type = ccs_ftr_bsc_brand_type />
+                    <cms:if final_brand_type == 'global'>
+                        <cms:if ccs_gl_site_name_txt_lgo_opt == '1'>
+                            <cms:set final_brand_type = 'name' />
+                        <cms:else />
+                            <cms:set final_brand_type = 'hoz' /> 
+                        </cms:if>
+                    </cms:if>
+
+                    <cms:if final_brand_type == 'name' >
+                        &copy; <cms:date format='Y' /> <cms:show ccs_gl_site_name />
+                    <cms:else />
+                        <cms:if final_brand_type == 'hoz'>
+                            <cms:if ccs_ftr_bsc_logo_theme == 'lgt'>
+                                <cms:set final_logo_src = ccs_gl_site_logo_hoz_lgt />
+                            <cms:else />
+                                <cms:set final_logo_src = ccs_gl_site_logo_hoz_drk />
+                            </cms:if>
+                        <cms:else />
+                            <cms:if ccs_ftr_bsc_logo_theme == 'lgt'>
+                                <cms:set final_logo_src = ccs_gl_site_logo_sqr_lgt />
+                            <cms:else />
+                                <cms:set final_logo_src = ccs_gl_site_logo_sqr_drk />
+                            </cms:if>
+                        </cms:if>
+
+                        <cms:if "<cms:not_empty final_logo_src />">
+                            <img class="d-inline-block align-middle me-2" src="<cms:show final_logo_src />" alt="<cms:show ccs_gl_site_name /> logo" style="max-width: 150px; height: auto; max-height: 40px;" />
+                        </cms:if>
+                        &copy; <cms:date format='Y' /> <cms:show ccs_gl_site_name />
+                    </cms:if>
+                </cms:pages>
             </div>
             
             <div class="col-auto position-relative">

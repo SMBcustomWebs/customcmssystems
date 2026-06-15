@@ -36,20 +36,29 @@
             <h4>Site Logo can either be an image or the website name</h4>
             <p>May choose size and color if using website name in place of logo image.</p>
         </cms:editable>
-        <cms:editable type='row' name='ccs_gl_site_biz_lgo_row'  order='5' >
-            <cms:editable type='dropdown' name='ccs_gl_site_name_txt_lgo_opt' label='Websie Logo as image or use website name' desc='options below'
-                opt_values='Image=0|Site Name=1'
-                class='col-md-4'
-                order='6'  
+        <cms:editable type='row' name='ccs_gl_site_biz_lgo_hoz_row' order='5' >
+            <cms:editable type='image' name='ccs_gl_site_logo_hoz_drk' label='Horizontal Logo (Dark/Color)' desc='For light backgrounds. 400x100 (4:1 ratio)'
+                width='400' height='100' crop='0' enforce_max='1' show_preview='1' preview_width='150' class='col-md-6 mb-3' order='8'
             />
-            <cms:editable type='image' name='ccs_gl_site_logo_hoz' label='Primary Navbar Logo (Horizontal)' desc='Required: 400px wide by 100px tall. (4:1 ratio)'
-                width='400' height='100' crop='0' enforce_max='1' show_preview='1' preview_width='150' class='col-md-6' order='8'
+            
+            <cms:editable type='image' name='ccs_gl_site_logo_hoz_lgt' label='Horizontal Logo (Light/White)' desc='For dark backgrounds. 400x100 (4:1 ratio)'
+                width='400' height='100' crop='0' enforce_max='1' show_preview='1' preview_width='150' class='col-md-6 mb-3' order='9'
             />
-            <cms:editable type='image' name='ccs_gl_site_logo_sqr' label='Square / Mobile Logo' desc='Required: 500px by 500px. (1:1 ratio)'
-                width='500' height='500' crop='0' enforce_max='1' show_preview='1' preview_width='75' class='col-md-6' order='9'
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_site_biz_lgo_sqr_row' order='6' >
+            <cms:editable type='image' name='ccs_gl_site_logo_sqr_drk' label='Square Logo (Dark/Color)' desc='For light backgrounds. 500x500 (1:1 ratio)'
+                width='500' height='500' crop='0' enforce_max='1' show_preview='1' preview_width='75' class='col-md-6 mb-3' order='10'
             />
-            <cms:editable type='image' name='ccs_gl_site_favicon' label='Favicon - may be ico, png, jpg' desc='The tiny logo that shows in browser tabs. Vector graphic recommended as favicon file'
-                width='64' height='64' enforce_max='1' show_preview='1' preview_width='25' class='col-md-12' order='10'
+            
+            <cms:editable type='image' name='ccs_gl_site_logo_sqr_lgt' label='Square Logo (Light/White)' desc='For dark backgrounds. 500x500 (1:1 ratio)'
+                width='500' height='500' crop='0' enforce_max='1' show_preview='1' preview_width='75' class='col-md-6 mb-3' order='11'
+            />
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_site_biz_lgo_fav_row' order='7' >
+            <cms:editable type='image' name='ccs_gl_site_favicon' label='Favicon - may be ico, png, jpg' desc='The tiny logo that shows in browser tabs.'
+                width='64' height='64' enforce_max='1' show_preview='1' preview_width='25' class='col-md-12' order='12'
             />
         </cms:editable>
         <cms:editable type='message' name='ccs_gl_site_biz_mta_msg' order='9' >
@@ -57,12 +66,19 @@
             <h2>Settings for Main Website Business Identification</h2>
         </cms:editable>
         <cms:editable type='row' name='ccs_gl_site_biz_mta_row'  order='10' >
-            <cms:editable type='text' name='ccs_gl_site_name' label='Name of Website' class='col-md-7' order='2' />
+            
+            <cms:editable type='dropdown' name='ccs_gl_site_name_txt_lgo_opt' label='Default Website Brand Display' desc='Choose global default (can be overridden in nav/footer)' opt_values='Image=0|Site Name=1' class='col-md-12 mb-3' order='1' />
+            
+            <cms:editable type='text' name='ccs_gl_site_name' label='Name of Website' class='col-md-6' order='2' />
+            
             <cms:func _into='ccs_gl_site_name_txt_lgo_chc' ccs_gl_site_name_txt_lgo_opt='' >
                 <cms:if ccs_gl_site_name_txt_lgo_opt='1'>show<cms:else />hide</cms:if>
             </cms:func>
+            
             <cms:editable type='dropdown' name='ccs_gl_site_name_txt_sz' label='Displayed Text Size' opt_values='dropdowns/heading-size.htm' dynamic='opt_values' not_active=ccs_gl_site_name_txt_lgo_chc class='col-md-3' order='4' />
+            
             <cms:editable type='dropdown' name='ccs_gl_site_name_txt_clr' label='Displayed Text Color' opt_values='dropdowns/solid-colors.htm' opt_selected='danger' dynamic='opt_values' not_active=ccs_gl_site_name_txt_lgo_chc class='col-md-3' order='6' />
+            
          </cms:editable>
         <cms:editable type='message' name='ccs_gl_tgln_fmt_msg' order='16' ><br><hr><h2>Format Text of Tagline</h2></cms:editable>
         <cms:editable type='row' name='ccs_gl_site_tgl_row'  order='10' >
@@ -281,7 +297,7 @@
                                     <span class="d-block text-muted small fw-bold text-uppercase">Site Logos</span>
                                     <span class="d-block text-muted small">Nav & Mobile Images</span>
                                 </div>
-                                <cms:popup_edit 'ccs_gl_site_biz_grp|ccs_gl_site_biz_lgo_msg|ccs_gl_site_biz_lgo_row|ccs_gl_site_name_txt_lgo_opt|ccs_gl_site_logo_hoz|ccs_gl_site_logo_sqr|ccs_gl_site_favicon' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                <cms:popup_edit 'ccs_gl_site_biz_grp|ccs_gl_site_biz_lgo_msg|ccs_gl_site_biz_lgo_hoz_row|ccs_gl_site_logo_hoz_drk|ccs_gl_site_logo_hoz_lgt|ccs_gl_site_biz_lgo_sqr_row|ccs_gl_site_logo_sqr_drk|ccs_gl_site_logo_sqr_lgt|ccs_gl_site_biz_lgo_fav_row|ccs_gl_site_favicon' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                             </div>
 							<div class="p-3 bg-light rounded mt-3">
 								<div class="d-flex justify-content-between align-items-center">

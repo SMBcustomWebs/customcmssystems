@@ -11,35 +11,51 @@
         <div class="row justify-content-between">
             <div class="col-lg-3 text-center text-lg-start mb-4 mb-lg-0 position-relative"> 
                 <cms:if ccs_gl_edt_ok>
-                    <div class="position-absolute top-0 start-0" style="margin-left: -35px; margin-top: -2px;">
-                        <cms:popup_edit 'ccs_ftr_3cl_lgo_grp|ccs_ftr_3cl_img_msg|ccs_ftr_3cl_lgo_row|ccs_ftr_3cl_lgo' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Logo Settings"><i class="fas fa-image text-warning" style="font-size: 12px;"></i></span>' />
+                    <div class="position-absolute top-0 start-0 z-3" style="margin-left: -35px; margin-top: -2px; pointer-events: none; width: max-content;">
+                        <cms:popup_edit 'ccs_ftr_3cl_brnd_grp|ccs_ftr_3cl_brnd_msg|ccs_ftr_3cl_brnd_row|ccs_ftr_3cl_brand_type|ccs_ftr_3cl_logo_theme' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px; pointer-events: auto;' title='Edit Logo Settings'><i class='fas fa-image text-warning' style='font-size: 12px;'></i></span>" />
                     </div>
                 </cms:if>
-                <img class="img-fluid mb-4 mx-auto mx-lg-0" src="<cms:get_field 'ccs_gl_site_logo_hoz_ftr' masterpage='globals.php' />" alt="<cms:get_field 'ccs_gl_site_name' masterpage='globals.php' /> logo" style="max-width: 250px;" />
-               
+                
                 <cms:pages masterpage='globals.php' limit='1'>
-                    <div class="ms-lg-n2">
-                        <cms:show_repeatable 'ccs_gl_social'>
-                            <a class="p-2 link-<cms:show ccs_ftr_3cl_txt_clr />" href="<cms:show ccs_gl_social_link />" target="_blank" title="<cms:show ccs_gl_social_name />">
-                                <span class="<cms:show ccs_gl_social_icon />" style="font-size:14.5px" aria-hidden="true"></span>
-                                <span class="visually-hidden"><cms:show ccs_gl_social_name /></span>
+                    <cms:set final_brand_type = ccs_ftr_3cl_brand_type />
+                    <cms:if final_brand_type == 'global'>
+                        <cms:if ccs_gl_site_name_txt_lgo_opt == '1'>
+                            <cms:set final_brand_type = 'name' />
+                        <cms:else />
+                            <cms:set final_brand_type = 'hoz' /> 
+                        </cms:if>
+                    </cms:if>
+
+                    <cms:if final_brand_type == 'name' >
+                        <h2 class="mb-4 mx-auto mx-lg-0 <cms:show ccs_gl_site_name_txt_sz /> text-<cms:show ccs_gl_site_name_txt_clr />">
+                            <a href="<cms:show k_site_link />" class="<cms:show ccs_gl_site_name_txt_sz /> text-<cms:show ccs_gl_site_name_txt_clr />">
+                                <cms:show ccs_gl_site_name />
                             </a>
-                        </cms:show_repeatable>
-                        
-                    </div>
-                    
-                    <div class="ms-lg-n2 mt-3">
-                        <cms:show_repeatable 'ccs_gl_hdqt_pho_rpt' >
-                            <a class="p-2 link-<cms:show ccs_ftr_3cl_txt_clr /> d-block" href="tel:<cms:show ccs_gl_hdqt_pho />">
-                                <span class="<cms:show ccs_gl_hdqt_pho_fa_icon /> fs-10" aria-hidden="true"></span>
-                                <span class="visually-hidden">Phone: </span>
-                                <span class="ms-2"><cms:show ccs_gl_hdqt_pho /></span>
-                            </a>
-                        </cms:show_repeatable>
-                        
-                    </div>
+                        </h2>
+                    <cms:else />
+                        <cms:if final_brand_type == 'hoz'>
+                            <cms:if ccs_ftr_3cl_logo_theme == 'lgt'>
+                                <cms:set final_logo_src = ccs_gl_site_logo_hoz_lgt />
+                            <cms:else />
+                                <cms:set final_logo_src = ccs_gl_site_logo_hoz_drk />
+                            </cms:if>
+                        <cms:else />
+                            <cms:if ccs_ftr_3cl_logo_theme == 'lgt'>
+                                <cms:set final_logo_src = ccs_gl_site_logo_sqr_lgt />
+                            <cms:else />
+                                <cms:set final_logo_src = ccs_gl_site_logo_sqr_drk />
+                            </cms:if>
+                        </cms:if>
+
+                        <a href="<cms:show k_site_link />" aria-label="<cms:show ccs_gl_site_name /> Home">
+                            <cms:if "<cms:not_empty final_logo_src />">
+                                <img src="<cms:show final_logo_src />" alt="<cms:show ccs_gl_site_name /> logo" class="img-fluid mb-4 mx-auto mx-lg-0 w-100" style="max-width: 250px; height: auto; max-height: 80px;" />
+                            <cms:else />
+                                <span class="fs-4 fw-bold mb-4 mx-auto mx-lg-0 d-block"><cms:show ccs_gl_site_name /></span>
+                            </cms:if>
+                        </a>
+                    </cms:if>
                 </cms:pages>
-            </div>
             
             <div class="col-1 text-center d-none d-lg-block" style="border-right: 1px solid rgba(255,255, 255,0.1);"></div>
             
