@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <cms:set ccs_thm="<cms:get_custom_field 'ccs_gl_site_thm_opt' masterpage='globals.php' />" />
-<html data-bs-theme="<cms:show ccs_thm />" lang="en-US" dir="ltr">
+
+<cms:set bs_theme_mode='light' />
+<cms:if ccs_thm=='dark' || ccs_thm=='scuro' || ccs_thm=='notte'>
+    <cms:set bs_theme_mode='dark' />
+</cms:if>
+
+<html data-bs-theme="<cms:show bs_theme_mode />" lang="en-US" dir="ltr">
 	
     <!-- =======change when site goes live==============-->
     <meta name="robots" content="noindex, nofollow">
