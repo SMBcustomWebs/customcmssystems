@@ -9,7 +9,8 @@
     
     <cms:editable type='message' name='ccs_gl_site_nav_msg' order='20' >
         <h3>Site Architecture</h3>
-        <h4>Select Prebuilt Navbar and Footer for the website. IMPORTANT: ONLY ONE OF EACH</h4>
+        <h4>IMPORTANT: ONLY THE TOP LISTED NAV BAR AND FOOTER WILL SHOW ON THE LIVE SITE. TOP 2 UTILITY BARS</h4>
+		<p>Use sorting arrows on the right of the tiles to rearrange order</p>
     </cms:editable>
     
     <cms:pagebuilder name='ccs_gl_tpb_pb' label='Optional Top Bar' skip_custom_fields='1' order='30'>
@@ -231,10 +232,7 @@
     <cms:embed 'pb_mods/pg_frame/main-cap.htm' />   
     <cms:embed 'pb_mods/pg_frame/nav/nav_emb.htm' />
 	<cms:set my_redirect_link = k_page_link />
-	
-<cms:popup_edit_ex 'ccs_gl_site_gen_msg|ccs_gl_nav_pb' width='1500' height='1200'  link_text="<button class='btn btn-sm btn-primary shadow-sm'><i class='fas fa-layer-group me-2'></i>Swap Navbar</button>" />
-	
-	
+
 	
         <div class="container py-5">
             <div class="d-flex justify-content-between align-items-center mb-4">

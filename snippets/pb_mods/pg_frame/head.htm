@@ -7,7 +7,7 @@
 </cms:if>
 
 <html data-bs-theme="<cms:show bs_theme_mode />" lang="en-US" dir="ltr">
-	
+	<head>
     <!-- =======change when site goes live==============-->
     <meta name="robots" content="noindex, nofollow">
     <!-- ===============================================-->
@@ -97,21 +97,7 @@
     <!--    Edit Modal Sizing -->
     <!-- ===============================================-->
 	<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >
-    
-     <style>
-        /* Target the CouchCMS inline popup container */		 
-		 #k_inline {
-			width: 95vw !important;
-			max-width: 750px !important; /* Shrunk from 1400px. Perfect size for desktop modals. */
-			max-height: 90vh !important; /* Prevents vertical blowout on small screens */
-			border-radius: 8px; 
-		}
-		#k_inline iframe {
-			width: 100% !important;
-			height: 100% !important;
-			border-radius: inherit;
-		} 
-    </style>
+ 
 </cms:if>
   </head>
   <body>

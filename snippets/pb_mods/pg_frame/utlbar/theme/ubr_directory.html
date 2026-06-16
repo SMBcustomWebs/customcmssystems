@@ -1,13 +1,10 @@
 <section class="bg-<cms:show ccs_ubr_dir_bg_clr_opt /> py-<cms:show ccs_ubr_dir_py /> <cms:show ccs_ubr_dir_dspr />" id="directory-search" aria-label="Directory Search">
-    
-    <cms:if ccs_gl_edt_ok>
-        <div class="container-fluid pt-2">
-            <cms:popup_edit 'ccs_ubr_dir_gen_grp|ccs_ubr_dir_init_msg|ccs_ubr_dir_mode_row|ccs_ubr_dir_mode|ccs_ubr_dir_2fld_opt|ccs_ubr_dir_gen_row|ccs_ubr_dir_bg_clr_opt|ccs_ubr_dir_py|ccs_ubr_dir_dspr' link_text="<span class='bg-800 link-warning'>| [EDIT BAR SETTINGS] |</span>" />
-            <cms:popup_edit 'ccs_ubr_dir_lbl_grp|ccs_ubr_dir_lbl_msg|ccs_ubr_dir_lbl_row_1|ccs_ubr_dir_lbl_kw|ccs_ubr_dir_lbl_cat|ccs_ubr_dir_lbl_loc' link_text="<span class='bg-800 link-warning'>| [EDIT LABELS] |</span>" />
-            <cms:popup_edit 'ccs_ubr_dir_btn_grp|ccs_ubr_dir_btn_msg|ccs_ubr_dir_btn_txt_row|ccs_ubr_dir_btn_txt|ccs_ubr_dir_btn_clr|ccs_ubr_dir_btn_lnk_clr|ccs_ubr_dir_btn_fmt_row|ccs_ubr_dir_btn_fill|ccs_ubr_dir_btn_st|ccs_ubr_dir_btn_sz|ccs_ubr_dir_btn_w|ccs_ubr_dir_btn_icon_row|ccs_ubr_dir_btn_icon_pos|ccs_ubr_dir_btn_icon_msg|ccs_ubr_dir_btn_icon_fa' link_text="<span class='bg-800 link-warning'>| [EDIT BUTTON] |</span>" />
+	<cms:if ccs_gl_edt_ok>
+        <div class="position-absolute top-0 start-0 mt-2 ms-3 z-3 d-flex gap-1">
+            <cms:popup_edit 'ccs_ubr_dir_gen_grp|ccs_ubr_dir_init_msg|ccs_ubr_dir_mode_row|ccs_ubr_dir_mode|ccs_ubr_dir_2fld_opt|ccs_ubr_dir_gen_row|ccs_ubr_dir_bg_clr_opt|ccs_ubr_dir_py|ccs_ubr_dir_dspr' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Bar Settings"><i class="fas fa-cog text-warning" style="font-size: 12px;"></i></span>' />
+
         </div>
     </cms:if>
-    
     <div class="container">
       
       <cms:set ccs_get_kw="<cms:gpc 'keyword' method='get' />" scope="global" />
@@ -30,8 +27,15 @@
             <cms:redirect url="<cms:link 'directory_results.php' />?keyword=<cms:show frm_keyword urlencode='1' />&category=<cms:show raw_cat urlencode='1' />&location=<cms:show raw_loc urlencode='1' />" />
         </cms:if>
 
-        <div class="<cms:show col_kw /> col-md-12 mb-3 mb-lg-0">
-          <label for="keyword" class="form-label mb-1"><cms:show ccs_ubr_dir_lbl_kw /></label>
+        <div class="<cms:show col_kw /> col-md-12 mb-3 mb-lg-0 position-relative">
+            <cms:if ccs_gl_edt_ok>
+                <div class="position-absolute z-3 d-flex gap-3" style="top: -1px; left: 20px;">
+                    
+                    <cms:popup_edit 'ccs_ubr_dir_lbl_grp|ccs_ubr_dir_lbl_msg|ccs_ubr_dir_lbl_row_1|ccs_ubr_dir_lbl_kw|ccs_ubr_dir_lbl_cat|ccs_ubr_dir_lbl_loc' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Labels'><i class='fas fa-tags text-warning' style='font-size: 12px;'></i></span>" />
+                </div>
+            </cms:if>
+
+            <label for="keyword" class="form-label mb-1"><cms:show ccs_ubr_dir_lbl_kw /></label>
           <div class="input-group">
               <cms:input type="text" name="keyword" id="keyword" class="form-control border-end-0" placeholder="e.g. Pizza, Plumber..." value=ccs_get_kw />
               <span class="input-group-text bg-transparent border-start-0 ps-0 pe-2"><i class="fa-solid fa-magnifying-glass text-muted" aria-hidden="true"></i></span>
@@ -76,13 +80,26 @@
                 </cms:if>
             </cms:capture>
 
-            <button type="submit" name="submit" id="submit" class="<cms:show final_cta_class />">
-                <cms:if ccs_ubr_dir_btn_icon_pos == 'btn-icon-left'><cms:if "<cms:not_empty ccs_ubr_dir_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_dir_btn_icon_fa /> me-2" aria-hidden="true"></i></span></cms:if></cms:if>
-                <cms:show ccs_ubr_dir_btn_txt />
-                <cms:if ccs_ubr_dir_btn_icon_pos == 'btn-icon-right'><cms:if "<cms:not_empty ccs_ubr_dir_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_dir_btn_icon_fa /> ms-2" aria-hidden="true"></i></span></cms:if></cms:if>
-            </button>
+            <span class="position-relative d-inline-block">
+                <cms:if ccs_gl_edt_ok>
+                    <span class="position-absolute z-3" style="top: -15px; left: -15px;">
+                        <cms:popup_edit 'ccs_ubr_dir_btn_grp|ccs_ubr_dir_btn_msg|ccs_ubr_dir_btn_txt_row|ccs_ubr_dir_btn_txt|ccs_ubr_dir_btn_clr|ccs_ubr_dir_btn_lnk_clr|ccs_ubr_dir_btn_fmt_row|ccs_ubr_dir_btn_fill|ccs_ubr_dir_btn_st|ccs_ubr_dir_btn_sz|ccs_ubr_dir_btn_w|ccs_ubr_dir_btn_icon_row|ccs_ubr_dir_btn_icon_pos|ccs_ubr_dir_btn_icon_msg|ccs_ubr_dir_btn_icon_fa' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Button'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+                    </span>
+                </cms:if>
+
+                <button type="submit" name="submit" id="submit" class="<cms:show final_cta_class />">
+                    <cms:if ccs_ubr_dir_btn_icon_pos == 'btn-icon-left'><cms:if "<cms:not_empty ccs_ubr_dir_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_dir_btn_icon_fa /> me-2" aria-hidden="true"></i></span></cms:if></cms:if>
+                    <cms:show ccs_ubr_dir_btn_txt />
+                    <cms:if ccs_ubr_dir_btn_icon_pos == 'btn-icon-right'><cms:if "<cms:not_empty ccs_ubr_dir_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_dir_btn_icon_fa /> ms-2" aria-hidden="true"></i></span></cms:if></cms:if>
+                </button>
+            </span>
         </div>
         
       </cms:form>
     </div>
+<div class="position-absolute top-50 end-0 translate-middle-y me-3" style="z-index: 1060; line-height: 1;">
+		<cms:pages masterpage='globals.php' limit='1'>
+			<cms:popup_edit 'ccs_gl_site_nav_msg|ccs_gl_tpb_pb' link_text="<button class='btn btn-sm btn-warning shadow-sm text-nowrap py-0 px-2' style='font-size: 11px; height: 24px; display: inline-flex; align-items: center;'><i class='fas fa-layer-group me-1' style='font-size: 10px;'></i>Swap Footer</button>" />
+		</cms:pages>
+	</div>
 </section>

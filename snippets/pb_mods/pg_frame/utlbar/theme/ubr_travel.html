@@ -1,10 +1,7 @@
 <section class="bg-<cms:show ccs_ubr_travel_bg_clr_opt /> py-<cms:show ccs_ubr_travel_py /> <cms:show ccs_ubr_travel_dspr /> <cms:if ccs_ubr_travel_stky>sticky-top top-0 start-0 z-3</cms:if>" id="travel" aria-label="Flight Search">
-    
-    <cms:if ccs_gl_edt_ok>
-        <div class="container-fluid pt-2">
-            <cms:popup_edit 'ccs_ubr_travel_gen_grp|ccs_ubr_travel_init_msg|ccs_ubr_travel_gen_row|ccs_ubr_travel_bg_clr_opt|ccs_ubr_travel_py|ccs_ubr_travel_dspr|ccs_ubr_travel_stky_row|ccs_ubr_travel_stky_msg|ccs_ubr_travel_stky' link_text="<span class='bg-800 link-warning'>| [EDIT BAR SETTINGS] |</span>" />
-            <cms:popup_edit 'ccs_ubr_travel_lbl_grp|ccs_ubr_travel_lbl_msg|ccs_ubr_travel_lbl_row_1|ccs_ubr_travel_lbl_origin|ccs_ubr_travel_lbl_dest|ccs_ubr_travel_lbl_dep|ccs_ubr_travel_lbl_ret|ccs_ubr_travel_lbl_pax' link_text="<span class='bg-800 link-warning'>| [EDIT LABELS] |</span>" />
-            <cms:popup_edit 'ccs_ubr_travel_btn_grp|ccs_ubr_travel_btn_msg|ccs_ubr_travel_btn_txt_row|ccs_ubr_travel_btn_txt|ccs_ubr_travel_btn_clr|ccs_ubr_travel_btn_lnk_clr|ccs_ubr_travel_btn_fmt_row|ccs_ubr_travel_btn_fill|ccs_ubr_travel_btn_st|ccs_ubr_travel_btn_sz|ccs_ubr_travel_btn_w|ccs_ubr_travel_btn_icon_row|ccs_ubr_travel_btn_icon_pos|ccs_ubr_travel_btn_icon_msg|ccs_ubr_travel_btn_icon_fa' link_text="<span class='bg-800 link-warning'>| [EDIT BUTTON] |</span>" />
+ <cms:if ccs_gl_edt_ok>
+        <div class="position-absolute top-50 start-0 translate-middle-y ms-2 z-3">
+            <cms:popup_edit 'ccs_ubr_travel_gen_grp|ccs_ubr_travel_init_msg|ccs_ubr_travel_gen_row|ccs_ubr_travel_bg_clr_opt|ccs_ubr_travel_py|ccs_ubr_travel_dspr|ccs_ubr_travel_stky_row|ccs_ubr_travel_stky_msg|ccs_ubr_travel_stky' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Bar Settings"><i class="fas fa-cog text-warning" style="font-size: 12px;"></i></span>' />
         </div>
     </cms:if>
     
@@ -26,8 +23,14 @@
 
         <style> .js-travel-date[readonly] { background-color: inherit; } </style>
 
-        <div class="col-lg-2 col-md-4 mb-3 mb-lg-0">
-          <label for="origin" class="form-label mb-1"><cms:show ccs_ubr_travel_lbl_origin /></label>
+        <div class="col-lg-2 col-md-12 mb-3 mb-lg-0 position-relative">
+            <cms:if ccs_gl_edt_ok>
+                <div class="position-absolute z-3" style="top: -1px; left: 20px;">
+                    <cms:popup_edit 'ccs_ubr_travel_lbl_grp|ccs_ubr_travel_lbl_msg|ccs_ubr_travel_lbl_row_1|ccs_ubr_travel_lbl_origin|ccs_ubr_travel_lbl_dest|ccs_ubr_travel_lbl_dep|ccs_ubr_travel_lbl_ret|ccs_ubr_travel_lbl_pax' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Labels'><i class='fas fa-tags text-warning' style='font-size: 12px;'></i></span>" />
+                </div>
+            </cms:if>
+
+            <label for="origin" class="form-label mb-1"><cms:show ccs_ubr_travel_lbl_origin /></label>
           <div class="input-group">
               <select name="origin" id="origin" class="form-select border-end-0" required>
                   <option value="" disabled <cms:if "<cms:not ccs_get_origin />">selected</cms:if>>Select...</option>
@@ -76,7 +79,7 @@
           </div>
         </div>
         
-        <div class="col-lg-2 col-md-4">
+        <div class="col-lg-2 col-md-12">
             <cms:capture into='final_cta_class' scope='global'>
                 <cms:if ccs_ubr_travel_btn_clr == 'link'>
                     btn btn-link link-<cms:show ccs_ubr_travel_btn_lnk_clr /> text-decoration-none <cms:show ccs_ubr_travel_btn_w /> <cms:show ccs_ubr_travel_btn_icon_pos />
@@ -86,15 +89,28 @@
                 </cms:if>
             </cms:capture>
 
-            <button type="submit" name="submit" id="submit" class="<cms:show final_cta_class />">
-                <cms:if ccs_ubr_travel_btn_icon_pos == 'btn-icon-left'><cms:if "<cms:not_empty ccs_ubr_travel_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_travel_btn_icon_fa /> me-2" aria-hidden="true"></i></span></cms:if></cms:if>
-                <cms:show ccs_ubr_travel_btn_txt />
-                <cms:if ccs_ubr_travel_btn_icon_pos == 'btn-icon-right'><cms:if "<cms:not_empty ccs_ubr_travel_btn_icon_fa />"><span class="btn-brand"><i class="<cms:show ccs_ubr_travel_btn_icon_fa /> ms-2" aria-hidden="true"></i></span></cms:if></cms:if>
-            </button>
+            <span class="position-relative d-inline-block">
+                <cms:if ccs_gl_edt_ok>
+                    <span class="position-absolute z-3" style="top: -15px; left: -15px;">
+                        <cms:popup_edit 'ccs_ubr_travel_btn_grp|ccs_ubr_travel_btn_msg|ccs_ubr_travel_btn_txt_row|ccs_ubr_travel_btn_txt|ccs_ubr_travel_btn_clr|ccs_ubr_travel_btn_lnk_clr|ccs_ubr_travel_btn_fmt_row|ccs_ubr_travel_btn_fill|ccs_ubr_travel_btn_st|ccs_ubr_travel_btn_sz|ccs_ubr_travel_btn_w|ccs_ubr_travel_btn_icon_row|ccs_ubr_travel_btn_icon_pos|ccs_ubr_travel_btn_icon_msg|ccs_ubr_travel_btn_icon_fa' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Button'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+                    </span>
+                </cms:if>
+
+                <button type="submit" name="submit" id="submit" class="<cms:show final_cta_class />">
+                    <cms:if ccs_ubr_travel_btn_icon_pos == 'btn-icon-left'><span class="btn-brand"><i class="fas fa-plane me-2" aria-hidden="true"></i></span></cms:if>
+                    <cms:show ccs_ubr_travel_btn_txt />
+                    <cms:if ccs_ubr_travel_btn_icon_pos == 'btn-icon-right'><span class="btn-brand"><i class="fas fa-plane ms-2" aria-hidden="true"></i></span></cms:if>
+                </button>
+            </span>
         </div>
         
       </cms:form>
     </div>
+<div class="position-absolute top-50 end-0 translate-middle-y me-3" style="z-index: 1060; line-height: 1;">
+		<cms:pages masterpage='globals.php' limit='1'>
+			<cms:popup_edit 'ccs_gl_site_nav_msg|ccs_gl_tpb_pb' link_text="<button class='btn btn-sm btn-warning shadow-sm text-nowrap py-0 px-2' style='font-size: 11px; height: 24px; display: inline-flex; align-items: center;'><i class='fas fa-layer-group me-1' style='font-size: 10px;'></i>Swap Footer</button>" />
+		</cms:pages>
+	</div>
 </section>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
