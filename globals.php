@@ -230,7 +230,12 @@
     <cms:embed 'pb_mods/pg_frame/head.htm' />
     <cms:embed 'pb_mods/pg_frame/main-cap.htm' />   
     <cms:embed 'pb_mods/pg_frame/nav/nav_emb.htm' />
-
+	<cms:set my_redirect_link = k_page_link />
+	
+<cms:popup_edit_ex 'ccs_gl_site_gen_msg|ccs_gl_nav_pb' width='1500' height='1200'  link_text="<button class='btn btn-sm btn-primary shadow-sm'><i class='fas fa-layer-group me-2'></i>Swap Navbar</button>" />
+	
+	
+	
         <div class="container py-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="fw-bold mb-0">Global Dashboard</h2>
