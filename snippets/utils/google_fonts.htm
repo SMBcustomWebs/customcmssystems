@@ -1,0 +1,59 @@
+<cms:pages masterpage='globals.php' limit='1'>
+    
+    <cms:if ccs_gl_site_custom_font_opt>
+        <cms:set raw_fonts="<cms:show ccs_gl_site_font_body_cust />|<cms:show ccs_gl_site_font_sans_cust />|<cms:show ccs_gl_site_font_serf_cust />|<cms:show ccs_gl_site_font_mono_cust />|<cms:show ccs_gl_site_font_crsv_cust />|<cms:show ccs_gl_site_font_decr_cust />" />
+    <cms:else_if ccs_gl_site_thm_typo_opt />
+        <cms:if ccs_gl_site_thm_opt == 'primavera'>
+            <cms:set raw_fonts="Lato|Playfair Display|Dancing Script|Oswald" />
+        <cms:else_if ccs_gl_site_thm_opt == 'estate' />
+            <cms:set raw_fonts="Montserrat|Cinzel|Dancing Script|Oswald" />
+        <cms:else_if ccs_gl_site_thm_opt == 'autunno' />
+            <cms:set raw_fonts="Open Sans|Merriweather|Dancing Script|Oswald" />
+        <cms:else_if ccs_gl_site_thm_opt == 'inverno' />
+            <cms:set raw_fonts="Roboto|Lora|Dancing Script|Oswald" />
+        </cms:if>
+    <cms:else />
+        <cms:set raw_fonts="Montserrat|Raleway|Playfair Display" />
+    </cms:if>
+
+    <cms:php>
+        // Get the string of fonts we gathered above
+        $raw_fonts = '<cms:show raw_fonts />';
+        $fonts_array = explode('|', $raw_fonts);
+        
+        // Fonts we DO NOT want to ask Google for
+        $skip_fonts = ['System Default', '-', 'Arial', 'Helvetica', 'Georgia', 'Times New Roman', 'Consolas', 'Courier New', 'Brush Script MT', 'Impact', ''];
+        
+        $final_fonts = [];
+        
+        // Filter out duplicates and web-safe fonts
+        foreach ($fonts_array as $font) {
+            $font = trim($font);
+            if (!in_array($font, $skip_fonts) && !in_array($font, $final_fonts)) {
+                $final_fonts[] = $font;
+            }
+        }
+        
+        $url_parts = [];
+        
+        // Format for the Google API
+        foreach ($final_fonts as $font) {
+            $formatted_font = str_replace(' ', '+', $font);
+            $url_parts[] = 'family=' . $formatted_font . ':ital,wght@0,300..800;1,300..800';
+        }
+        
+        // Combine them together into the final string
+        $font_url = implode('&', $url_parts);
+        
+        // Pass it back to CouchCMS
+        global $CTX;
+        $CTX->set('final_font_url', $font_url, 'global');
+    </cms:php>
+
+    <cms:if final_font_url ne ''>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?<cms:show final_font_url />&display=swap" rel="stylesheet">
+    </cms:if>
+
+</cms:pages>

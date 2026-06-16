@@ -30,7 +30,7 @@
         <p>Click the bars to expand (+) or collapse (-)</p>
     </cms:editable>
     
-    <cms:editable type='group' name='ccs_gl_site_biz_grp' label='Website Business Settings' desc='logo, site name, tagline, color theme, favicon' collapsed='1' order='9'>
+    <cms:editable type='group' name='ccs_gl_site_biz_grp' label='Website Business Settings' desc='logo, site name, tagline, color theme, favicon' collapsed='1' order='12'>
         <cms:editable type='message' name='ccs_gl_site_biz_lgo_msg' order='4' >
             <h2>Upload Logos, Icons.</h2>
             <h4>Site Logo can either be an image or the website name</h4>
@@ -96,7 +96,7 @@
         <cms:editable type='textarea' name='ccs_gl_site_desc' label='Website Description' desc='SEO meta description.' class='col-md-12' order='20' />
     </cms:editable>
     
-    <cms:editable type='group' name='ccs_gl_site_nav_mnu_grp' label='Website Navigation Menu Settings' collapsed='0' order='12'>
+    <cms:editable type='group' name='ccs_gl_site_nav_mnu_grp' label='Website Navigation Menu Settings' collapsed='0' order='15'>
         <cms:editable type='message' name='ccs_gl_site_nav_mnu_dd_msg' order='9' ><h2>Settings for Hovering and Dropdown Menus</h2></cms:editable>
         <cms:editable type='row' name='ccs_gl_site_nav_mnu_dd_row'  order='10' >
             <cms:editable type='dropdown' name='ccs_gl_site_nav_actv_clr' label='Menu Item Color on Active Page' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' order='4' />
@@ -108,7 +108,7 @@
         </cms:editable>
     </cms:editable>
     
-    <cms:editable type='group' name='ccs_gl_site_cntc_grp' label='Website Contact Settings' order='15'>
+    <cms:editable type='group' name='ccs_gl_site_cntc_grp' label='Website Contact Settings' order='18'>
         <cms:editable type='text' name='ccs_gl_hdqt_st_add' label='Headquarter Street Address' order='2' />
         <cms:editable type='text' name='ccs_gl_hdqt_st_ad2' label='Headquarter Suite' order='4' />
         <cms:editable type='text' name='ccs_gl_hdqt_cty' label='Headquarter City' order='6' />
@@ -132,7 +132,7 @@
         </cms:repeatable>
     </cms:editable>
     
-    <cms:editable type='group' name='ccs_gl_site_scl_grp' label='Website Social Media Settings' order='18'>
+    <cms:editable type='group' name='ccs_gl_site_scl_grp' label='Website Social Media Settings' order='21'>
         <cms:editable type='message' name='ccs_gl_social_msg' order='2'><h3>Add Social links and Icons</h3></cms:editable>   
         <cms:repeatable name='ccs_gl_social' label='Social Links' order='4' >
 			<cms:editable name='ccs_gl_social_name' label='Name' type='text' order="2" />
@@ -145,16 +145,27 @@
         <cms:editable type='text' name='ccs_gl_appl_app' label='Apple App Link' order='8' />
     </cms:editable>
     
-    <cms:editable type='checkbox' name='ccs_gl_site_custom_color_opt' label='Customize Site Colors' opt_values='Customize Colors=1' order='20' />
-    <cms:editable type='checkbox' name='ccs_gl_site_custom_font_opt' label='Customize Site Fonts' opt_values='Customize Fonts=1' order='22' />
+    <cms:editable type='checkbox' name='ccs_gl_site_custom_color_opt' label='Customize Site Colors' opt_values='Customize Colors=1' order='24' />
+    <cms:editable type='checkbox' name='ccs_gl_site_custom_font_opt' label='Customize Site Fonts' opt_values='Customize Fonts=1' order='26' />
 
-    <cms:func _into='ccs_gl_site_colors_custom' ccs_gl_site_custom_color_opt='' ><cms:if ("<cms:is '1' in=ccs_gl_site_custom_color_opt />") >show<cms:else />hide</cms:if></cms:func>
+    <cms:func _into='ccs_gl_site_colors_custom' ccs_gl_site_custom_color_opt='' ><cms:if "<cms:is '1' in=ccs_gl_site_custom_color_opt />" >show<cms:else />hide</cms:if></cms:func>
     <cms:func _into='ccs_gl_site_fonts_custom' ccs_gl_site_custom_font_opt=''><cms:if "<cms:is '1' in=ccs_gl_site_custom_font_opt />" >show<cms:else />hide</cms:if></cms:func>
-    <cms:func _into='ccs_gl_site_def_thm' ccs_gl_site_custom_color_opt=''><cms:if "<cms:is '1' in=ccs_gl_site_custom_color_opt />" >hide<cms:else />show</cms:if></cms:func>
     
-    <cms:editable type='dropdown' name='ccs_gl_site_thm_opt' label='Set Website Color Theme' opt_values='Light=light|Dark=dark|Primavera=primavera|Estate=estate|Autunno=autunno|Inverno=inverno' not_active=ccs_gl_site_def_thm order='25' />
+    <cms:editable type='dropdown' name='ccs_gl_site_thm_opt' label='Set Website Theme Base' opt_values='Light=light|Dark=dark|Primavera=primavera|Estate=estate|Autunno=autunno|Inverno=inverno|Scuro (Dark)=scuro|Notte (Dark)=notte' order='30' />
+
+    <cms:func _into='ccs_gl_site_thm_clr_cond' ccs_gl_site_custom_color_opt='' ccs_gl_site_thm_opt=''>
+        <cms:if ("<cms:is '1' in=ccs_gl_site_custom_color_opt />") || (ccs_gl_site_thm_opt == 'light') || (ccs_gl_site_thm_opt == 'dark') >hide<cms:else />show</cms:if>
+    </cms:func>
     
-    <cms:editable type='group' name='ccs_gl_site_site_cst_clr_grp' label='Custom Website Theme Colors' not_active=ccs_gl_site_colors_custom order='27' >
+    <cms:editable type='checkbox' name='ccs_gl_site_thm_clr_opt' label='Disable Theme Background/Text Colors' desc='Check this box to strip away the theme-specific background and text colors, reverting to basic white/dark.' opt_values='Do Not Apply Theme Bg/Text=1' not_active=ccs_gl_site_thm_clr_cond order='32' />
+
+    <cms:func _into='ccs_gl_site_thm_typo_cond' ccs_gl_site_custom_font_opt='' ccs_gl_site_thm_opt=''>
+        <cms:if ("<cms:is '1' in=ccs_gl_site_custom_font_opt />") || (ccs_gl_site_thm_opt == 'light') || (ccs_gl_site_thm_opt == 'dark') >hide<cms:else />show</cms:if>
+    </cms:func>
+    
+    <cms:editable type='checkbox' name='ccs_gl_site_thm_typo_opt' label='Apply Theme Typography' desc='Overrides defaults with curated fonts matching the selected theme.' opt_values='Apply Theme Typography=1' not_active=ccs_gl_site_thm_typo_cond order='34' />
+    
+    <cms:editable type='group' name='ccs_gl_site_site_cst_clr_grp' label='Custom Website Theme Colors' not_active=ccs_gl_site_colors_custom order='39' >
         <cms:editable type='color' name='ccs_gl_site_primary_cust' label='Primary Color' color='#007bff' alpha='0' width='50%' height='100px' order='12' />
         <cms:editable type='color' name='ccs_gl_site_secondary_cust' label='Secondary Color' color='#7968D9' alpha='0' width='50%' height='100px' order='14' />
         <cms:editable type='color' name='ccs_gl_site_tertiary_cust' label='Tertiary Color' color='#687BD9' alpha='0' width='50%' height='100px' order='14' />
@@ -171,7 +182,7 @@
         <cms:editable type='color' name='ccs_gl_site_body_bg_cust' label='Site Background' color='#ffffff' alpha='0' width='50%' height='100px' order='24' />
     </cms:editable>
     
-    <cms:editable type='group' name='ccs_gl_site_site_cst_slct_grp' label='Colors when SELECTING Text' order='30' >
+    <cms:editable type='group' name='ccs_gl_site_site_cst_slct_grp' label='Colors when SELECTING Text' order='42' >
         <cms:editable type='message' name='ccs_gl_site_site_cst_slct_msg' order='2'><h3>Choose Colors For Highlighting</h3></cms:editable>   
         <cms:editable type='row' name='ccs_gl_site_hglt_row' order='5' >
             <cms:editable type='dropdown' name='ccs_gl_site_hglt_clr' label='Highlighted Text Color' opt_values='dropdowns/theme-colors.htm' opt_selected='light' dynamic='opt_values' class='col-md-4' order='2' />
@@ -179,32 +190,35 @@
         </cms:editable>
     </cms:editable>
     
-    <cms:editable type='group' name='ccs_gl_site_site_fonts' label='Website Custom Type Fonts' not_active=ccs_gl_site_fonts_custom order='33' >
+    <cms:editable type='group' name='ccs_gl_site_site_fonts' label='Website Custom Type Fonts' not_active=ccs_gl_site_fonts_custom order='45' >
+        
         <cms:editable type='message' name='ccs_gl_site_font_cust_dfl_msg' order='13'><br><hr><h2>Default Font Style</h2></cms:editable>   
-        <cms:editable type='textarea' name='ccs_gl_site_font_body_cust' label="Custom default font-family" no_xss_check='1' order='14' >"Montserrat", sans-serif</cms:editable>
+        <cms:editable type='dropdown' name='ccs_gl_site_font_body_cust' label="Custom default font-family" opt_values='dropdowns/font-sans.htm' dynamic='opt_values' order='14' />
+        
         <cms:editable type='message' name='ccs_gl_site_font_cust_xtr_msg' order='17'><br><hr><h2>Extra Font Styles</h2></cms:editable>   
-        <cms:editable type='textarea' name='ccs_gl_site_font_base_cust' label="Custom 'Base' font" no_xss_check='1' order='18' >"Helvetica Neue", Arial, sans-serif</cms:editable>
-        <cms:editable type='textarea' name='ccs_gl_site_font_sans_cust' label="Custom Sans Serif Font" no_xss_check='1' order='22' >"Droid Sans", sans-serif</cms:editable>
-        <cms:editable type='textarea' name='ccs_gl_site_font_serf_cust' label="Custom serif Font" no_xss_check='1' order='26' >"Playfair Display", serif</cms:editable>
-        <cms:editable type='textarea' name='ccs_gl_site_font_mono_cust' label="Custom monospace Font" no_xss_check='1' order='30' >monospace</cms:editable>
-        <cms:editable type='textarea' name='ccs_gl_site_font_crsv_cust' label="Custom cursive Font" no_xss_check='1' order='34' >"Comic Sans MS"</cms:editable>
-        <cms:editable type='textarea' name='ccs_gl_site_font_decr_cust' label="Custom decorative Font" no_xss_check='1' order='38' >Sreda</cms:editable>
-        <cms:editable type='text' name='ccs_gl_site_font_size_cust' label="Custom Font Size" maxlength="4" width="125" order="42" >1</cms:editable>
-        <cms:editable type='text' name='ccs_gl_site_font_weight_cust' label="Custom Font Weight" maxlength="4" width="75" order="46" >400</cms:editable>
-        <cms:editable type='text' name='ccs_gl_site_line_height_cust' label="Custom Line Height" maxlength="4" width="75" order="50" >1.45</cms:editable>
+        <cms:editable type='dropdown' name='ccs_gl_site_font_sans_cust' label="Custom Sans Serif Font" opt_values='dropdowns/font-sans.htm' dynamic='opt_values' order='22' />
+        <cms:editable type='dropdown' name='ccs_gl_site_font_serf_cust' label="Custom Serif Font" opt_values='dropdowns/font-serif.htm' dynamic='opt_values' order='26' />
+        <cms:editable type='dropdown' name='ccs_gl_site_font_mono_cust' label="Custom Monospace Font" opt_values='dropdowns/font-mono.htm' dynamic='opt_values' order='30' />
+        <cms:editable type='dropdown' name='ccs_gl_site_font_crsv_cust' label="Custom Cursive Font" opt_values='dropdowns/font-script.htm' dynamic='opt_values' order='34' />
+        <cms:editable type='dropdown' name='ccs_gl_site_font_decr_cust' label="Custom Decorative Font" opt_values='dropdowns/font-decor.htm' dynamic='opt_values' order='38' />
+        
+        <cms:editable type='dropdown' name='ccs_gl_site_font_size_cust' label="Custom Font Size" opt_values='dropdowns/ccs-bdy-fnt-size.htm' dynamic='opt_values' order="42" />
+        <cms:editable type='dropdown' name='ccs_gl_site_font_weight_cust' label="Custom Font Weight" opt_values='dropdowns/ccs-bdy-fnt-wght.htm' dynamic='opt_values' order="46" />
+        <cms:editable type='dropdown' name='ccs_gl_site_line_height_cust' label="Custom Line Height" opt_values='dropdowns/ccs-bdy-fnt-line.htm' dynamic='opt_values' order="50" />
+        <cms:editable type='dropdown' name='ccs_gl_site_letter_space_cust' label="Custom Letter Spacing" opt_values='dropdowns/ccs-bdy-fnt-spce.htm' dynamic='opt_values' order="54" />
     </cms:editable>
 
-    <cms:editable type='group' name='ccs_gl_maintenance_grp' label='Maintenance Mode' order='40'>
+    <cms:editable type='group' name='ccs_gl_maintenance_grp' label='Maintenance Mode' order='48'>
         <cms:editable type='checkbox' name='ccs_gl_maintenance_mode' label='Soft Maintenance Mode' desc='Check to redirect public traffic to a coming soon page' opt_values='Site Offline=1' order='1' />
     </cms:editable>
 
-    <cms:editable type='group' name='ccs_gl_integrations_grp' label='Third-Party Scripts & Routing' order='45'>
+    <cms:editable type='group' name='ccs_gl_integrations_grp' label='Third-Party Scripts & Routing' order='51'>
         <cms:editable type='text' name='ccs_gl_form_email' label='Primary Form Routing Email' desc='Where should contact forms send notifications?' order='1' />
         <cms:editable type='textarea' name='ccs_gl_header_scripts' label='Header Scripts (Google Analytics, Pixel)' desc='DO NOT include <script> tags, just the code inside.' no_xss_check='1' order='2' />
         <cms:editable type='textarea' name='ccs_gl_footer_scripts' label='Footer Scripts (Live Chat, HubSpot)' no_xss_check='1' order='3' />
     </cms:editable>
 
-    <cms:editable type='group' name='ccs_gl_legal_grp' label='Privacy & Cookies' order='50'>
+    <cms:editable type='group' name='ccs_gl_legal_grp' label='Privacy & Cookies' order='54'>
         <cms:editable type='checkbox' name='ccs_gl_cookie_consent' label='Enable Cookie Consent Banner?' opt_values='Yes=1' order='1' />
         <cms:editable type='text' name='ccs_gl_privacy_link' label='Privacy Policy Link' order='2' />
         <cms:editable type='text' name='ccs_gl_terms_link' label='Terms of Service Link' order='3' />
@@ -216,9 +230,10 @@
 
 <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") > 
     <cms:embed 'pb_mods/pg_frame/head.htm' />
+	<cms:embed 'pb_mods/pg_frame/main-cap.htm' />   
     <cms:embed 'pb_mods/pg_frame/nav/nav_emb.htm' />
     
-    <body class="bg-light">
+    <body>
         <div class="container py-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="fw-bold mb-0">Global Dashboard</h2>
@@ -236,7 +251,7 @@
                     <div class="card shadow-sm h-100 border-0">
                         <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
                             <h5 class="mb-0 fw-bold">Site Status</h5>
-                            <cms:popup_edit 'ccs_gl_maintenance_grp|ccs_gl_maintenance_mode' link_text="<button class='btn btn-sm btn-light rounded-circle shadow-sm' style='width:32px; height:32px;' title='Edit Maintenance Mode'><i class='fas fa-cog text-muted'></i></button>" />
+                            <cms:popup_edit 'ccs_gl_maintenance_grp|ccs_gl_maintenance_mode' link_text="<button class='btn btn-sm btn-light rounded-circle shadow-sm d-flex justify-content-center align-items-center' style='width:32px; height:32px; padding: 0;' title='Edit Maintenance Mode'><i class='fas fa-cog text-muted'></i></button>" />
                         </div>
                         <div class="card-body">
                             <div class="d-flex align-items-center mb-3">
@@ -318,7 +333,7 @@
 					<div class="card shadow-sm h-100 border-0">
 						<div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
 							<h5 class="mb-0 fw-bold">Theme & Colors</h5>
-							<cms:popup_edit 'ccs_gl_site_custom_color_opt|ccs_gl_site_thm_opt|ccs_gl_site_site_cst_clr_grp|ccs_gl_site_primary_cust|ccs_gl_site_secondary_cust|ccs_gl_site_tertiary_cust|ccs_gl_site_success_cust|ccs_gl_site_warning_cust|ccs_gl_site_danger_cust' link_text="<button class='btn btn-sm btn-light rounded-circle shadow-sm' style='width:32px; height:32px;' title='Edit Theme & Colors'><i class='fas fa-palette text-primary'></i></button>" />
+							<cms:popup_edit 'ccs_gl_site_custom_color_opt|ccs_gl_site_thm_opt|ccs_gl_site_site_cst_clr_grp|ccs_gl_site_primary_cust|ccs_gl_site_secondary_cust|ccs_gl_site_tertiary_cust|ccs_gl_site_success_cust|ccs_gl_site_warning_cust|ccs_gl_site_danger_cust' link_text="<button class='btn btn-sm btn-light rounded-circle shadow-sm d-flex justify-content-center align-items-center' style='width:32px; height:32px; padding: 0;' title='Edit Theme & Colors'><i class='fas fa-palette text-primary'></i></button>" />
 						</div>
 
 						<div class="card-body" data-bs-theme="<cms:show ccs_gl_site_thm_opt />">
@@ -326,6 +341,7 @@
 							<div class="mb-3">
 								<span class="badge bg-dark text-uppercase px-2 py-1"><cms:show ccs_gl_site_thm_opt /> Theme</span>
 								<cms:if ccs_gl_site_custom_color_opt><span class="badge bg-primary text-uppercase px-2 py-1 ms-1">Custom Overrides Active</span></cms:if>
+								<cms:if ccs_gl_site_thm_clr_opt == '1'><span class="badge bg-secondary text-uppercase px-2 py-1 ms-1">Bg/Text Disabled</span></cms:if>
 							</div>
 
 							<cms:if ccs_gl_site_custom_color_opt>
@@ -339,6 +355,8 @@
 								<cms:set sw_danger=ccs_gl_site_danger_cust />
 								<cms:set sw_light=ccs_gl_site_light_cust />
 								<cms:set sw_dark=ccs_gl_site_dark_cust />
+								<cms:set sw_body_bg=ccs_gl_site_body_bg_cust />
+								<cms:set sw_body_clr=ccs_gl_site_body_clr_cust />
 							<cms:else />
 								<cms:set sw_success="#4CD964" />
 								<cms:set sw_info="#2EB7F5" />
@@ -347,16 +365,59 @@
 								<cms:set sw_light="#fafafa" />
 								<cms:set sw_dark="#0c151a" />
 
+								<cms:set sw_body_bg="#ffffff" />
+								<cms:set sw_body_clr="#292b2c" />
+
 								<cms:if ccs_gl_site_thm_opt == 'primavera'>
 									<cms:set sw_primary="#FF8E9C" /><cms:set sw_secondary="#85D3A9" /><cms:set sw_tertiary="#A3D5FF" /><cms:set sw_quaternary="#FFE8A1" />
+									<cms:if ccs_gl_site_thm_clr_opt != '1'>
+										<cms:set sw_body_bg="#FFF0F5" />
+										<cms:set sw_body_clr="#2C3E50" />
+									</cms:if>
+
 								<cms:else_if ccs_gl_site_thm_opt == 'estate' />
 									<cms:set sw_primary="#FF9F1C" /><cms:set sw_secondary="#2EC4B6" /><cms:set sw_tertiary="#E71D36" /><cms:set sw_quaternary="#FFBF69" />
+									<cms:if ccs_gl_site_thm_clr_opt != '1'>
+										<cms:set sw_body_bg="#F0F8FF" />
+										<cms:set sw_body_clr="#011627" />
+									</cms:if>
+
 								<cms:else_if ccs_gl_site_thm_opt == 'autunno' />
 									<cms:set sw_primary="#D95D39" /><cms:set sw_secondary="#F0A202" /><cms:set sw_tertiary="#826251" /><cms:set sw_quaternary="#A89C94" />
+									<cms:if ccs_gl_site_thm_clr_opt != '1'>
+										<cms:set sw_body_bg="#EFE8E0" />
+										<cms:set sw_body_clr="#3A2318" />
+									</cms:if>
+
 								<cms:else_if ccs_gl_site_thm_opt == 'inverno' />
 									<cms:set sw_primary="#3A86FF" /><cms:set sw_secondary="#8ECAE6" /><cms:set sw_tertiary="#4A4E69" /><cms:set sw_quaternary="#C1D3FE" />
+									<cms:if ccs_gl_site_thm_clr_opt != '1'>
+										<cms:set sw_body_bg="#E2EAF2" />
+										<cms:set sw_body_clr="#1A252C" />
+									</cms:if>
+
+								<cms:else_if ccs_gl_site_thm_opt == 'scuro' />
+									<cms:set sw_primary="#00ADB5" /><cms:set sw_secondary="#393E46" /><cms:set sw_tertiary="#5C6B73" /><cms:set sw_quaternary="#9DB2BF" />
+									<cms:set sw_success="#2ECC71" /><cms:set sw_info="#3498DB" /><cms:set sw_warning="#F1C40F" /><cms:set sw_danger="#E74C3C" /><cms:set sw_light="#EAEAEA" /><cms:set sw_dark="#15181C" />
+									<cms:if ccs_gl_site_thm_clr_opt != '1'>
+										<cms:set sw_body_bg="#222831" />
+										<cms:set sw_body_clr="#EEEEEE" />
+									</cms:if>
+
+								<cms:else_if ccs_gl_site_thm_opt == 'notte' />
+									<cms:set sw_primary="#66FCF1" /><cms:set sw_secondary="#45A29E" /><cms:set sw_tertiary="#7B2CBF" /><cms:set sw_quaternary="#E0AAFF" />
+									<cms:set sw_success="#00FF7F" /><cms:set sw_info="#00BFFF" /><cms:set sw_warning="#FFD700" /><cms:set sw_danger="#FF003F" /><cms:set sw_light="#F0F0F0" /><cms:set sw_dark="#050505" />
+									<cms:if ccs_gl_site_thm_clr_opt != '1'>
+										<cms:set sw_body_bg="#0B0C10" />
+										<cms:set sw_body_clr="#C5C6C7" />
+									</cms:if>
+
 								<cms:else />
 									<cms:set sw_primary="#007AFF" /><cms:set sw_secondary="#292b2c" /><cms:set sw_tertiary="#687BD9" /><cms:set sw_quaternary="#68C2D9" />
+									<cms:if ccs_gl_site_thm_opt == 'dark'>
+										<cms:set sw_body_bg="#404040" />
+										<cms:set sw_body_clr="#e1e1e1" />
+									</cms:if>
 								</cms:if>
 							</cms:if>
 
@@ -369,6 +430,7 @@
 									<div title="Quaternary" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 32px; height: 32px; background-color: <cms:show sw_quaternary />;"></div>
 								</div>
 							</div>
+
 							<div class="mt-2">
 								<span class="d-block text-muted small fw-bold text-uppercase mb-2">Utility Colors</span>
 								<div class="d-flex flex-wrap gap-2">
@@ -378,6 +440,14 @@
 									<div title="Danger" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:show sw_danger />;"></div>
 									<div title="Light" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:show sw_light />;"></div>
 									<div title="Dark" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 28px; height: 28px; background-color: <cms:show sw_dark />;"></div>
+								</div>
+							</div>
+
+							<div class="mt-3 p-2 rounded border border-secondary border-opacity-10 d-flex align-items-center justify-content-between" style="background-color: <cms:show sw_body_bg />;">
+								<span class="small fw-bold text-uppercase" style="color: <cms:show sw_body_clr />;">Bg & Text Match</span>
+								<div class="d-flex gap-2">
+									<div title="Background Color" class="rounded shadow-sm border border-secondary border-opacity-25" style="width: 24px; height: 24px; background-color: <cms:show sw_body_bg />;"></div>
+									<div title="Text Color" class="rounded-circle shadow-sm border border-secondary border-opacity-25" style="width: 24px; height: 24px; background-color: <cms:show sw_body_clr />;"></div>
 								</div>
 							</div>
 
@@ -391,7 +461,7 @@
 				<div class="card shadow-sm h-100 border-0">
 					<div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
 						<h5 class="mb-0 fw-bold">UI Playground</h5>
-						<button class='btn btn-sm btn-light rounded-circle shadow-sm disabled' style='width:32px; height:32px;' title='Preview Only'><i class='fas fa-shapes text-secondary'></i></button>
+						<button class='btn btn-sm btn-light rounded-circle shadow-sm d-flex justify-content-center align-items-center' style='width:32px; height:32px; padding: 0;' title='Preview Only'><i class='fas fa-shapes text-secondary'></i></button>
 					</div>
 					<div class="card-body d-flex flex-column justify-content-between">
 
@@ -437,69 +507,131 @@
 								<cms:if ccs_gl_site_custom_font_opt><span class="badge bg-primary text-uppercase px-2 py-1">Custom Overrides Active</span></cms:if>
 							</div>
 						</div>
-						<cms:popup_edit 'ccs_gl_site_custom_font_opt|ccs_gl_site_site_fonts|ccs_gl_site_font_body_cust|ccs_gl_site_font_base_cust|ccs_gl_site_font_sans_cust|ccs_gl_site_font_serf_cust|ccs_gl_site_font_mono_cust|ccs_gl_site_font_crsv_cust|ccs_gl_site_font_decr_cust|ccs_gl_site_font_size_cust|ccs_gl_site_font_weight_cust|ccs_gl_site_line_height_cust' link_text="<button class='btn btn-sm btn-light rounded-circle shadow-sm' style='width:32px; height:32px;' title='Edit Typography'><i class='fas fa-font text-primary'></i></button>" />
+						<cms:popup_edit 'ccs_gl_site_custom_font_opt|ccs_gl_site_site_fonts|ccs_gl_site_font_body_cust|ccs_gl_site_font_sans_cust|ccs_gl_site_font_serf_cust|ccs_gl_site_font_mono_cust|ccs_gl_site_font_crsv_cust|ccs_gl_site_font_decr_cust|ccs_gl_site_font_size_cust|ccs_gl_site_font_weight_cust|ccs_gl_site_line_height_cust|ccs_gl_site_letter_space_cust' link_text="<button class='btn btn-sm btn-light rounded-circle shadow-sm d-flex justify-content-center align-items-center' style='width:32px; height:32px; padding: 0;' title='Edit Typography'><i class='fas fa-font text-primary'></i></button>" />
 					</div>
 
 					<div class="card-body">
+						
 						<cms:if ccs_gl_site_custom_font_opt>
-							<cms:set dash_font_base=ccs_gl_site_font_base_cust />
-							<cms:set dash_font_sans=ccs_gl_site_font_sans_cust />
-							<cms:set dash_font_serif=ccs_gl_site_font_serf_cust />
-							<cms:set dash_font_mono=ccs_gl_site_font_mono_cust />
-							<cms:set dash_font_cursive=ccs_gl_site_font_crsv_cust />
-							<cms:set dash_font_decor=ccs_gl_site_font_decr_cust />
-							<cms:set dash_font_size=ccs_gl_site_font_size_cust />
-							<cms:set dash_line_height=ccs_gl_site_line_height_cust />
-						<cms:else />
-							<cms:set dash_font_base="'Montserrat', -apple-system, sans-serif" />
-							<cms:set dash_font_sans="'Raleway', -apple-system, sans-serif" />
-							<cms:set dash_font_serif="'Playfair Display', 'Libre Baskerville', Georgia, serif" />
-							<cms:set dash_font_mono="'SFMono-Regular', Menlo, Monaco, Consolas, monospace" />
-							<cms:set dash_font_cursive="'Bradley Hand', 'Lucida Handwriting', 'Brush Script MT', cursive" />
-							<cms:set dash_font_decor="'Sreda', 'Arvo', 'Candara', sans-serif" />
-							<cms:set dash_font_size="0.875" />
-							<cms:set dash_line_height="1.5" />
-						</cms:if>
+                            <cms:set dash_font_body=ccs_gl_site_font_body_cust />
+                            <cms:set dash_font_sans=ccs_gl_site_font_sans_cust />
+                            <cms:set dash_font_serif=ccs_gl_site_font_serf_cust />
+                            <cms:set dash_font_mono=ccs_gl_site_font_mono_cust />
+                            <cms:set dash_font_cursive=ccs_gl_site_font_crsv_cust />
+                            <cms:set dash_font_decor=ccs_gl_site_font_decr_cust />
+                            
+                            <cms:set dash_font_size=ccs_gl_site_font_size_cust />
+                            <cms:set dash_font_weight=ccs_gl_site_font_weight_cust />
+                            <cms:set dash_line_height=ccs_gl_site_line_height_cust />
+                            <cms:set dash_letter_space=ccs_gl_site_letter_space_cust />
+
+                            <cms:if dash_font_size=='-' || dash_font_size==''><cms:set dash_font_size='0.875' /></cms:if>
+                            <cms:if dash_font_weight=='-' || dash_font_weight==''><cms:set dash_font_weight='400' /></cms:if>
+                            <cms:if dash_line_height=='-' || dash_line_height==''><cms:set dash_line_height='1.5' /></cms:if>
+                            <cms:if dash_letter_space=='-' || dash_letter_space==''><cms:set dash_letter_space='0em' /></cms:if>
+                            
+                        <cms:else_if ccs_gl_site_thm_typo_opt />
+                            <cms:if ccs_gl_site_thm_opt == 'primavera'>
+                                <cms:set dash_font_body='Lato' />
+                                <cms:set dash_font_sans='Lato' />
+                                <cms:set dash_font_serif='Playfair Display' />
+                            <cms:else_if ccs_gl_site_thm_opt == 'estate' />
+                                <cms:set dash_font_body='Montserrat' />
+                                <cms:set dash_font_sans='Montserrat' />
+                                <cms:set dash_font_serif='Cinzel' />
+                            <cms:else_if ccs_gl_site_thm_opt == 'autunno' />
+                                <cms:set dash_font_body='Open Sans' />
+                                <cms:set dash_font_sans='Open Sans' />
+                                <cms:set dash_font_serif='Merriweather' />
+                            <cms:else_if ccs_gl_site_thm_opt == 'inverno' />
+                                <cms:set dash_font_body='Roboto' />
+                                <cms:set dash_font_sans='Roboto' />
+                                <cms:set dash_font_serif='Lora' />
+                            </cms:if>
+                            
+                            <cms:set dash_font_mono='SFMono-Regular' />
+                            <cms:set dash_font_cursive='Dancing Script' />
+                            <cms:set dash_font_decor='Oswald' />
+                            
+                            <cms:set dash_font_size="0.875" />
+                            <cms:set dash_font_weight="400" />
+                            <cms:set dash_line_height="1.5" />
+                            <cms:set dash_letter_space="0em" />
+                            
+                        <cms:else />
+                            <cms:set dash_font_body='Montserrat' />
+                            <cms:set dash_font_sans='Raleway' />
+                            <cms:set dash_font_serif='Playfair Display' />
+                            <cms:set dash_font_mono='SFMono-Regular' />
+                            <cms:set dash_font_cursive='Bradley Hand' />
+                            <cms:set dash_font_decor='Sreda' />
+                            
+                            <cms:set dash_font_size="0.875" />
+                            <cms:set dash_font_weight="400" />
+                            <cms:set dash_line_height="1.5" />
+                            <cms:set dash_letter_space="0em" />
+                        </cms:if>
 
 						<div class="row g-3">
 							<div class="col-md-4">
-								<div class="p-2 bg-light rounded mb-2 overflow-hidden h-50">
-									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Base / Body</span>
-									<span class="fs-6 d-block text-truncate" style="font-family: <cms:show dash_font_base />;">The quick brown fox jumps.</span>
+								<div class="p-2 bg-light rounded mb-2 overflow-hidden" style="height: 48%;">
+									<div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.65rem;">Base / Body</span>
+                                        <span class="badge bg-white text-dark border border-secondary border-opacity-25" style="font-size: 0.65rem;"><cms:if dash_font_body=='-' || dash_font_body==''>Base<cms:else/><cms:show dash_font_body /></cms:if></span>
+                                    </div>
+									<span class="fs-6 d-block text-truncate" style="font-family: '<cms:show dash_font_body />', sans-serif;">The quick brown fox.</span>
 								</div>
-								<div class="p-2 bg-light rounded overflow-hidden h-50">
-									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Sans-Serif</span>
-									<span class="fs-6 d-block text-truncate" style="font-family: <cms:show dash_font_sans />;">The quick brown fox jumps.</span>
-								</div>
-							</div>
-
-							<div class="col-md-4">
-								<div class="p-2 bg-light rounded mb-2 overflow-hidden h-50">
-									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Headings (Serif)</span>
-									<span class="fs-6 fw-bold d-block text-truncate" style="font-family: <cms:show dash_font_serif />;">The quick brown fox.</span>
-								</div>
-								<div class="p-2 bg-light rounded overflow-hidden h-50">
-									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Monospace (Code)</span>
-									<span class="fs-6 d-block text-truncate" style="font-family: <cms:show dash_font_mono />;">The quick brown fox.</span>
+								
+                                <div class="p-2 bg-light rounded overflow-hidden" style="height: 48%;">
+									<div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.65rem;">Sans-Serif</span>
+                                        <span class="badge bg-white text-dark border border-secondary border-opacity-25" style="font-size: 0.65rem;"><cms:if dash_font_sans=='-' || dash_font_sans==''>Base<cms:else/><cms:show dash_font_sans /></cms:if></span>
+                                    </div>
+									<span class="fs-6 d-block text-truncate" style="font-family: '<cms:show dash_font_sans />', sans-serif;">The quick brown fox.</span>
 								</div>
 							</div>
 
 							<div class="col-md-4">
-								<div class="p-2 bg-light rounded mb-2 overflow-hidden h-50">
-									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Cursive / Script</span>
-									<span class="fs-5 d-block text-truncate" style="font-family: <cms:show dash_font_cursive />;">The quick brown fox.</span>
+								<div class="p-2 bg-light rounded mb-2 overflow-hidden" style="height: 48%;">
+									<div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.65rem;">Headings (Serif)</span>
+                                        <span class="badge bg-white text-dark border border-secondary border-opacity-25" style="font-size: 0.65rem;"><cms:if dash_font_serif=='-' || dash_font_serif==''>Base<cms:else/><cms:show dash_font_serif /></cms:if></span>
+                                    </div>
+									<span class="fs-6 fw-bold d-block text-truncate" style="font-family: '<cms:show dash_font_serif />', serif;">The quick brown fox.</span>
 								</div>
-								<div class="p-2 bg-light rounded overflow-hidden h-50">
-									<span class="d-block text-muted small fw-bold text-uppercase mb-1" style="font-size: 0.7rem;">Decorative</span>
-									<span class="fs-6 d-block text-truncate" style="font-family: <cms:show dash_font_decor />;">The quick brown fox.</span>
+								
+                                <div class="p-2 bg-light rounded overflow-hidden" style="height: 48%;">
+									<div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.65rem;">Monospace</span>
+                                        <span class="badge bg-white text-dark border border-secondary border-opacity-25" style="font-size: 0.65rem;"><cms:if dash_font_mono=='-' || dash_font_mono==''>Base<cms:else/><cms:show dash_font_mono /></cms:if></span>
+                                    </div>
+									<span class="fs-6 d-block text-truncate" style="font-family: '<cms:show dash_font_mono />', monospace;">The quick brown fox.</span>
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="p-2 bg-light rounded mb-2 overflow-hidden" style="height: 48%;">
+									<div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.65rem;">Cursive / Script</span>
+                                        <span class="badge bg-white text-dark border border-secondary border-opacity-25" style="font-size: 0.65rem;"><cms:if dash_font_cursive=='-' || dash_font_cursive==''>Base<cms:else/><cms:show dash_font_cursive /></cms:if></span>
+                                    </div>
+									<span class="fs-5 d-block text-truncate" style="font-family: '<cms:show dash_font_cursive />', cursive;">The quick brown fox.</span>
+								</div>
+								
+                                <div class="p-2 bg-light rounded overflow-hidden" style="height: 48%;">
+									<div class="d-flex justify-content-between align-items-center mb-1">
+                                        <span class="text-muted small fw-bold text-uppercase" style="font-size: 0.65rem;">Decorative</span>
+                                        <span class="badge bg-white text-dark border border-secondary border-opacity-25" style="font-size: 0.65rem;"><cms:if dash_font_decor=='-' || dash_font_decor==''>Base<cms:else/><cms:show dash_font_decor /></cms:if></span>
+                                    </div>
+									<span class="fs-6 d-block text-truncate" style="font-family: '<cms:show dash_font_decor />', sans-serif;">The quick brown fox.</span>
 								</div>
 							</div>
 						</div>
 
 						<div class="p-3 mt-3 border border-secondary border-opacity-25 rounded bg-white">
-							<span class="d-block text-muted small fw-bold text-uppercase mb-2" style="font-size: 0.7rem;">Spacing Preview (Size: <cms:show dash_font_size />rem | LH: <cms:show dash_line_height />)</span>
-							<div class="text-dark" style="font-family: <cms:show dash_font_base />; font-size: <cms:show dash_font_size />rem; line-height: <cms:show dash_line_height />;">
-								This paragraph demonstrates how your chosen base font, size, and line height interact. Notice how the vertical rhythm breathes as you adjust the line height setting.
+							<span class="d-block text-muted small fw-bold text-uppercase mb-2" style="font-size: 0.7rem;">Spacing Preview (Size: <cms:show dash_font_size />rem | Wt: <cms:show dash_font_weight /> | LH: <cms:show dash_line_height /> | LS: <cms:show dash_letter_space />)</span>
+							<div class="text-dark" style="font-family: '<cms:show dash_font_body />', sans-serif; font-size: <cms:show dash_font_size />rem; font-weight: <cms:show dash_font_weight />; line-height: <cms:show dash_line_height />; letter-spacing: <cms:show dash_letter_space />;">
+								This paragraph demonstrates how your chosen base font, size, weight, line height, and letter spacing interact. Notice how the vertical rhythm breathes as you adjust the settings.
 							</div>
 						</div>
 

@@ -53,6 +53,7 @@
         <cms:set black="<cms:show ccs_gl_site_black_cust />" "global" />
         <cms:set body_clr="<cms:show ccs_gl_site_body_clr_cust />" "global" />
         <cms:set body_bg="<cms:show ccs_gl_site_body_bg_cust />" "global" /> 
+        
     <cms:else />
         <cms:set success="#4CD964" "global" />
         <cms:set info="#2EB7F5" "global" />
@@ -63,37 +64,81 @@
         <cms:set white="#fff" "global" />
         <cms:set black="#000" "global" />
 
+        <cms:set body_clr="#292b2c" "global" />
+        <cms:set body_bg="#fff" "global" />
+
         <cms:if ccs_gl_site_thm_opt == 'primavera'>
             <cms:set primary="#FF8E9C" "global" />
             <cms:set secondary="#85D3A9" "global" />
             <cms:set tertiary="#A3D5FF" "global" />
             <cms:set quaternary="#FFE8A1" "global" />
-            <cms:set body_bg="#FCFCFA" "global" />
-            <cms:set body_clr="#2C3E50" "global" />
+            <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                <cms:set body_bg="#FFF0F5" "global" />
+                <cms:set body_clr="#2C3E50" "global" />
+            </cms:if>
             
         <cms:else_if ccs_gl_site_thm_opt == 'estate' />
             <cms:set primary="#FF9F1C" "global" />
             <cms:set secondary="#2EC4B6" "global" />
             <cms:set tertiary="#E71D36" "global" />
             <cms:set quaternary="#FFBF69" "global" />
-            <cms:set body_bg="#FFFFFF" "global" />
-            <cms:set body_clr="#011627" "global" />
+            <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                <cms:set body_bg="#F0F8FF" "global" />
+                <cms:set body_clr="#011627" "global" />
+            </cms:if>
             
         <cms:else_if ccs_gl_site_thm_opt == 'autunno' />
             <cms:set primary="#D95D39" "global" />
             <cms:set secondary="#F0A202" "global" />
             <cms:set tertiary="#826251" "global" />
             <cms:set quaternary="#A89C94" "global" />
-            <cms:set body_bg="#F4F1ED" "global" />
-            <cms:set body_clr="#3A1700" "global" />
+            <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                <cms:set body_bg="#EFE8E0" "global" />
+                <cms:set body_clr="#3A2318" "global" />
+            </cms:if>
             
         <cms:else_if ccs_gl_site_thm_opt == 'inverno' />
             <cms:set primary="#3A86FF" "global" />
             <cms:set secondary="#8ECAE6" "global" />
             <cms:set tertiary="#4A4E69" "global" />
             <cms:set quaternary="#C1D3FE" "global" />
-            <cms:set body_bg="#F8F9FA" "global" />
-            <cms:set body_clr="#0B132B" "global" />
+            <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                <cms:set body_bg="#E2EAF2" "global" />
+                <cms:set body_clr="#1A252C" "global" />
+            </cms:if>
+		<cms:else_if ccs_gl_site_thm_opt == 'scuro' />
+            <cms:set primary="#00ADB5" "global" />
+            <cms:set secondary="#393E46" "global" />
+            <cms:set tertiary="#5C6B73" "global" />
+            <cms:set quaternary="#9DB2BF" "global" />
+            <cms:set success="#2ECC71" "global" />
+            <cms:set info="#3498DB" "global" />
+            <cms:set warning="#F1C40F" "global" />
+            <cms:set danger="#E74C3C" "global" />
+            <cms:set light="#EAEAEA" "global" />
+            <cms:set dark="#15181C" "global" />
+            
+            <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                <cms:set body_bg="#222831" "global" />
+                <cms:set body_clr="#EEEEEE" "global" />
+            </cms:if>
+            
+        <cms:else_if ccs_gl_site_thm_opt == 'notte' />
+            <cms:set primary="#66FCF1" "global" />
+            <cms:set secondary="#45A29E" "global" />
+            <cms:set tertiary="#7B2CBF" "global" />
+            <cms:set quaternary="#E0AAFF" "global" />
+            <cms:set success="#00FF7F" "global" />
+            <cms:set info="#00BFFF" "global" />
+            <cms:set warning="#FFD700" "global" />
+            <cms:set danger="#FF003F" "global" />
+            <cms:set light="#F0F0F0" "global" />
+            <cms:set dark="#050505" "global" />
+            
+            <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                <cms:set body_bg="#0B0C10" "global" />
+                <cms:set body_clr="#C5C6C7" "global" />
+            </cms:if>
             
         <cms:else />
             <cms:set primary="#007AFF" "global" />
@@ -101,15 +146,9 @@
             <cms:set tertiary="#687BD9" "global" />
             <cms:set quaternary="#68C2D9" "global" />
             
-            <cms:if ccs_gl_site_thm_opt == 'light'>
-                <cms:set body_clr="#292b2c" "global" />
-                <cms:set body_bg="#fff" "global" />
-            <cms:else_if ccs_gl_site_thm_opt == 'dark' />
+            <cms:if ccs_gl_site_thm_opt == 'dark'>
                 <cms:set body_clr="#e1e1e1" "global" />
                 <cms:set body_bg="#404040" "global" />
-            <cms:else />
-                <cms:set body_clr="#292b2c" "global" />
-                <cms:set body_bg="#fff" "global" />
             </cms:if>
         </cms:if>
     </cms:if>
@@ -127,25 +166,50 @@
     <cms:set gray-1100="#0c151a" "global" />
     <cms:set gray-1200="#292b2c" "global" />
 
-    <cms:if ccs_gl_site_custom_font_opt >
-       <cms:set bff="<cms:show ccs_gl_site_font_body_cust />" "global" />
-       <cms:set fbs="<cms:show ccs_gl_site_font_base_cust />" "global" />
-       <cms:set fss="<cms:show ccs_gl_site_font_sans_cust />" "global" />
-       <cms:set fmn="<cms:show ccs_gl_site_font_mono_cust />" "global" />
-       <cms:set fsf="<cms:show ccs_gl_site_font_serf_cust />" "global" />
-       <cms:set fcs="<cms:show ccs_gl_site_font_crsv_cust />" "global" />
-       <cms:set fdc="<cms:show ccs_gl_site_font_decr_cust />" "global" />
+	<cms:if ccs_gl_site_custom_font_opt >
+       <cms:set bff="'<cms:show ccs_gl_site_font_body_cust />', sans-serif" "global" />
+       <cms:set fss="'<cms:show ccs_gl_site_font_sans_cust />', sans-serif" "global" />
+       <cms:set fmn="'<cms:show ccs_gl_site_font_mono_cust />', monospace" "global" />
+       <cms:set fsf="'<cms:show ccs_gl_site_font_serf_cust />', serif" "global" />
+       <cms:set fcs="'<cms:show ccs_gl_site_font_crsv_cust />', cursive" "global" />
+       <cms:set fdc="'<cms:show ccs_gl_site_font_decr_cust />', sans-serif" "global" />
        <cms:set bfs="<cms:show ccs_gl_site_font_size_cust />" "global" />
        <cms:set bfw="<cms:show ccs_gl_site_font_weight_cust />" "global" />
        <cms:set blh="<cms:show ccs_gl_site_line_height_cust />" "global" />
+       
+    <cms:else_if ccs_gl_site_thm_typo_opt />
+        <cms:if ccs_gl_site_thm_opt == 'primavera'>
+            <cms:set bff="'Lato', sans-serif" "global" />
+            <cms:set fss="'Lato', sans-serif" "global" />
+            <cms:set fsf="'Playfair Display', serif" "global" />
+        <cms:else_if ccs_gl_site_thm_opt == 'estate' />
+            <cms:set bff="'Montserrat', sans-serif" "global" />
+            <cms:set fss="'Montserrat', sans-serif" "global" />
+            <cms:set fsf="'Cinzel', serif" "global" />
+        <cms:else_if ccs_gl_site_thm_opt == 'autunno' />
+            <cms:set bff="'Open Sans', sans-serif" "global" />
+            <cms:set fss="'Open Sans', sans-serif" "global" />
+            <cms:set fsf="'Merriweather', serif" "global" />
+        <cms:else_if ccs_gl_site_thm_opt == 'inverno' />
+            <cms:set bff="'Roboto', sans-serif" "global" />
+            <cms:set fss="'Roboto', sans-serif" "global" />
+            <cms:set fsf="'Lora', serif" "global" />
+        </cms:if>
+        
+        <cms:set fmn='"SFMono-Regular", Menlo, Monaco, Consolas, monospace' "global" />
+        <cms:set fcs='"Dancing Script", cursive' "global" />
+        <cms:set fdc='"Oswald", sans-serif' "global" />
+        <cms:set bfs="0.875" "global" />
+        <cms:set bfw="400" "global" />
+        <cms:set blh="1.5" "global" />
+
     <cms:else />
-       <cms:set bff='"Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"' "global" />
-       <cms:set fbs='"Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"' "global" />
-       <cms:set fss=' Raleway, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"' "global" />
-       <cms:set fmn='"SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace' "global" />
-       <cms:set fsf='"Playfair Display","Libre Baskerville", Georgia, serif ' "global" />
-       <cms:set fcs='"Bradley Hand", "Lucida Handwriting", "Brush Script MT", "Comic Sans MS"' "global" />
-       <cms:set fdc='Sreda, Arvo, Candara' "global" />
+       <cms:set bff='"Montserrat", -apple-system, sans-serif' "global" />
+       <cms:set fss='"Raleway", -apple-system, sans-serif' "global" />
+       <cms:set fmn='"SFMono-Regular", Menlo, Monaco, Consolas, monospace' "global" />
+       <cms:set fsf='"Playfair Display", Georgia, serif' "global" />
+       <cms:set fcs='"Bradley Hand", "Brush Script MT", cursive' "global" />
+       <cms:set fdc='"Sreda", Arvo, Candara' "global" />
        <cms:set bfs="0.875" "global" />
        <cms:set bfw="400" "global" />
        <cms:set blh="1.5" "global" />
@@ -235,6 +299,13 @@
     --ccs-black: <cms:show black />;
     --ccs-black-rgb: <cms:show black_rgb />;
     
+	--ccs-body-color: <cms:show body_clr />;
+    --ccs-body-bg: <cms:show body_bg />;
+
+  	--bs-body-color: var(--ccs-body-color);
+    --bs-heading-color: var(--ccs-body-color);
+    --bs-body-bg: var(--ccs-body-bg);
+
     --ccs-body-color-rgb: <cms:show body_clr_rgb />;
     --ccs-body-bg-rgb: <cms:show body_bg_rgb />;
 
@@ -291,6 +362,15 @@
     </cms:if>
 }
 
+body {
+    background-color: var(--ccs-body-bg);
+    color: var(--ccs-body-color);
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    color: var(--ccs-body-color);
+}
+
 .hr-sm {
   width: 14rem;
   margin: 1.25rem auto;
@@ -310,9 +390,7 @@
 .font-sans-serif {
   font-family: <cms:show fss /> !important;
 }
-.font-base {
-  font-family:<cms:show fbs /> !important ;
-}
+
 .font-monospace {
   font-family: <cms:show fmn /> !important;
 }
