@@ -1,0 +1,129 @@
+/* Custom White-Label Stylesheet */
+
+/* =========================================================
+   VERIFIED SPECIFICITY OVERRIDES 
+   ========================================================= */
+
+/* Target: Mosaic "Add New" Buttons */
+button.btn.btn-success.mosaic-btn-add {
+    background-color: var(--admin-success) !important;
+    border-color: var(--admin-success) !important;
+    color: #ffffff !important;
+}
+
+button.btn.btn-success.mosaic-btn-add:hover,
+button.btn.btn-success.mosaic-btn-add:focus,
+button.btn.btn-success.mosaic-btn-add:active {
+    /* Falling back to primary for the hover state */
+    background-color: var(--admin-primary) !important;
+    border-color: var(--admin-primary) !important;
+}
+
+/* Target: Workspace Group Headers */
+#content .row-group > label.group-heading {
+    /* Uses Tertiary, falls back to Primary if Tertiary is empty */
+    background-color: var(--admin-tertiary, var(--admin-primary)) !important;
+    border-bottom-color: var(--admin-tertiary, var(--admin-primary)) !important;
+    color: #ffffff !important;
+}
+
+/* =========================================================
+   SECONDARY & ICON BUTTONS (Verified DOM Fix)
+   ========================================================= */
+
+/* Target: Default Grey Buttons (e.g., Advanced Settings) and Mosaic Icon Buttons (e.g., Trash) */
+.btn-group > button.btn.btn-default,
+.mosaic-item-btns button.btn {
+    background-color: transparent !important;
+    border: 1px solid var(--admin-primary) !important;
+    color: var(--admin-primary) !important;
+    transition: all 0.2s ease-in-out;
+}
+
+/* Ensure the SVG icons inside match the text color */
+.btn-group > button.btn.btn-default .i,
+.mosaic-item-btns button.btn .i {
+    fill: currentColor !important;
+}
+
+/* Target: Hover States */
+.btn-group > button.btn.btn-default:hover,
+.btn-group > button.btn.btn-default:focus,
+.mosaic-item-btns button.btn:hover,
+.mosaic-item-btns button.btn:focus {
+    background-color: var(--admin-primary) !important;
+    color: #ffffff !important;
+}
+
+/* =========================================================
+   SPECIFIC INDIVIDUAL BUTTONS
+   ========================================================= */
+
+/* Target: The main 'View' button */
+a.btn#btn_view {
+    background-color: var(--admin-primary) !important;
+    border-color: var(--admin-primary) !important;
+    color: #ffffff !important;
+}
+
+a.btn#btn_view:hover,
+a.btn#btn_view:focus,
+a.btn#btn_view:active {
+    background-color: var(--admin-secondary) !important;
+    border-color: var(--admin-secondary) !important;
+}
+
+/* =========================================================
+   PANEL HEADERS & MISC UI
+   ========================================================= */
+
+/* Removed .field-hint from this group */
+#sidebar-toggle,
+.panel-heading,
+.table > thead,
+.popover-title {
+    background-color: var(--admin-tertiary, var(--admin-primary)) !important;
+    color: #ffffff !important;
+    border-color: var(--admin-tertiary, var(--admin-primary)) !important;
+    
+    text-shadow: none !important; 
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    letter-spacing: 0.5px !important; 
+}
+
+/* Ensure the primary panel headings match dynamically */
+.panel-heading.panel-primary {
+    background-color: var(--admin-tertiary, var(--admin-primary)) !important;
+}
+
+/* =========================================================
+   FIELD DESCRIPTIONS (desc= parameter)
+   ========================================================= */
+
+.field-hint {
+    background-color: transparent !important;
+    color: #555555 !important; /* 1. Bulletproof safe fallback */
+    color: var(--admin-text) !important; /* 2. Overrides ONLY if valid color exists */
+    opacity: 0.85; 
+    font-size: 13px !important;
+    margin-top: 4px !important;
+    text-shadow: none !important;
+    display: block !important;
+}
+
+/* =========================================================
+   GROUP HEADER DESCRIPTIONS (desc= parameter in groups)
+   ========================================================= */
+
+.panel-heading .k_desc,
+.panel-heading .desc,
+a.panel-heading span.k_desc.desc {
+    background-color: transparent !important;
+    color: rgba(255, 255, 255, 0.85) !important; /* Soft white for contrast */
+    font-size: 13px !important;
+    font-weight: normal !important;
+    margin-left: 8px !important;
+    text-shadow: none !important;
+    letter-spacing: 0.5px !important;
+}

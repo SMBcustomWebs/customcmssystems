@@ -31,17 +31,12 @@
 			<cms:embed 'pb_mods/hero/embed/hero_cta.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_modal-add.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_btm_rail.htm' />
-             
-
         </cms:tile>
-     
 
         <cms:tile name='ccs_hro_split_tile' label='Hero - Split Sides' _pb_template='hero/theme/hero_split' _pb_height='350'>
 			<cms:embed 'pb_mods/hero/embed/hero_format_split.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_split_col_1.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_split_col_2.htm' />
-			
-			
             </cms:tile>
         
         <cms:tile name='ccs_hro_offset_tile' label='Hero - Single Image with Offset Element' _pb_template='' _pb_height='350'>

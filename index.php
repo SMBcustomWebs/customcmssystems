@@ -6,7 +6,6 @@
         <cms:section label='Page Hero' name='hro_sect'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_msc' />
         <cms:section label='Banner Transition' name='trans_sect'  masterpage='blocks/banner/transitions.php' mosaic='trns_msc' />
         
-        <cms:section label='Site Footer' name='ftr_sect'  masterpage='blocks/frame/footer.php' mosaic='footer_msc' />
 
     </cms:pagebuilder>
     

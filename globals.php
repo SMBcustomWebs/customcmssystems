@@ -84,32 +84,39 @@
 
     <cms:editable type='group' name='ccs_gl_master_theme_grp' label='Master Theme Controls' desc='Toggle active themes, custom overrides, and global typography' order='70'>
         
-        <cms:editable type='message' name='ccs_gl_theme_master_msg' order='1'>
-            <h2>Theme Engine Controls</h2>
-            <p>Select your base theme, then toggle typography or custom colors below to override defaults.</p>
+        <cms:editable type='message' name='ccs_gl_theme_custom_msg' order='1'>
+            <h2>Theme & Custom Overrides</h2>
+            <p>Check the boxes below to unlock total manual control over colors and fonts. Leave unchecked to select a curated base theme.</p>
         </cms:editable>
 
-        <cms:editable type='dropdown' name='ccs_gl_site_thm_opt' label='Set Website Theme Base' opt_values='Light=light|Dark=dark|Primavera=primavera|Estate=estate|Autunno=autunno|Inverno=inverno|Scuro (Dark)=scuro|Notte (Dark)=notte' order='2' />
+        <cms:editable type='checkbox' name='ccs_gl_site_custom_color_opt' label='Customize Site Colors' opt_values='Customize Colors=1' order='2' />
+        <cms:editable type='checkbox' name='ccs_gl_site_custom_font_opt' label='Customize Site Fonts' opt_values='Customize Fonts=1' order='3' />
+
+        <cms:func _into='ccs_gl_hide_theme_dropdown' ccs_gl_site_custom_color_opt=''>
+            <cms:if "<cms:is '1' in=ccs_gl_site_custom_color_opt />">hide<cms:else />show</cms:if>
+        </cms:func>
+
+        <cms:func _into='ccs_gl_site_colors_custom' ccs_gl_site_custom_color_opt='' ><cms:if "<cms:is '1' in=ccs_gl_site_custom_color_opt />" >show<cms:else />hide</cms:if></cms:func>
+        <cms:func _into='ccs_gl_site_fonts_custom' ccs_gl_site_custom_font_opt=''><cms:if "<cms:is '1' in=ccs_gl_site_custom_font_opt />" >show<cms:else />hide</cms:if></cms:func>
+
+        <cms:editable type='message' name='ccs_gl_theme_master_msg' order='4' not_active=ccs_gl_hide_theme_dropdown>
+            <br><hr><h2>Curated Theme Engine</h2>
+            <p>Select your base theme, then toggle typography or background settings below.</p>
+        </cms:editable>
+
+        <cms:editable type='dropdown' name='ccs_gl_site_thm_opt' label='Set Website Theme Base' opt_values='Light=light|Dark=dark|Primavera=primavera|Estate=estate|Autunno=autunno|Inverno=inverno|Scuro (Dark)=scuro|Notte (Dark)=notte' not_active=ccs_gl_hide_theme_dropdown order='5' />
 
         <cms:func _into='ccs_gl_site_thm_clr_cond' ccs_gl_site_custom_color_opt='' ccs_gl_site_thm_opt=''>
             <cms:if ("<cms:is '1' in=ccs_gl_site_custom_color_opt />") || (ccs_gl_site_thm_opt == 'light') || (ccs_gl_site_thm_opt == 'dark') >hide<cms:else />show</cms:if>
         </cms:func>
+        
         <cms:func _into='ccs_gl_site_thm_typo_cond' ccs_gl_site_custom_font_opt='' ccs_gl_site_thm_opt=''>
             <cms:if ("<cms:is '1' in=ccs_gl_site_custom_font_opt />") || (ccs_gl_site_thm_opt == 'light') || (ccs_gl_site_thm_opt == 'dark') >hide<cms:else />show</cms:if>
         </cms:func>
-        <cms:func _into='ccs_gl_site_colors_custom' ccs_gl_site_custom_color_opt='' ><cms:if "<cms:is '1' in=ccs_gl_site_custom_color_opt />" >show<cms:else />hide</cms:if></cms:func>
-        <cms:func _into='ccs_gl_site_fonts_custom' ccs_gl_site_custom_font_opt=''><cms:if "<cms:is '1' in=ccs_gl_site_custom_font_opt />" >show<cms:else />hide</cms:if></cms:func>
 
-        <cms:editable type='checkbox' name='ccs_gl_site_thm_clr_opt' label='Disable Theme Background/Text Colors' desc='Check this box to revert to basic white/dark.' opt_values='Do Not Apply Theme Bg/Text=1' not_active=ccs_gl_site_thm_clr_cond order='3' />
-        <cms:editable type='checkbox' name='ccs_gl_site_thm_typo_opt' label='Apply Theme Typography' desc='Overrides defaults with curated fonts matching the theme.' opt_values='Apply Theme Typography=1' not_active=ccs_gl_site_thm_typo_cond order='4' />
-
-        <cms:editable type='message' name='ccs_gl_theme_custom_msg' order='5'>
-            <br><hr><h2>Custom Overrides</h2>
-            <p>Check the boxes below to unlock total manual control over colors and fonts.</p>
-        </cms:editable>
-
-        <cms:editable type='checkbox' name='ccs_gl_site_custom_color_opt' label='Customize Site Colors' opt_values='Customize Colors=1' order='6' />
-        <cms:editable type='checkbox' name='ccs_gl_site_custom_font_opt' label='Customize Site Fonts' opt_values='Customize Fonts=1' order='7' />
+        <cms:editable type='checkbox' name='ccs_gl_site_thm_clr_opt' label='Disable Theme Background/Text Colors' desc='Check this box to revert to basic white/dark.' opt_values='Do Not Apply Theme Bg/Text=1' not_active=ccs_gl_site_thm_clr_cond order='6' />
+        <cms:editable type='checkbox' name='ccs_gl_site_thm_typo_opt' label='Apply Theme Typography' desc='Overrides defaults with curated fonts matching the theme.' opt_values='Apply Theme Typography=1' not_active=ccs_gl_site_thm_typo_cond order='7' />
+        
     </cms:editable>
 
 
@@ -330,9 +337,9 @@
                 <div class="col-lg-4">
                     <div class="card shadow-sm h-100 border-0">
                         <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0 fw-bold">Theme & Colors</h5>
-                            <cms:popup_edit 'ccs_gl_master_theme_grp|ccs_gl_site_custom_color_opt|ccs_gl_site_thm_opt|ccs_gl_site_site_cst_clr_grp|ccs_gl_site_primary_cust|ccs_gl_site_secondary_cust|ccs_gl_site_tertiary_cust|ccs_gl_site_success_cust|ccs_gl_site_warning_cust|ccs_gl_site_danger_cust' link_text="<button class='btn btn-sm btn-body-tertiary rounded-circle shadow-sm d-flex justify-content-center align-items-center' style='width:32px; height:32px; padding: 0;' title='Edit Theme & Colors'><i class='fas fa-palette text-primary'></i></button>" />
-                        </div>
+							<h5 class="mb-0 fw-bold">Theme & Colors</h5>
+							<cms:popup_edit 'ccs_gl_master_theme_grp|ccs_gl_site_custom_color_opt|ccs_gl_site_thm_opt|ccs_gl_site_site_cst_clr_grp|ccs_gl_site_primary_cust|ccs_gl_site_secondary_cust|ccs_gl_site_tertiary_cust|ccs_gl_site_quaternary_cust|ccs_gl_site_success_cust|ccs_gl_site_info_cust|ccs_gl_site_warning_cust|ccs_gl_site_danger_cust|ccs_gl_site_light_cust|ccs_gl_site_dark_cust|ccs_gl_site_white_cust|ccs_gl_site_black_cust|ccs_gl_site_body_clr_cust|ccs_gl_site_body_bg_cust' link_text="<button class='btn btn-sm btn-body-tertiary rounded-circle shadow-sm d-flex justify-content-center align-items-center' style='width:32px; height:32px; padding: 0;' title='Edit Theme & Colors'><i class='fas fa-palette text-primary'></i></button>" />
+						</div>
 
                         <div class="card-body" data-bs-theme="<cms:show ccs_gl_site_thm_opt />">
 

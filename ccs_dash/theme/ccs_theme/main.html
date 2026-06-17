@@ -1,0 +1,350 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1, minimal-ui" name="viewport"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="noindex" name="robots"/>
+    <title><cms:localize 'admin_panel' /></title>
+    <link href="<cms:show k_system_theme_link />includes/admin/main.css?v=<cms:show k_cms_build />" rel="stylesheet"/>
+    <link href="<cms:show k_system_theme_link />includes/mcustomscrollbar/mcustomscrollbar.css?v=<cms:show k_cms_build />" rel="stylesheet"/>
+    <link href="<cms:show k_system_theme_link />includes/magnific-popup/magnific-popup.css?v=<cms:show k_cms_build />" rel="stylesheet"/>
+
+    <cms:admin_css_files>
+        <link rel="stylesheet" href="<cms:show k_css_file />" type="text/css" media="screen"/>
+    </cms:admin_css_files>
+
+    <cms:pages masterpage='globals.php' limit='1'>
+		
+		<cms:set ccs_custom_color_opt = ccs_gl_site_custom_color_opt scope='global' />
+		<cms:set ccs_thm_opt = ccs_gl_site_thm_opt scope='global' />
+		<cms:set ccs_thm_clr_opt = ccs_gl_site_thm_clr_opt scope='global' />
+		
+		
+        <cms:if ccs_gl_site_custom_color_opt >
+            <cms:set primary="<cms:show ccs_gl_site_primary_cust />" scope="global" />
+            <cms:set secondary="<cms:show ccs_gl_site_secondary_cust />" scope="global" />
+            <cms:set tertiary="<cms:show ccs_gl_site_tertiary_cust />" scope="global" />
+            <cms:set quaternary="<cms:show ccs_gl_site_quaternary_cust />" scope="global" />
+            <cms:set success="<cms:show ccs_gl_site_success_cust />" scope="global" />
+            <cms:set info="<cms:show ccs_gl_site_info_cust />" scope="global" />
+            <cms:set warning="<cms:show ccs_gl_site_warning_cust />" scope="global" />
+            <cms:set danger="<cms:show ccs_gl_site_danger_cust />" scope="global" />
+            <cms:set light="<cms:show ccs_gl_site_light_cust />" scope="global" />
+            <cms:set dark="<cms:show ccs_gl_site_dark_cust />" scope="global" />
+            <cms:set white="<cms:show ccs_gl_site_white_cust />" scope="global" />
+            <cms:set black="<cms:show ccs_gl_site_black_cust />" scope="global" />
+            <cms:set body_clr="<cms:show ccs_gl_site_body_clr_cust />" scope="global" />
+            <cms:set body_bg="<cms:show ccs_gl_site_body_bg_cust />" scope="global" /> 
+            
+        <cms:else />
+            <cms:set success="#4CD964" scope="global" />
+            <cms:set info="#2EB7F5" scope="global" />
+            <cms:set warning="#FF9500" scope="global" />
+            <cms:set danger="#FF3B30" scope="global" />
+            <cms:set light="#fafafa" scope="global" />
+            <cms:set dark="#0c151a" scope="global" />
+            <cms:set white="#fff" scope="global" />
+            <cms:set black="#000" scope="global" />
+            <cms:set body_clr="#292b2c" scope="global" />
+            <cms:set body_bg="#fff" scope="global" />
+
+            <cms:if ccs_gl_site_thm_opt == 'primavera'>
+                <cms:set primary="#FF8E9C" scope="global" />
+                <cms:set secondary="#85D3A9" scope="global" />
+                <cms:set tertiary="#A3D5FF" scope="global" />
+                <cms:set quaternary="#FFE8A1" scope="global" />
+                <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                    <cms:set body_bg="#FFF0F5" scope="global" />
+                    <cms:set body_clr="#2C3E50" scope="global" />
+                </cms:if>
+                
+            <cms:else_if ccs_gl_site_thm_opt == 'estate' />
+                <cms:set primary="#FF9F1C" scope="global" />
+                <cms:set secondary="#2EC4B6" scope="global" />
+                <cms:set tertiary="#E71D36" scope="global" />
+                <cms:set quaternary="#FFBF69" scope="global" />
+                <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                    <cms:set body_bg="#F0F8FF" scope="global" />
+                    <cms:set body_clr="#011627" scope="global" />
+                </cms:if>
+                
+            <cms:else_if ccs_gl_site_thm_opt == 'autunno' />
+                <cms:set primary="#D95D39" scope="global" />
+                <cms:set secondary="#F0A202" scope="global" />
+                <cms:set tertiary="#826251" scope="global" />
+                <cms:set quaternary="#A89C94" scope="global" />
+                <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                    <cms:set body_bg="#EFE8E0" scope="global" />
+                    <cms:set body_clr="#3A2318" scope="global" />
+                </cms:if>
+                
+            <cms:else_if ccs_gl_site_thm_opt == 'inverno' />
+                <cms:set primary="#3A86FF" scope="global" />
+                <cms:set secondary="#8ECAE6" scope="global" />
+                <cms:set tertiary="#4A4E69" scope="global" />
+                <cms:set quaternary="#C1D3FE" scope="global" />
+                <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                    <cms:set body_bg="#E2EAF2" scope="global" />
+                    <cms:set body_clr="#1A252C" scope="global" />
+                </cms:if>
+                
+            <cms:else_if ccs_gl_site_thm_opt == 'scuro' />
+                <cms:set primary="#00ADB5" scope="global" />
+                <cms:set secondary="#393E46" scope="global" />
+                <cms:set tertiary="#5C6B73" scope="global" />
+                <cms:set quaternary="#9DB2BF" scope="global" />
+                <cms:set success="#2ECC71" scope="global" />
+                <cms:set info="#3498DB" scope="global" />
+                <cms:set warning="#F1C40F" scope="global" />
+                <cms:set danger="#E74C3C" scope="global" />
+                <cms:set light="#EAEAEA" scope="global" />
+                <cms:set dark="#15181C" scope="global" />
+                <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                    <cms:set body_bg="#222831" scope="global" />
+                    <cms:set body_clr="#EEEEEE" scope="global" />
+                </cms:if>
+                
+            <cms:else_if ccs_gl_site_thm_opt == 'notte' />
+                <cms:set primary="#66FCF1" scope="global" />
+                <cms:set secondary="#45A29E" scope="global" />
+                <cms:set tertiary="#7B2CBF" scope="global" />
+                <cms:set quaternary="#E0AAFF" scope="global" />
+                <cms:set success="#00FF7F" scope="global" />
+                <cms:set info="#00BFFF" scope="global" />
+                <cms:set warning="#FFD700" scope="global" />
+                <cms:set danger="#FF003F" scope="global" />
+                <cms:set light="#F0F0F0" scope="global" />
+                <cms:set dark="#050505" scope="global" />
+                <cms:if ccs_gl_site_thm_clr_opt != '1'>
+                    <cms:set body_bg="#0B0C10" scope="global" />
+                    <cms:set body_clr="#C5C6C7" scope="global" />
+                </cms:if>
+                
+            <cms:else />
+                <cms:set primary="#007AFF" scope="global" />
+                <cms:set secondary="#292b2c" scope="global" />
+                <cms:set tertiary="#687BD9" scope="global" />
+                <cms:set quaternary="#68C2D9" scope="global" />
+                <cms:if ccs_gl_site_thm_opt == 'dark'>
+                    <cms:set body_clr="#e1e1e1" scope="global" />
+                    <cms:set body_bg="#404040" scope="global" />
+                </cms:if>
+            </cms:if>
+        </cms:if>
+    </cms:pages>
+
+    <style>
+        <cms:admin_css />
+        
+        /* DECLARE ALL CSS VARIABLES FOR STYLES.CSS */
+        :root {
+            --admin-primary: <cms:show primary />;
+            --admin-secondary: <cms:show secondary />;
+            --admin-tertiary: <cms:show tertiary />;
+            --admin-quaternary: <cms:show quaternary />;
+            --admin-success: <cms:show success />;
+            --admin-info: <cms:show info />;
+            --admin-warning: <cms:show warning />;
+            --admin-danger: <cms:show danger />;
+            --admin-light: <cms:show light />;
+            --admin-dark: <cms:show dark />;
+            --admin-white: <cms:show white />;
+            --admin-black: <cms:show black />;
+            --admin-bg: <cms:show body_bg />;
+            --admin-text: <cms:show body_clr />;
+        }		
+		
+		
+        /* 1. Neutral Workspace Background */
+        body, #simple-page, #tabs-page #content { 
+            background-color: #f4f6f8 !important; 
+            color: #333333 !important; 
+        }
+        #header, #tabs-page .ctrl-bot { 
+            background-color: #ffffff !important; 
+        }
+
+        /* 2. Theme-Driven Sidebar Background */
+        #sidebar, #sidebar-btns, #menu-wrap, .sidebar-txt, #sidebar-bot, #sidebar-top { 
+            background-color: <cms:show body_bg /> !important; 
+            border-color: rgba(128, 128, 128, 0.1) !important;
+            text-shadow: none !important;
+            box-shadow: none !important;
+        }
+
+        /* 3. Theme-Driven Sidebar Text (Automatic Contrast) */
+        .sidebar-txt > p, .sidebar-txt > p > a, #sidebar-btns > .btn, 
+        #nav>li>a, .nav-group>ul>li>a {
+            color: <cms:show body_clr /> !important;
+            text-shadow: none !important;
+        }
+        .nav-icon > .i, #sidebar-toggle > .i { 
+            fill: <cms:show body_clr /> !important; 
+            opacity: 0.8;
+        }
+
+        /* 4. Group Headers -> TERTIARY Color */
+        .nav-heading-toggle {
+            color: <cms:show tertiary /> !important;
+            opacity: 0.9;
+            text-shadow: none !important;
+        }
+
+        /* 5. Hover States */
+        #nav>li>a:hover, #nav>li>a:focus, .nav-group>ul>li>a:hover, .nav-group>ul>li>a:focus { 
+            background-color: rgba(128, 128, 128, 0.1) !important; 
+            color: <cms:show primary /> !important; 
+        }
+        .nav-icon:hover > .i, .nav-icon:focus > .i { fill: <cms:show primary /> !important; opacity: 1; }
+
+        /* 6. Active Sidebar Items -> SECONDARY Color */
+        #nav>li>.nav-active, #nav>li>.nav-active:hover, #nav>li>.nav-active:focus,
+        .nav-group>ul>li>.nav-active, .nav-group>ul>li>.nav-active:hover, .nav-group>ul>li>.nav-active:focus {
+            background-color: <cms:show secondary /> !important;
+            color: #ffffff !important;
+            border-color: <cms:show secondary /> !important;
+        }
+        .nav-active.nav-icon > .i { fill: #ffffff !important; opacity: 1; }
+
+        /* 7. Buttons & Form Elements -> PRIMARY Color */
+        .btn.btn-primary, .btn-menu.toggled, .table.table-primary>thead,
+        .ctrl>input:checked+span.ctrl-option, .ctrl>input:active+span.ctrl-option,
+        .ctrls-checkbox>label>input:checked+span.ctrl-option, .ctrls-radio>label>input:checked+span.ctrl-option,
+        .checklist>li>label>input:checked+span.ctrl-option,
+        .panel-heading.panel-primary {
+            background-color: <cms:show primary /> !important;
+            border-color: <cms:show primary /> !important;
+            color: #ffffff !important;
+        }
+
+        .select>select:focus+.select-caret>.i, .prepend>.text:focus~.i, .prepend>.password:focus~.i { 
+            fill: <cms:show primary /> !important; 
+        }
+        button.btn-txt:hover, button.btn-txt:focus { 
+            color: <cms:show primary /> !important; 
+            fill: <cms:show primary /> !important; 
+        }
+
+        /* 8. Button Hover States -> SECONDARY Color */
+        .btn.btn-primary:focus, .btn.btn-primary:active, .btn.btn-primary:hover { 
+            background-color: <cms:show secondary /> !important; 
+            border-color: <cms:show secondary /> !important; 
+        }
+
+        /* 9. Badges & Counters -> QUATERNARY Color */
+        .nav-count {
+            background-color: <cms:show quaternary /> !important;
+            border-color: <cms:show quaternary /> !important;
+            color: #111111 !important; /* Kept dark for contrast against light quaternary */
+        }
+
+        /* 10. Highlights & Borders */
+        .panel-heading.panel-primary, .panel-heading.panel-primary+.panel-body,
+        .table.table-primary, .table.table-primary>thead>tr>th { 
+            border-color: <cms:show primary /> !important; 
+        }
+        input[type="text"]:focus, input[type="password"]:focus,
+        textarea:focus, select:focus, .nicEdit-mainContain.nicEdit-mainSelected { 
+            border-color: <cms:show primary /> !important; 
+            box-shadow: 0 0 4px <cms:show primary /> !important; 
+        }
+        ::-moz-selection { background: <cms:show primary /> !important; color: #fff; }
+        ::selection { background: <cms:show primary /> !important; color: #fff; }
+
+    </style>
+    <script src="<cms:show k_system_theme_link />includes/svg4everybody.min.js?v=<cms:show k_cms_build />"></script>
+    <script src="<cms:show k_admin_link />includes/jquery-3.x.min.js?v=<cms:show k_cms_build />"></script>
+    <script src="<cms:show k_system_theme_link />includes/admin/main.js?v=<cms:show k_cms_build />"></script>
+
+    <cms:admin_meta />
+
+    <cms:admin_js_files>
+        <script type="text/javascript" src="<cms:show k_js_file />"></script>
+    </cms:admin_js_files>
+
+    <link href="<cms:show k_system_theme_link />includes/admin/images/favicon.ico" rel="shortcut icon"/>
+</head>
+<body>
+<cms:if k_show_simple>
+    <div id="scroll-content" style="left:0">
+        <div id="content">
+            <cms:admin_html />
+            <cms:show k_main_content />
+        </div>
+    </div>
+<cms:else />
+    <cms:set is_sidebar_collapsed = '0' />
+    <cms:if "<cms:gpc 'collapsed_sidebar' method='cookie' />">
+        <cms:set is_sidebar_collapsed = '1' scope='parent' />
+    </cms:if>
+
+    <div id="sidebar"<cms:if is_sidebar_collapsed> class="collapsed"</cms:if>>
+        <button class="tt" data-placement="right" id="sidebar-toggle" title="Toggle Sidebar" type="button"><cms:render 'icon' 'menu' /></button>
+        <div id="menu-wrap">
+            <a href="<cms:show k_admin_link /><cms:show k_admin_page />" id="logo-wrap"><cms:render 'logo' dark='0' id='logo' /></a>
+            <div class="btn-group" id="menu-btns">
+                <a class="btn btn-alt btn-menu" href="<cms:show k_logout_link />"><cms:show_icon 'account-logout' /></a>
+                <a class="btn btn-alt btn-menu" href="<cms:show k_site_link />" target="_blank"><cms:show_icon 'magnifying-glass' /></a>
+                <button class="btn btn-primary btn-menu" type="button"><cms:show_icon 'menu' /></button>
+            </div>
+        </div>
+        <div id="menu-content">
+            <div class="sidebar-txt" id="sidebar-top"><p><cms:localize 'greeting' /> <a href="<cms:show k_user_edit_link />"><cms:show k_user_title /></a></p></div>
+            <div id="scroll-sidebar">
+
+                <cms:render 'sidebar' />
+
+                <cms:if k_user_access_level ge '10'>
+                    <div id="nav-links">
+                        <a href="<cms:show k_admin_link />gen_dump.php">Download Dump</a>
+                        <cms:if k_prettyurls >
+                            <a class="popup-ajax" href="<cms:show k_admin_link />gen_htaccess.php" target="_blank">Generate .htaccess</a>
+                        </cms:if>
+                    </div>
+                </cms:if>
+            </div>
+            <div class="btn-group" id="sidebar-btns">
+                <a class="btn btn-primary" href="<cms:show k_logout_link />" id="log-out"><cms:show_icon 'account-logout' /><cms:localize 'logout' /></a>
+                <a class="btn btn-primary" href="<cms:show k_site_link />" id="view-site" target="_blank"><cms:show_icon 'magnifying-glass' /><cms:localize 'view_site' /></a>
+            </div>
+            <div class="sidebar-txt" id="sidebar-bot">
+                <p>
+                <cms:if k_admin_footer >
+                    <cms:show k_admin_footer />
+                <cms:else />
+                    <a href="http://www.couchcms.com/">CouchCMS Version <cms:show k_cms_version /> (<cms:show k_cms_build />)</a>
+                </cms:if>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="scroll-content">
+        <div id="header">
+            <div id="header-inner">
+                <cms:render 'toolbar' />
+                <cms:render 'title' />
+            </div>
+            <cms:render 'subtitle' />
+        </div>
+
+        <div id="content">
+            <cms:admin_html />
+            <cms:show k_main_content />
+        </div>
+    </div>
+</cms:if>
+
+<script src="<cms:show k_system_theme_link />includes/mcustomscrollbar/mcustomscrollbar.min.js?v=<cms:show k_cms_build />"></script>
+<script src="<cms:show k_system_theme_link />includes/bootstrap.min.js?v=<cms:show k_cms_build />"></script>
+<script src="<cms:show k_system_theme_link />includes/magnific-popup/magnific-popup.min.js?v=<cms:show k_cms_build />"></script>
+<script src="<cms:show k_system_theme_link />includes/toastr.min.js?v=<cms:show k_cms_build />"></script>
+
+<script type="text/javascript">
+    //<![CDATA[
+    <cms:admin_js />
+    //]]>
+</script>
+</body>
+</html>

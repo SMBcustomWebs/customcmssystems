@@ -151,7 +151,7 @@
     // 26.
     // If the admin-panel uses a custom theme, set the following to the folder-name of the theme.
     // Theme folder is expected to be within the 'couch/theme' folder. No leading or trailing slashes please.
-    define( 'K_ADMIN_THEME', 'ecomm' );
+    define( 'K_ADMIN_THEME', 'ccs_theme' );
     //unhide the following lines to move the theme folder to under the root
     //define( 'K_THEME_NAME', trim( K_ADMIN_THEME, " /\\" ) );
     //define( 'K_THEME_DIR', dirname(K_COUCH_DIR) . '/' . K_ADMIN_THEME . '/' );
