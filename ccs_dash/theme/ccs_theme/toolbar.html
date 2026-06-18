@@ -1,0 +1,84 @@
+<cms:set btn_globals = '' scope='global' />
+<cms:set btn_add_new = '' scope='global' />
+<cms:set btn_folders = '' scope='global' />
+<cms:set btn_view = '' scope='global' />
+<cms:set btn_others = '' scope='global' />
+
+<cms:admin_actions childof='toolbar'>
+    
+    <cms:capture into='temp_btn'>
+        <cms:if k_action_is_custom >
+            <cms:if k_action_render>
+                <cms:render k_action_render k_action_args />
+            <cms:else />
+                <cms:show k_action_html />
+            </cms:if>
+        <cms:else />
+            
+            <a id="<cms:if k_action_title == 'Manage Globals'>btn_globals<cms:else_if k_action_title == 'Manage Folders' />btn_folders<cms:else_if k_action_title == 'Add New' />btn_add_new<cms:else_if k_action_title == 'View' />btn_view</cms:if>" 
+               class="btn icon-collapse tt-collapse<cms:if k_action_class> <cms:show k_action_class /></cms:if>"
+                data-title="<cms:if k_action_desc><cms:show k_action_desc /><cms:else /><cms:show k_action_title /></cms:if>"
+                href="<cms:show k_action_link />"
+                <cms:if k_action_target>target="<cms:show k_action_target />"</cms:if>
+            >
+                <cms:if k_action_icon ><cms:show_icon k_action_icon /></cms:if><cms:hide>
+                </cms:hide>
+                
+                <span class="collapse-title">
+                    <cms:if k_action_title == 'Manage Globals'>
+                        Edit Global Settings
+                    <cms:else_if k_action_title == 'Manage Folders' />
+                        Edit Categories
+                    <cms:else_if k_action_title == 'Add New' />
+                        Create New Entry
+                    <cms:else />
+                        <cms:show k_action_title />
+                    </cms:if>
+                </span>
+            </a>
+        </cms:if>
+    </cms:capture>
+
+    <cms:if k_action_title == 'Manage Globals'>
+        <cms:set btn_globals = temp_btn scope='global' />
+    <cms:else_if k_action_title == 'Add New' />
+        <cms:set btn_add_new = temp_btn scope='global' />
+    <cms:else_if k_action_title == 'Manage Folders' />
+        <cms:set btn_folders = temp_btn scope='global' />
+    <cms:else_if k_action_title == 'View' />
+        <cms:set btn_view = temp_btn scope='global' />
+    <cms:else />
+        <cms:set btn_others = "<cms:show btn_others /><cms:show temp_btn />" scope='global' />
+    </cms:if>
+
+</cms:admin_actions>
+
+
+<div class="toolbar-custom-layout" style="display: flex; gap: 15px; justify-content: flex-end;">
+
+    <cms:if btn_add_new >
+        <div class="btn-group">
+            <cms:show btn_add_new />
+        </div>
+    </cms:if>
+
+    <cms:if btn_globals || btn_folders>
+        <div class="btn-group">
+            <cms:show btn_globals />
+            <cms:show btn_folders />
+        </div>
+    </cms:if>
+
+    <cms:if btn_others>
+        <div class="btn-group">
+            <cms:show btn_others />
+        </div>
+    </cms:if>
+
+    <cms:if btn_view>
+        <div class="btn-group">
+            <cms:show btn_view />
+        </div>
+    </cms:if>
+
+</div>
