@@ -14,13 +14,14 @@
         <link rel="stylesheet" href="<cms:show k_css_file />" type="text/css" media="screen"/>
     </cms:admin_css_files>
 
+    <link href="<cms:show k_theme_link />style.css?v=<cms:show k_cms_build />" rel="stylesheet"/>
+
     <cms:pages masterpage='globals.php' limit='1'>
-		
-		<cms:set ccs_custom_color_opt = ccs_gl_site_custom_color_opt scope='global' />
-		<cms:set ccs_thm_opt = ccs_gl_site_thm_opt scope='global' />
-		<cms:set ccs_thm_clr_opt = ccs_gl_site_thm_clr_opt scope='global' />
-		
-		
+        
+        <cms:set ccs_custom_color_opt = ccs_gl_site_custom_color_opt scope='global' />
+        <cms:set ccs_thm_opt = ccs_gl_site_thm_opt scope='global' />
+        <cms:set ccs_thm_clr_opt = ccs_gl_site_thm_clr_opt scope='global' />
+        
         <cms:if ccs_gl_site_custom_color_opt >
             <cms:set primary="<cms:show ccs_gl_site_primary_cust />" scope="global" />
             <cms:set secondary="<cms:show ccs_gl_site_secondary_cust />" scope="global" />
@@ -137,10 +138,7 @@
     <style>
         <cms:admin_css />
         
-        /* Custom White-Label Stylesheet */
-
-
-/* DECLARE ALL CSS VARIABLES FOR STYLES.CSS */
+        /* DECLARE ALL CSS VARIABLES GLOBALLY SO style.css CAN INHERIT THEM */
         :root {
             --admin-primary: <cms:show primary />;
             --admin-secondary: <cms:show secondary />;
@@ -156,294 +154,13 @@
             --admin-black: <cms:show black />;
             --admin-bg: <cms:show body_bg />;
             --admin-text: <cms:show body_clr />;
-        }		
-		
-		
-        /* 1. Neutral Workspace Background */
-        body, #simple-page, #tabs-page #content { 
-            background-color: #f4f6f8 !important; 
-            color: #333333 !important; 
-        }
-        #header, #tabs-page .ctrl-bot { 
-            background-color: #ffffff !important; 
-        }
-
-        /* 2. Theme-Driven Sidebar Background */
-        #sidebar, #sidebar-btns, #menu-wrap, .sidebar-txt, #sidebar-bot, #sidebar-top { 
-            background-color: <cms:show body_bg /> !important; 
-            border-color: rgba(128, 128, 128, 0.1) !important;
-            text-shadow: none !important;
-            box-shadow: none !important;
-        }
-
-        /* 3. Theme-Driven Sidebar Text (Automatic Contrast) */
-        .sidebar-txt > p, .sidebar-txt > p > a, #sidebar-btns > .btn, 
-        #nav>li>a, .nav-group>ul>li>a {
-            color: <cms:show body_clr /> !important;
-            text-shadow: none !important;
-        }
-        .nav-icon > .i, #sidebar-toggle > .i { 
-            fill: <cms:show body_clr /> !important; 
-            opacity: 0.8;
-        }
-
-        /* 4. Group Headers -> TERTIARY Color */
-        .nav-heading-toggle {
-            color: <cms:show tertiary /> !important;
-            opacity: 0.9;
-            text-shadow: none !important;
-        }
-
-        /* 5. Hover States */
-        #nav>li>a:hover, #nav>li>a:focus, .nav-group>ul>li>a:hover, .nav-group>ul>li>a:focus { 
-            background-color: rgba(128, 128, 128, 0.1) !important; 
-            color: <cms:show primary /> !important; 
-        }
-        .nav-icon:hover > .i, .nav-icon:focus > .i { fill: <cms:show primary /> !important; opacity: 1; }
-
-        /* 6. Active Sidebar Items -> SECONDARY Color */
-        #nav>li>.nav-active, #nav>li>.nav-active:hover, #nav>li>.nav-active:focus,
-        .nav-group>ul>li>.nav-active, .nav-group>ul>li>.nav-active:hover, .nav-group>ul>li>.nav-active:focus {
-            background-color: <cms:show secondary /> !important;
-            color: #ffffff !important;
-            border-color: <cms:show secondary /> !important;
-        }
-        .nav-active.nav-icon > .i { fill: #ffffff !important; opacity: 1; }
-
-        /* 7. Buttons & Form Elements -> PRIMARY Color */
-        .btn.btn-primary, .btn-menu.toggled, .table.table-primary>thead,
-        .ctrl>input:checked+span.ctrl-option, .ctrl>input:active+span.ctrl-option,
-        .ctrls-checkbox>label>input:checked+span.ctrl-option, .ctrls-radio>label>input:checked+span.ctrl-option,
-        .checklist>li>label>input:checked+span.ctrl-option,
-        .panel-heading.panel-primary {
-            background-color: <cms:show primary /> !important;
-            border-color: <cms:show primary /> !important;
-            color: #ffffff !important;
-        }
-
-        .select>select:focus+.select-caret>.i, .prepend>.text:focus~.i, .prepend>.password:focus~.i { 
-            fill: <cms:show primary /> !important; 
-        }
-        button.btn-txt:hover, button.btn-txt:focus { 
-            color: <cms:show primary /> !important; 
-            fill: <cms:show primary /> !important; 
-        }
-
-        /* 8. Button Hover States -> SECONDARY Color */
-        .btn.btn-primary:focus, .btn.btn-primary:active, .btn.btn-primary:hover { 
-            background-color: <cms:show secondary /> !important; 
-            border-color: <cms:show secondary /> !important; 
-        }
-
-        /* 9. Badges & Counters -> QUATERNARY Color */
-        .nav-count {
-            background-color: <cms:show quaternary /> !important;
-            border-color: <cms:show quaternary /> !important;
-            color: #111111 !important; /* Kept dark for contrast against light quaternary */
-        }
-
-        /* 10. Highlights & Borders */
-        .panel-heading.panel-primary, .panel-heading.panel-primary+.panel-body,
-        .table.table-primary, .table.table-primary>thead>tr>th { 
-            border-color: <cms:show primary /> !important; 
-        }
-        input[type="text"]:focus, input[type="password"]:focus,
-        textarea:focus, select:focus, .nicEdit-mainContain.nicEdit-mainSelected { 
-            border-color: <cms:show primary /> !important; 
-            box-shadow: 0 0 4px <cms:show primary /> !important; 
-        }
-        ::-moz-selection { background: <cms:show primary /> !important; color: #fff; }
-        ::selection { background: <cms:show primary /> !important; color: #fff; }
-		
-		
-/* =========================================================
-   CUSTOM TOOLBAR BUTTONS (Specificity Fix)
-   ========================================================= */
-
-/* 1. Add New Button -> SUCCESS Color */
-body #header a.btn#btn_add_new {
-    background-color: var(--admin-success) !important;
-    border-color: var(--admin-success) !important;
-    color: #ffffff !important;
-}
-
-body #header a.btn#btn_add_new:hover,
-body #header a.btn#btn_add_new:focus {
-    background-color: var(--admin-secondary) !important;
-    border-color: var(--admin-secondary) !important;
-}
-
-/* 2. Folders & Globals Buttons -> Solid PRIMARY Color */
-body #header a.btn#btn_globals,
-body #header a.btn#btn_folders {
-    background-color: var(--admin-primary) !important;
-    border-color: var(--admin-primary) !important;
-    color: #ffffff !important;
-}
-
-body #header a.btn#btn_globals:hover,
-body #header a.btn#btn_globals:focus,
-body #header a.btn#btn_folders:hover,
-body #header a.btn#btn_folders:focus {
-    background-color: var(--admin-tertiary) !important;
-    border-color: var(--admin-tertiary) !important;
-    color: #ffffff !important;
-}
-
-/* 3. The main 'View' button -> INFO Color */
-body #header a.btn#btn_view {
-    background-color: var(--admin-info) !important;
-    border-color: var(--admin-info) !important;
-    color: #ffffff !important;
-}
-
-body #header a.btn#btn_view:hover,
-body #header a.btn#btn_view:focus,
-body #header a.btn#btn_view:active {
-    background-color: var(--admin-quaternary) !important;
-    border-color: var(--admin-quaternary) !important;
-}
-
-/* 4. Ensure SVG icons match the text color */
-body #header a.btn#btn_add_new .i,
-body #header a.btn#btn_globals .i,
-body #header a.btn#btn_folders .i,
-body #header a.btn#btn_view .i {
-    fill: currentColor !important;
-}
-
-/* =========================================================
-   VERIFIED SPECIFICITY OVERRIDES 
-   ========================================================= */
-
-/* Target: Mosaic "Add New" Buttons */
-button.btn.btn-success.mosaic-btn-add {
-    background-color: var(--admin-success) !important;
-    border-color: var(--admin-success) !important;
-    color: #ffffff !important;
-}
-
-button.btn.btn-success.mosaic-btn-add:hover,
-button.btn.btn-success.mosaic-btn-add:focus,
-button.btn.btn-success.mosaic-btn-add:active {
-    /* Falling back to primary for the hover state */
-    background-color: var(--admin-primary) !important;
-    border-color: var(--admin-primary) !important;
-}
-
-/* Target: Workspace Group Headers */
-#content .row-group > label.group-heading {
-    /* Uses Tertiary, falls back to Primary if Tertiary is empty */
-    background-color: var(--admin-tertiary, var(--admin-primary)) !important;
-    border-bottom-color: var(--admin-tertiary, var(--admin-primary)) !important;
-    color: #ffffff !important;
-}
-
-/* =========================================================
-   SECONDARY & ICON BUTTONS (Verified DOM Fix)
-   ========================================================= */
-
-/* Target: Default Grey Buttons (e.g., Advanced Settings) and Mosaic Icon Buttons (e.g., Trash) */
-.btn-group > button.btn.btn-default,
-.mosaic-item-btns button.btn {
-    background-color: transparent !important;
-    border: 1px solid var(--admin-primary) !important;
-    color: var(--admin-primary) !important;
-    transition: all 0.2s ease-in-out;
-}
-
-/* Ensure the SVG icons inside match the text color */
-.btn-group > button.btn.btn-default .i,
-.mosaic-item-btns button.btn .i {
-    fill: currentColor !important;
-}
-
-/* Target: Hover States */
-.btn-group > button.btn.btn-default:hover,
-.btn-group > button.btn.btn-default:focus,
-.mosaic-item-btns button.btn:hover,
-.mosaic-item-btns button.btn:focus {
-    background-color: var(--admin-primary) !important;
-    color: #ffffff !important;
-}
-
-/* =========================================================
-   SPECIFIC INDIVIDUAL BUTTONS
-   ========================================================= */
-
-/* Target: The main 'View' button */
-a.btn#btn_view {
-    background-color: var(--admin-primary) !important;
-    border-color: var(--admin-primary) !important;
-    color: #ffffff !important;
-}
-
-a.btn#btn_view:hover,
-a.btn#btn_view:focus,
-a.btn#btn_view:active {
-    background-color: var(--admin-secondary) !important;
-    border-color: var(--admin-secondary) !important;
-}
-
-/* =========================================================
-   PANEL HEADERS & MISC UI
-   ========================================================= */
-
-/* Removed .field-hint from this group */
-#sidebar-toggle,
-.panel-heading,
-.table > thead,
-.popover-title {
-    background-color: var(--admin-tertiary, var(--admin-primary)) !important;
-    color: #ffffff !important;
-    border-color: var(--admin-tertiary, var(--admin-primary)) !important;
-    
-    text-shadow: none !important; 
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-    letter-spacing: 0.5px !important; 
-}
-
-/* Ensure the primary panel headings match dynamically */
-.panel-heading.panel-primary {
-    background-color: var(--admin-tertiary, var(--admin-primary)) !important;
-}
-
-/* =========================================================
-   FIELD DESCRIPTIONS (desc= parameter)
-   ========================================================= */
-
-.field-hint {
-    background-color: transparent !important;
-    color: #555555 !important; /* 1. Bulletproof safe fallback */
-    color: var(--admin-text) !important; /* 2. Overrides ONLY if valid color exists */
-    opacity: 0.85; 
-    font-size: 13px !important;
-    margin-top: 4px !important;
-    text-shadow: none !important;
-    display: block !important;
-}
-
-/* =========================================================
-   GROUP HEADER DESCRIPTIONS (desc= parameter in groups)
-   ========================================================= */
-
-.panel-heading .k_desc,
-.panel-heading .desc,
-a.panel-heading span.k_desc.desc {
-    background-color: transparent !important;
-    color: rgba(255, 255, 255, 0.85) !important; /* Soft white for contrast */
-    font-size: 13px !important;
-    font-weight: normal !important;
-    margin-left: 8px !important;
-    text-shadow: none !important;
-    letter-spacing: 0.5px !important;
-}
-
-		
-		
-
+        }       
     </style>
+	
+	
+	
+	
+	
     <script src="<cms:show k_system_theme_link />includes/svg4everybody.min.js?v=<cms:show k_cms_build />"></script>
     <script src="<cms:show k_admin_link />includes/jquery-3.x.min.js?v=<cms:show k_cms_build />"></script>
     <script src="<cms:show k_system_theme_link />includes/admin/main.js?v=<cms:show k_cms_build />"></script>
@@ -455,6 +172,7 @@ a.panel-heading span.k_desc.desc {
     </cms:admin_js_files>
 
     <link href="<cms:show k_system_theme_link />includes/admin/images/favicon.ico" rel="shortcut icon"/>
+	
 </head>
 <body>
 <cms:if k_show_simple>

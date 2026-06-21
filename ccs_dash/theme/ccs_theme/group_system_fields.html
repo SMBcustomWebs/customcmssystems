@@ -1,0 +1,34 @@
+<div id="admin_wrapper_system_fields" <cms:if k_field_hidden>style="display:none;"</cms:if>>
+    
+    <style>
+        #k_element_k_image,
+        #k_element_k_k_desc {
+            display: none !important;
+        }
+    </style>
+	<script>
+    $(function() {
+        // Find the Parent Folder label span and replace its text
+        $('#k_label_f_k_pid span').text('Menu Category (Maximum 2 levels deep)');
+    });
+</script>
+    <cms:admin_form_fields childof='_system_fields_' depth='1'>
+        
+        <cms:set skip_system_field='0' />
+
+        <cms:if k_field_name='k_weight'>
+            <cms:set skip_system_field='1' />
+        </cms:if>
+
+        <cms:if k_route_module='folders'>
+            <cms:if k_field_name='k_name'>
+                <cms:set skip_system_field='1' />
+            </cms:if>
+        </cms:if>
+
+        <cms:if skip_system_field='0'>
+            <cms:render 'form_row' />
+        </cms:if>
+
+    </cms:admin_form_fields>
+</div>

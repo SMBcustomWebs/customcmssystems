@@ -96,9 +96,7 @@
             </cms:style>
             <cms:ignore>
                 <cms:script>
-                    function test(){
-                        alert( 'Hello<cms:show k_count />' );
-                    }
+                    
                 </cms:script>
                 <cms:html>
                     <cms:repeat '3' startcount='1'>
@@ -128,12 +126,13 @@
             <cms:field 'k_selector_checkbox' />
         </cms:config_list_view>
         <cms:config_form_view>
+			
             <cms:field 'k_page_title' label='Employee Name' group='_custom_fields_' />
             <cms:field 'k_page_name' hide='1' />
-            <cms:field 'k_folder_title' label='Submenu Title'  />
+            
     		<cms:field 'k_folder_name' hide='1' />
 			
-            <cms:field 'k_page_folder_id' label='Menu To Place Under' desc='may not choose crossed-out names'  group='_custom_fields_' />
+            <cms:field 'k_page_folder_id' label='Menu Category' group='_custom_fields_' />
             <cms:jit_fields>
                 <cms:if k_page_id ne '-1'>
                 
@@ -143,66 +142,7 @@
     </cms:template>
     <!--<cms:ignore><cms:embed 'pg_frame/head.htm' /></cms:ignore>-->
     <cms:embed 'tl_if_pb_emb.html' />
-<!-- <cms:ignore>
-<h1>Folders:</h1>
-  <cms:folders hierarchical='1' childof=k_folder_name limit='1'  >
-    <h2><cms:show k_folder_title /></h2><cms:dump />HERE
-      <cms:folders hierarchical='1' include_custom_fields='1' childof=k_folder_name  >
-          -<a href="<cms:show k_folder_link />"><cms:show k_folder_title /></a><br />
-      </cms:folders>
-  </cms:folders><br>
-  <h1>Pages:</h1>
-  <cms:pages masterpage=k_template_name limit='1'>
-    <cms:dump />
-  </cms:pages>
-<cms:show k_template_folder_masterpage />
-is k page?: <cms:show k_is_page />
-<cms:if k_is_page>
-    <h1>Page-view: <cms:show k_page_title /></h1>
-   
-    < !-- if page is contained within a folder -- >
-    <cms:if k_page_foldername >
-        <h3>Page in folder: <cms:show k_page_foldertitle /></h3>
-       
-        < !-- bring the containing folder in context using cms:folders like this -- >
-        <cms:folders hierarchical='1' include_custom_fields='1' root=k_page_foldername depth='2'>
-       DUMP FROM FOLDER INSIDE PAGE INSIDE PAGE VIEW:<br>
-            <cms:dump />
-           
-           
-        </cms:folders>
-       
-    </cms:if>
 
-</cms:if></cms:ignore> -->
-      
-
-
-
-
-
-
-<!--
-<h2>About Company</h2>
-  <section class="p-0 text-white">
-
-    <div class="bg-holder overlay overlay-2" style="background-image:url(<cms:show k_site_link />assets/images/about-company.jpg);">
-    </div>
-    <!--/.bg-holder-- >
-
-    <div class="container">
-      <div class="row min-vh-50 align-items-center py-5">
-        <div class="col-md-8 col-lg-5">
-          <h1 class="fs-6 fs-md-5 mb-3 text-white">About Posh </h1>
-          <p class="fw-light fs-8">Responsive in design | Elegant in Style One Perfect Template for Anything</p>
-        </div>
-      </div>
-    </div>
-    <!-- end of .container-- >
-
-  </section>
-  <!-- <section> close ============================-->
-  <!-- ============================================-->
 
 
 <?php COUCH::invoke(); ?>

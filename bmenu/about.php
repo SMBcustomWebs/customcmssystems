@@ -41,8 +41,8 @@
     </cms:config_list_view>
     
     <cms:config_form_view>
-        <cms:field 'k_folder_title' label='Submenu Title'  />
-        <cms:field 'k_folder_name' hide='1' />
+        <cms:field 'k_label_f_k_title' label='Subcategory Name' group='_custom_fields_' />
+        <cms:field 'f_k_name' hide='1' />
         <cms:field 'k_page_image' hide='0' />
         <cms:jit_fields>
             <cms:if k_page_id ne '-1'>

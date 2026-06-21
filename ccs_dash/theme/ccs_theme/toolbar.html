@@ -26,11 +26,11 @@
                 
                 <span class="collapse-title">
                     <cms:if k_action_title == 'Manage Globals'>
-                        Edit Global Settings
+                        Edit '<cms:show k_template_title />' Home
                     <cms:else_if k_action_title == 'Manage Folders' />
-                        Edit Categories
+                        '<cms:show k_template_title />' Categories
                     <cms:else_if k_action_title == 'Add New' />
-                        Create New Entry
+    					Create New '<cms:show k_template_title />' <cms:if k_route_module='folders'>Category<cms:else />Page</cms:if>
                     <cms:else />
                         <cms:show k_action_title />
                     </cms:if>
@@ -56,16 +56,23 @@
 
 <div class="toolbar-custom-layout" style="display: flex; gap: 15px; justify-content: flex-end;">
 
-    <cms:if btn_add_new >
+    <cms:if btn_globals>
         <div class="btn-group">
-            <cms:show btn_add_new />
+            <cms:show btn_globals />
+            
         </div>
     </cms:if>
 
-    <cms:if btn_globals || btn_folders>
+	<cms:if btn_folders>
         <div class="btn-group">
-            <cms:show btn_globals />
+            
             <cms:show btn_folders />
+        </div>
+    </cms:if>	
+	
+    <cms:if btn_add_new>
+        <div class="btn-group">
+            <cms:show btn_add_new />
         </div>
     </cms:if>
 
