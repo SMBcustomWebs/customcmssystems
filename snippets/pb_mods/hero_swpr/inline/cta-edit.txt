@@ -1,0 +1,30 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+
+    <cms:set cur_cta_rmv="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_rmv" />" />
+    <cms:set cur_cta_txt="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_txt" />" />
+    
+    <cms:if cur_cta_rmv == '1' || cur_cta_txt == ''>
+        <cms:set cta_btn_cls="btn-outline-secondary bg-white opacity-50" />
+    <cms:else />
+        <cms:set cta_btn_cls="btn-light shadow-sm" />
+    </cms:if>
+
+    <cms:if cur_scl_opt == '0'>
+        <cms:set scl_btn_cls="btn-outline-secondary bg-white opacity-50" />
+    <cms:else />
+        <cms:set scl_btn_cls="btn-light shadow-sm" />
+    </cms:if>
+
+    <cms:popup_edit 
+        "ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_msg|ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_ctrl_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_rmv|ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_txt|ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_lnk|ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_ovr|ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_cst_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_cta_cst_lnk|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_clr_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_halg|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_clr|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_std_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_fill|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_st|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_sz|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_w|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_lnk_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_lnk_clr|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_icon_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_icon_pos|ccs_hro_swpr_sl_<cms:show cur_slide_num />_loc_cta_icon_fa"
+        hide_fields="ccs_hro_swpr_sl_<cms:show cur_slide_num />_grp|hero_swpr_glbl_cta_mode"
+        link_text="<button class='btn btn-sm <cms:show cta_btn_cls /> rounded-circle mb-3' type='button' aria-label='Edit Link Button' title='Edit Link Button'><i class='fa-solid fa-link'></i></button>" 
+    />
+
+    <cms:popup_edit 
+        "ccs_hro_swpr_sl_<cms:show cur_slide_num />_scl_msg|ccs_hro_swpr_sl_<cms:show cur_slide_num />_scl_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_scl_opt|ccs_hro_swpr_sl_<cms:show cur_slide_num />_scl_halg"
+        hide_fields="ccs_hro_swpr_sl_<cms:show cur_slide_num />_grp"
+        link_text="<button class='btn btn-sm <cms:show scl_btn_cls /> rounded-circle' type='button' aria-label='Toggle Social Links' title='Toggle Social Links'><i class='fa-solid fa-share-nodes'></i></button>" 
+    />
+
+</cms:if>

@@ -15,7 +15,7 @@
 
 <cms:if loc_img != ''>
     <img class="img-fluid object-fit-<cms:show loc_img_fit />" 
-         style="max-height: 60vh; <cms:if loc_img_fit == 'contain'>width: auto;<cms:else />width: 100%; object-position: <cms:show loc_img_pos />;</cms:if>"
+         style="max-height: 100%; <cms:if loc_img_fit == 'contain'>width: auto;<cms:else />width: 100%; object-position: <cms:show loc_img_pos />;</cms:if>"
          src="<cms:show loc_img />" 
          alt="<cms:show loc_img_alt />" 
     />

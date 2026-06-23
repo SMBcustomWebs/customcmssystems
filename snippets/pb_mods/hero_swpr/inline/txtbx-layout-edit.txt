@@ -1,0 +1,7 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <cms:popup_edit 
+        "ccs_hro_swpr_sl_<cms:show k_count />_lyt_msg|ccs_hro_swpr_sl_<cms:show k_count />_lyt_ovr_row|ccs_hro_swpr_sl_<cms:show k_count />_lyt_ovr|ccs_hro_swpr_sl_<cms:show k_count />_layout_row|ccs_hro_swpr_sl_<cms:show k_count />_bx_sz|ccs_hro_swpr_sl_<cms:show k_count />_valg|ccs_hro_swpr_sl_<cms:show k_count />_halg|ccs_hro_swpr_sl_<cms:show k_count />_txt_alg|ccs_hro_swpr_sl_<cms:show k_count />_txtbx_opt_row|ccs_hro_swpr_sl_<cms:show k_count />_py_ht|ccs_hro_swpr_sl_<cms:show k_count />_txtbx_bg_opt|ccs_hro_swpr_sl_<cms:show k_count />_txtbx_bg_row|ccs_hro_swpr_sl_<cms:show k_count />_txtblk_bg_pd|ccs_hro_swpr_sl_<cms:show k_count />_txtblk_bg_clr|ccs_hro_swpr_sl_<cms:show k_count />_txtblk_bg_opc|ccs_hro_swpr_sl_<cms:show k_count />_txtbx_brd_row|ccs_hro_swpr_sl_<cms:show k_count />_txtblk_bg_brd_siz|ccs_hro_swpr_sl_<cms:show k_count />_txtblk_bg_brd_sty|ccs_hro_swpr_sl_<cms:show k_count />_txtblk_bg_brd_clr|ccs_hro_swpr_sl_<cms:show k_count />_txtblk_brd_rad|ccs_hro_swpr_sl_<cms:show k_count />_txtblk_brd_spc"
+        hide_fields="ccs_hro_swpr_sl_<cms:show k_count />_grp|hero_swpr_glbl_txtbx_mode"
+        link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Text Box Layout' title='Edit Text Box Layout'><i class='fa-solid fa-object-group'></i></button>" 
+    />
+</cms:if>

@@ -6,19 +6,28 @@
             
             <div class="<cms:show cur_box_classes /> text-<cms:show act_txt_alg /> <cms:if has_backdrop == '1'>p-<cms:if act_bg_pd != ''><cms:show act_bg_pd /><cms:else />0</cms:if></cms:if> position-relative z-3">
                 
+                <div class="position-absolute top-0 start-0 ms-n4 z-10 d-flex flex-column gap-2">
+                    <cms:embed 'pb_mods/hero_swpr/inline/txtbx-layout-edit.txt' /> 
+                    <cms:embed 'pb_mods/hero_swpr/inline/payload-edit.txt' /> 
+                </div>
+                
                 <cms:if act_blk_opt == '1'>
-                    <cms:embed 'pb_mods/hero/theme/hero_swiper_txtbx_img.html' />
+                    <cms:embed 'pb_mods/hero_swpr/theme/hero_swiper_txtbx_img.html' />
                 <cms:else />
-                    <cms:embed 'pb_mods/hero/theme/hero_swiper_txtbx_txt.html' />
+                    <cms:embed 'pb_mods/hero_swpr/theme/hero_swiper_txtbx_txt.html' />
                 </cms:if>
                 
-                <cms:embed 'pb_mods/hero/theme/hero_swiper_cta.html' /> 
+                <cms:embed 'pb_mods/hero_swpr/theme/hero_swiper_cta.html' /> 
                 
                 <cms:if cur_scl_opt == '1'>
                     <div class="d-flex w-100 justify-content-<cms:if cur_scl_halg><cms:show cur_scl_halg /><cms:else />center</cms:if> mt-3">
                         <cms:embed 'pb_mods/hero/theme/hero_social.html' />
                     </div>
                 </cms:if>
+
+                <div class="position-absolute bottom-0 end-0 me-n4 z-10 d-flex flex-column gap-2">
+					<cms:embed 'pb_mods/hero_swpr/inline/cta-edit.txt' />
+				</div>
 
             </div>
 
