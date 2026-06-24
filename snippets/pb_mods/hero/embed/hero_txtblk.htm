@@ -36,28 +36,83 @@
             class='col-sm-6 col-md-4'
             order='6'
         />
+
+		/>
     </cms:editable>
     
-    <cms:editable type='row' name='ccs_hro_txtblk_bg_row' order='15'>
-        <cms:editable type='dropdown' name='ccs_hro_txtbx_bg_opt' label='Add Background' desc='options will show below'
-            opt_values='No Background=0 | Add Background to Text Area=1'
-            class='col-sm-6 col-md-4'
-            order='2'
-        />
-    </cms:editable>
+    <cms:ignore> --- Text Box Style Toggle --- </cms:ignore>
+	<cms:editable type='row' name='ccs_hro_txtblk_bg_row' order='15'>
+		<cms:editable type='dropdown' name='ccs_hro_txtbx_bg_opt' label='Text Box Style' desc='Background visibility' 
+			opt_values='None=none | Backdrop Only=backdrop | Backdrop with Border=border' 
+			opt_selected='none' 
+			class='col-md-6' 
+			order='2' 
+		/>
+	</cms:editable>
 
-    <cms:func _into='ccs_hro_txtbx_bg_chc' ccs_hro_txtbx_bg_opt=''>
-        <cms:if ccs_hro_txtbx_bg_opt='1'>0<cms:else />1</cms:if>
-    </cms:func>
-     
-    <cms:editable type='row' name='ccs_hro_txtblk_pd_row' order='20'>
-        <cms:editable type='dropdown' name='ccs_hro_txtblk_bg_pd' label='Inner Padding' desc='space from text block edge'
-            opt_values='dropdowns/padding.htm'
-            dynamic='opt_values'
-            class='col-sm-6 col-md-4'
-            order='2'
-        />
-    </cms:editable>
+	<cms:ignore> --- Backdrop Logic & Row --- </cms:ignore>
+	<cms:func _into='ccs_hro_hide_txtbx_bg' ccs_hro_txtbx_bg_opt=''>
+		<cms:if ccs_hro_txtbx_bg_opt == 'none'>1<cms:else />0</cms:if>
+	</cms:func>
+
+	<cms:editable type='row' name='ccs_hro_txtblk_bg_clr_row' not_active=ccs_hro_hide_txtbx_bg order='20'>
+		<cms:editable type='dropdown' name='ccs_hro_txtblk_bg_pd' label='Inner Padding' desc='Space from text block edge' 
+			opt_values='dropdowns/padding.htm' 
+			dynamic='opt_values' 
+			class='col-md-4' 
+			order='2' 
+		/>
+		<cms:editable type='dropdown' name='ccs_hro_txtblk_bg_clr' label='Textblock Color' 
+			opt_values='dropdowns/solid-colors.htm' 
+			dynamic='opt_values' 
+			class='col-md-4' 
+			order='4' 
+		/>
+		<cms:editable type='dropdown' name='ccs_hro_txtblk_bg_opc' label='Textblock Background Opacity' desc='Transparency of the text box' 
+			opt_values='dropdowns/img-transparency.htm' 
+			dynamic='opt_values' 
+			class='col-md-4' 
+			order='6' 
+		/>
+	</cms:editable>
+
+	<cms:ignore> --- Border Logic & Row --- </cms:ignore>
+	<cms:func _into='ccs_hro_hide_txtbx_brd' ccs_hro_txtbx_bg_opt=''>
+		<cms:if ccs_hro_txtbx_bg_opt != 'border'>1<cms:else />0</cms:if>
+	</cms:func>
+
+	<cms:editable type='row' name='ccs_hro_txtblk_bg_bd_row' not_active=ccs_hro_hide_txtbx_brd order='25'>
+		<cms:editable type='dropdown' name='ccs_hro_txtblk_bg_brd_siz' label='Border Size' 
+			opt_values='dropdowns/border-size.htm' 
+			dynamic='opt_values' 
+			class='col-md-3' 
+			order='2' 
+		/>
+		<cms:editable type='dropdown' name='ccs_hro_txtblk_bg_brd_sty' label='Border Style' 
+			opt_values='dropdowns/border-style.htm' 
+			dynamic='opt_values' 
+			class='col-md-3' 
+			order='4' 
+		/>
+		<cms:editable type='dropdown' name='ccs_hro_txtblk_bg_brd_clr' label='Border Color' 
+			opt_values='dropdowns/solid-colors.htm' 
+			dynamic='opt_values' 
+			class='col-md-3' 
+			order='6' 
+		/>
+		<cms:editable type='dropdown' name='ccs_hro_txtblk_brd_rad' label='Border Radius' 
+			opt_values='dropdowns/border-radius.htm' 
+			dynamic='opt_values' 
+			class='col-md-3' 
+			order='8' 
+		/>
+		<cms:editable type='dropdown' name='ccs_hro_txtblk_brd_spc' label='Border Distance' desc='Space around the border' 
+			opt_values='dropdowns/outline-offset.htm' 
+			dynamic='opt_values' 
+			class='col-md-12 mt-3' 
+			order='10' 
+		/>
+	</cms:editable>
 
 	<cms:editable type='row' name='ccs_hro_txtbx_cstm_sz_row' not_active=ccs_hro_txtbx_sz_chc order='143'>
 		<cms:editable type='message' name='ccs_hro_txtbx_cstm_sz_msg' order='2'>

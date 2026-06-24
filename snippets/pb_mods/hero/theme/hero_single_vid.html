@@ -1,8 +1,10 @@
 <cms:embed 'pb_mods/hero/theme/hero_custom_settings.html' />
 
-<section id="<cms:show local_hero_id />" class="bg-<cms:show ccs_hro_bg_clr_opt /> p-0 has-parallax position-relative">
+<section id="<cms:show local_hero_id />" class="p-0 has-parallax position-relative">
     
-    <div class="bg-holder overlay overlay-<cms:show ccs_hro_ovrly_clr_opt />" 
+    <div class="bg-holder hro-base"></div>
+
+    <div class="bg-holder" 
          style="background-image:url(<cms:show ccs_hro_bg_img />);"
          role="img" 
          aria-label="<cms:show ccs_hro_bg_alt />"
@@ -10,7 +12,7 @@
          data-parallax="data-parallax">
          
          <div class="position-absolute top-0 start-0 w-100 h-100 overflow-hidden">
-             <cms:if ccs_hro_bg_vid_src_opt='1'>
+             <cms:if ccs_hro_bg_vid_src_opt == '1'>
                  <div class="bg-youtube w-100 h-100" data-youtube-embed='{"videoId":"<cms:show ccs_hro_bg_ytb_id />","startSeconds":"<cms:show ccs_hro_bg_ytb_str />","endSeconds":"<cms:show ccs_hro_bg_ytb_stp />"}'></div>
              <cms:else />
                  <video class="bg-video w-100 h-100 object-fit-cover" autoplay="autoplay" loop="loop" muted="muted" playsinline="playsinline">
@@ -20,21 +22,20 @@
                  </video>
              </cms:if>
          </div>
-         
     </div>
+    
+    <cms:if ccs_hro_ovrly_clr_opt != 'transparent' && ccs_hro_ovrly_clr_opt != 'none' && ccs_hro_ovrly_clr_opt != ''>
+        <div class="bg-holder hro-overlay"></div>
+    </cms:if>
     
     <cms:embed 'pb_mods/hero/theme/hero_container_single.html' is_video_tile='1' />
 
     <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")> 
-        
         <div class="position-absolute top-50 start-0 translate-middle-y ms-3 z-3 d-flex flex-column gap-2">
-            
-            
         </div>
         
         <div class="position-absolute bottom-0 start-0 m-3 z-3">
             <cms:popup_edit '*' link_text='<button class="btn btn-danger shadow-sm" type="button" aria-label="Master Edit Settings" title="All Hero Settings"><i class="fa-solid fa-gear"></i> Master Edit</button>' />
         </div>
-        
     </cms:if> 
 </section>

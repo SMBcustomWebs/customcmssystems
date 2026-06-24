@@ -6,7 +6,7 @@
 
     <cms:editable type='row' name='ccs_hro_gen_layout_row' order='5'>
         <cms:editable type='dropdown' name='ccs_hro_vht' label='Main Height of Section' desc='Overall vertical space.'
-            opt_values='Full=100|Half=50|3/4=75|1/4=25'
+            opt_values='Full=100|Half=50|3/4=75'
             class='col-sm-6 col-md-4'
             order='2'
         />
@@ -16,7 +16,7 @@
             class='col-sm-6 col-md-4'
             order='4'
         />
- 		 <cms:editable type='dropdown' name='ccs_hro_bg_scrl_spd' label='Page Scrolling Effect' desc='Creates a 3D effect. Negative numbers push the image behind the page; positive numbers pull it to the front.'
+ 		 <cms:editable type='dropdown' name='ccs_hro_bg_scrl_spd' label='Page Scrolling Effect' desc='Creates a 3D effect. May add zoom to background image'
             opt_values='dropdowns/prlx-scrl.htm'
             dynamic='opt_values'
             class='col-sm-6 col-md-4'
@@ -63,16 +63,18 @@
             class='col-sm-6 col-md-3'
             order='2'
         />
-        <cms:editable type='dropdown' name='ccs_hro_cta_opt' label='How Many Link Buttons?' desc='Choose 0 to 3 buttons'
-            opt_values='None=0|1|2|3'
-            class='col-sm-6 col-md-3'
-            order='4'
-        />
-	  <cms:editable type='dropdown' name='ccs_hro_cta_social' label='Add Social Links' desc='links set at Global Site Settings'
+		<cms:func _into='hide_cta_opt' ccs_hro_txtblk_blk_opt=''>
+			<cms:if ccs_hro_txtblk_blk_opt == '2'>
+				1
+			<cms:else />
+				0
+			</cms:if>
+		</cms:func>
+		<cms:editable type='dropdown' name='ccs_hro_cta_social' label='Add Social Links' desc='links set at Global Site Settings'
             opt_values='No Social Links=0 | Add Social Buttons=1'
             class='col-sm-6 col-md-3'
-            order='6'
-        />
+            order='4'
+        />	  
 		<cms:func _into='ccs_hro_hide_social_align' ccs_hro_cta_social=''>
 			<cms:if ccs_hro_cta_social == '0'>1<cms:else />0</cms:if>
 		</cms:func>
@@ -81,8 +83,14 @@
 			opt_selected='center' 
 			not_active=ccs_hro_hide_social_align
 			class='col-sm-6 col-md-3' 
-			order='8'
+			order='6'
 		/>
+		 <cms:editable type='dropdown' name='ccs_hro_cta_opt' label='How Many Link Buttons?' desc='Choose 0 to 3 buttons'
+            opt_values='None=0|1|2|3'
+			not_active=hide_cta_opt
+            class='col-sm-6 col-md-3'
+            order='8'
+        />
     </cms:editable>
 	<cms:editable type='message' name='ccs_hro_opt_div' order='19'>
 		<hr><br>

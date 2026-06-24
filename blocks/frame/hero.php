@@ -11,7 +11,6 @@
 			<cms:embed 'pb_mods/hero/embed/hero_txtblk_txt.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_txtblk_img.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_txtblk_form.htm' />
-			<cms:embed 'pb_mods/hero/embed/hero_txtblk_bg.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_cta.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_modal-add.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_btm_rail.htm' />
@@ -27,7 +26,6 @@
 			<cms:embed 'pb_mods/hero/embed/hero_txtblk_txt.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_txtblk_img.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_txtblk_form.htm' />
-			<cms:embed 'pb_mods/hero/embed/hero_txtblk_bg.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_cta.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_modal-add.htm' />
 			<cms:embed 'pb_mods/hero/embed/hero_btm_rail.htm' />
