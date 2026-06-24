@@ -55,14 +55,20 @@
     </cms:editable>
  	<cms:editable type='message' name='ccs_hro_clr_div' order='14'>
 		<hr><br>
-		<h4>Header display and navigation</h4>
+		<h3>What's in the box?</h3>
 	</cms:editable>
-	<cms:editable type='row' name='ccs_hro_cta_row' order='15'>
+	<cms:editable type='row' name='ccs_hro_txtopt_row' order='15'>
         <cms:editable type='dropdown' name='ccs_hro_txtblk_blk_opt' label='Text Block Information' desc='what is inside text block. All options below'
             opt_values='Text=0|Image=1|Interactive Form=2'
             class='col-sm-6 col-md-3'
             order='2'
         />
+	</cms:editable>
+	 	<cms:editable type='message' name='ccs_hro_scl_div' order='19'>
+		<hr><br>
+		<h4>Social and navigation</h4>
+	</cms:editable>
+	<cms:editable type='row' name='ccs_hro_cta_row' order='20'>
 		<cms:func _into='hide_cta_opt' ccs_hro_txtblk_blk_opt=''>
 			<cms:if ccs_hro_txtblk_blk_opt == '2'>
 				1
@@ -92,11 +98,11 @@
             order='8'
         />
     </cms:editable>
-	<cms:editable type='message' name='ccs_hro_opt_div' order='19'>
+	<cms:editable type='message' name='ccs_hro_opt_div' order='24'>
 		<hr><br>
 		<h4>Hero extras</h4>
 	</cms:editable>
-    <cms:editable type='row' name='ccs_hro_interactivity_row' order='20'>
+    <cms:editable type='row' name='ccs_hro_interactivity_row' order='25'>
         <cms:editable type='dropdown' name='ccs_hro_mdl_add_opt' label='External Playing Media' desc='Adds an interactive popup video or photo gallery modal.'
             opt_values='No Add=0|Add Gallery=1|Add Video=2'
             class='col-sm-6 col-md-4'

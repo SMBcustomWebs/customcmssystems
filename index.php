@@ -1,12 +1,12 @@
 <?php require_once( 'ccs_dash/cms.php' ); ?>
 <cms:template title="Homepage" parent='_site_' icon='home' order="90" >
     
-    <cms:pagebuilder name='home_hero_pb' label='Homepage Hero Section' desc='1 per page' skip_custom_fields='1' order='-5'>
+    <cms:pagebuilder name='hero_pb' label='Homepage Hero Section' desc='1 per page' skip_custom_fields='1' order='-5'>
         <cms:section label='Page Hero Single' name='hm_hro_sect'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_msc' />
 		<cms:section label='Page Hero Carousel' name='hm_hero_swpr_sect'  masterpage='blocks/frame/hero_swpr.php' mosaic='ccs_hro_swpr_msc' />
     </cms:pagebuilder>
 	
-    <cms:pagebuilder name='home_cont_pb' label='Homepage Content Section' desc='' skip_custom_fields='1' order='-1'>
+    <cms:pagebuilder name='cont_pb' label='Homepage Content Section' desc='' skip_custom_fields='1' order='-1'>
 		<cms:section label='Banner Transition' name='hm_trans_sect'  masterpage='blocks/banner/transitions.php' mosaic='trns_msc' />
 	</cms:pagebuilder>
 </cms:template>
@@ -16,7 +16,7 @@
     <cms:abort><cms:dump_all /></cms:abort>   
 </cms:ignore>
 <cms:set my_redirect_link = k_page_link />
-
+<cms:set my_current_tpl = k_template_name scope='global' />
 <cms:if k_user_access_level ge '7' && "<cms:not "<cms:get_session 'inline_edit_on' />" />" >
     <cms:no_edit />
 </cms:if>
@@ -48,15 +48,17 @@
 <cms:embed 'pb_mods/pg_frame/main-cap.htm' />   
 <cms:embed 'pb_mods/pg_frame/nav/nav_emb.htm' />
 
-<cms:show_pagebuilder 'home_hero_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+<cms:show_pagebuilder 'hero_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
 	<cms:show k_content />
 </cms:show_pagebuilder>
-
+<cms:show_pagebuilder 'cont_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+	<cms:show k_content />
+</cms:show_pagebuilder>
 <cms:embed 'pb_mods/pg_frame/footer/ftr_emb.htm' />
 <cms:embed 'pb_mods/pg_frame/tail.htm' />
 <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")  >     
     <div>
-        <cms:popup_edit_ex 'home_hero_pb|home_cont_pb' width='1050' height='1200' link_text='<button class="btn btn-lg btn-danger me-2 mb-1 fs--1" type="button">Full Page Mosaic Edit</button>' /> 
+        <cms:popup_edit_ex 'hero_pb|cont_pb' width='1050' height='1200' link_text='<button class="btn btn-lg btn-danger me-2 mb-1 fs--1" type="button">Full Page Mosaic Edit</button>' /> 
     </div>         
 </cms:if>
 <?php COUCH::invoke(); ?>

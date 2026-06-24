@@ -1,11 +1,5 @@
 <div class="overflow-hidden position-relative <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>pe-5</cms:if>">
 
-    <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
-        <div class="position-absolute top-0 end-0 mt-2 me-2 z-3">
-            <cms:popup_edit 'ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_form_grp|ccs_hro_txtblk_form_opt_row|ccs_hro_txtblk_form_msg|ccs_hro_txtblk_form_opt|ccs_hro_txtblk_form_smpl_row|ccs_hro_txtblk_frm_smpl_msg|ccs_hro_txtblk_form_smplx_row|ccs_hro_txtblk_frm_smplx_msg|ccs_hro_txtblk_form_cntct_row|ccs_hro_txtblk_frm_cntc_msg|ccs_hro_frm_ttl_msg|ccs_hro_txtblk_form_ttl_row|ccs_hro_txtblk_frm_title|ccs_hro_txtblk_frm_ttl_clr|ccs_hro_txtblk_frm_ttl_sz|ccs_hro_txtblk_frm_ttl_wt|ccs_hro_txtblk_frm_ttl_fst|ccs_hro_txtblk_frm_ttl_font|ccs_hro_txtblk_frm_ttl_ls|ccs_hro_frm_para_msg|ccs_hro_txtblk_form_para_row|ccs_hro_txtblk_frm_para|ccs_hro_txtblk_frm_para_clr|ccs_hro_txtblk_frm_para_sz|ccs_hro_txtblk_frm_para_wt|ccs_hro_txtblk_frm_para_fst|ccs_hro_txtblk_frm_para_font|ccs_hro_txtblk_frm_para_ls|ccs_hro_txtblk_frm_cta_row|ccs_hro_txtblk_frm_cta_msg|ccs_hro_txtblk_frm_cta_txt|ccs_hro_txtblk_frm_cta_plc|ccs_hro_txtblk_frm_cta_clr_row|ccs_hro_txtblk_frm_cta_clr|ccs_hro_txtblk_frm_cta_fmt_row|ccs_hro_txtblk_frm_cta_fill|ccs_hro_txtblk_frm_cta_st|ccs_hro_txtblk_frm_cta_sz|ccs_hro_txtblk_frm_cta_w|ccs_hro_txtblk_frm_cta_icon_pos_row|ccs_hro_txtblk_frm_cta_icon_pos|ccs_hro_txtblk_frm_cta_icon_fa_row|ccs_hro_txtblk_frm_cta_icon_fa' hide_fields='ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_form_grp' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Form Styling" title="Edit Form Styling"><i class="fa-solid fa-list-check"></i></button>' />
-        </div>
-    </cms:if>
-
     <cms:if ccs_hro_mdl_add_opt != '0'>
         <cms:if ccs_hro_mdl_plc != 'bottom'>
             <div class="mb-4">
@@ -15,16 +9,40 @@
     </cms:if>
 
     <cms:if ccs_hro_txtblk_frm_title>
-        <h3 class="text-<cms:show ccs_hro_txtblk_frm_ttl_clr /> fs-<cms:show ccs_hro_txtblk_frm_ttl_sz /> fw-<cms:show ccs_hro_txtblk_frm_ttl_wt /> fst-<cms:show ccs_hro_txtblk_frm_ttl_fst /> font-<cms:show ccs_hro_txtblk_frm_ttl_font /> ls-<cms:show ccs_hro_txtblk_frm_ttl_ls /> mb-0">
-            <cms:show ccs_hro_txtblk_frm_title />
-        </h3>
-    </cms:if>
+		<div class="w-100 mb-3">
+			<div class="position-relative d-inline-block <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>pe-5</cms:if>">
+
+				<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+					<div class="position-absolute top-50 end-0 translate-middle-y z-3">
+						<cms:popup_edit 'ccs_hro_txtblk_blk_opt|ccs_hro_frm_ttl_msg|ccs_hro_txtblk_form_ttl_row|ccs_hro_txtblk_frm_title|ccs_hro_txtblk_frm_ttl_clr|ccs_hro_txtblk_frm_ttl_sz|ccs_hro_txtblk_frm_ttl_wt|ccs_hro_txtblk_frm_ttl_fst|ccs_hro_txtblk_frm_ttl_font|ccs_hro_txtblk_frm_ttl_ls' hide_fields='ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_form_grp' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Form Title" title="Edit Form Title"><i class="fa-solid fa-pencil"></i></button>' />
+					</div>
+				</cms:if>
+
+				<h3 class="text-<cms:show ccs_hro_txtblk_frm_ttl_clr /> fs-<cms:show ccs_hro_txtblk_frm_ttl_sz /> fw-<cms:show ccs_hro_txtblk_frm_ttl_wt /> fst-<cms:show ccs_hro_txtblk_frm_ttl_fst /> font-<cms:show ccs_hro_txtblk_frm_ttl_font /> ls-<cms:show ccs_hro_txtblk_frm_ttl_ls /> mb-0">
+					<cms:show ccs_hro_txtblk_frm_title />
+				</h3>
+
+			</div>
+		</div>
+	</cms:if>
 
     <cms:if ccs_hro_txtblk_frm_para>
-        <p class="text-<cms:show ccs_hro_txtblk_frm_para_clr /> fs-<cms:show ccs_hro_txtblk_frm_para_sz /> fw-<cms:show ccs_hro_txtblk_frm_para_wt /> fst-<cms:show ccs_hro_txtblk_frm_para_fst /> font-<cms:show ccs_hro_txtblk_frm_para_font /> ls-<cms:show ccs_hro_txtblk_frm_para_ls />">
-            <cms:show ccs_hro_txtblk_frm_para />
-        </p>
-    </cms:if>
+		<div class="w-100 mb-3">
+			<div class="position-relative d-inline-block <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>pe-5</cms:if>">
+
+				<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+					<div class="position-absolute top-50 end-0 translate-middle-y z-3">
+						<cms:popup_edit 'ccs_hro_txtblk_blk_opt|ccs_hro_frm_para_msg|ccs_hro_txtblk_form_para_row|ccs_hro_txtblk_frm_para|ccs_hro_txtblk_frm_para_clr|ccs_hro_txtblk_frm_para_sz|ccs_hro_txtblk_frm_para_wt|ccs_hro_txtblk_frm_para_fst|ccs_hro_txtblk_frm_para_font|ccs_hro_txtblk_frm_para_ls' hide_fields='ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_form_grp' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Form Byline" title="Edit Form Byline"><i class="fa-solid fa-pencil"></i></button>' />
+					</div>
+				</cms:if>
+
+				<p class="text-<cms:show ccs_hro_txtblk_frm_para_clr /> fs-<cms:show ccs_hro_txtblk_frm_para_sz /> fw-<cms:show ccs_hro_txtblk_frm_para_wt /> fst-<cms:show ccs_hro_txtblk_frm_para_fst /> font-<cms:show ccs_hro_txtblk_frm_para_font /> ls-<cms:show ccs_hro_txtblk_frm_para_ls /> mb-0">
+					<cms:show ccs_hro_txtblk_frm_para />
+				</p>
+
+			</div>
+		</div>
+	</cms:if>
 
     <cms:form name='ccs_hro_frm' class="posh-form" method="post">
         
@@ -69,20 +87,30 @@
             </cms:if>
             
             <div class="w-100 mt-4 mt-sm-3 text-<cms:show ccs_hro_txtblk_frm_cta_plc /> position-relative">
-                <button class="btn <cms:show ccs_hro_txtblk_frm_cta_sz /> btn<cms:show ccs_hro_txtblk_frm_cta_fill />-<cms:show ccs_hro_txtblk_frm_cta_clr /> <cms:show ccs_hro_txtblk_frm_cta_st /> <cms:show ccs_hro_txtblk_frm_cta_w />" type="submit">
+				<div class="position-relative d-inline-block <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>pe-5</cms:if>">
 
-                    <cms:if ccs_hro_txtblk_frm_cta_icon_pos == 'left' && ccs_hro_txtblk_frm_cta_icon_fa>
-                        <i class="<cms:show ccs_hro_txtblk_frm_cta_icon_fa /> me-2"></i>
-                    </cms:if>
+					<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+						<div class="position-absolute top-50 end-0 translate-middle-y z-3">
+							<cms:popup_edit 'ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_form_grp|ccs_hro_txtblk_frm_cta_row|ccs_hro_txtblk_frm_cta_msg|ccs_hro_txtblk_frm_cta_txt|ccs_hro_txtblk_frm_cta_plc|ccs_hro_txtblk_frm_cta_clr_row|ccs_hro_txtblk_frm_cta_clr|ccs_hro_txtblk_frm_cta_fmt_row|ccs_hro_txtblk_frm_cta_fill|ccs_hro_txtblk_frm_cta_st|ccs_hro_txtblk_frm_cta_sz|ccs_hro_txtblk_frm_cta_w|ccs_hro_txtblk_frm_cta_icon_pos_row|ccs_hro_txtblk_frm_cta_icon_pos|ccs_hro_txtblk_frm_cta_icon_fa_row|ccs_hro_txtblk_frm_cta_icon_fa' hide_fields='ccs_hro_txtblk_blk_opt|ccs_hro_txtblk_form_grp' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Submit Button" title="Edit Submit Button"><i class="fa-solid fa-pencil"></i></button>' />
+						</div>
+					</cms:if>
 
-                    <cms:show ccs_hro_txtblk_frm_cta_txt />
+					<button class="btn <cms:show ccs_hro_txtblk_frm_cta_sz /> btn<cms:show ccs_hro_txtblk_frm_cta_fill />-<cms:show ccs_hro_txtblk_frm_cta_clr /> <cms:show ccs_hro_txtblk_frm_cta_st /> <cms:show ccs_hro_txtblk_frm_cta_w />" type="submit">
 
-                    <cms:if ccs_hro_txtblk_frm_cta_icon_pos == 'right' && ccs_hro_txtblk_frm_cta_icon_fa>
-                        <i class="<cms:show ccs_hro_txtblk_frm_cta_icon_fa /> ms-2"></i>
-                    </cms:if>
+						<cms:if ccs_hro_txtblk_frm_cta_icon_pos == 'left' && ccs_hro_txtblk_frm_cta_icon_fa>
+							<i class="<cms:show ccs_hro_txtblk_frm_cta_icon_fa /> me-2"></i>
+						</cms:if>
 
-                </button>
-            </div>
+						<cms:show ccs_hro_txtblk_frm_cta_txt />
+
+						<cms:if ccs_hro_txtblk_frm_cta_icon_pos == 'right' && ccs_hro_txtblk_frm_cta_icon_fa>
+							<i class="<cms:show ccs_hro_txtblk_frm_cta_icon_fa /> ms-2"></i>
+						</cms:if>
+
+					</button>
+
+				</div>
+			</div>
 
         </cms:if>
     </cms:form>
