@@ -48,9 +48,14 @@
 <cms:embed 'pb_mods/pg_frame/main-cap.htm' />   
 <cms:embed 'pb_mods/pg_frame/nav/nav_emb.htm' />
 
+
 <cms:show_pagebuilder 'hero_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
-	<cms:show k_content />
+	<cms:if k_count == '1'>
+		<cms:show k_content />
+	</cms:if>
 </cms:show_pagebuilder>
+
+
 <cms:show_pagebuilder 'cont_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
 	<cms:show k_content />
 </cms:show_pagebuilder>
