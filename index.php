@@ -16,7 +16,7 @@
     <cms:abort><cms:dump_all /></cms:abort>   
 </cms:ignore>
 <cms:set my_redirect_link = k_page_link />
-<cms:set my_current_tpl = k_template_name scope='global' />
+
 <cms:if k_user_access_level ge '7' && "<cms:not "<cms:get_session 'inline_edit_on' />" />" >
     <cms:no_edit />
 </cms:if>
