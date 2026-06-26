@@ -10,11 +10,12 @@
             
             <cms:embed 'pb_mods/hero_swpr/theme/hero_swpr_slide_cstm-stngs.html' />
             
-            <div class="swiper-slide overflow-hidden d-flex flex-column" style="min-height: 100dvh;">
+            <div class="swiper-slide overflow-hidden d-flex flex-column hro-base bg-<cms:show swpr_bg_clr />" style="min-height: 100dvh;">
                 
-                <div class="position-absolute top-0 start-0 m-3 d-flex flex-column gap-2 z-10">
-                    <cms:embed 'pb_mods/hero_swpr/inline/img-vid-ovl.txt' /> 
-                </div>
+                <cms:embed 'pb_mods/hero_swpr/inline/img-vid-ovl.txt' /> 
+                
+                
+                
                 
                 <cms:if loc_img>
                     <div class="slide-media-layer" 
@@ -24,6 +25,7 @@
                         <img src="<cms:show loc_img />" alt="Hero Background" style="width: 100%; height: 100%; object-fit: cover;" />
                     </div>
                 </cms:if>
+
 
                 <cms:if loc_is_vid == '1'>
                     <div class="slide-video-layer" 
@@ -60,13 +62,15 @@
                     </div>
                 </cms:if>
 
-                <cms:if act_ovrly_clr>
-                    <div class="slide-overlay-layer" 
+
+                <cms:if act_ovrly_class != '' || act_ovrly_style != ''>
+                    <div class="slide-overlay-layer <cms:show act_ovrly_class />" 
                          data-parallax="data-parallax" 
                          data-rellax-speed="<cms:show ccs_hro_swpr_bg_scrl_spd />"
-                         style="position: absolute; top: -30vh; bottom: -30vh; left: 0; width: 100%; z-index: 3; background-color: <cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_ovrly_clr_opt" />; opacity: <cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_ovrly_opc" />;">
+                         style="position: absolute; top: -30vh; bottom: -30vh; left: 0; width: 100%; z-index: 3; opacity: <cms:show act_ovrly_opc />; <cms:show act_ovrly_style />">
                     </div>
                 </cms:if>
+
 
                 <div class="slide-content-layer d-flex flex-column flex-grow-1" style="position: relative; z-index: 4; width: 100%;">
                     <cms:embed 'pb_mods/hero_swpr/theme/hero_swiper_container.html' />
@@ -84,7 +88,6 @@
                 <i class="fa-solid fa-pause"></i>
             </button>
         </cms:if>
-
     </div>
 </div>
 </section>

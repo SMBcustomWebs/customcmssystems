@@ -1,0 +1,15 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+	<div class="position-absolute top-0 start-0 mt-3 ms-3 z-3 d-flex flex-column gap-2">
+		<cms:popup_edit 'ccs_hro_gen_layout_msg|ccs_hro_vht|ccs_hro_py_ht|ccs_hro_bg_scrl_spd' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Height and Layout" title="Edit Height and Layout"><i class="fa-solid fa-arrows-up-down"></i></button>' />
+
+		<cms:popup_edit 'ccs_hro_bg_clr_opt|ccs_hro_form_gen_clr_msg|ccs_hro_bg_clr_cstm_grp|ccs_hro_bg_clr_cstm_msg|ccs_hro_bg_clr_cstm_grdt_opt_row|ccs_hro_bg_clr_cstm_grdt_opt|ccs_hro_bg_clr_cstm_row|ccs_hro_bg_clr_cstm_one|ccs_hro_bg_clr_cstm_two|ccs_hro_bg_clr_cust_grad_split_opt|ccs_hro_bg_clr_cstm_grad_rvrs_opt' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Background Color" title="Edit Background Color"><i class="fa-solid fa-fill-drip"></i></button>' />
+		
+		<cms:if is_video_tile='1'>
+			<cms:popup_edit 'ccs_hro_bg_vid_grp|ccs_hro_bg_vid_msg|ccs_hro_bg_vid_row|ccs_hro_bg_vid_src_opt|ccs_hro_bg_vid_ytb_row|ccs_hro_bg_ytb_id|ccs_hro_bg_ytb_str|ccs_hro_bg_ytb_stp|ccs_hro_bg_vid_vmo_row|ccs_hro_bg_vmo_id|ccs_hro_bg_vid_lcl_row|ccs_hro_bg_vid_upl_vid_mp4|ccs_hro_bg_vid_upl_vid_webm|ccs_hro_bg_vid_upl_vid_ogv|ccs_hro_bg_img_grp|ccs_hro_bg_img_msg|ccs_hro_bg_img_row|ccs_hro_bg_img|ccs_hro_bg_alt|ccs_hro_bg_img_opc' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Background Video" title="Edit Background Video"><i class="fa-solid fa-video"></i></button>' />
+		<cms:else />
+			<cms:popup_edit 'ccs_hro_bg_img_grp|ccs_hro_bg_img_msg|ccs_hro_bg_img_row|ccs_hro_bg_img|ccs_hro_bg_alt|ccs_hro_bg_img_opc' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Background Image" title="Edit Background Image"><i class="fa-regular fa-image"></i></button>' />
+		</cms:if>
+
+		<cms:popup_edit 'ccs_hro_ovrly_clr_opt|ccs_hro_ovrly_opc|ccs_hro_ovrly_clr_cstm_grp|ccs_hro_ovrly_clr_cstm_msg|ccs_hro_ovrly_clr_cstm_grdt_opt_row|ccs_hro_ovrly_clr_grdt_opt|ccs_hro_ovrly_cstm_row|ccs_hro_ovrly_clr_cstm_one|ccs_hro_ovrly_clr_cstm_two|ccs_hro_ovrly_cust_grad_split_opt|ccs_hro_ovrly_clr_cstm_grdt_rvrs_opt' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Overlay Color" title="Edit Overlay Color"><i class="fa-solid fa-wand-magic-sparkles"></i></button>' />
+	</div>
+</cms:if>

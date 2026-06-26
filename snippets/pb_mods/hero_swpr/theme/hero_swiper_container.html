@@ -1,10 +1,10 @@
 <div class="container d-flex flex-column justify-content-center flex-grow-1">
     
-    <div class="row align-items-<cms:if act_valg><cms:show act_valg /><cms:else />center</cms:if> justify-content-<cms:if act_halg><cms:show act_halg /><cms:else />center</cms:if> py-<cms:if act_py_ht != ''><cms:show act_py_ht /><cms:else />5</cms:if> w-100 m-0">
+    <div class="row align-items-<cms:show act_valg /> justify-content-<cms:show act_halg /> py-<cms:show act_py_ht /> w-100 m-0">
         
         <div class="<cms:show act_bx_sz />">
             
-            <div class="<cms:show cur_box_classes /> text-<cms:show act_txt_alg /> <cms:if has_backdrop == '1'>p-<cms:if act_bg_pd != ''><cms:show act_bg_pd /><cms:else />0</cms:if></cms:if> position-relative z-3">
+            <div class="<cms:show cur_box_classes /> text-<cms:show act_txt_alg /> <cms:if has_backdrop == '1' && act_bg_pd>p-<cms:show act_bg_pd /></cms:if> position-relative z-3">
                 
                 <div class="position-absolute top-0 start-0 ms-n4 z-10 d-flex flex-column gap-2">
                     <cms:embed 'pb_mods/hero_swpr/inline/txtbx-layout-edit.txt' /> 
@@ -20,14 +20,14 @@
                 <cms:embed 'pb_mods/hero_swpr/theme/hero_swiper_cta.html' /> 
                 
                 <cms:if cur_scl_opt == '1'>
-                    <div class="d-flex w-100 justify-content-<cms:if cur_scl_halg><cms:show cur_scl_halg /><cms:else />center</cms:if> mt-3">
+                    <div class="d-flex w-100 justify-content-<cms:show cur_scl_halg /> mt-3">
                         <cms:embed 'pb_mods/hero/theme/hero_social.html' />
                     </div>
                 </cms:if>
 
                 <div class="position-absolute bottom-0 end-0 me-n4 z-10 d-flex flex-column gap-2">
-					<cms:embed 'pb_mods/hero_swpr/inline/cta-edit.txt' />
-				</div>
+                    <cms:embed 'pb_mods/hero_swpr/inline/cta-edit.txt' />
+                </div>
 
             </div>
 
@@ -38,13 +38,24 @@
 </div>
 
 <cms:if cur_bot_opt == '1'>
-    <div class="position-absolute bottom-0 start-0 w-<cms:if cur_bot_sz == '6'>50<cms:else />100</cms:if> bg-<cms:show cur_bot_shd /> py-<cms:show cur_bot_thk /> px-4 z-index-2">
-        
-        <cms:if cur_bot_txt>
-            <p class="m-0 text-<cms:show cur_bot_clr /> fs-<cms:show cur_bot_txt_sz /> fw-<cms:show cur_bot_wt /> fst-<cms:show cur_bot_fst /> font-<cms:show cur_bot_fnt />">
-                <cms:show cur_bot_txt />
-            </p>
-        </cms:if>
+    <div class="row justify-content-center w-100 position-absolute bottom-0 start-0 m-0 z-3">
+        <div class="col-<cms:show cur_bot_sz /> align-self-bottom position-relative px-0">
+            <div class="bg-<cms:show cur_bot_shd /> text-center py-<cms:show cur_bot_thk />">
+                
+                <cms:if (k_user_access_level ge '7') && (inline_is_active=='1')>
+                    <cms:capture into='edit_rail'>ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_ctrl_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_row|ccs_hro_swpr_sl_<cms:show cur_slide_num />_bot_rail_txt_row</cms:capture>
+                    <div class="position-absolute bottom-100 start-50 translate-middle-x mb-2 z-3">
+                        <cms:popup_edit "<cms:show edit_rail />" link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Bottom Rail"><i class="fa-regular fa-window-minimize"></i></button>' />
+                    </div>
+                </cms:if>
+                
+                <cms:if cur_bot_txt>
+                    <div class="text-<cms:show cur_bot_clr /> fs-<cms:show cur_bot_txt_sz /> fst-<cms:show cur_bot_fst /> fw-<cms:show cur_bot_wt /> font-<cms:show cur_bot_fnt /> pt-1 mb-0">
+                        <cms:show cur_bot_txt />
+                    </div>
+                </cms:if>
 
+            </div>
+        </div>
     </div>
 </cms:if>

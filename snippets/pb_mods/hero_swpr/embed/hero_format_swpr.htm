@@ -46,19 +46,20 @@
         <cms:if hero_swpr_glbl_txtbx_mode == 'local'>1<cms:else />0</cms:if>
     </cms:func>
 
-    <cms:editable type='row' name='hero_swpr_txtblk_gen_row' not_active=hide_glbl_txtbx label='Global Text Block Size and Alignment' order='325' >
+    <cms:editable type='row' name='hero_swpr_txtblk_gen_row' not_active=hide_glbl_txtbx label='Global Content Block Size and Alignment' order='325' >
          <cms:editable type='message' name='hero_swpr_txtblk_gen_msg' order='2'>
-             <h2>Global Text Box Size and Placement</h2>
+             <h2>Global Content Box Size and Placement</h2>
+			 <h3>Content Box is the framing of the content - text or image.</h3>
         </cms:editable>
-        <cms:editable type='dropdown' name='hero_swpr_txtbx_sz_opt' label='Size of Text Box' desc='Choosing "Custom" opens options' opt_values='dropdowns/hero_txt-box_size.htm' dynamic='opt_values' class='col-md-3' order='4' />
-        <cms:editable type='dropdown' name='hero_swpr_txtbx_valg' label='Align Text Vertical' desc='Top, Middle, Bottom' opt_values='dropdowns/v-align.htm' dynamic='opt_values' class='col-md-3' order='6' />
-        <cms:editable type='dropdown' name='hero_swpr_txtbx_halg' label='Align Text Box Horizontal' desc='Left, Center, Right' opt_values='dropdowns/h-align.htm' dynamic='opt_values' class='col-md-3' order='8' />
-        <cms:editable type='dropdown' name='hero_swpr_txt_halg' label='Align Inside Textbox' desc='Alignment of what is inside the text block' opt_values='dropdowns/h-align.htm' dynamic='opt_values' class='col-md-3' order='10' />
+        <cms:editable type='dropdown' name='hero_swpr_txtbx_sz_opt' label='Size of Content Block Box' desc='Choosing "Custom" opens options' opt_values='dropdowns/hero_txt-box_size.htm' dynamic='opt_values' class='col-md-4' order='4' />
+        <cms:editable type='dropdown' name='hero_swpr_txtbx_valg' label='Align Content Block Vertical' desc='Top, Middle, Bottom' opt_values='dropdowns/v-align.htm' dynamic='opt_values' class='col-md-4' order='6' />
+        <cms:editable type='dropdown' name='hero_swpr_txtbx_halg' label='Align Content Box Horizontal' desc='Left, Center, Right' opt_values='dropdowns/h-align.htm' dynamic='opt_values' class='col-md-4' order='8' />
+        <cms:editable type='dropdown' name='hero_swpr_txt_halg' label='Align Inside Textbox' desc='Horizontanl alignment of content inside the content block box' opt_values='dropdowns/h-align.htm' dynamic='opt_values' class='col-md-6' order='10' />
     </cms:editable>
     
-    <cms:editable type='row' name='hero_swpr_txtblk_opt_row' not_active=hide_glbl_txtbx label='Global Text Block Settings' order='326' >
-        <cms:editable type='dropdown' name='hero_swpr_py_ht' label='Top and Bottom Padding' desc='Outer padding' opt_values='0|3|6|8|11' opt_selected='0' class='col-md-6' order='2' />
-        <cms:editable type='dropdown' name='hero_swpr_txtbx_bg_opt' label='Text Box Style' desc='Background visibility' opt_values='None=none|Backdrop Only=backdrop|Backdrop with Border=border' opt_selected='none' class='col-md-6' order='4' />
+    <cms:editable type='row' name='hero_swpr_txtblk_opt_row' not_active=hide_glbl_txtbx label='Global Content Block Settings' order='326' >
+        <cms:editable type='dropdown' name='hero_swpr_py_ht' label='Top and Bottom Padding' desc='Outer padding from top and bottom edges' opt_values='0|3|6|8|11' opt_selected='0' class='col-md-6' order='2' />
+        <cms:editable type='dropdown' name='hero_swpr_txtbx_bg_opt' label='Text Box Backdrop' desc='Backing to help separate content from Hero Backdrop' opt_values='None=none|Backdrop Only=backdrop|Backdrop with Border=border' opt_selected='none' class='col-md-6' order='4' />
     </cms:editable>
 
     <cms:func _into='hide_glbl_txtbx_bg' hero_swpr_glbl_txtbx_mode='' hero_swpr_txtbx_bg_opt=''>
@@ -74,7 +75,7 @@
     <cms:editable type='row' name='hero_swpr_txtblk_bg_clr_row' not_active=hide_glbl_txtbx_bg order='327'>
         <cms:editable type='dropdown' name='hero_swpr_txtblk_bg_pd' label='Inner Padding' desc='space from text block edge' opt_values='dropdowns/padding.htm' dynamic='opt_values' class='col-md-4' order='2' />
         <cms:editable type='dropdown' name='hero_swpr_txtblk_bg_clr' label='Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='4' />
-        <cms:editable type='dropdown' name='hero_swpr_txtblk_bg_opc' label='Background Opacity' desc='Transparency of the text box' opt_values='dropdowns/img-transparency.htm' dynamic='opt_values' class='col-md-4' order='6' />
+        <cms:editable type='dropdown' name='hero_swpr_txtblk_bg_opc' label='Background Opacity' desc='Transparency of the content box' opt_values='dropdowns/img-transparency.htm' dynamic='opt_values' class='col-md-4' order='6' />
     </cms:editable>
 
     <cms:func _into='hide_glbl_txtbx_brd' hero_swpr_glbl_txtbx_mode='' hero_swpr_txtbx_bg_opt=''>
@@ -194,9 +195,36 @@
         <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_lnk_clr' label='Link Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-12' order='2' />
     </cms:editable>
 
-    <cms:editable type='row' name='ccs_hro_swpr_glbl_cta_icon_row' not_active=hide_glbl_cta_std order='360'>
-        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_icon_pos' label='Icon Position' opt_values='None=0 | Left=left | Right=right' class='col-md-6' order='2' />
-        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_icon_fa' label='Font Awesome Icon' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-6' order='4' />
+    <cms:func _into='hide_glbl_cta_icon_pos' hero_swpr_glbl_cta_mode='' ccs_hro_swpr_glbl_cta_clr=''>
+        <cms:if hero_swpr_glbl_cta_mode == 'local'>
+            1
+        <cms:else_if ccs_hro_swpr_glbl_cta_clr != 'link' />
+            0
+        <cms:else />
+            1
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_hro_swpr_glbl_cta_icon_pos_row' not_active=hide_glbl_cta_icon_pos order='360'>
+        <cms:editable type='dropdown' name='ccs_hro_swpr_glbl_cta_icon_pos' label='Icon Position' opt_values='dropdowns/button-icon.htm' dynamic='opt_values' class='col-md-4 col-sm-6' order='2' />
+    </cms:editable>
+
+    <cms:func _into='hide_glbl_cta_icon_fa' hero_swpr_glbl_cta_mode='' ccs_hro_swpr_glbl_cta_clr='' ccs_hro_swpr_glbl_cta_icon_pos=''>
+        <cms:if hero_swpr_glbl_cta_mode == 'local'>
+            1
+        <cms:else_if (ccs_hro_swpr_glbl_cta_clr != 'link') && (ccs_hro_swpr_glbl_cta_icon_pos != '') && (ccs_hro_swpr_glbl_cta_icon_pos != '0') />
+            0
+        <cms:else />
+            1
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='message' name='ccs_hro_swpr_glbl_cta_icon_msg' not_active=hide_glbl_cta_icon_fa order='361'>
+        <p class="mb-0 mt-3 text-muted" style="font-size:12px;">Find icons at <a href="https://fontawesome.com/v6/search?m=free" target="_blank">Font Awesome v6</a>.</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_hro_swpr_glbl_cta_icon_fa_row' not_active=hide_glbl_cta_icon_fa order='362'>
+        <cms:editable type='text' name='ccs_hro_swpr_glbl_cta_icon_fa' label='Font Awesome Icon Class' maxlength='50' width='300' class='col-md-6 col-sm-12' order='2' />
     </cms:editable>
 
 </cms:editable>
