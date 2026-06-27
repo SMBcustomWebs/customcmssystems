@@ -5,9 +5,19 @@
     <cms:set txtbx_img_fit="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_img_fit" />" />
     <cms:set txtbx_img_pos="<cms:get "ccs_hro_swpr_sl_<cms:show cur_slide_num />_txtblk_img_pos" />" />
 
-    <img class="img-fluid object-fit-<cms:show txtbx_img_fit />" 
-         style="max-height: 100%; <cms:if txtbx_img_fit == 'contain'>width: auto;<cms:else />width: 100%; object-position: <cms:show txtbx_img_pos />;</cms:if>"
-         src="<cms:show txtbx_img />" 
-         alt="<cms:show txtbx_img_alt />" 
-    />
+    <div class="position-relative w-100">
+        <cms:if txtbx_img_fit == 'cover'>
+            <img class="img-fluid w-100 object-fit-cover" 
+                 style="max-height: 60vh; object-position: <cms:show txtbx_img_pos />;"
+                 src="<cms:show txtbx_img />" 
+                 alt="<cms:show txtbx_img_alt />" 
+            />
+        <cms:else />
+            <img class="img-fluid object-fit-contain w-100" 
+                 style="max-height: 60vh;"
+                 src="<cms:show txtbx_img />" 
+                 alt="<cms:show txtbx_img_alt />" 
+            />
+        </cms:if>
+    </div>
 </cms:if>

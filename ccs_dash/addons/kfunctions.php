@@ -25,6 +25,7 @@ if( defined('K_ADMIN') ){
         global $FUNCS;      
         $FUNCS->register_admin_menuitem( array('name'=>'_mod_bnr_', 'title'=>'Banner Modules', 'is_header'=>'1', 'weight'=>'100') );
         $FUNCS->register_admin_menuitem( array('name'=>'_mod_lst_', 'title'=>'List Mods', 'is_header'=>'1', 'weight'=>'200') );
+		$FUNCS->register_admin_menuitem( array('name'=>'_mod_prt_', 'title'=>'Portfolio Mods', 'is_header'=>'1', 'weight'=>'225') );
         $FUNCS->register_admin_menuitem( array('name'=>'_mod_mnl_', 'title'=>'Manual Entry Mods', 'is_header'=>'1', 'weight'=>'250') );
         $FUNCS->register_admin_menuitem( array('name'=>'_mod_glr_', 'title'=>'Photo Gallery Mods', 'is_header'=>'1', 'weight'=>'300') );
         $FUNCS->register_admin_menuitem( array('name'=>'_mod_cmp_', 'title'=>'Mixed Sections Mod', 'is_header'=>'1', 'weight'=>'400') );
