@@ -636,7 +636,7 @@
                         <div class="p-3 mt-3 border border-secondary border-opacity-25 rounded bg-body-tertiary">
                             <span class="d-block text-body-secondary small fw-bold text-uppercase mb-2" style="font-size: 0.7rem;">Spacing Preview (Size: <cms:show dash_font_size />rem | Wt: <cms:show dash_font_weight /> | LH: <cms:show dash_line_height /> | LS: <cms:show dash_letter_space />)</span>
                             <div class="text-body" style="font-family: '<cms:show dash_font_body />', sans-serif; font-size: <cms:show dash_font_size />rem; font-weight: <cms:show dash_font_weight />; line-height: <cms:show dash_line_height />; letter-spacing: <cms:show dash_letter_space />;">
-                                This paragraph demonstrates how your chosen base font, size, weight, line height, and letter spacing interact. Notice how the vertical rhythm breathes as you adjust the settings.
+                                This paragraph demonstrates how your chosen base font, size, weight, line height, and letter spacing interact. Notice how the vertical rhythm breathes as you adjust the settings. The quick brown fox jumps over the lazy dog.
                             </div>
                         </div>
 
@@ -672,7 +672,7 @@
                             <cms:else_if nav_count == '0' />
                                 <span class="badge bg-danger ms-1">Missing</span>
                             <cms:else />
-                                <span class="badge bg-danger ms-1"><cms:show nav_count /> Detected (Delete <cms:show "<cms:sub nav_count '1' />" />)</span>
+                                <span class="badge bg-danger ms-1"><cms:show nav_count /> Staged.<br>Only First Listed Will show.</span>
                             </cms:if>
                         </div>
                         <cms:popup_edit 'ccs_gl_nav_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Manage</button>" />
@@ -684,9 +684,9 @@
                             <cms:if tpb_count == '1' || tpb_count == '2'>
                                 <span class="badge bg-success ms-1"><cms:show tpb_count /> Active</span>
                             <cms:else_if tpb_count == '0' />
-                                <span class="badge bg-secondary ms-1">None (Optional)</span>
+                                <span class="badge bg-secondary ms-1">None Staged.</span>
                             <cms:else />
-                                <span class="badge bg-danger ms-1"><cms:show tpb_count /> Detected (Max 2)</span>
+                                <span class="badge bg-danger ms-1"><cms:show tpb_count />  Staged.<br>Only Top Two Listed Will show.</span>
                             </cms:if>
                         </div>
                         <cms:popup_edit 'ccs_gl_tpb_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Manage</button>" />
@@ -700,7 +700,7 @@
                             <cms:else_if ftr_count == '0' />
                                 <span class="badge bg-danger ms-1">Missing</span>
                             <cms:else />
-                                <span class="badge bg-danger ms-1"><cms:show ftr_count /> Detected (Delete <cms:show "<cms:sub ftr_count '1' />" />)</span>
+                                <span class="badge bg-danger ms-1"><cms:show ftr_count /> Staged.<br>Only First Listed Will show.</span>
                             </cms:if>
                         </div>
                         <cms:popup_edit 'ccs_gl_ftr_pb' link_text="<button class='btn btn-sm btn-outline-primary'>Manage</button>" />
@@ -710,7 +710,7 @@
 
                 <cms:if nav_count gt '1' || ftr_count gt '1' || tpb_count gt '2'>
                     <div class="alert alert-danger small py-2 mt-3 mb-0">
-                        <i class="fas fa-triangle-exclamation me-1"></i> <strong>Layout Error:</strong> You have too many blocks active. Only the first valid block will be displayed on your live site.
+                        <i class="fas fa-triangle-exclamation me-1"></i> <strong>Layout:</strong> Only the top listed block will be displayed on the live site.
                     </div>
                 </cms:if>
 

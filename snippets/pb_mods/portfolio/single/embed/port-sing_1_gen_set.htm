@@ -1,0 +1,36 @@
+<cms:editable type='group' name='ccs_prt_sng_1_gen_grp' label='General Settings' desc='' order='10'>
+	<cms:editable type='message' name='ccs_prt_dtl_spc_msg' order='2'>
+		<h2>Portfolio Single Page General Settings</h2>
+		<h3>Set basic styles if overriding site settings</h3>
+		<br><hr>
+	</cms:editable>
+	
+	<cms:editable type='row' name='ccs_prt_sng_1_gen_row' order='5'>
+		<cms:editable type='dropdown' name='ccs_prt_sng_1_bg_clr' label='Background Color' desc=''
+			opt_values='dropdowns/all-colors.htm'
+			dynamic='opt_values'
+			class='col-md-4 col-sm-12'
+			order='2'
+		/>
+		<cms:editable type='dropdown' name='ccs_prt_sng_1_pt' label='Top Spacing' desc=''
+			opt_values='dropdowns/padding-top.htm'
+			dynamic='opt_values'
+			class='col-md-4 col-sm-6'
+			order='4'
+		/>
+
+		<cms:editable type='dropdown' name='ccs_prt_sng_1_pb' label='Bottom Spacing' desc=''
+			opt_values='dropdowns/padding-bot.htm'
+			dynamic='opt_values'
+			class='col-md-4 col-sm-6'
+			order='6'
+		/>
+		<cms:editable type='checkbox' name='ccs_prt_sng_1_hd_hide' label='Hide Header Section' desc=''
+			opt_values='Yes=1'
+			class='col-md-4 col-sm-6'
+			order='8'
+		/>
+	</cms:editable>
+	
+	
+</cms:editable>

@@ -1,5 +1,5 @@
 <?php require_once( 'ccs_dash/cms.php' ); ?>
-    <cms:template title="Products" icon='tags' clonable='1' dynamic_folders='1' folder_masterpage='bmenu/product.php' icon='tags' order="1400"  >
+    <cms:template title="Products"  clonable='1' dynamic_folders='1' folder_masterpage='bmenu/product.php' icon='tags' order="1400"  >
         <cms:globals>
             <cms:editable type='message' name='tpl_msg' order='1' >
                 <h2>Product Menu Page:: Build Homeview and Single-Content Pages</h2>
@@ -150,7 +150,7 @@
                 </font>
             </cms:editable>   
 
-            <cms:editable type='textarea' name='pp_options' label='Describe Varients Here As Explained Above'
+            <cms:editable type='textarea' name='pp_options' label='Describe Variants Here As Explained Above'
                 height='130'
                 order='4'
             />
@@ -216,10 +216,10 @@
         <cms:config_list_view exclude='default-page' searchable='1' orderby='weight' order='asc'>
             <cms:style>
                 .col-k_page_title{
-                    width: 20% ; important!
+                    width: 20% important; 
                 }
                 .col-k_up_down{
-                    width: 10% ; important!
+                    width: 10% important; 
                 }
             </cms:style>
             <cms:ignore>
