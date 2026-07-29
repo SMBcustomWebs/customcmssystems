@@ -698,4 +698,34 @@ a {
 </cms:if>
 
 
+
+
+
+/* -------------------------------------------------------------------------- */
+/* SHOPPING CART OVERRIDES                                   */
+/* -------------------------------------------------------------------------- */
+.custom-variants table { margin: 0; }
+.custom-variants table td { padding: 0 10px 0 0; }
+.custom-variants table select, 
+.custom-variants table input[type="text"] {
+    display: block;
+    width: 100%;
+    padding: .375rem 2.25rem .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .375rem;
+}
+
+/* Swiper Image Aspect Ratio Fix */
+.product-slider .swiper-slide img {
+    aspect-ratio: 1 / 1 !important;
+    object-fit: contain !important;
+    width: 100% !important;
+    background-color: transparent !important;
+}
+
 <?php COUCH::invoke(); ?>

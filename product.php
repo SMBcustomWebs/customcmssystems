@@ -1,5 +1,9 @@
 <?php require_once( 'ccs_dash/cms.php' ); ?>
-    <cms:template title="Products"  clonable='1' dynamic_folders='1' folder_masterpage='bmenu/product.php' icon='tags' order="1400"  >
+    <cms:template title="Products" clonable='1' dynamic_folders='1' folder_masterpage='bmenu/product.php' icon='tags' order="1400">
+        
+        <!-- ============================================== -->
+        <!-- PRESERVED GLOBALS & PAGEBUILDERS               -->
+        <!-- ============================================== -->
         <cms:globals>
             <cms:editable type='message' name='tpl_msg' order='1' >
                 <h2>Product Menu Page:: Build Homeview and Single-Content Pages</h2>
@@ -12,8 +16,8 @@
                 <h4>This is the landing page when users click on "About" in the menu</h4>
                 <p></p>
                 <hr><br>
-
             </cms:editable>
+
             <cms:pagebuilder name='glb_hmv_hro_pb' label='Home View Page Header (Hero)' skip_custom_fields='1' order='5'>
                 <cms:section label='Home View Page Hero' name='glb_hmv_hro_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_block_msc' />
             </cms:pagebuilder>
@@ -30,7 +34,6 @@
 
             <cms:pagebuilder name='glb_hmv_xtr_pb' label='Home view Extra Content Builder' skip_custom_fields='1' order='15'>
                 <cms:section label='Banner Transition' name='glb_sng_xtr_sct'  masterpage='blocks/mods/transitions.php' mosaic='trns_msc' />
-
             </cms:pagebuilder>
 
             <cms:editable type='message' name='glb_sng_msg' order='104' >
@@ -39,7 +42,7 @@
                 <h4>This is the landing page when users click on a single "About" (employee) link</h4>
                 <p></p>
             </cms:editable>
-            <!-- Build page layout for single-content view with Pagebuilder Blocks -->
+
             <cms:pagebuilder name='glb_sng_hro_pb' label='Single Page Header (Hero)' skip_custom_fields='1' order='105'>
                 <cms:section label='Single View Page Hero' name='glb_sng_hro_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_block_msc' />
             </cms:pagebuilder>
@@ -51,49 +54,80 @@
 
             <cms:pagebuilder name='glb_sng_xtr_pb' label='Single Page Extra Content Builder' skip_custom_fields='1' order='115'>
                 <cms:section label='Banner Transition' name='glb_sng_xtr_sct'  masterpage='blocks/mods/transitions.php' mosaic='trns_msc' />
-
             </cms:pagebuilder>
         </cms:globals>  
-        <!-- force category to be chosen - set in addon/k_functions -->
+
+        <!-- Force category to be chosen -->
         <cms:editable type='hidden' name='dummy' validator='menu_check' order='1' >1</cms:editable>  
-        <!-- product description -->
-        <cms:editable type='textarea' name='itm_desc' label='General Description'  desc='describe <k_template_title />'  order='15' />
-        <cms:editable type='group' name='itm_img_grp' label='Images' order='20' >
-            <cms:editable name='itm_img_mn' type='image' desc='main image max dimension 800px'         
-                width='1000'
-                height='1000'
-                enforce_max='1'
-                show_preview='1' 
-                preview_width='75'
-                order='5'
-            />
-            <cms:editable type='thumbnail' name='pp_itm_thumb' label='Thumbnail'
-                width='200' 
-                height='200'
-                show_preview='1'
-                assoc_field='itm_img_mn'
-                order='10'
-            />
-            <cms:editable type='jcropthumb' name='itm_list_thumb' label='600x600 List Image'
-                width='600'
-                height='600'
-                show_preview='1'
-                preview_height='75'
-                assoc_field='itm_img_mn'
-                order='15'
-            />
+
+
+        <!-- ============================================== -->
+        <!-- ZONE 1: CORE IDENTITY                          -->
+        <!-- ============================================== -->
+        <cms:editable type='message' name='msg_core' order='10'>
+            <div style="background: #fff3cd; border: 1px solid #ffe69c; border-left: 4px solid #f6c23e; padding: 15px; border-radius: 4px; margin-top: 20px; margin-bottom: 10px;">
+                <h4 style="margin: 0 0 5px 0; color: #1cc88a; font-family: sans-serif;">1. General Product Details</h4>
+                <p style="margin: 0; color: #5a5c69; font-size: 13px; font-family: sans-serif;">Set the primary product identity. Enter the unique SKU, general text description, and upload the main hero image below.</p>
+            </div>
         </cms:editable>
-        <!-- product pricing -->
-        <cms:editable type='group' name='group_price' label='Price Points' desc="current, reduced, added, etc"  order='30' >    
-            <cms:editable type='text' name='pp_price' label='Base Price' desc='Amount in USD (correct upto 2 decimal points without the $ sign)'
-                maxlength='10'
-                required='1'
-                search_type='decimal'
-                validator='non_zero_decimal'
-                width='150'
-                order='5'
-            />
-            <cms:editable type='message' name='explain_discount_scale'  order='10' >
+
+        <cms:editable name='itm_sku' label='Product SKU' desc='Leave blank to use a system-generated ID (Letters and numbers only)' type='text' search_type='text' validator='regex=/^[A-Za-z0-9-]+$/' order='12' />
+		
+        <cms:editable type='textarea' name='itm_desc' label='General Description' desc='Describe this product. (Plain text only to preserve template styling)' order='15' />
+
+        <!-- Main Image & Thumbnails Pulled to Root Level -->
+        <cms:editable name='itm_img_mn' label='Main Hero Image' type='image' desc='Main image max dimension 1000px' width='1000' height='1000' crop='0' show_preview='1' preview_width='75' order='20' />
+        <cms:editable name='pp_itm_thumb' label='Thumbnail (Auto)' type='thumbnail' width='200' height='200' show_preview='1' assoc_field='itm_img_mn' order='21' />
+        <cms:editable name='itm_list_thumb' label='600x600 List Image (Auto)' type='jcropthumb' width='600' height='600' show_preview='1' preview_height='75' assoc_field='itm_img_mn' order='22' />
+
+
+        <!-- ============================================== -->
+        <!-- ZONE 2: MEDIA & SPECIFICATIONS                 -->
+        <!-- ============================================== -->
+        <cms:editable type='message' name='msg_media' order='30'>
+            <div style="background: #fff3cd; border: 1px solid #ffe69c; border-left: 4px solid #f6c23e; padding: 15px; border-radius: 4px; margin-top: 20px; margin-bottom: 10px;">
+                <h4 style="margin: 0 0 5px 0; color: #1cc88a; font-family: sans-serif;">2. Product Media & Highlights</h4>
+                <p style="margin: 0; color: #5a5c69; font-size: 13px; font-family: sans-serif;">Manage the image gallery slider and build categorized specification accordions.</p>
+            </div>
+        </cms:editable>
+
+        <cms:mosaic name='itm_sldrs_msc' label='Item Slide Show (Gallery)' order='35'>
+            <cms:tile name='gallery_image' label='Gallery Image'>
+                <cms:editable name='itm_slider_img' label='Gallery Image' type='image' width='1000' height='1000' crop='0' show_preview='1' preview_width='75' order='1' />
+                <cms:editable name='itm_slider_img_alt' label='Alt Text' type='text' order='2' />
+            </cms:tile>
+        </cms:mosaic>
+
+        <cms:mosaic name='itm_specs_msc' label='Specifications & Highlights' desc='Create categorized accordion sections' order='40'>
+            <cms:tile name='spec_section' label='Spec Category'>
+                <cms:editable type='text' name='spec_title' label='Category Title (Accordion Header)' desc='e.g., Dimensions, Materials, Safety Data' required='1' order='5' />
+                <cms:editable 
+                    type='richtext' 
+                    name='spec_content' 
+                    label='Category Content' 
+                    desc='Add text, lists, charts, or images' 
+                    toolbar='custom' 
+                    custom_toolbar='Bold, Italic, -, RemoveFormat | NumberedList, BulletedList | Link, Unlink | Image, Table | Source'
+                    order='10' 
+                />
+            </cms:tile>
+        </cms:mosaic>
+
+
+        <!-- ============================================== -->
+        <!-- ZONE 3: E-COMMERCE & CART ENGINE               -->
+        <!-- ============================================== -->
+        <cms:editable type='message' name='msg_ecommerce' order='50'>
+            <div style="background: #fff3cd; border: 1px solid #ffe69c; border-left: 4px solid #f6c23e; padding: 15px; border-radius: 4px; margin-top: 20px; margin-bottom: 10px;">
+                <h4 style="margin: 0 0 5px 0; color: #1cc88a; font-family: sans-serif;">3. Cart Rules & Logistics (Advanced)</h4>
+                <p style="margin: 0; color: #856404; font-size: 13px; font-family: sans-serif;">Configure pricing logic, available product variants, and shipping data.<i>Clicking on title bars will expand or collapse the group</i></p>
+            </div>
+        </cms:editable>
+
+        <cms:editable type='group' name='group_price' label='Price Points' desc="current, reduced, added, etc" order='55' >   
+            <cms:editable type='text' name='pp_price' label='Base Price' desc='Amount in USD (correct upto 2 decimal points without the $ sign)' maxlength='10' required='1' search_type='decimal' validator='non_zero_decimal' width='150' order='5' />
+            
+            <cms:editable type='message' name='explain_discount_scale' order='10' >
                 <b>Quantity based pricing:</b> <i>(Tiered pricing)</i><br/>
                 <font color='#777'>If the base price of this product varies based on the quantity purchased (useful for bulk purchases),<br>
                 for example, if the base price is $10 but you want the price to be reduced by $2 (i.e. made $8) for purchase of more than 5 units, and by $3 (i.e. made $7) for purchase of more than 10 units, set it to:</font> <br/>
@@ -103,27 +137,13 @@
                 <font color='blue'><pre>[ 5=2 | 10=3 ]%</pre></font>        
                 <font color='#777'>where the string above now stands for '<i>reduce price by 2% for more than 5, reduce by 3% for more than 10</i>'</font>
             </cms:editable>   
-            <cms:editable type='text' name='pp_discount_scale' label='Add Qty Pricing Here:' desc="follow format as explained above"
-                validator='regex=/\[\[?([^\]]*)\](\]?)\s*(%?)/'
-                order='15'
-            />
-            <cms:editable type='text' name='old_price' label='OldPrice' desc='gets crossed out on page (optional)'
-                maxlength='10'
-                search_type='decimal'
-                width='150'
-                order='20'
-            />
-            <cms:editable type='relation' name='pp_tax_class' label='Tax Class' desc="if not selected, default tax applies"  
-                has='one' 
-                searchable='0'  
-                orderby='page_name' 
-                order_dir='asc'
-                masterpage='tax-class.php' 
-                order='25' 
-            />
+            <cms:editable type='text' name='pp_discount_scale' label='Add Qty Pricing Here:' desc="follow format as explained above" validator='regex=/\[\[?([^\]]*)\](\]?)\s*(%?)/' order='15' />
+            
+            <cms:editable type='text' name='old_price' label='OldPrice' desc='gets crossed out on page (optional)' maxlength='10' search_type='decimal' width='150' order='20' />
+            <cms:editable type='relation' name='pp_tax_class' label='Tax Class' desc="if not selected, default tax applies" has='one' searchable='0' orderby='page_name' order_dir='asc' masterpage='tax-class.php' order='25' />
         </cms:editable>
 
-        <cms:editable type='group' name='group_variants' label='Variants' desc="colors, sizes, etc" order='40' >    
+        <cms:editable type='group' name='group_variants' label='Variants' desc="colors, sizes, etc" collapsed='1' order='60' >   
             <cms:editable type='message' name='explain_options' order='2'>
                 <hr><br><hr>
                 <b>Product Variants:</b>
@@ -149,99 +169,42 @@
                     4. To create a textbox (if the variant consists of custom text e.g. message to be printed on T-Shirts), use '*TEXT*' as shown in the third variant above. You can also specify any price difference as shown in the last variant.
                 </font>
             </cms:editable>   
-
-            <cms:editable type='textarea' name='pp_options' label='Describe Variants Here As Explained Above'
-                height='130'
-                order='4'
-            />
+            <cms:editable type='textarea' name='pp_options' label='Describe Variants Here As Explained Above' height='130' order='4' />
         </cms:editable>
-        <cms:repeatable name='itm_ad_nfo' label="Specifications / Highlights" desc="each its own entry"  order='47'>
-            <cms:editable type='text' name='prod_spec'label='Additional Info:' order='45' />
-        </cms:repeatable>
             
-        <cms:editable type='group' name='group_shipping' label='Shipping Information' desc='click to expand'  order='50' > 
-            <cms:editable type='radio' name='pp_requires_shipping' label='Requires shipping' desc='Select No if this is not a physical product that requires shipping'
-                opt_values='Yes=1 | No=0'
-                opt_selected = '1'
-                order='5'
-            />
-
-            <cms:editable type='message' name='explain_shipping_scale'  order='8' >
+        <cms:editable type='group' name='group_shipping' label='Shipping Information' desc='click to expand' collapsed='1' order='65' > 
+            <cms:editable type='radio' name='pp_requires_shipping' label='Requires shipping' desc='Select No if this is not a physical product that requires shipping' opt_values='Yes=1 | No=0' opt_selected='1' order='5' />
+            <cms:editable type='message' name='explain_shipping_scale' order='8' >
                 <b>Shipping Charges:</b><br/>
                 <font color='#777'>Set the option below if you want to set up a sliding scale of shipping charges based on the number of this item ordered.<br>
                 For example, if you charge $3 to deliver one to five units, $7 to ship six to 15 units, and $10 to ship more than 15 units, set it to:</font> <br/>
                 <font color='blue'><pre>[ 0=3 | 5=7 | 15=10 ]</pre></font>
                 <font color='#777'>where the string above stands for '<i>3 for more than 0, 7 for more than 5, 10 for more than 15</i>'</font>
             </cms:editable>   
-
-            <cms:editable type='text' name='pp_shipping_scale' label='Set Shipping Charge:' desc='examples above' 
-                validator='regex=/\[\[?([^\]]*)\](\]?)\s*(%?)/'
-                order='10'
-            />
-        </cms:editable>    
-
-        <cms:ignore>
-            <cms:editable type='relation' name='itm_bnd_rl' label="Brand Relation" masterpage='brands.php' has='one' order='60' />
-        </cms:ignore>
-        <cms:repeatable name='itm_sldrs' label="Item Slide Show"  order='70'>
-            <cms:editable name='itm_slider_img' label='Image 1000x1000' type='image'  
-                width='1000'
-                height='1000'
-                crop='1'
-                show_preview='1'
-                preview_width='75'
-                order='3'              
-            />
-            <cms:editable name='itm_slider_img_alt' label='Alt Text' type='text' order='4' />
-        </cms:repeatable>
-            
-        <cms:editable type='checkbox' name="feature" label="On Feature Listing" desc="check to add to features list"
-            opt_values='Set As Feature Item=1'
-            opt_selected = '0'
-            order='75'
-        />
-        <cms:editable type='checkbox' name="value" label="On Value Listing" desc="check to add to values list"
-            opt_values='Set As Value Item=1'
-            opt_selected = '0'
-            order='77'
-        />
-        <cms:editable type='checkbox' name="noshow" label="Do Not Show On Menu" desc="default - Will be shown on Site menu"
-            opt_values='Do Not Show on Menu=1'
-            opt_selected = '0'
-            order='79'
-        />
+            <cms:editable type='text' name='pp_shipping_scale' label='Set Shipping Charge:' desc='examples above' validator='regex=/\[\[?([^\]]*)\](\]?)\s*(%?)/' order='10' />
+        </cms:editable>   
 
 
-        <!-- Amin page listing format -->
+        <!-- ============================================== -->
+        <!-- ZONE 4: VISIBILITY & BADGES                    -->
+        <!-- ============================================== -->
+        <cms:editable type='group' name='group_visibility' label='Visibility & Placement' order='75'>
+            <cms:editable type='checkbox' name="feature" label="On Feature Listing" desc="check to add to features list" opt_values='Set As Feature Item=1' opt_selected='0' order='1' />
+            <cms:editable type='checkbox' name="value" label="On Value Listing" desc="check to add to values list" opt_values='Set As Value Item=1' opt_selected='0' order='2' />
+            <cms:editable type='checkbox' name="noshow" label="Do Not Show On Menu" desc="default - Will be shown on Site menu" opt_values='Do Not Show on Menu=1' opt_selected='0' order='3' />
+        </cms:editable>
+
+
+        <!-- ============================================== -->
+        <!-- ADMIN VIEWS (LIST & FORM)                      -->
+        <!-- ============================================== -->
         <cms:config_list_view exclude='default-page' searchable='1' orderby='weight' order='asc'>
+            <!-- FIXED CSS BUG HERE -->
             <cms:style>
-                .col-k_page_title{
-                    width: 20% important; 
-                }
-                .col-k_up_down{
-                    width: 10% important; 
-                }
+                .col-k_page_title { width: 20% !important; }
+                .col-k_up_down { width: 10% !important; }
             </cms:style>
-            <cms:ignore>
-                <cms:script>
-                    function test(){
-                        alert( 'Hello<cms:show k_count />' );
-                    }
-                </cms:script>
-                <cms:html>
-                    <cms:repeat '3' startcount='1'>
-                        <h<cms:show k_count />>Hello</h><cms:show k_count />>
-                    </cms:repeat>
-
-                    <cms:show_warning heading='Important' >
-                        Please do not delete any of these pages!
-                    </cms:show_warning>
-                    <cms:show_info heading='' >
-                        These pages have been created automatically!
-                    </cms:show_info>
-
-                </cms:html>
-            </cms:ignore>
+            
             <cms:field 'k_up_down' header='Reorder Arrows' class='k_up_down' />
             <cms:field 'k_page_title' sortable='0' class='k_page_title' />
             <cms:field 'sb_menu_fld' header='Menu Path To Page' >
@@ -259,15 +222,14 @@
         <cms:config_form_view>
             <cms:field 'k_page_title' label='Product Name' group='_custom_fields_' />
             <cms:field 'k_page_name' hide='1' />
-            <cms:field 'k_page_folder_id' label='Menu To Place Under' desc='may not choose crossed-out names'  group='_custom_fields_' />
-                    
-
+            <cms:field 'k_page_folder_id' label='Menu To Place Under' desc='may not choose crossed-out names' group='_custom_fields_' />
             <cms:jit_fields>
                 <cms:if k_page_id ne '-1'>
-            
                 </cms:if> 
             </cms:jit_fields>
         </cms:config_form_view>
+
     </cms:template>
+    
     <cms:embed 'tl_if_pb_emb.html' />
 <?php COUCH::invoke(); ?>
