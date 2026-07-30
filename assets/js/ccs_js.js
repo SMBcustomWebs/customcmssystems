@@ -80,3 +80,75 @@ window.addEventListener('load', function() {
         });
     });
 });
+
+//cart modal
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the Bootstrap Offcanvas
+    var cartOffcanvasEl = document.getElementById('cartOffcanvas');
+    if (!cartOffcanvasEl) return; // Exit if not on a page with the cart
+    
+    var bsOffcanvas = new bootstrap.Offcanvas(cartOffcanvasEl);
+    var cartBody = document.getElementById('cart-modal-body');
+    var cartBadges = document.querySelectorAll('.cart-qty-badge');
+
+    // Function: Fetch fresh cart data and update the sidebar
+    function refreshCartModal() {
+        cartBody.innerHTML = '<div class="d-flex justify-content-center align-items-center h-100 p-5"><div class="spinner-border text-secondary" role="status"></div></div>';
+        
+        fetch(window.cartModalUrl)
+            .then(response => response.text())
+            .then(html => {
+                cartBody.innerHTML = html;
+                
+                // Update the quantity badge
+                var newCountEl = cartBody.querySelector('#ajax-cart-count');
+                if (newCountEl && newCountEl.textContent !== "") {
+                    cartBadges.forEach(badge => badge.textContent = newCountEl.textContent);
+                }
+            })
+            .catch(error => console.error('Error fetching cart:', error));
+    }
+
+    // Action 1: ADD TO CART (Intercepts form submission)
+    document.addEventListener('submit', function(e) {
+        if (e.target.classList.contains('cart-form')) {
+            e.preventDefault();
+            var form = e.target;
+            
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form)
+            }).then(() => {
+                bsOffcanvas.show(); // Slide sidebar open
+                refreshCartModal(); // Fetch updated items
+            });
+        }
+    });
+
+    // Action 2 & 3: UPDATE OR REMOVE ITEMS (Inside the modal)
+    document.addEventListener('click', function(e) {
+        // Remove Button
+        var removeBtn = e.target.closest('.cart-remove');
+        if (removeBtn) {
+            e.preventDefault();
+            fetch(removeBtn.href).then(() => refreshCartModal());
+        }
+        
+        // Update Quantities Button
+        var updateBtn = e.target.closest('.cart-update');
+        if (updateBtn) {
+            e.preventDefault();
+            var form = updateBtn.closest('form');
+            fetch(form.action, {
+                method: 'POST',
+                body: new FormData(form)
+            }).then(() => refreshCartModal());
+        }
+    });
+
+    // Optional: Refresh the cart when manually opened
+    cartOffcanvasEl.addEventListener('show.bs.offcanvas', function () {
+        refreshCartModal();
+    });
+});

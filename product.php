@@ -64,6 +64,22 @@
         <!-- ============================================== -->
         <!-- ZONE 1: CORE IDENTITY                          -->
         <!-- ============================================== -->
+		
+		<!-- 1. The Controlling Field (Checkbox) -->
+		<cms:editable type='checkbox' name='track_inventory' label='Track Inventory' desc='Check this box to strictly enforce stock limits on this item' opt_values='Yes=1' opt_selected='0' order='6' />
+
+		<!-- 2. The Conditional Function -->
+		<cms:func _into='show_inventory_cond' track_inventory=''>
+			<cms:if "<cms:is '1' in=track_inventory />">
+				show
+			<cms:else />
+				hide
+			</cms:if>
+		</cms:func>
+
+		<!-- 3. The Target Field -->
+		<cms:editable type='text' name='in_stock' label='Inventory Count' desc='Total number of physical items in stock (Numbers only)' search_type='integer' validator='non_negative_integer' width='150' order='7' not_active=show_inventory_cond />
+		
         <cms:editable type='message' name='msg_core' order='10'>
             <div style="background: #fff3cd; border: 1px solid #ffe69c; border-left: 4px solid #f6c23e; padding: 15px; border-radius: 4px; margin-top: 20px; margin-bottom: 10px;">
                 <h4 style="margin: 0 0 5px 0; color: #1cc88a; font-family: sans-serif;">1. General Product Details</h4>

@@ -14,7 +14,7 @@
 
     /////////////////////////////////////// Custom config values ////////////////////////////////////////
     $pp['tpl_ajax_cart'] = 'cart-modal.php';
-    $pp['tpl_products'] = 'index.php';
+    $pp['tpl_products'] = 'product.php';
     $pp['tpl_coupons'] = 'coupons.php';
     $pp['msg_add_success'] = 'Product successfully added to your cart.';
     $pp['msg_update_success'] = 'Product quantity successfully updated.';

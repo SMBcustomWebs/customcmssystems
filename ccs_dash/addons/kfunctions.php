@@ -33,6 +33,7 @@ if( defined('K_ADMIN') ){
         $FUNCS->register_admin_menuitem( array('name'=>'_mod_adv_', 'title'=>'Advanced Mod', 'is_header'=>'1', 'weight'=>'600') );
         $FUNCS->register_admin_menuitem( array('name'=>'_frame_', 'title'=>'Headers &amp; Footers', 'is_header'=>'1', 'weight'=>'700') );
         $FUNCS->register_admin_menuitem( array('name'=>'_global_', 'title'=>'Global Site Settings', 'is_header'=>'1', 'weight'=>'800') );
+		$FUNCS->register_admin_menuitem( array('name'=>'_site_', 'title'=>'General Site Settings', 'is_header'=>'1', 'weight'=>'810') );
         $FUNCS->register_admin_menuitem( array('name'=>'_donottouch_', 'title'=>'DO NOT TOUCH', 'is_header'=>'1', 'weight'=>'900') );
 
     }
@@ -208,3 +209,17 @@ if( defined('K_ADMIN') ){ // if admin-panel being displayed ..
         }
     }
 }
+
+
+
+//To check Session vars
+//$FUNCS->add_event_listener( 'add_render_vars', function () {
+ //   global $CTX;
+  //  $CTX->set( 'k__session', $_SESSION, 'global' );
+//});
+//add this to page
+//<cms:php>
+ //   echo '<div class="alert alert-warning mt-3"><pre>';
+ //   print_r($_SESSION);
+ //   echo '</pre></div>';
+//</cms:php>
