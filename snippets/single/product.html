@@ -1,170 +1,178 @@
-<section class="py-3 py-lg-5">
-    <div class="container mt-2 mt-lg-4">
-        <div class="row">
-            <div class="col-12 col-lg ps-lg-8 order-2 order-lg-2">
-                
-                <div class="text-warning mb-2">
-                    <span class="fas fa-star me-1" style="width:15px"></span>
-                    <span class="fas fa-star me-1" style="width:15px"></span>
-                    <span class="fas fa-star me-1" style="width:15px"></span>
-                    <i class="fas fa-star-half-alt me-1" style="width:15px"></i>
-                    <span class="far fa-star me-0" style="width:15px"></span>
-                </div>
-                
-                <!-- Title & Edit Details -->
-                <div class="d-flex align-items-center mb-2">
-                    <h1 class="fs-6 mb-0 me-2"><cms:show k_page_title /></h1>
-                    <cms:popup_edit 'k_page_title | feature | value | itm_desc' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Details' title='Edit Details'><i class='fas fa-pencil-alt'></i></button>" />
-                </div>
-                
-                <!-- Feature and Value Badges -->
-                <cms:if feature>
-                    <div class="badge text-bg-warning me-2">Feature Item</div>
-                </cms:if>
-                <cms:if value>
-                    <div class="badge text-bg-info text-white">Great Value</div>
-                </cms:if>
+<cms:set target_product_id="<cms:gpc 'p' method='get' />" />
 
-                <!-- Pricing Section Header & Edit Button -->
-                <div class="d-flex align-items-center mt-3 mb-1">
-                    <span class="text-700 me-2 fw-bold">
-                        <cms:if old_price>Now Only<cms:else />Only</cms:if>
-                    </span>
-                    <cms:popup_edit 'group_price | group_variants | group_shipping' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Pricing' title='Edit Pricing & Cart'><i class='fas fa-pencil-alt'></i></button>" />
-                </div>
+<cms:pages masterpage='product.php' id=target_product_id limit='1'>
+	<section class="py-3 py-lg-5">
+		<div class="container mt-2 mt-lg-4">
+			<div class="row">
+				<div class="col-12 col-lg ps-lg-8 order-2 order-lg-2">
 
-                <div class="pb-3 mb-3 border-bottom border-300"> 
-                    <span class="fs-7">$<cms:number_format pp_price /></span>
-                    <cms:if old_price>
-                        &nbsp;<del class="text-muted">$<cms:number_format old_price /></del>
-                    </cms:if>
-                    <cms:if pp_requires_shipping == '0'>
-                        &nbsp;<strong class="text-success"><i class="fas fa-download"></i> Digital / No Shipping</strong>
-                    </cms:if>
-                </div>
-                
-                <h6 class="mb-3">SKU: 
-					<cms:if itm_sku>
-						<cms:show itm_sku />
-					<cms:else />
-						<cms:show k_page_id />
+					<div class="text-warning mb-2">
+						<span class="fas fa-star me-1" style="width:15px"></span>
+						<span class="fas fa-star me-1" style="width:15px"></span>
+						<span class="fas fa-star me-1" style="width:15px"></span>
+						<i class="fas fa-star-half-alt me-1" style="width:15px"></i>
+						<span class="far fa-star me-0" style="width:15px"></span>
+					</div>
+					
+					<!-- Title & Edit Details -->
+					<div class="d-flex align-items-center mb-2">
+						<h1 class="fs-6 mb-0 me-2"><cms:show k_page_title /></h1>
+						<cms:popup_edit 'k_page_title | feature | value | itm_desc' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Details' title='Edit Details'><i class='fas fa-pencil-alt'></i></button>" />
+					</div>
+
+					<!-- Feature and Value Badges -->
+					<cms:if feature>
+						<div class="badge text-bg-warning me-2">Feature Item</div>
 					</cms:if>
-				</h6>
+					<cms:if value>
+						<div class="badge text-bg-info text-white">Great Value</div>
+					</cms:if>
 
-                <!-- Description Section -->
-                <h5 class="mt-4"><cms:show k_page_title /> Description</h5>
-                <div class="mb-4">
-                    <cms:show itm_desc />
-                </div>
-                
-                <!-- CouchCart Product Form & Variants -->
-                <cms:pp_product_form class="mb-4 d-flex flex-wrap align-items-center gap-3">
-                    
-                    <cms:if pp_options>
-                        <cms:php>
-                            global $CTX;
-                            $options_str = trim($CTX->get('pp_options'));
-                            if($options_str != ''){
-                                $arr_options = explode("\n", $options_str);
-                                $opt_count = 0; 
-                                foreach($arr_options as $option){
-                                    $option = trim($option);
-                                    if(!$option) continue;
-                                    if( preg_match('/^([^\[]+)\[([^\]]+)\](\*?)$/', $option, $matches) ){
-                                        $opt_name = trim($matches[1]);
-                                        $opt_values = explode('|', $matches[2]);
-                                        
-                                        echo '<div class="me-3 mb-md-0 d-md-flex align-items-md-center custom-variants">';
-                                        echo '<label class="mb-md-0 fw-bold me-2" for="os'.$opt_count.'">'.$opt_name.':</label>';
-                                        echo '<select class="form-select" name="os'.$opt_count.'" id="os'.$opt_count.'" style="min-width: 7.5rem;">';
-                                        
-                                        foreach($opt_values as $val){
-                                            $val = trim($val);
-                                            $parts = explode('=', $val);
-                                            $display_name = trim($parts[0]);
-                                            $value_attr = htmlspecialchars($val, ENT_QUOTES, 'UTF-8');
-                                            echo '<option value="'.$value_attr.'">'.$display_name.'</option>';
-                                        }
-                                        echo '</select></div>';
-                                        $opt_count++;
-                                    }
-                                }
-                            }
-                        </cms:php>
-                    </cms:if>
+					<!-- Pricing Section Header & Edit Button -->
+					<div class="d-flex align-items-center mt-3 mb-1">
+						<span class="text-700 me-2 fw-bold">
+							<cms:if old_price>Now Only<cms:else />Only</cms:if>
+						</span>
+						<cms:popup_edit 'group_price | group_variants | group_shipping' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Pricing' title='Edit Pricing & Cart'><i class='fas fa-pencil-alt'></i></button>" />
+					</div>
 
-                    <div class="form-group mb-md-0 d-md-flex align-items-md-center">
-                        <label class="mb-md-0 fw-bold" for="qty">Quantity: </label>
-                        <input type="number" class="ms-md-2 form-control" id="qty" name="qty" value="1" min="1" style="min-width: 5rem;">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-danger ms-3">Add to Cart</button>
-                </cms:pp_product_form>
+					<div class="pb-3 mb-3 border-bottom border-300"> 
+						<span class="fs-7">$<cms:number_format pp_price /></span>
+						<cms:if old_price>
+							&nbsp;<del class="text-muted">$<cms:number_format old_price /></del>
+						</cms:if>
+						<cms:if pp_requires_shipping == '0'>
+							&nbsp;<strong class="text-success"><i class="fas fa-download"></i> Digital / No Shipping</strong>
+						</cms:if>
+					</div>
 
-                <!-- Mosaic Accordion: Specifications -->
-                <!-- Only shows if specs exist, OR if user is admin (so they have the button to add them) -->
-                <cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>" || k_user_access_level ge '7'>
-                    <div class="mt-5">
-                        <div class="d-flex align-items-center mb-3">
-                            <h5 class="mb-0 me-2">Specifications & Highlights</h5>
-                            <cms:popup_edit 'itm_specs_msc' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Specs' title='Edit Specifications'><i class='fas fa-pencil-alt'></i></button>" />
-                        </div>
-                        
-                        <cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>">
-                            <div class="accordion" id="specsAccordion">
-                                <cms:show_mosaic 'itm_specs_msc'>
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="heading<cms:show k_count />">
-                                            <!-- The first item gets 'true' and no 'collapsed' class -->
-                                            <button class="accordion-button <cms:if k_count!='1'>collapsed</cms:if>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<cms:show k_count />" aria-expanded="<cms:if k_count=='1'>true<cms:else />false</cms:if>" aria-controls="collapse<cms:show k_count />">
-                                                <cms:show spec_title />
-                                            </button>
-                                        </h2>
-                                        <!-- The first item gets 'show' to remain open by default -->
-                                        <div id="collapse<cms:show k_count />" class="accordion-collapse collapse <cms:if k_count=='1'>show</cms:if>" aria-labelledby="heading<cms:show k_count />" data-bs-parent="#specsAccordion">
-                                            <div class="accordion-body fw-light text-wrap overflow-hidden">
-                                                <cms:show spec_content />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </cms:show_mosaic>
-                            </div>
-                        </cms:if>
-                    </div>
-                </cms:if>
-            </div>
-            
-            <div class="col-6 col-sm-5 col-md-6 col-lg-4 mx-auto ms-lg-0 order-1 order-lg-1 mb-3 mb-lg-0">
-                <!-- Media / Images Edit Button -->
-                <div class="d-flex justify-content-end mb-2">
-                    <cms:popup_edit 'itm_img_grp | itm_sldrs' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Media' title='Edit Media & Images'><i class='fas fa-pencil-alt'></i></button>" />
-                </div>
-                
-                <div class="swiper-theme-container product-slider" data-swiper-theme-container="data-swiper-theme-container">
-                    <div class="swiper" data-swiper='{"effect":"fade","fadeEffect":{"crossFade":true},"spaceBetween":5,"loop":true,"loopedSlides":5,"thumb":{"spaceBetween":5,"slidesPerView":5,"loop":true,"freeMode":true,"grabCursor":true,"loopedSlides":5,"centeredSlides":true,"slideToClickedSlide":true,"watchSlidesVisibility":true,"watchSlidesProgress":true},"slideToClickedSlide":true}'>
-                        <div class="swiper-wrapper">
-                            
-                            <cms:if itm_img_mn>
-                                <div class="swiper-slide">
-                                    <img class="w-100" src="<cms:show itm_img_mn />" alt="<cms:show k_page_title />" />
-                                </div>
-                            </cms:if>
+					<h6 class="mb-3">SKU: 
+						<cms:if itm_sku>
+							<cms:show itm_sku />
+						<cms:else />
+							<cms:show k_page_id />
+						</cms:if>
+					</h6>
 
-                            <cms:show_mosaic 'itm_sldrs_msc'>
-								<div class="swiper-slide">
-									<img class="w-100" src="<cms:show itm_slider_img />" alt="<cms:show itm_slider_img_alt />" />
+					<!-- Description Section -->
+					<h5 class="mt-4"><cms:show k_page_title /> Description</h5>
+					<div class="mb-4">
+						<cms:show itm_desc />
+					</div>
+
+					<!-- CouchCart Product Form & Variants -->
+					<cms:pp_product_form class="mb-4 d-flex flex-wrap align-items-center gap-3">
+
+						<cms:if pp_options>
+							<cms:php>
+								global $CTX;
+								$options_str = trim($CTX->get('pp_options'));
+								if($options_str != ''){
+									$arr_options = explode("\n", $options_str);
+									$opt_count = 0; 
+									foreach($arr_options as $option){
+										$option = trim($option);
+										if(!$option) continue;
+										if( preg_match('/^([^\[]+)\[([^\]]+)\](\*?)$/', $option, $matches) ){
+											$opt_name = trim($matches[1]);
+											$opt_values = explode('|', $matches[2]);
+
+											echo '<div class="me-3 mb-md-0 d-md-flex align-items-md-center custom-variants">';
+											echo '<label class="mb-md-0 fw-bold me-2" for="os'.$opt_count.'">'.$opt_name.':</label>';
+											echo '<select class="form-select" name="os'.$opt_count.'" id="os'.$opt_count.'" style="min-width: 7.5rem;">';
+
+											foreach($opt_values as $val){
+												$val = trim($val);
+												$parts = explode('=', $val);
+												$display_name = trim($parts[0]);
+												$value_attr = htmlspecialchars($val, ENT_QUOTES, 'UTF-8');
+												echo '<option value="'.$value_attr.'">'.$display_name.'</option>';
+											}
+											echo '</select></div>';
+											$opt_count++;
+										}
+									}
+								}
+							</cms:php>
+						</cms:if>
+
+						<div class="form-group mb-md-0 d-md-flex align-items-md-center">
+							<label class="mb-md-0 fw-bold" for="qty">Quantity: </label>
+							<input type="number" class="ms-md-2 form-control" id="qty" name="qty" value="1" min="1" style="min-width: 5rem;">
+						</div>
+
+						<button type="submit" class="btn btn-danger ms-3">Add to Cart</button>
+					</cms:pp_product_form>
+
+					<!-- Mosaic Accordion: Specifications -->
+					<!-- Only shows if specs exist, OR if user is admin (so they have the button to add them) -->
+					<cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>" || k_user_access_level ge '7'>
+						<div class="mt-5">
+							<div class="d-flex align-items-center mb-3">
+								<h5 class="mb-0 me-2">Specifications & Highlights</h5>
+								<cms:popup_edit 'itm_specs_msc' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Specs' title='Edit Specifications'><i class='fas fa-pencil-alt'></i></button>" />
+							</div>
+
+							<cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>">
+								<div class="accordion" id="specsAccordion">
+									<cms:show_mosaic 'itm_specs_msc'>
+										<div class="accordion-item">
+											<h2 class="accordion-header" id="heading<cms:show k_count />">
+												<!-- The first item gets 'true' and no 'collapsed' class -->
+												<button class="accordion-button <cms:if k_count!='1'>collapsed</cms:if>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<cms:show k_count />" aria-expanded="<cms:if k_count=='1'>true<cms:else />false</cms:if>" aria-controls="collapse<cms:show k_count />">
+													<cms:show spec_title />
+												</button>
+											</h2>
+											<!-- The first item gets 'show' to remain open by default -->
+											<div id="collapse<cms:show k_count />" class="accordion-collapse collapse <cms:if k_count=='1'>show</cms:if>" aria-labelledby="heading<cms:show k_count />" data-bs-parent="#specsAccordion">
+												<div class="accordion-body fw-light text-wrap overflow-hidden">
+													<cms:show spec_content />
+												</div>
+											</div>
+										</div>
+									</cms:show_mosaic>
 								</div>
-							</cms:show_mosaic>
+							</cms:if>
+						</div>
+					</cms:if>
+				</div>
 
-                            <div class="swiper-nav">
-                                <div class="swiper-button-next"></div>
-                                <div class="swiper-button-prev"></div>
-                            </div>
+				<div class="col-6 col-sm-5 col-md-6 col-lg-4 mx-auto ms-lg-0 order-1 order-lg-1 mb-3 mb-lg-0">
+					<!-- Media / Images Edit Button -->
+					<div class="d-flex justify-content-end mb-2">
+						<cms:popup_edit 'itm_img_mn | itm_sldrs_msc' hide_fields='itm_img_grp' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Media' title='Edit Media & Images'><i class='fas fa-pencil-alt'></i></button>" />
+					</div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+					<div class="swiper-theme-container product-slider" data-swiper-theme-container="data-swiper-theme-container">
+						<div class="swiper" data-swiper='{"effect":"fade","fadeEffect":{"crossFade":true},"spaceBetween":5,"loop":true,"loopedSlides":5,"thumb":{"spaceBetween":5,"slidesPerView":5,"loop":true,"freeMode":true,"grabCursor":true,"loopedSlides":5,"centeredSlides":true,"slideToClickedSlide":true,"watchSlidesVisibility":true,"watchSlidesProgress":true},"slideToClickedSlide":true}'>
+							<div class="swiper-wrapper">
+
+									<div class="swiper-slide">
+										<cms:if itm_img_mn>
+											<img class="w-100" src="<cms:show itm_img_mn />" alt="<cms:show k_page_title />" />
+										<cms:else />
+											<!-- Fallback if the client forgot to upload an image -->
+											<img class="w-100" src="<cms:show k_admin_link />uploads/image/noimg.png" alt="Image Not Available" />
+										</cms:if>
+									</div>
+
+
+								<cms:show_mosaic 'itm_sldrs_msc'>
+									<div class="swiper-slide">
+										<img class="w-100" src="<cms:show itm_slider_img />" alt="<cms:show itm_slider_img_alt />" />
+									</div>
+								</cms:show_mosaic>
+
+								<div class="swiper-nav">
+									<div class="swiper-button-next"></div>
+									<div class="swiper-button-prev"></div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</cms:pages>
