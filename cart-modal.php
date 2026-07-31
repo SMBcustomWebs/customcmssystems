@@ -65,12 +65,12 @@
                     
                     <!-- Details & Quantity -->
                     <div class="col-8 px-2">
-                        <a href="<cms:show link />" class="text-decoration-none">
-                            <p class="text-1100 fs-10 fw-bold mb-1 lh-sm"><cms:show title /></p>
+                        <a href="<cms:show link />">
+                            <p class="mb-1 fw-bold"><cms:show title /></p>
                         </a>
                         
                         <cms:pp_selected_options startcount='1'>
-                            <div class="text-600 mb-0" style="font-size: 0.75rem;"><cms:show option_name />: <cms:show option_value /></div>
+                            <div class="mb-0 text-muted"><cms:show option_name />: <cms:show option_value /></div>
                         </cms:pp_selected_options>
                         
                         <!-- Reach back to the database using verified 'id' -->
@@ -82,18 +82,18 @@
                         <div class="d-flex justify-content-between align-items-center mt-2">
                             <div style="width: 60px;">
                                 <!-- Inject the max attribute -->
-                                <input type="number" class="form-control form-control-sm px-1 py-0 text-center" name="qty[<cms:show line_id />]" value="<cms:show quantity />" min="1" step="1" <cms:if cart_track_inv && cart_in_stock gt '0'>max="<cms:show cart_in_stock />"</cms:if>>
+                                <input type="number" class="form-control form-control-sm px-1 py-0" name="qty[<cms:show line_id />]" value="<cms:show quantity />" min="1" step="1" <cms:if cart_track_inv && cart_in_stock gt '0'>max="<cms:show cart_in_stock />"</cms:if>>
                             </div>
-                            <div class="fw-bold text-success fs-10">US $<cms:number_format line_total /></div>
+                            <div class="text-success fw-bold">US $<cms:number_format line_total /></div>
                         </div>
 
                         <!-- Optional UX: Show max available under the box -->
                         <cms:if cart_track_inv && cart_in_stock gt '0'>
-                            <small class="text-success mt-1 d-block" style="font-size: 0.65rem;"><cms:show cart_in_stock /> max available</small>
+                            <small class="mt-1 d-block text-warning"><cms:show cart_in_stock /> max available</small>
                         </cms:if>
                         
-                        <div class="text-end mt-1">
-                            <a class="link-danger text-decoration-none cart-remove" style="font-size: 0.75rem;" href="<cms:pp_remove_item_link />">
+                        <div class="mt-1 text-end">
+                            <a class="cart-remove text-danger text-decoration-none" href="<cms:pp_remove_item_link />">
                                 <i class="fas fa-trash-alt"></i> Remove
                             </a>
                         </div>
@@ -104,10 +104,10 @@
         </div>
         
         <!-- Sticky Bottom Totals & Actions -->
-        <div class="p-3 bg-light border-top mt-auto">
+        <div class="p-3 border-top mt-auto bg-light">
             <div class="d-flex justify-content-between mb-3">
-                <span class="text-900 fw-semi-bold">Subtotal:</span>
-                <span class="fw-bold text-success fs-9">$<cms:number_format "<cms:pp_sub_total />" /></span>
+                <span class="fw-bold">Subtotal:</span>
+                <span class="text-success fw-bold">$<cms:number_format "<cms:pp_sub_total />" /></span>
             </div>
             
             <button type="submit" class="btn btn-outline-secondary btn-sm w-100 mb-2 cart-update">Update Quantities</button>
@@ -115,7 +115,7 @@
             
             <cms:if cart_has_error>
                 <!-- Show the combined error message and hide the checkout button -->
-                <div class="alert alert-danger p-2 text-center mb-0" style="font-size: 0.75rem; font-weight: 600;" role="alert">
+                <div class="alert alert-danger p-2 mb-0" role="alert">
                     <i class="fas fa-exclamation-triangle me-1"></i> <cms:show cart_error_msg />
                 </div>
                 <button type="button" class="btn btn-secondary w-100 mt-2" disabled>
@@ -124,18 +124,18 @@
             <cms:else />
                 <!-- Normal Checkout Button -->
                 <a href="<cms:pp_checkout_link />" class="btn btn-danger w-100 mt-3">
-					<i class="fas fa-lock me-2"></i> Purchase / Checkout
-				</a>
+                    <i class="fas fa-lock me-2"></i> Purchase / Checkout
+                </a>
             </cms:if>
-			
+            
         </div>
     </cms:pp_cart_form>
 
 <cms:else />
     <!-- Empty State -->
-    <div class="p-4 text-center mt-5">
-        <i class="fas fa-shopping-cart fa-3x text-300 mb-3"></i>
-        <h5 class="text-700">Your cart is empty.</h5>
+    <div class="p-4 mt-5 text-center">
+        <i class="fas fa-shopping-cart fa-3x mb-3 text-muted"></i>
+        <h5>Your cart is empty.</h5>
         <button type="button" class="btn btn-primary mt-3" data-bs-dismiss="offcanvas">Continue Shopping</button>
     </div>
 </cms:if>

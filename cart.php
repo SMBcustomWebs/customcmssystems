@@ -16,7 +16,7 @@
         
         <div class="row">
             <div class="col-12">
-                <h1 class="fs-7 pt-6 pb-4">Your Shopping Cart</h1>
+                <h1 class="pt-6 pb-4">Your Shopping Cart</h1>
             </div>
         </div>
         
@@ -73,28 +73,28 @@
                             <div class="col-md-6 col-lg-12">
                                 
                                 <cms:pp_cart_items>
-                                    <div class="row border border-300 py-3 mb-3 mx-0">                                   
+                                    <div class="row border py-3 mb-3 mx-0">                                   
                                         
                                         <!-- Dynamic Image with Fallback -->
-										<div class="col-lg-3"> 
-											<cms:if itm_thumb>
-												<img class="img-fluid mx-auto d-block mb-3 mb-lg-0" style="max-width: 160px;" src="<cms:show itm_thumb />" alt="<cms:show title />" />
-											<cms:else />
-												<img class="img-fluid mx-auto d-block mb-3 mb-lg-0" style="max-width: 160px;" src="<cms:show k_admin_link />uploads/image/noimg.png" alt="Image Not Available" />
-											</cms:if>
-										</div>
+                                        <div class="col-lg-3"> 
+                                            <cms:if itm_thumb>
+                                                <img class="img-fluid mx-auto d-block mb-3 mb-lg-0" style="max-width: 160px;" src="<cms:show itm_thumb />" alt="<cms:show title />" />
+                                            <cms:else />
+                                                <img class="img-fluid mx-auto d-block mb-3 mb-lg-0" style="max-width: 160px;" src="<cms:show k_admin_link />uploads/image/noimg.png" alt="Image Not Available" />
+                                            </cms:if>
+                                        </div>
                                         
                                         <div class="col-lg-6">
-                                            <h5 class="fs-9 text-1100">Details</h5>
-                                            <hr class="text-300" />
+                                            <h5>Details</h5>
+                                            <hr />
                                             <a href="<cms:show link />">
-                                                <p class="text-1100 fs-10 fw-bold"><cms:show title /></p>
+                                                <p class="fw-bold"><cms:show title /></p>
                                             </a>
                                             
                                             <!-- Dynamic Variants Loop -->
                                             <cms:pp_selected_options startcount='1'>
-                                                <div class="row fs-10">
-                                                    <div class="col-3"> <span class="fw-semi-bold me-3"><cms:show option_name /> : </span></div>
+                                                <div class="row text-muted">
+                                                    <div class="col-3"> <span class="me-3 fw-bold"><cms:show option_name /> : </span></div>
                                                     <div class="col"><cms:show option_value /></div>
                                                 </div>
                                             </cms:pp_selected_options>
@@ -106,7 +106,7 @@
                                             </cms:pages>
 
                                             <div class="row align-items-center mt-3">
-                                                <label class="col-3 mb-0" for="qty<cms:show line_id />"> Quantity :</label>
+                                                <label class="col-3 mb-0 fw-bold" for="qty<cms:show line_id />"> Quantity :</label>
                                                 
                                                 <div class="col-3">
                                                     <!-- Inject the max attribute -->
@@ -114,22 +114,22 @@
                                                     
                                                     <!-- Optional UX: Show max available under the box -->
                                                     <cms:if cart_track_inv && cart_in_stock gt '0'>
-                                                        <small class="text-success fs-11 mt-1 d-block"><cms:show cart_in_stock /> max available</small>
+                                                        <small class="mt-1 d-block text-warning"><cms:show cart_in_stock /> max available</small>
                                                     </cms:if>
                                                 </div>
                                                 
                                                 <div class="col">
-                                                    <p class="fs-10 mb-0 fw-semi-bold text-700">US $<cms:number_format price /><span class="fw-normal"> / base price</span></p>
+                                                    <p class="mb-0 text-muted">US $<cms:number_format price /><span> / base price</span></p>
                                                 </div>
                                             </div>
                                             
                                         </div>
                                         
                                         <div class="col-lg-3">
-                                            <h5 class="fs-9 text-1100">Line Total </h5>
-                                            <hr class="text-300" />
-                                            <p class="mb-0 fw-bold text-success">US $<cms:number_format line_total /></p>
-                                            <a class="link-danger fs-10 mt-2 d-inline-block" href="<cms:pp_remove_item_link />"> <i class="fas fa-trash-alt me-1"></i>Remove</a>
+                                            <h5>Line Total </h5>
+                                            <hr />
+                                            <p class="mb-0 text-success fw-bold">US $<cms:number_format line_total /></p>
+                                            <a class="mt-2 d-inline-block text-danger text-decoration-none" href="<cms:pp_remove_item_link />"> <i class="fas fa-trash-alt me-1"></i>Remove</a>
                                         </div>
                                     </div>
                                 </cms:pp_cart_items>
@@ -141,11 +141,11 @@
                     <!-- CART TOTALS & CHECKOUT COLUMN -->
                     <div class="col">
                         <div class="row">
-                            <div class="col-12 border border-300 align-self-start p-3">
-                                <p class="fw-semi-bold my-3 text-1100">You have <cms:pp_count_items /> item(s) in cart</p>
-                                <hr class="text-300" />
+                            <div class="col-12 border align-self-start p-3 bg-light">
+                                <p class="my-3 fw-bold">You have <cms:pp_count_items /> item(s) in cart</p>
+                                <hr />
                                 
-                                <div class="row text-1100">
+                                <div class="row">
                                     <div class="col-8">
                                         <p class="mb-0">Sub Total: </p>
                                     </div>
@@ -172,14 +172,14 @@
                                     </cms:if>
                                     
                                     <div class="col-12">
-                                        <hr class="text-300 my-2" />
+                                        <hr class="my-2" />
                                     </div>
                                     
                                     <div class="col-7">
-                                        <p class="fw-bold text-success mb-0 fs-7">Total: </p>
+                                        <p class="mb-0 fw-bold text-success">Total: </p>
                                     </div>
                                     <div class="col-5 text-end">
-                                        <p class="fw-bold text-success mb-0 fs-7">$<cms:number_format "<cms:pp_total />" /></p>
+                                        <p class="mb-0 fw-bold text-success">$<cms:number_format "<cms:pp_total />" /></p>
                                     </div>
                                 </div>
                             </div>
@@ -189,26 +189,24 @@
                             </div>
                             
                             <cms:if cart_has_error>
-								<!-- Show the combined error message and hide the checkout button -->
-								<div class="alert alert-danger fw-bold fs-10 text-center mb-0 mt-3" role="alert">
-									<i class="fas fa-exclamation-triangle me-2"></i> <cms:show cart_error_msg />
-								</div>
-								<!-- ADDED mb-2 mb-lg-4 HERE -->
-								<button type="button" class="btn btn-secondary w-100 mt-2 mb-2 mb-lg-4" disabled>
-									<i class="fas fa-lock me-2"></i> Checkout Disabled
-								</button>
-							<cms:else />
-								<!-- Normal Checkout Button -->
-								<!-- ADDED mb-2 mb-lg-4 HERE -->
-								<a href="<cms:pp_checkout_link />" class="btn btn-danger w-100 mt-3 mb-2 mb-lg-4">
-									<i class="fas fa-lock me-2"></i> Purchase / Checkout
-								</a>
-							</cms:if>
+                                <!-- Show the combined error message and hide the checkout button -->
+                                <div class="alert alert-danger text-center mb-0 mt-3" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i> <cms:show cart_error_msg />
+                                </div>
+                                <button type="button" class="btn btn-secondary w-100 mt-2 mb-2 mb-lg-4" disabled>
+                                    <i class="fas fa-lock me-2"></i> Checkout Disabled
+                                </button>
+                            <cms:else />
+                                <!-- Normal Checkout Button -->
+                                <a href="<cms:pp_checkout_link />" class="btn btn-danger w-100 mt-3 mb-2 mb-lg-4">
+                                    <i class="fas fa-lock me-2"></i> Purchase / Checkout
+                                </a>
+                            </cms:if>
 
-							<!-- NEW: Return to Shopping Button -->
-							<a href="<cms:link 'products.php' />" class="btn btn-outline-secondary w-100">
-								<i class="fas fa-arrow-left me-2"></i> Return to Shopping
-							</a>
+                            <!-- NEW: Return to Shopping Button -->
+                            <a href="<cms:link 'products.php' />" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-arrow-left me-2"></i> Return to Shopping
+                            </a>
                         </div>
                     </div>
                     
@@ -218,7 +216,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="alert alert-secondary py-5 text-center">
-                        <h4 class="mb-3"><i class="fas fa-shopping-cart fa-2x text-300 mb-3"></i><br>Your cart is currently empty!</h4>
+                        <h4 class="mb-3"><i class="fas fa-shopping-cart fa-2x mb-3 text-muted"></i><br>Your cart is currently empty!</h4>
                         <a href="<cms:show k_site_link />" class="btn btn-primary">Return to Shop</a>
                     </div>
                 </div>
