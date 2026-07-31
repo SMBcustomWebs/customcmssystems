@@ -142,7 +142,18 @@
 
         <cms:editable type='group' name='group_price' label='Price Points' desc="current, reduced, added, etc" order='55' >   
             <cms:editable type='text' name='pp_price' label='Base Price' desc='Amount in USD (correct upto 2 decimal points without the $ sign)' maxlength='10' required='1' search_type='decimal' validator='non_zero_decimal' width='150' order='5' />
-            
+            <cms:editable 
+				name='pp_tax_class' 
+				label='Tax Class' 
+				desc="If not selected, the default global tax percent will be used" 
+				type='relation' 
+				has='one' 
+				searchable='0' 
+				order='10' 
+				orderby='page_name' 
+				order_dir='asc' 
+				masterpage='tax-class.php' 
+			/>
             <cms:editable type='message' name='explain_discount_scale' order='10' >
                 <b>Quantity based pricing:</b> <i>(Tiered pricing)</i><br/>
                 <font color='#777'>If the base price of this product varies based on the quantity purchased (useful for bulk purchases),<br>

@@ -73,16 +73,16 @@
                             <div class="col-md-6 col-lg-12">
                                 
                                 <cms:pp_cart_items>
-                                    <div class="row border border-300 py-3 mb-3 mx-0">
+                                    <div class="row border border-300 py-3 mb-3 mx-0">                                   
                                         
                                         <!-- Dynamic Image with Fallback -->
-                                        <div class="col-lg-3"> 
-                                            <cms:if itm_thumb>
-                                                <img class="w-100" src="<cms:show itm_thumb />" alt="<cms:show title />" />
-                                            <cms:else />
-                                                <img class="w-100" src="<cms:show k_admin_link />uploads/image/noimg.png" alt="Image Not Available" />
-                                            </cms:if>
-                                        </div>
+										<div class="col-lg-3"> 
+											<cms:if itm_thumb>
+												<img class="img-fluid mx-auto d-block mb-3 mb-lg-0" style="max-width: 160px;" src="<cms:show itm_thumb />" alt="<cms:show title />" />
+											<cms:else />
+												<img class="img-fluid mx-auto d-block mb-3 mb-lg-0" style="max-width: 160px;" src="<cms:show k_admin_link />uploads/image/noimg.png" alt="Image Not Available" />
+											</cms:if>
+										</div>
                                         
                                         <div class="col-lg-6">
                                             <h5 class="fs-9 text-1100">Details</h5>
@@ -189,20 +189,26 @@
                             </div>
                             
                             <cms:if cart_has_error>
-                                <!-- Show the combined error message and hide the checkout button -->
-                                <div class="alert alert-danger fw-bold fs-10 text-center mb-0 mt-3" role="alert">
-                                    <i class="fas fa-exclamation-triangle me-2"></i> <cms:show cart_error_msg />
-                                </div>
-                                <button type="button" class="btn btn-secondary w-100 mt-2" disabled>
-                                    <i class="fas fa-lock me-2"></i> Checkout Disabled
-                                </button>
-                            <cms:else />
-                                <!-- Normal Checkout Button -->
-                                <a href="<cms:show pp_checkout_link />" class="btn btn-danger w-100 mt-3">
-                                    <i class="fas fa-lock me-2"></i> Purchase / Checkout
-                                </a>
-                            </cms:if>
-                            
+								<!-- Show the combined error message and hide the checkout button -->
+								<div class="alert alert-danger fw-bold fs-10 text-center mb-0 mt-3" role="alert">
+									<i class="fas fa-exclamation-triangle me-2"></i> <cms:show cart_error_msg />
+								</div>
+								<!-- ADDED mb-2 mb-lg-4 HERE -->
+								<button type="button" class="btn btn-secondary w-100 mt-2 mb-2 mb-lg-4" disabled>
+									<i class="fas fa-lock me-2"></i> Checkout Disabled
+								</button>
+							<cms:else />
+								<!-- Normal Checkout Button -->
+								<!-- ADDED mb-2 mb-lg-4 HERE -->
+								<a href="<cms:pp_checkout_link />" class="btn btn-danger w-100 mt-3 mb-2 mb-lg-4">
+									<i class="fas fa-lock me-2"></i> Purchase / Checkout
+								</a>
+							</cms:if>
+
+							<!-- NEW: Return to Shopping Button -->
+							<a href="<cms:link 'products.php' />" class="btn btn-outline-secondary w-100">
+								<i class="fas fa-arrow-left me-2"></i> Return to Shopping
+							</a>
                         </div>
                     </div>
                     

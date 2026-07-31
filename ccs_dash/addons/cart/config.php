@@ -5,7 +5,7 @@
     // /////////////////////////////////// Core config values ////////////////////////////////////////////
     $pp['tpl_cart'] = 'cart.php';
     $pp['tpl_checkout'] = 'checkout.php';
-    $pp['paypal_use_sandbox'] = 0;
+    $pp['paypal_use_sandbox'] = 1;
     $pp['paypal_email'] = '';
     $pp['currency'] = 'USD';
     $pp['currency_symbol'] = '$';
@@ -78,7 +78,7 @@
     /*
         Tax
     */
-    $pp['tax_percent'] = '0';
+    $pp['tax_percent'] = '7.5';
 
     // Set the following to '1' if tax is to be applied before adding shipping charges to cart total (i.e. shipping is not taxed).
     $pp['tax_excludes_shipping'] = '0';

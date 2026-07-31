@@ -123,9 +123,11 @@
                 </button>
             <cms:else />
                 <!-- Normal Checkout Button -->
-                <button type="submit" name="checkout" class="btn btn-danger w-100">Checkout</button>
+                <a href="<cms:pp_checkout_link />" class="btn btn-danger w-100 mt-3">
+					<i class="fas fa-lock me-2"></i> Purchase / Checkout
+				</a>
             </cms:if>
-
+			
         </div>
     </cms:pp_cart_form>
 
