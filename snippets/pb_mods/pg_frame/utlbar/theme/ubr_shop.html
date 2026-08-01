@@ -1,3 +1,10 @@
+<cms:set my_wishlist_count='0' scope='global' />
+<cms:if k_logged_in>
+    <!-- Use capture to silently trap the printed number into our variable -->
+    <cms:capture into='my_wishlist_count' scope='global'>
+        <cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show k_user_id />" count_only='1' />
+    </cms:capture>
+</cms:if>
 <section class="bg-<cms:show ccs_ubr_shop_bg_clr_opt /> py-0 text-<cms:show ccs_ubr_shop_txt_clr /> <cms:show ccs_ubr_shop_dspr /> <cms:if ccs_ubr_shop_stky>sticky-top top-0 start-0 z-3</cms:if>" aria-label="E-Commerce and Account Links">
     
     <cms:if ccs_gl_edt_ok>
@@ -54,15 +61,15 @@
                     <span class="visually-hidden">Profile</span>
                 </a>
                 
-                <!-- Wishlist (Static for now, but ready for logic) -->
-                <a class="btn btn-link btn-sm px-2 link-<cms:show ccs_ubr_shop_txt_clr />" href="#!">
-                    <span class="fw-bolder fs-9 <cms:show ccs_ubr_shop_icn_wishlist />" aria-hidden="true"></span>
-                    <span class="visually-hidden">Wishlist</span>
-                    <span class="d-inline-block ps-1">0</span>
-                </a>
-                
+                <!-- Wishlist Modal Trigger -->
+				<a class="btn btn-link btn-sm px-2 link-<cms:show ccs_ubr_shop_txt_clr />" href="#wishlistOffcanvas" data-bs-toggle="offcanvas" role="button" aria-controls="wishlistOffcanvas" title="Show Wishlist">
+					<span class="fw-bolder fs-9 <cms:show ccs_ubr_shop_icn_wishlist />" aria-hidden="true"></span>
+					<span class="visually-hidden">Wishlist</span>
+					<span id="wishlist-count-badge" class="d-inline-block ps-1"><cms:show my_wishlist_count /></span>
+				</a>
+
                 <!-- Cart Icon with Dynamic Count and Offcanvas Trigger -->
-                <a class="btn btn-link btn-sm px-2 link-<cms:show ccs_ubr_shop_txt_clr /> pe-md-0" href="#cartOffcanvas" data-bs-toggle="offcanvas" role="button" aria-controls="cartOffcanvas">
+                <a class="btn btn-link btn-sm px-2 link-<cms:show ccs_ubr_shop_txt_clr /> pe-md-0" href="#cartOffcanvas" data-bs-toggle="offcanvas" role="button" aria-controls="cartOffcanvas" title="Show Cart">
                     <span class="fw-bolder fs-9 <cms:show ccs_ubr_shop_icn_cart />" aria-hidden="true"></span>
                     <span class="visually-hidden">Cart</span>
                     <span class="d-inline-block ps-1 cart-qty-badge"><cms:pp_count_items /></span>
@@ -77,20 +84,8 @@
 <!-- ============================================-->
 <!-- Cart Offcanvas Shell =======================-->
 <!-- ============================================-->
-<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel" style="width: 450px; max-width: 100vw;">
-    <div class="offcanvas-header bg-light border-bottom">
-        <h5 class="offcanvas-title fw-bold" id="cartOffcanvasLabel">
-            <i class="fas fa-shopping-cart me-2 text-primary"></i>Your Cart
-        </h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    
-    <!-- The JavaScript will inject cart-modal.php exactly into this div -->
-    <div class="offcanvas-body p-0" id="cart-modal-body">
-        <div class="d-flex justify-content-center align-items-center h-100">
-            <div class="spinner-border text-secondary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-    </div>
-</div>
+<cms:embed 'e_modals/cart.html' />
+<!-- ============================================-->
+<!-- Wishlist Offcanvas Shell ===================-->
+<!-- ============================================-->
+<cms:embed 'e_modals/wishlist.html' />

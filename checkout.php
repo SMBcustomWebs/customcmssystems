@@ -24,8 +24,36 @@
             
             <!-- CHECKOUT FORM COLUMN -->
             <div class="col-lg-7 pe-lg-5">
+				
+				<!-- Login Prompt for Guests -->
+				<cms:if k_logged_out>
+					<div class="alert alert-info d-flex align-items-center mb-4 p-3 border rounded bg-light">
+						<i class="fas fa-user-circle fa-2x me-3 text-primary"></i>
+						<div>
+							<h5 class="mb-1 fw-bold">Already have an account?</h5>
+							<p class="mb-0 text-muted">
+								<!-- Using the smart login link instead of a hardcoded URL -->
+								<a href="<cms:login_link />" class="text-primary fw-bold text-decoration-none">Log in</a> 
+								for faster checkout, saved addresses, and easy order tracking.
+							</p>
+						</div>
+					</div>
+				</cms:if>
+				
+				
                 <h3 class="mb-4">Billing & Shipping Information</h3>
                 
+                <!-- IF LOGGED IN: Split the user's Display Name into First and Last for the form -->
+                <cms:php>
+                    global $CTX;
+                    $full_name = $CTX->get('k_user_title');
+                    if($full_name){
+                        $parts = explode(' ', $full_name, 2);
+                        $CTX->set('prefill_first_name', $parts[0]);
+                        $CTX->set('prefill_last_name', isset($parts[1]) ? $parts[1] : '');
+                    }
+                </cms:php>
+
                 <cms:form method="post" anchor='0'>
     
                     <cms:if k_success>
@@ -163,17 +191,17 @@
                 <div class="row g-3 mb-4">
                     <div class="col-md-6">
                         <label for="order_first_name" class="form-label fw-bold">First Name *</label>
-                        <cms:input type="text" class="form-control" id="order_first_name" name="first_name" required="1" />
+                        <cms:input type="text" class="form-control" id="order_first_name" name="first_name" required="1" value=prefill_first_name />
                         <cms:if k_error_first_name><div class="mt-1 text-danger fw-bold">First name is required</div></cms:if>
                     </div>
                     <div class="col-md-6">
                         <label for="order_last_name" class="form-label fw-bold">Last Name *</label>
-                        <cms:input type="text" class="form-control" id="order_last_name" name="last_name" required="1" />
+                        <cms:input type="text" class="form-control" id="order_last_name" name="last_name" required="1" value=prefill_last_name />
                         <cms:if k_error_last_name><div class="mt-1 text-danger fw-bold">Last name is required</div></cms:if>
                     </div>
                     <div class="col-12">
                         <label for="order_email" class="form-label fw-bold">Email Address *</label>
-                        <cms:input type="text" validator="email" class="form-control" id="order_email" name="email" required="1" />
+                        <cms:input type="text" validator="email" class="form-control" id="order_email" name="email" required="1" value=k_user_email />
                         <cms:if k_error_email><div class="mt-1 text-danger fw-bold">Valid email is required</div></cms:if>
                         <div class="form-text text-muted">We'll send your receipt and tracking info here.</div>
                     </div>
@@ -184,29 +212,27 @@
                 <div class="row g-3 mb-4">
                     <div class="col-12">
                         <label for="order_address" class="form-label fw-bold">Street Address *</label>
-                        <cms:input type="text" class="form-control" id="order_address" name="address" placeholder="123 Main St" required="1" />
+                        <cms:input type="text" class="form-control" id="order_address" name="address" placeholder="123 Main St" required="1" value=k_user_shipping_address />
                         <cms:if k_error_address><div class="mt-1 text-danger fw-bold">Address is required</div></cms:if>
                         <div class="form-text text-danger">Please use a physical address (No P.O. Boxes allowed).</div>
                     </div>
                     <div class="col-md-6">
                         <label for="order_city" class="form-label fw-bold">City *</label>
-                        <cms:input type="text" class="form-control" id="order_city" name="city" required="1" />
+                        <cms:input type="text" class="form-control" id="order_city" name="city" required="1" value=k_user_shipping_city />
                         <cms:if k_error_city><div class="mt-1 text-danger fw-bold">City is required</div></cms:if>
                     </div>
                     <div class="col-md-3">
                         <label for="order_state" class="form-label fw-bold">State *</label>
-                        <cms:input type="text" class="form-control" id="order_state" name="state" required="1" />
+                        <cms:input type="text" class="form-control" id="order_state" name="state" required="1" value=k_user_shipping_state />
                         <cms:if k_error_state><div class="mt-1 text-danger fw-bold">State is required</div></cms:if>
                     </div>
                     <div class="col-md-3">
                         <label for="order_zip" class="form-label fw-bold">Zip Code *</label>
-                        <cms:input type="text" class="form-control" id="order_zip" name="zip" required="1" />
+                        <cms:input type="text" class="form-control" id="order_zip" name="zip" required="1" value=k_user_shipping_zip />
                         <cms:if k_error_zip><div class="mt-1 text-danger fw-bold">Zip is required</div></cms:if>
                     </div>
                 </div>
 
-                    
-                    
                 <!-- The Billing Toggle -->
                 <div class="form-check mt-4 mb-4">
                     <input class="form-check-input" type="checkbox" id="same_as_shipping" name="same_as_shipping" value="1" checked>
@@ -221,29 +247,25 @@
 
                     <div class="mb-3">
                         <label class="form-label fw-bold">Street Address *</label>
-                        <input type="text" class="form-control" name="billing_street" id="billing_street">
+                        <input type="text" class="form-control" name="billing_street" id="billing_street" value="<cms:show k_user_billing_street />">
                     </div>
 
                     <div class="row">
                         <div class="col-md-5 mb-3">
                             <label class="form-label fw-bold">City *</label>
-                            <input type="text" class="form-control" name="billing_city" id="billing_city">
+                            <input type="text" class="form-control" name="billing_city" id="billing_city" value="<cms:show k_user_billing_city />">
                         </div>
                         <div class="col-md-4 mb-3">
                             <label class="form-label fw-bold">State *</label>
-                            <input type="text" class="form-control" name="billing_state" id="billing_state">
+                            <input type="text" class="form-control" name="billing_state" id="billing_state" value="<cms:show k_user_billing_state />">
                         </div>
                         <div class="col-md-3 mb-3">
                             <label class="form-label fw-bold">Zip Code *</label>
-                            <input type="text" class="form-control" name="billing_zip" id="billing_zip">
+                            <input type="text" class="form-control" name="billing_zip" id="billing_zip" value="<cms:show k_user_billing_zip />">
                         </div>
                     </div>
                 </div>
 
-                    
-                    
-                    
-                    
                 <!-- Payment Selection -->
                 <h5 class="mb-3 mt-4 fw-bold">Payment Method</h5>
                 <div class="p-3 border rounded mb-4 bg-light">
@@ -255,7 +277,7 @@
                             <i class="fas fa-credit-card me-2 text-primary"></i> Credit / Debit Card
                         </label>
 
-                        <!-- NEW: Stripe Elements Secure Container -->
+                        <!-- Stripe Elements Secure Container -->
                         <div id="stripe-card-container" class="mt-3 p-3 border rounded bg-white">
                             <div id="card-element">
                                 <!-- Stripe's Javascript will securely inject the card inputs here -->
@@ -301,18 +323,15 @@
                         </div>
                     </cms:if>
 
-                    <!-- KK'S CUSTOM TAX BREAKDOWN -->
                     <cms:if "<cms:pp_taxes />">
                         <hr class="my-2">
                         <cms:each pp_custom_taxes>
-                            <!-- Shows individual category e.g., "Tax (Ammo)" -->
                             <div class="d-flex justify-content-between mb-1 text-muted">
                                 <span>Tax (<cms:show key />)</span>
                                 <span>$<cms:number_format "<cms:show item />" /></span>
                             </div>
                         </cms:each>
 
-                        <!-- Shows combined tax total -->
                         <div class="d-flex justify-content-between mb-2">
                             <span class="fw-bold">Taxes Total</span>
                             <span class="fw-bold">$<cms:number_format "<cms:pp_taxes />" /></span>
@@ -337,7 +356,6 @@
 <!-- ============================================-->
 <script>
     
-    
     // UI Toggle: Billing vs Shipping Address
     var sameAsShippingCheckbox = document.getElementById('same_as_shipping');
     var billingContainer = document.getElementById('billing_address_container');
@@ -345,19 +363,10 @@
     sameAsShippingCheckbox.addEventListener('change', function() {
         if (this.checked) {
             billingContainer.style.display = 'none';
-            // Optional: clear the billing fields if they re-check the box
-            document.getElementById('billing_street').value = '';
-            document.getElementById('billing_city').value = '';
-            document.getElementById('billing_state').value = '';
-            document.getElementById('billing_zip').value = '';
         } else {
             billingContainer.style.display = 'block';
         }
     });
-    
-    
-    
-    
     
     // 1. Initialize Stripe with the public test key
     var stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
@@ -410,7 +419,7 @@
     stripeRadio.addEventListener('change', togglePaymentFields);
     paypalRadio.addEventListener('change', togglePaymentFields);
 
-    // 6. NEW: Intercept the form submission
+    // 6. Intercept the form submission
     var form = document.querySelector('form');
     
     form.addEventListener('submit', function(event) {
@@ -421,27 +430,23 @@
             // Request a secure token from Stripe
             stripe.createToken(card).then(function(result) {
                 if (result.error) {
-                    // Show error in the UI if card is invalid
                     var errorElement = document.getElementById('card-errors');
                     errorElement.textContent = result.error.message;
                 } else {
-                    // Success! Send the token to CouchCMS
                     stripeTokenHandler(result.token);
                 }
             });
         }
     });
 
-    // 7. NEW: Append the token to the form and submit
+    // 7. Append the token to the form and submit
     function stripeTokenHandler(token) {
-        // Create a hidden input to store the token ID
         var hiddenInput = document.createElement('input');
         hiddenInput.setAttribute('type', 'hidden');
         hiddenInput.setAttribute('name', 'stripeToken');
         hiddenInput.setAttribute('value', token.id);
         form.appendChild(hiddenInput);
 
-        // Submit the form natively to CouchCMS
         form.submit();
     }
 </script>

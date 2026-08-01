@@ -50,7 +50,6 @@ echo(str_replace( \"php\", \"html\", \"<cms:show k_template_name />\" ));
 			<cms:if k_count == '1'>
             	<cms:show k_content />
 			</cms:if>
-			
         </cms:show_pagebuilder>
         <cms:popup_edit 'hro_sng_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Header</button>" />
 
@@ -66,7 +65,6 @@ echo(str_replace( \"php\", \"html\", \"<cms:show k_template_name />\" ));
         </cms:show_pagebuilder>
         <cms:popup_edit 'xtr_sng_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Endr</button>" />
     </cms:pages>
-
 <cms:else_if k_is_folder />
  	<cms:pages masterpage="bmenu/<cms:show ccs_active_page_master />" limit="1" >
 		<cms:show_pagebuilder 'hro_sbm_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
@@ -84,8 +82,29 @@ echo(str_replace( \"php\", \"html\", \"<cms:show k_template_name />\" ));
 		</cms:show_pagebuilder>
 		<cms:popup_edit 'xtr_sbm_p' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
 	</cms:pages>
-<cms:else />
+<cms:else_if k_is_list />
+    <cms:pages masterpage="<cms:show k_template_name />__globals" limit="1" >
+        <cms:show_pagebuilder 'hro_sng_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+			<cms:if k_count == '1'>
+            	<cms:show k_content />
+			</cms:if>
+			
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'hro_sng_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Header</button>" />
 
+        <cms:embed "<cms:show single_content />" />
+
+        <cms:show_pagebuilder 'cnt_sng_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+            <cms:show k_content />
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'cnt_sng_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+
+        <cms:show_pagebuilder 'xtr_sng_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+            <cms:show k_content />
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'xtr_sng_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Endr</button>" />
+    </cms:pages>
+<cms:else />
     <cms:pages masterpage="<cms:show k_template_name />__globals" limit="1" >
         <cms:show_pagebuilder 'hro_hmv_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
 			<cms:if k_count == '1'>

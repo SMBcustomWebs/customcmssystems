@@ -1,0 +1,92 @@
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+            
+                <cms:if k_logged_in>
+                    <h3 class="mb-4 fw-bold">Your Saved Items</h3>
+                    
+                    <div class="wishlist-container">
+                        <!-- 1. Outer Loop: Find records in wishlist.php for this specific user -->
+                        <cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show k_user_id />">
+                            
+                            <!-- Save outer variables before entering the inner loop so Couch doesn't forget them -->
+                            <cms:set my_saved_variants = wish_variants />
+                            <cms:set my_wishlist_entry_id = k_page_id />
+                
+                            <!-- 2. Inner Loop: Fetch the live product data using the saved Product ID -->
+                            <cms:pages masterpage='product.php' id=wish_product_id limit='1'>
+                                
+                                <!-- JS HOOKS ADDED HERE: class="wishlist-item-row" and id="..." -->
+                                <div class="card mb-3 p-3 border shadow-sm wishlist-item-row" id="wishlist-item-<cms:show my_wishlist_entry_id />">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-8">
+                                            <h5 class="mb-1">
+                                                <a href="<cms:show k_page_link />" class="text-decoration-none text-dark"><cms:show k_page_title /></a>
+                                            </h5>
+                                            
+                                            <!-- Display the raw captured string -->
+                                            <p class="text-muted small mb-2">
+                                                <em>Saved Data: <cms:show my_saved_variants /></em>
+                                            </p>
+                                            
+                                            <!-- 3. Live Stock Checking Logic -->
+                                            <cms:if track_inventory>
+                                                <cms:if in_stock le '0'>
+                                                    <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i> Out of Stock</span>
+                                                <cms:else />
+                                                    <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i> In Stock</span>
+                                                </cms:if>
+                                            </cms:if>
+                                        </div>
+                                        
+                                        <!-- 4. BUTTONS -->
+                                        <div class="col-md-4 text-md-end mt-3 mt-md-0 d-flex justify-content-md-end align-items-center">
+                                            
+                                            <!-- Remove Button -->
+                                            <button type="button" class="btn btn-link text-danger p-0 text-decoration-none shadow-none remove-wishlist-btn me-4" data-entry-id="<cms:show my_wishlist_entry_id />">
+                                                <i class="fas fa-trash-alt"></i> Remove
+                                            </button>
+                
+                                            <!-- Move to Cart Button or Out of Stock Badge -->
+                                            <cms:if track_inventory ne '1' || in_stock gt '0'>
+                                                <button type="button" class="btn btn-outline-success move-to-cart-btn"
+                                                        data-product-link="<cms:show k_page_link />"
+                                                        data-variants="<cms:show my_saved_variants />"
+                                                        data-entry-id="<cms:show my_wishlist_entry_id />">
+                                                    <i class="fas fa-shopping-cart"></i> Move to Cart
+                                                </button>
+                                            <cms:else />
+                                                <span class="text-danger small fw-bold">
+                                                    <i class="fas fa-exclamation-circle me-1"></i> Temp Out of Stock
+                                                </span>
+                                            </cms:if>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                
+                            </cms:pages>
+                
+                            <!-- If the user has no saved items, show this message -->
+                            <cms:no_results>
+                                <!-- JS HOOK ADDED HERE: class="empty-wishlist-msg" -->
+                                <div class="alert alert-info py-4 text-center shadow-sm empty-wishlist-msg">
+                                    <i class="far fa-heart fa-2x mb-2 text-muted"></i>
+                                    <h5 class="mb-0">You haven't saved any items yet.</h5>
+                                </div>
+                            </cms:no_results>
+                
+                        </cms:pages>
+                    </div>
+                <cms:else />
+                    <div class="alert alert-warning p-4 text-center shadow-sm mt-4">
+                        <i class="fas fa-lock fa-2x mb-3 text-muted"></i>
+                        <h5 class="mb-0">Please <a href="<cms:login_link />" class="text-decoration-none">log in</a> to view your saved items.</h5>
+                    </div>
+                </cms:if>
+
+            </div>
+        </div>
+    </div>
+</section>

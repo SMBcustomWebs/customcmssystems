@@ -152,3 +152,173 @@ document.addEventListener('DOMContentLoaded', function() {
         refreshCartModal();
     });
 });
+
+
+// Wishlist Logic - Native UI Architecture
+document.addEventListener('DOMContentLoaded', function() {
+    var wishlistOffcanvasEl = document.getElementById('wishlistOffcanvas');
+    if (!wishlistOffcanvasEl) return;
+
+    var wishlistBadge = document.getElementById('wishlist-count-badge');
+
+    // Function to safely subtract from the badge count
+    function updateWishlistCount() {
+        if (wishlistBadge) {
+            let currentCount = parseInt(wishlistBadge.textContent) || 0;
+            let newCount = currentCount - 1;
+            if (newCount < 0) newCount = 0;
+            wishlistBadge.textContent = newCount;
+        }
+    }
+
+    // Function to check if list is empty and show the empty message
+    function checkEmptyState() {
+        var remainingItems = wishlistOffcanvasEl.querySelectorAll('.wishlist-item-row');
+        if (remainingItems.length === 0) {
+            var emptyMsg = wishlistOffcanvasEl.querySelector('.empty-wishlist-msg');
+            if (emptyMsg) {
+                emptyMsg.style.display = 'block';
+            } else {
+                // Fallback if the empty-wishlist-msg div isn't caught
+                var offcanvasBody = document.getElementById('wishlist-modal-body');
+                if (offcanvasBody) {
+                    offcanvasBody.innerHTML = '<div class="text-center text-muted mt-5 py-4"><i class="far fa-heart fa-3x mb-3 opacity-50"></i><h5>Your wishlist is empty.</h5></div>';
+                }
+            }
+        }
+    }
+
+    // Listen for all clicks inside the Wishlist Offcanvas
+    wishlistOffcanvasEl.addEventListener('click', function(e) {
+        
+        // --- 1. REMOVE ITEM LOGIC ---
+        var removeBtn = e.target.closest('.remove-wishlist-btn');
+        if (removeBtn) {
+            e.preventDefault();
+            var entryId = removeBtn.getAttribute('data-entry-id');
+            var rowElement = document.getElementById('wishlist-item-' + entryId);
+            
+            // Show loading state
+            var originalText = removeBtn.innerHTML;
+            removeBtn.disabled = true;
+            removeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>...';
+
+            // Build the data payload for the Assassin script
+            var formData = new FormData();
+            formData.append('wishlist_action', 'delete_item');
+            formData.append('entry_id', entryId);
+
+            // Fire the background POST request
+            fetch(window.wishlistModalUrl, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(text => {
+                if (text.includes('WISHLIST_DELETED')) {
+                    // Success! Remove it from the screen
+                    if (rowElement) rowElement.remove();
+                    updateWishlistCount();
+                    checkEmptyState();
+                } else {
+                    console.error('Server error:', text);
+                    removeBtn.disabled = false;
+                    removeBtn.innerHTML = originalText;
+                }
+            })
+            .catch(err => {
+                console.error('Network error:', err);
+                removeBtn.disabled = false;
+                removeBtn.innerHTML = originalText;
+            });
+        }
+
+        // --- 2. MOVE TO CART LOGIC ---
+        var moveBtn = e.target.closest('.move-to-cart-btn');
+        if (moveBtn) {
+            e.preventDefault();
+            var entryId = moveBtn.getAttribute('data-entry-id');
+            var productLink = moveBtn.getAttribute('data-product-link');
+            var variantStr = moveBtn.getAttribute('data-variants');
+            var rowElement = document.getElementById('wishlist-item-' + entryId);
+            
+            var originalText = moveBtn.innerHTML;
+            moveBtn.disabled = true;
+            moveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Moving...';
+
+            // 1. Fetch the product page to scrape the cart form
+            fetch(productLink)
+            .then(res => res.text())
+            .then(html => {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(html, 'text/html');
+                var cartForm = doc.querySelector('#add-to-cart-form') || doc.querySelector('form.cart-form'); 
+                if(!cartForm) throw new Error("Could not find the cart form on product page.");
+
+                var cartData = new FormData(cartForm);
+                
+                // Inject the variants
+                var parts = variantStr.split('|');
+                parts.forEach(part => {
+                    var kv = part.split(':');
+                    if(kv.length === 2) {
+                        var key = kv[0].trim();
+                        var val = kv[1].trim();
+                        if(cartData.has(key)) cartData.set(key, val);
+                        else cartData.append(key, val);
+                    }
+                });
+                
+                if(cartData.has('qty')) cartData.set('qty', '1');
+                else cartData.append('qty', '1');
+
+                var submitBtn = cartForm.querySelector('button[type="submit"], input[type="submit"]');
+                if(submitBtn && submitBtn.name) cartData.append(submitBtn.name, submitBtn.value || '1');
+                else cartData.append('submit', '1'); 
+
+                // POST to the actual Cart URL
+                return fetch(cartForm.getAttribute('action'), {
+                    method: 'POST',
+                    body: cartData
+                });
+            })
+            .then(() => {
+                // 2. Added to cart! Now tell the assassin to delete the wishlist entry
+                var delData = new FormData();
+                delData.append('wishlist_action', 'delete_item');
+                delData.append('entry_id', entryId);
+
+                return fetch(window.wishlistModalUrl, {
+                    method: 'POST',
+                    body: delData
+                });
+            })
+            .then(() => {
+                // 3. Update the Wishlist UI
+                if (rowElement) rowElement.remove();
+                updateWishlistCount();
+                checkEmptyState();
+                
+                // 4. Update the Cart UI
+                var cartBody = document.getElementById('cart-modal-body');
+                if(cartBody && window.cartModalUrl) {
+                    fetch(window.cartModalUrl)
+                    .then(res => res.text())
+                    .then(html => {
+                        cartBody.innerHTML = html;
+                        var newCountEl = cartBody.querySelector('#ajax-cart-count');
+                        var cartBadges = document.querySelectorAll('.cart-qty-badge');
+                        if (newCountEl) {
+                            cartBadges.forEach(b => b.textContent = newCountEl.textContent);
+                        }
+                    });
+                }
+            })
+            .catch(err => {
+                console.error("Move to Cart Error:", err);
+                moveBtn.disabled = false;
+                moveBtn.innerHTML = originalText;
+            });
+        }
+    });
+});

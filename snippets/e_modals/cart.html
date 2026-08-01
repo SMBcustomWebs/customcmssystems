@@ -1,0 +1,18 @@
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel" style="width: 450px; max-width: 100vw;">
+    <div class="offcanvas-header bg-light border-bottom">
+        <h5 class="offcanvas-title fw-bold" id="cartOffcanvasLabel">
+            <i class="fas fa-shopping-cart me-2 text-primary"></i>Your Cart
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    
+    <!-- The JavaScript will inject cart-modal.php exactly into this div -->
+    <div class="offcanvas-body p-0" id="cart-modal-body">
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="spinner-border text-secondary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+</div>

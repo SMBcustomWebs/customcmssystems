@@ -1,5 +1,11 @@
 <?php require_once( 'ccs_dash/cms.php' ); ?>
 <cms:template title="Cart Modal Fragment" parent='_donottouch_' hidden='1' />
+<!-- SECURITY LOCKDOWN: Only allow POST requests, unless user is Super Admin -->
+<cms:if k_method ne 'POST'>
+    <cms:if k_user_access_level lt '10'>
+        <cms:redirect k_site_link />
+    </cms:if>
+</cms:if>
 <cms:no_cache />
 
 <cms:if "<cms:pp_count_items />" >
