@@ -106,7 +106,8 @@
                 <cms:templates orderby='weight' order='asc' >
                     <cms:if k_template_order gt '1000' && k_template_order lt '1999'>
                         <cms:set ccs_mdd_loop_template = k_template_name />
-                        
+                        <cms:set ccs_mdd_loop_title = k_template_title />
+						
                         <li class="nav-item dropdown d-inline-flex align-items-center"> 
                             <a class="nav-link pe-1 <cms:show ccs_nav_typography /> <cms:if k_template_name == ccs_active_page_master>active</cms:if>" href="<cms:show k_template_link />" <cms:if k_template_name == ccs_active_page_master>aria-current="page"</cms:if>>
                                 <cms:show k_template_title />
@@ -119,6 +120,17 @@
                             
                             <cms:pages masterpage='globals.php' limit='1'>
                                 <ul class="dropdown-menu navbar-dropdown-caret bg-<cms:show ccs_gl_site_nav_dd_bg />">
+									<!-- ADMIN ADD-NEW DYNAMIC LINK -->
+									<cms:if k_user_access_level ge '7'>
+										<li>
+											<a class="dropdown-item fw-bold text-success <cms:show ccs_nav_typography />" href="<cms:show k_site_link />add-<cms:show ccs_mdd_loop_template />">
+												<div class="dropdown-item-wrapper ps-2">
+													+ Add <cms:show ccs_mdd_loop_title />
+												</div>
+											</a>
+										</li>
+										<li><hr class="dropdown-divider" style="opacity: 0.15;"></li>
+									</cms:if>
                                     <cms:if k_template_has_dynamic_folders>
                                         
                                         <cms:folders hierarchical='1' masterpage=ccs_mdd_loop_template depth='1'>

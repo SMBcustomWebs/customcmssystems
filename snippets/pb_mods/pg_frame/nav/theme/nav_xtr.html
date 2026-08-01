@@ -154,7 +154,17 @@
                                                 
                                                 <div class="col-lg-8 py-3 py-lg-5 ps-lg-5">
                                                     <div class="row justify-lg-content-start g-0">
-                                                        
+                                                        <!-- ADMIN ADD-NEW DYNAMIC LINK -->
+														<cms:if k_user_access_level ge '7'>
+															<div class="col-12 mb-3 pb-3" style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+																<a class="dropdown-link d-block fw-bold text-success <cms:show ccs_nav_typography />" href="<cms:show k_site_link />add-<cms:show ccs_xtr_loop_template />">
+																	<div class="dropdown-item-wrapper ps-2">
+																		+ Add <cms:show ccs_xtr_template_title />
+																	</div>
+																</a>
+															</div>
+														</cms:if>
+														
                                                         <cms:pages masterpage=ccs_xtr_loop_template>
                                                             <cms:if k_page_foldername == ''>
                                                                 <div class="col-6 col-sm-4 mb-4 pe-3">

@@ -1,11 +1,11 @@
 <nav class="position-relative navbar navbar-top navbar-expand-lg bg-<cms:show ccs_nav_sdd_bg_clr_opt /> <cms:if ccs_nav_sdd_stky>sticky-top top-0 start-0 z-3</cms:if>" aria-label="Primary Navigation">
-	 <cms:if ccs_gl_edt_ok>
+    <cms:if ccs_gl_edt_ok>
         <div class="d-none d-lg-flex position-absolute top-50 start-0 translate-middle-y ms-2 z-3 gap-1">
-			<cms:popup_edit 'ccs_nav_sdd_gen_grp|ccs_nav_sdd_gen_msg|ccs_nav_sdd_gen_row|ccs_nav_sdd_bg_clr_opt|ccs_nav_sdd_stky_row|ccs_nav_sdd_stl_msg|ccs_nav_sdd_stky' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Navbar Settings'><i class='fas fa-cog text-warning' style='font-size: 12px;'></i></span>" />
+            <cms:popup_edit 'ccs_nav_sdd_gen_grp|ccs_nav_sdd_gen_msg|ccs_nav_sdd_gen_row|ccs_nav_sdd_bg_clr_opt|ccs_nav_sdd_stky_row|ccs_nav_sdd_stl_msg|ccs_nav_sdd_stky' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Navbar Settings'><i class='fas fa-cog text-warning' style='font-size: 12px;'></i></span>" />
 
-			<cms:popup_edit 'ccs_nav_sdd_nav_txt_grp|ccs_nav_sdd_nav_msg|ccs_nav_sdd_nav_txt_row|ccs_nav_sdd_nav_text|ccs_nav_sdd_nav_fs|ccs_nav_sdd_nav_fwt|ccs_nav_sdd_nav_fst|ccs_nav_sdd_nav_font|ccs_nav_sdd_nav_ls' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format Navigation text'><i class='fas fa-font text-warning' style='font-size: 12px;'></i></span>" />
-		</div>
-	</cms:if>
+            <cms:popup_edit 'ccs_nav_sdd_nav_txt_grp|ccs_nav_sdd_nav_msg|ccs_nav_sdd_nav_txt_row|ccs_nav_sdd_nav_text|ccs_nav_sdd_nav_fs|ccs_nav_sdd_nav_fwt|ccs_nav_sdd_nav_fst|ccs_nav_sdd_nav_font|ccs_nav_sdd_nav_ls' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format Navigation text'><i class='fas fa-font text-warning' style='font-size: 12px;'></i></span>" />
+        </div>
+    </cms:if>
     <div class="container position-relative">
         
         <cms:if ccs_gl_edt_ok>
@@ -63,11 +63,11 @@
                 </cms:if>   
 
                 <cms:if ccs_gl_edt_ok>
-					<div class="position-absolute top-0 start-0 mt-2 ms-n4 z-3 d-flex flex-column gap-1" style="width: max-content; pointer-events: none;">
-						<cms:show local_brnd_popup />
-						<cms:popup_edit 'ccs_gl_site_tgl_row|ccs_gl_tgln|ccs_gl_tgln_opt|ccs_gl_tgln_clr|ccs_gl_tgln_fmt_msg|ccs_gl_site_tgl_row|ccs_gl_tgln_txt_sz|ccs_gl_tgln_fnt_wt|ccs_gl_tgln_ltr_spc|ccs_gl_tgln_fnt_st|ccs_gl_tgln_fnt_fm' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px; pointer-events: auto;' title='Edit Tagline'><i class='fas fa-pen text-warning' style='font-size: 12px;'></i></span>" />
-					</div>
-				</cms:if>
+                    <div class="position-absolute top-0 start-0 mt-2 ms-n4 z-3 d-flex flex-column gap-1" style="width: max-content; pointer-events: none;">
+                        <cms:show local_brnd_popup />
+                        <cms:popup_edit 'ccs_gl_site_tgl_row|ccs_gl_tgln|ccs_gl_tgln_opt|ccs_gl_tgln_clr|ccs_gl_tgln_fmt_msg|ccs_gl_site_tgl_row|ccs_gl_tgln_txt_sz|ccs_gl_tgln_fnt_wt|ccs_gl_tgln_ltr_spc|ccs_gl_tgln_fnt_st|ccs_gl_tgln_fnt_fm' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px; pointer-events: auto;' title='Edit Tagline'><i class='fas fa-pen text-warning' style='font-size: 12px;'></i></span>" />
+                    </div>
+                </cms:if>
             </div>
         </cms:pages>
         
@@ -83,15 +83,15 @@
             
             <ul class="navbar-nav navbar-nav-top justify-content-end flex-1 me-lg-n2 position-relative" data-top-nav-dropdowns="data-top-nav-dropdowns">
                 <cms:if ccs_gl_edt_ok>
-					<div class="position-absolute top-0 start-0 ms-3 z-3 d-flex gap-5" style="width: max-content; pointer-events: none; margin-top: -15px;">
-						
+                    <div class="position-absolute top-0 start-0 ms-3 z-3 d-flex gap-5" style="width: max-content; pointer-events: none; margin-top: -15px;">
+                        
 
-						<cms:pages masterpage='globals.php' limit='1'>
-							<cms:popup_edit 'ccs_gl_site_nav_mnu_dd_msg|ccs_gl_site_nav_actv_clr|ccs_gl_site_nav_mnu_dd_row|ccs_gl_site_nav_dd_txt_clr|ccs_gl_site_nav_dd_bg' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format dropdown menu colors'><i class='fas fa-palette text-warning' style='font-size: 12px;'></i></span>" />
-							<cms:popup_edit 'ccs_gl_site_nav_hvr_clr|ccs_gl_site_nav_dd_hvr_clr|ccs_gl_site_nav_dd_hvr_bg' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format floatover colors'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
-						</cms:pages>
-					</div>
-				</cms:if>
+                        <cms:pages masterpage='globals.php' limit='1'>
+                            <cms:popup_edit 'ccs_gl_site_nav_mnu_dd_msg|ccs_gl_site_nav_actv_clr|ccs_gl_site_nav_mnu_dd_row|ccs_gl_site_nav_dd_txt_clr|ccs_gl_site_nav_dd_bg' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format dropdown menu colors'><i class='fas fa-palette text-warning' style='font-size: 12px;'></i></span>" />
+                            <cms:popup_edit 'ccs_gl_site_nav_hvr_clr|ccs_gl_site_nav_dd_hvr_clr|ccs_gl_site_nav_dd_hvr_bg' link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format floatover colors'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+                        </cms:pages>
+                    </div>
+                </cms:if>
                 <cms:if k_logged_in >
                     <li class="nav-item">
                         <a class="nav-link <cms:show ccs_nav_typography />" href="<cms:link masterpage='users/logout.php' />">
@@ -112,10 +112,11 @@
                         </a>
                     </li>
                 </cms:if>
-			
+            
                 <cms:templates orderby='weight' order='asc' >
                     <cms:if k_template_order gt '1000' && k_template_order lt '1999'>
                         <cms:set ccs_nav_loop_template = k_template_name />
+                        <cms:set ccs_nav_loop_title = k_template_title />
                         
                         <li class="nav-item dropdown d-inline-flex align-items-center">
                             
@@ -130,6 +131,18 @@
                             
                             <cms:pages masterpage='globals.php' limit='1'>
                                 <ul class="dropdown-menu navbar-dropdown-caret bg-<cms:show ccs_gl_site_nav_dd_bg />">
+                                    
+                                    <!-- ADMIN ADD-NEW DYNAMIC LINK -->
+                                    <cms:if k_user_access_level ge '7'>
+                                        <li>
+                                            <a class="dropdown-item fw-bold text-success <cms:show ccs_nav_typography />" href="<cms:show k_site_link />add-<cms:show ccs_nav_loop_template />">
+                                                <div class="dropdown-item-wrapper ps-2">
+                                                    + Add <cms:show ccs_nav_loop_title />
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider" style="opacity: 0.15;"></li>
+                                    </cms:if>
                                     
                                     <cms:set ccs_sdd_has_top_pages = '0' />
                                     
@@ -168,7 +181,7 @@
                                                 </a>
                                             </li>
                                         </cms:pages>
-                                    </cms:folders>    
+                                    </cms:folders>   
                                     
                                 </ul>
                             </cms:pages>
@@ -179,9 +192,9 @@
 
         </div>
     </div>
-	<div class="position-absolute top-50 end-0 translate-middle-y me-3" style="z-index: 1060; line-height: 1;">
-		<cms:pages masterpage='globals.php' limit='1'>
-			<cms:popup_edit 'ccs_gl_site_nav_msg|ccs_gl_nav_pb' link_text="<button class='btn btn-sm btn-warning shadow-sm text-nowrap py-0 px-2' style='font-size: 11px; height: 24px; display: inline-flex; align-items: center;'><i class='fas fa-layer-group me-1' style='font-size: 10px;'></i>Swap Navbar</button>" />
-		</cms:pages>
-	</div>
+    <div class="position-absolute top-50 end-0 translate-middle-y me-3" style="z-index: 1060; line-height: 1;">
+        <cms:pages masterpage='globals.php' limit='1'>
+            <cms:popup_edit 'ccs_gl_site_nav_msg|ccs_gl_nav_pb' link_text="<button class='btn btn-sm btn-warning shadow-sm text-nowrap py-0 px-2' style='font-size: 11px; height: 24px; display: inline-flex; align-items: center;'><i class='fas fa-layer-group me-1' style='font-size: 10px;'></i>Swap Navbar</button>" />
+        </cms:pages>
+    </div>
 </nav>

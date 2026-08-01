@@ -54,14 +54,35 @@
 
             </cms:pagebuilder>
         </cms:globals>  
-        <!-- force category to be chosen - set in addon/k_functions -->
+       <!-- force category to be chosen - set in addon/k_functions -->
         <cms:editable type='hidden' name='dummy' validator='menu_check' order='1' >1</cms:editable>  
-        <!-- Item description -->
+
+        <!-- ============================================== -->
+        <!-- CORE IDENTITY & INVENTORY CONTROLLERS          -->
+        <!-- ============================================== -->
+        <!-- 1. The Controlling Field (Checkbox) -->
+        <cms:editable type='checkbox' name='track_inventory' label='Track Availability' desc='Check this box to strictly enforce booking/stock limits on this service' opt_values='Yes=1' opt_selected='0' order='6' />
+
+        <!-- 2. The Conditional Function -->
+        <cms:func _into='show_inventory_cond' track_inventory=''>
+            <cms:if "<cms:is '1' in=track_inventory />">
+                show
+            <cms:else />
+                hide
+            </cms:if>
+        </cms:func>
+
+        <!-- 3. The Target Field -->
+        <cms:editable type='text' name='in_stock' label='Availability Count' desc='Total number of available slots/items (Numbers only)' search_type='integer' validator='non_negative_integer' width='150' order='7' not_active=show_inventory_cond />
+
+<cms:editable name='itm_sku' label='Service SKU / ID' desc='Leave blank to use a system-generated ID (Letters and numbers only)' type='text' search_type='text' validator='regex=/^[A-Za-z0-9-]+$/' order='12' />        <!-- Item description -->
         <cms:editable type='textarea' name='itm_desc' label='General Description'  desc='Describe Service'  order='15' />
+        
         <cms:editable type='group' name='itm_img_grp' label='Images' collapsed='1' order='20' >
-            <cms:editable name='itm_img_mn' type='image' desc='main image max dimension 800px'         
+            <cms:editable name='itm_img_mn' type='image' desc='main image max dimension 1000px'         
                 width='1000'
                 height='1000'
+                enctype='multipart/form-data'
                 enforce_max='1'
                 show_preview='1' 
                 preview_width='75'
@@ -84,11 +105,8 @@
             />
         </cms:editable>
 
-
-
-
         <!-- service pricing -->
-        <cms:editable type='group' name='group_price' label='Price Points' desc="current, reduced, added, etc"  order='30' >    
+        <cms:editable type='group' name='group_price' label='Price Points' desc="current, reduced, added, etc"  order='30' >   
             <cms:editable type='text' name='pp_price' label='Base Price' desc='Amount in USD (correct upto 2 decimal points without the $ sign)'
                 maxlength='10'
                 required='0'
@@ -97,11 +115,23 @@
                 width='150'
                 order='5'
             />
-            <cms:editable
-                name='explain_discount_scale' 
-                type='message'
-                order='10'
-                >
+            
+            <cms:editable 
+                type='dropdown' 
+                name='svc_qty_type' 
+                label='Quantity Label (Cart Option)' 
+                desc='Select what the quantity box represents. Select "none" to hide the quantity box entirely.' 
+                opt_values='none | hours | days | weeks | workers | sessions | pages | units' 
+                order='7' 
+            />
+			<cms:func _into='show_qty_pricing_cond' svc_qty_type=''>
+				<cms:if svc_qty_type != 'none'>
+					show
+				<cms:else />
+					hide
+				</cms:if>
+			</cms:func>
+            <cms:editable name='explain_discount_scale' type='message' not_active=show_qty_pricing_cond order='10'>
                 <b>Quantity based pricing:</b> <i>(Tiered pricing)</i><br/>
                 <font color='#777'>If the base price of this service varies based on the quantity purchased (useful for bulk purchases),<br>
                 for example, if the base price is $10 but you want the price to be reduced by $2 (i.e. made $8) for purchase of more than 5 units, and by $3 (i.e. made $7) for purchase of more than 10 units, set it to:</font> <br/>
@@ -111,34 +141,17 @@
                 <font color='blue'><pre>[ 5=2 | 10=3 ]%</pre></font>        
                 <font color='#777'>where the string above now stands for '<i>reduce price by 2% for more than 5, reduce by 3% for more than 10</i>'</font>
             </cms:editable>   
-            <cms:editable 
-                name='pp_discount_scale' 
-                label=':'
-                type='text' 
-                validator='regex=/\[\[?([^\]]*)\](\]?)\s*(%?)/'
-                order='15'
-            />
-            <cms:editable 
-                name='old_price' 
-                label='OldPrice' 
-                desc='gets crossed out on page (optional)'
-                maxlength='10'
-                search_type='decimal'
-                width='150'
-                type='text' 
-                order='20'
-            />
+            
+            <cms:editable name='pp_discount_scale' label='Add Qty Pricing Here:' type='text' not_active=show_qty_pricing_cond validator='regex=/\[\[?([^\]]*)\](\]?)\s*(%?)/' order='15' />
+            
+            <cms:editable name='old_price' label='OldPrice' desc='gets crossed out on page (optional)' maxlength='10' search_type='decimal' width='150' type='text' order='20' />
+            
             <cms:editable type='relation' name='pp_tax_class' label='Tax Class' desc="if not selected, default tax applies"  
-                has='one' 
-                searchable='0'  
-                orderby='page_name' 
-                order_dir='asc'
-                masterpage='tax-class.php' 
-                order='25' 
+                has='one' searchable='0'  orderby='page_name' order_dir='asc' masterpage='tax-class.php' order='25' 
             />
         </cms:editable>
         
-        <cms:editable type='group' name='group_variants' label='Variants' desc="colors, sizes, etc" order='40' >    
+        <cms:editable type='group' name='group_variants' label='Variants' desc="tiers, speed, options, etc" order='40' >   
             <cms:editable type='message' name='explain_options' order='2'>
                 <hr><br><hr>
                 <b>Service Variants:</b>
@@ -161,26 +174,34 @@
                     2. If an option has a different price than the base price, you can specify the price difference too.<br/> 
                     For example, the 'Black' option of 'Color' above will add $3 to the base price while the 'Green' will deduct $2. <br>
                     3. To create radio buttons instead of a dropdown add a '*' at the end as with 'Size' in the example above. <br/>
-                    4. To create a textbox (if the variant consists of custom text e.g. message to be printed on T-Shirts), use '*TEXT*' as shown in the third variant above. You can also specify any price difference as shown in the last variant.
+                    4. To create a textbox (if the variant consists of custom text e.g. message to be printed), use '*TEXT*' as shown in the third variant above. You can also specify any price difference as shown in the last variant.
                 </font>
             </cms:editable>   
 
-            <cms:editable type='textarea' name='pp_options' label='Describe Varients Here As Explained Above'
-                height='130'
-                order='4'
-            />
+            <cms:editable type='textarea' name='pp_options' label='Describe Variants Here As Explained Above' height='130' order='4' />
         </cms:editable>
-        <cms:repeatable name='itm_ad_nfo' label="Specifications / Highlights" desc="each its own entry"  order='47'>
-            <cms:editable type='text' name='prod_spec'label='Additional Info:' order='45' />
-        </cms:repeatable>
-            
-        <cms:editable type='group' name='group_shipping' label='Shipping Information' desc='click to expand'  order='50' > 
-            <cms:editable type='radio' name='pp_requires_shipping' label='Requires Product shipping' desc='Select Yes a physical product requires shipping for service work'
-                opt_values='Yes=1 | No=0'
-                opt_selected = '0'
-                order='5'
-            />
 
+        <!-- ============================================== -->
+        <!-- NEW MOSAIC REGIONS (Replaces Repeatables)      -->
+        <!-- ============================================== -->
+        <cms:mosaic name='itm_specs_msc' label='Specifications & Highlights' desc='Create categorized accordion sections' order='47'>
+            <cms:tile name='spec_section' label='Spec Category'>
+                <cms:editable type='text' name='spec_title' label='Category Title (Accordion Header)' required='1' order='5' />
+                <cms:editable type='richtext' name='spec_content' label='Category Content' toolbar='custom' custom_toolbar='Bold, Italic, -, RemoveFormat | NumberedList, BulletedList | Link, Unlink | Image, Table | Source' order='10' />
+            </cms:tile>
+        </cms:mosaic>
+
+        <cms:mosaic name='itm_sldrs_msc' label='Service Slide Show (Gallery)' order='48'>
+            <cms:tile name='gallery_image' label='Gallery Image'>
+                <cms:editable name='itm_slider_img' label='Image 1000x1000' type='image' width='1000' height='1000' crop='0' show_preview='1' preview_width='75' order='1' />
+                <cms:editable name='itm_slider_img_alt' label='Alt Text' type='text' order='2' />
+            </cms:tile>
+        </cms:mosaic>
+            
+        <cms:editable type='group' name='group_shipping' label='Shipping / Logistics Information' desc='click to expand' order='50' > 
+            <cms:editable type='radio' name='pp_requires_shipping' label='Requires Product shipping' desc='Select Yes if a physical product requires shipping for service work'
+                opt_values='Yes=1 | No=0' opt_selected = '0' order='5'
+            />
             <cms:editable type='message' name='explain_shipping_scale'  order='8' >
                 <b>Shipping Charges:</b><br/>
                 <font color='#777'>Set the option below if you want to set up a sliding scale of shipping charges based on the number of this item ordered.<br>
@@ -189,43 +210,14 @@
                 <font color='#777'>where the string above stands for '<i>3 for more than 0, 7 for more than 5, 10 for more than 15</i>'</font>
             </cms:editable>   
 
-            <cms:editable type='text' name='pp_shipping_scale' label='Set Shipping Charge:' desc='examples above' 
-                validator='regex=/\[\[?([^\]]*)\](\]?)\s*(%?)/'
-                order='10'
-            />
-        </cms:editable>    
+            <cms:editable type='text' name='pp_shipping_scale' label='Set Shipping Charge:' desc='examples above' validator='regex=/\[\[?([^\]]*)\](\]?)\s*(%?)/' order='10' />
+        </cms:editable>   
 
-        <cms:ignore>
-            <cms:editable type='relation' name='itm_bnd_rl' label="Brand Relation" masterpage='brands.php' has='one' order='60' />
-        </cms:ignore>
-        <cms:repeatable name='itm_sldrs' label="Item Slide Show"  order='70'>
-            <cms:editable name='itm_slider_img' label='Image 1000x1000' type='image'  
-                width='1000'
-                height='1000'
-                crop='1'
-                show_preview='1'
-                preview_width='75'
-                order='3'              
-            />
-            <cms:editable name='itm_slider_img_alt' label='Alt Text' type='text' order='4' />
-        </cms:repeatable>
-            
-        <cms:editable type='checkbox' name="feature" label="On Feature Listing" desc="check to add to features list"
-            opt_values='Set As Feature Item=1'
-            opt_selected = '0'
-            order='75'
-        />
-        <cms:editable type='checkbox' name="value" label="On Value Listing" desc="check to add to values list"
-            opt_values='Set As Value Item=1'
-            opt_selected = '0'
-            order='77'
-        />
-        <cms:editable type='checkbox' name="noshow" label="Do Not Show On Menu" desc="default - Will be shown on Site menu"
-            opt_values='Do Not Show on Menu=1'
-            opt_selected = '0'
-            order='79'
-        />
-
+        <cms:editable type='checkbox' name="feature" label="On Feature Listing" desc="check to add to features list" opt_values='Set As Feature Item=1' opt_selected = '0' order='75' />
+        <cms:editable type='checkbox' name="value" label="On Value Listing" desc="check to add to values list" opt_values='Set As Value Item=1' opt_selected = '0' order='77' />
+        <cms:editable type='checkbox' name="noshow" label="Do Not Show On Menu" desc="default - Will be shown on Site menu" opt_values='Do Not Show on Menu=1' opt_selected = '0' order='79' />
+		
+		
         <cms:config_list_view exclude='default-page' searchable='1' orderby='weight' order='asc'>
             <cms:style>
                 .col-k_page_title{

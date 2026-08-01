@@ -1,93 +1,256 @@
-<!-- ============================================-->
-<!-- <section> begin ============================-->
-<section>
+<cms:set target_service_id="<cms:gpc 'p' method='get' />" />
 
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-8">
-                <h1 class="fs-6 fs-md-5 mb-4">
-                    <cms:show k_page_title />
-                </h1>
-                <p class="lead text-700">
-                    Released in 2017 with a vision to renovate the web design; Posh Today is a global trend setter in beautiful design and modern user experience.
-                </p>
-            </div>
-        </div>
-        <div class="row mt-8">
-            <div class="col-md-6 col-lg-4">
-                <h5>
-                    Client: 
-                </h5>
-                <p class="text-700 fw-light">
-                    ThemeWagon Inc.
-                </p>
-                <h6 class="mt-4">
-                    Project Link: 
-                </h6>
-                <a href="#!">
-                     https://themewagon.com/
-                </a>
-                <h5 class="mt-6">
-                    Services: 
-                </h5>
-                <ul class="bullet-inside ps-0 text-700 fw-light">
-                    <li>Branding </li>
-                    <li>Print Collateral </li>
-                    <li>Web Design </li>
-                    <li>Digital Strategy </li>
-                </ul>
-            </div>
-            <div class="col-md-6 col-lg-7 mt-5 mt-md-0">
-                <h4>
-                    Brief 
-                </h4>
-                <hr class="short text-400" />
-                <p class="fw-light text-800">
-                    From a simple hyperlink to the contact form, Posh is packed with so many elements and features to do more.
-                </p>
-                <p class="fw-light text-800">
-                    It's important to launch a startup or personal website quickly. Posh will allow you to make a cool site in no time. And you don't have to bargain with off-shore freelancers or virtual workers anyway; even if you don't know coding. 
-                </p>
-            </div>
-        </div>
-        <div class="row">
-                    <h4>Bigpicture gallery</h4>
-                    <p>You can easily create a gallery of lightbox images by <code>data-bigpicture</code> and <code>data-bp</code> attribute. For a specific gallery set an Id to the parent element and pass the id through <code>data-bigpicture</code> attribute. Use <code>data-bp</code> attribute to pass the image source.</p>
-                    <div class="row mt-5" id="image_gallery">
-                      <div class="col-sm-4 mb-4">
-                        <a href="#!" data-caption="caption" data-bigpicture='{"gallery":"#image_gallery"}' data-bp="<cms:show k_site_link />assets/images/portfolio/01.jpg">
-                          <img class="rounded img-fluid" src="<cms:show k_site_link />assets/images/portfolio/01.jpg" alt="" />
-                        </a>
-                      </div>
-                      <div class="col-sm-4 mb-4">
-                        <a href="#!" data-caption="caption" data-bigpicture='{"gallery":"#image_gallery"}' data-bp="<cms:show k_site_link />assets/images/portfolio/02.jpg">
-                          <img class="rounded img-fluid" src="<cms:show k_site_link />assets/images/portfolio/02.jpg" alt="" />
-                        </a>
-                      </div>
-                      <div class="col-sm-4 mb-4">
-                        <a href="#!" data-caption="caption" data-bigpicture='{"gallery":"#image_gallery"}' data-bp="<cms:show k_site_link />assets/images/portfolio/03.jpg">
-                          <img class="rounded img-fluid" src="<cms:show k_site_link />assets/images/portfolio/03.jpg" alt="" />
-                        </a>
-                      </div>
-                      <div class="col-sm-4 mb-4">
-                        <a href="#!" data-caption="caption" data-bigpicture='{"gallery":"#image_gallery"}' data-bp="<cms:show k_site_link />assets/images/portfolio/04.jpg">
-                          <img class="rounded img-fluid" src="<cms:show k_site_link />assets/images/portfolio/04.jpg" alt="" />
-                        </a>
-                      </div>
-                      <div class="col-sm-4 mb-4">
-                        <a href="#!" data-caption="caption" data-bigpicture='{"gallery":"#image_gallery"}' data-bp="<cms:show k_site_link />assets/images/portfolio/05.jpg">
-                          <img class="rounded img-fluid" src="<cms:show k_site_link />assets/images/portfolio/05.jpg" alt="" />
-                        </a>
-                      </div>
-                      <div class="col-sm-4 mb-4">
-                        <a href="#!" data-caption="caption" data-bigpicture='{"gallery":"#image_gallery"}' data-bp="<cms:show k_site_link />assets/images/portfolio/06.jpg">
-                          <img class="rounded img-fluid" src="<cms:show k_site_link />assets/images/portfolio/06.jpg" alt="" />
-                        </a>
-                      </div>
+<cms:pages masterpage='service.php' id=target_service_id limit='1'>
+    <section class="py-3 py-lg-5">
+        <div class="container mt-2 mt-lg-4">
+            
+            <div class="row gx-lg-5">
+                
+                <!-- LEFT SIDE: Media & Details (65% width on desktop) -->
+                <div class="col-lg-7 order-2 order-lg-1">
+                    
+                    <!-- Media Edit Button -->
+                    <div class="d-flex justify-content-end mb-2">
+                        <cms:popup_edit 'itm_img_mn | itm_sldrs_msc' hide_fields='itm_img_grp' link_text="<button class='btn btn-sm btn-secondary shadow-sm rounded-circle' type='button' aria-label='Edit Media' title='Edit Media & Images'><i class='fas fa-camera'></i></button>" />
                     </div>
+
+                    <!-- 1:1 Image with Thumbnails on the Right -->
+                    <div class="row g-2 mb-5">
+                        <div class="col-9 col-md-10">
+                            <!-- Main Image -->
+                            <cms:if itm_img_mn>
+                                <img class="img-fluid rounded border shadow-sm w-100" src="<cms:show itm_img_mn />" alt="<cms:show k_page_title />" style="aspect-ratio: 1/1; object-fit: cover;" />
+                            <cms:else />
+                                <img class="img-fluid rounded border shadow-sm w-100" src="<cms:show k_admin_link />uploads/image/noimg.png" alt="No Image" style="aspect-ratio: 1/1; object-fit: cover;" />
+                            </cms:if>
+                        </div>
+                        <div class="col-3 col-md-2 d-flex flex-column gap-2" style="max-height: 100%; overflow-y: auto;">
+                            <!-- Re-render main image as first thumb -->
+                            <cms:if itm_img_mn>
+                                <img class="img-fluid rounded border border-primary w-100 opacity-75 hover-opacity-100 cursor-pointer" src="<cms:show itm_img_mn />" alt="Thumbnail" style="aspect-ratio: 1/1; object-fit: cover;" />
+                            </cms:if>
+                            
+                            <cms:show_mosaic 'itm_sldrs_msc'>
+                                <img class="img-fluid rounded border w-100 opacity-75 hover-opacity-100 cursor-pointer" src="<cms:show itm_slider_img />" alt="<cms:show itm_slider_img_alt />" style="aspect-ratio: 1/1; object-fit: cover;" />
+                            </cms:show_mosaic>
+                        </div>
+                    </div>
+
+                    <!-- Description Section -->
+                    <div class="d-flex align-items-center mb-3">
+                        <h3 class="mb-0 me-2">Service Overview</h3>
+                        <cms:popup_edit 'k_page_title | feature | value | itm_desc' link_text="<button class='btn btn-sm btn-secondary shadow-sm rounded-circle' type='button' aria-label='Edit Details' title='Edit Details'><i class='fas fa-pencil-alt'></i></button>" />
+                    </div>
+                    
+                    <div class="mb-5">
+                        <cms:show itm_desc />
+                    </div>
+
+                </div>
+
+                <!-- RIGHT SIDE: Booking / Pricing Card & Specs (35% width on desktop, Sticky) -->
+                <div class="col-lg-5 order-1 order-lg-2 mb-4 mb-lg-0">
+                    <div class="position-sticky top-0" style="padding-top: 1.5rem;">
+                        
+                        <!-- Main Booking Card -->
+                        <div class="card border-0 shadow-sm rounded p-3 mb-4">
+                            
+                            <!-- Badges & Inventory Popup -->
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <cms:if feature><span class="badge text-bg-warning me-1">Featured</span></cms:if>
+                                    <cms:if value><span class="badge text-bg-info text-white">Great Value</span></cms:if>
+                                </div>
+                                <cms:popup_edit 'track_inventory | in_stock' link_text="<button class='btn btn-sm btn-secondary shadow-sm rounded-circle' type='button' title='Edit Availability'><i class='fas fa-calendar-check'></i></button>" />
+                            </div>
+
+                            <h2 class="mb-2"><cms:show k_page_title /></h2>
+                            
+                            <div class="text-warning mb-3">
+                                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><i class="far fa-star"></i>
+                            </div>
+
+                            <!-- Pricing -->
+                            <div class="d-flex align-items-center mb-4">
+                                <h3 class="mb-0 me-2">$<cms:number_format pp_price /></h3>
+                                <cms:if old_price>
+                                    <h5 class="mb-0 ms-2 text-decoration-line-through opacity-75">$<cms:number_format old_price /></h5>
+                                </cms:if>
+                                <cms:popup_edit 'group_price | group_variants | group_shipping' link_text="<button class='btn btn-sm btn-secondary shadow-sm rounded-circle ms-auto' type='button' title='Edit Pricing & Logic'><i class='fas fa-cog'></i></button>" />
+                            </div>
+
+                            <!-- 1. Evaluate Inventory Logic -->
+                            <cms:set allow_purchase='1' />
+                            <cms:set max_limit='' />
+
+                            <cms:if track_inventory>
+                                <cms:if in_stock && in_stock gt '0'>
+                                    <cms:set max_limit=in_stock />
+                                <cms:else />
+                                    <cms:set allow_purchase='0' />
+                                </cms:if>
+                            </cms:if>
+
+                            <!-- 2. Render Form or Out of Stock Badge -->
+                            <cms:if allow_purchase>
+
+                                <cms:pp_product_form id="add-to-cart-form" class="cart-form">
+                                    <cms:if k_error>
+                                        <div class="alert alert-danger w-100 mb-3"><cms:show k_error /></div>
+                                    </cms:if>
+
+                                    <!-- Variants -->
+                                    <cms:pp_product_options>
+                                        <div class="mb-3">
+                                            <label class="mb-1"><cms:show option_name />:</label>
+                                            <cms:pp_option_values class="form-select w-100" />
+                                        </div>
+                                    </cms:pp_product_options>
+
+                                    <!-- Dynamic Quantity Box -->
+                                    <cms:if svc_qty_type != 'none'>
+                                        <div class="mb-3">
+                                            <label class="mb-1" for="qty">
+                                                Quantity <span class="text-capitalize">(<cms:show svc_qty_type />)</span>:
+                                            </label>
+                                            <input type="number" class="form-control" id="qty" name="qty" value="1" min="1" <cms:if max_limit>max="<cms:show max_limit />"</cms:if>>
+                                        </div>
+                                    <cms:else />
+                                        <!-- Hidden quantity if 'None' is selected -->
+                                        <input type="hidden" name="qty" value="1">
+                                    </cms:if>
+
+                                    <button type="submit" class="btn btn-primary w-100 mb-3">
+                                        <i class="fas fa-calendar-plus me-2"></i> Add Service
+                                    </button>
+
+                                    <cms:if track_inventory>
+                                        <div class="text-center mb-3">
+                                            <span class="text-success"><i class="fas fa-check-circle"></i> <cms:show in_stock /> available</span>
+                                        </div>
+                                    </cms:if>
+
+                                </cms:pp_product_form>
+
+                                <!-- WISHLIST BUTTON -->
+                                <cms:set my_wishlist_action="<cms:gpc 'wishlist_action' method='post' />" />
+                                <cms:if my_wishlist_action='save_item' && k_logged_in >
+                                    <cms:set my_prod_id="<cms:gpc 'product_id' method='post' />" />
+                                    <cms:set my_vars="<cms:gpc 'variants' method='post' />" />
+                                    <cms:db_persist _masterpage='wishlist.php' _mode='create' k_page_title="Wishlist-<cms:show k_user_id />-<cms:show my_prod_id />" wish_user_id=k_user_id wish_product_id=my_prod_id wish_variants=my_vars />
+                                    <cms:if k_error><cms:abort>ERROR: <cms:show k_error /></cms:abort><cms:else /><cms:abort>WISHLIST_SUCCESS</cms:abort></cms:if>
+                                </cms:if>
+
+                                <div class="text-center">
+                                    <cms:if k_logged_in>
+                                        <button type="button" id="save-wishlist-btn" class="btn btn-link text-primary text-decoration-none">
+                                            <i class="far fa-heart me-1"></i> Save for Later
+                                        </button>
+                                        <div id="wishlist_feedback" class="mt-1" style="display:none;"></div>
+                                        <script>
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                const btn = document.getElementById('save-wishlist-btn');
+                                                if(btn) {
+                                                    btn.addEventListener('click', function(e) {
+                                                        e.preventDefault();
+                                                        const cartForm = document.getElementById('add-to-cart-form');
+                                                        const feedback = document.getElementById('wishlist_feedback');
+                                                        if(!cartForm) return;
+                                                        
+                                                        const formData = new FormData(cartForm);
+                                                        let variantString = '';
+                                                        formData.forEach(function(value, key) {
+                                                            if(key.toLowerCase() !== 'qty' && key.toLowerCase() !== 'quantity' && key !== 'submit') {
+                                                                variantString += key + ': ' + value + ' | ';
+                                                            }
+                                                        });
+                                                        if(variantString.endsWith(' | ')) variantString = variantString.slice(0, -3);
+
+                                                        const sendData = new FormData();
+                                                        sendData.append('wishlist_action', 'save_item');
+                                                        sendData.append('product_id', '<cms:show k_page_id />');
+                                                        sendData.append('variants', variantString);
+
+                                                        btn.disabled = true;
+                                                        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Saving...';
+
+                                                        fetch(window.location.href, {
+                                                            method: 'POST', body: sendData, headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                                                        }).then(response => response.text()).then(data => {
+                                                            if(data.includes('WISHLIST_SUCCESS')) {
+                                                                btn.className = 'btn btn-link text-success text-decoration-none';
+                                                                btn.innerHTML = '<i class="fas fa-check me-1"></i> Saved to Wishlist';
+                                                                feedback.className = 'mt-1 text-success';
+                                                                feedback.innerHTML = 'Added with your options!';
+                                                            } else {
+                                                                feedback.className = 'mt-1 text-danger';
+                                                                feedback.innerHTML = 'Error saving to wishlist.';
+                                                            }
+                                                            feedback.style.display = 'block';
+                                                        }).catch(error => {
+                                                            btn.disabled = false;
+                                                            btn.innerHTML = '<i class="far fa-heart me-1"></i> Save for Later';
+                                                        });
+                                                    });
+                                                }
+                                            });
+                                        </script>
+                                    <cms:else />
+                                        <a href="<cms:login_link />" class="btn btn-link text-primary text-decoration-none">
+                                            <i class="far fa-heart me-1"></i> Log in to Save
+                                        </a>
+                                    </cms:if>
+                                </div>
+
+                            <cms:else />
+                                <div class="alert alert-warning text-center py-3 border">
+                                    <h5 class="mb-0"><i class="fas fa-calendar-times me-2"></i> Currently Unavailable</h5>
+                                </div>
+                            </cms:if>
+
+                        </div>
+                        
+                        <!-- Mosaic Accordion: Specifications (Moved to the Sidebar) -->
+                        <cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>" || k_user_access_level ge '7'>
+                            <div class="mt-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <h4 class="mb-0 me-2">Scope & Specifications</h4>
+                                    <cms:popup_edit 'itm_specs_msc' link_text="<button class='btn btn-sm btn-secondary shadow-sm rounded-circle' type='button' aria-label='Edit Specs' title='Edit Specifications'><i class='fas fa-pencil-alt'></i></button>" />
+                                </div>
+
+                                <cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>">
+                                    <div class="accordion accordion-flush bg-transparent border-top" id="specsAccordion">
+                                        <cms:show_mosaic 'itm_specs_msc'>
+                                            <div class="accordion-item bg-transparent">
+                                                <h5 class="accordion-header" id="heading<cms:show k_count />">
+                                                    <button class="accordion-button bg-transparent px-0 py-3 <cms:if k_count!='1'>collapsed</cms:if>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<cms:show k_count />" aria-expanded="<cms:if k_count=='1'>true<cms:else />false</cms:if>" aria-controls="collapse<cms:show k_count />">
+                                                        <cms:show spec_title />
+                                                    </button>
+                                                </h5>
+                                                <div id="collapse<cms:show k_count />" class="accordion-collapse collapse <cms:if k_count=='1'>show</cms:if>" aria-labelledby="heading<cms:show k_count />" data-bs-parent="#specsAccordion">
+                                                    <div class="accordion-body px-0 text-wrap overflow-hidden">
+                                                        <cms:show spec_content />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </cms:show_mosaic>
+                                    </div>
+                                </cms:if>
+                            </div>
+                        </cms:if>
+                        
+                    </div>
+                </div>
+
+            </div>
         </div>
         
-    </div>
-<!-- end of .container-->
-
-</section>
+        <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >
+            <div class="container mt-4">
+                <a href="<cms:link 'add-service.php' />?pid=<cms:show k_page_id />" class="btn btn-warning shadow-sm">
+                    <i class="fas fa-edit me-1"></i> Edit Whole Service
+                </a>
+            </div>
+        </cms:if>
+    </section>
+</cms:pages>
