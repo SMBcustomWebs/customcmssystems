@@ -319,7 +319,13 @@
 						</div>
 					</div>
 				</div>
+			
 			</div>
 		</div>
+	<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >
+				<a href="<cms:link 'add-product.php' />?pid=<cms:show k_page_id />" class="btn btn-warning fw-bold">
+					Edit Whole Product
+				</a>
+			</cms:if>
 	</section>
 </cms:pages>

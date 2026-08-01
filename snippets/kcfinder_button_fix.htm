@@ -1,0 +1,127 @@
+<!-- CSS Fixes for Front-End KCFinder/Couch Form Buttons -->
+<style>
+    /* Force popup to absolute front */
+    .mfp-bg { z-index: 999999 !important; }
+    .mfp-wrap { z-index: 1000000 !important; }
+    
+    /* CRITICAL: Stop SVGs from absorbing clicks */
+    button.popup-iframe svg, .img-preview svg { pointer-events: none !important; }
+    
+    /* Button styling */
+    button.popup-iframe {
+        display: inline-flex !important; align-items: center; gap: 8px;
+        padding: 6px 12px; border: 1px solid #ced4da; background-color: #f8f9fa;
+        color: #333; border-radius: 4px; cursor: pointer; margin-top: 5px;
+    }
+    button.popup-iframe:hover { background-color: #e9ecef; }
+    button.popup-iframe svg { max-width: 16px !important; max-height: 16px !important; }
+
+    /* Preview Box Styling */
+    .img-preview {
+        position: relative; display: inline-flex; align-items: center; justify-content: center;
+        border: 2px dashed #dee2e6; background-color: #f8f9fa; border-radius: 6px;
+        width: 120px; height: 120px; overflow: hidden; cursor: pointer; margin-bottom: 10px;
+    }
+    .img-preview > svg { width: 50px !important; height: 50px !important; color: #adb5bd; }
+    
+    /* Keep the input and button aligned neatly */
+    .upload-group { display: flex; gap: 10px; align-items: center; width: 100%; }
+    .upload-path { flex-grow: 1; }
+	
+/* =========================================
+   DESKTOP IMAGE UPLOAD OVERFLOW FIX
+========================================= */
+@media (min-width: 768px) {
+    /* 1. Ensure the label sits on its own line above the image */
+    label.form-label + .img-preview {
+        display: block !important;
+        margin-top: 10px !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* 2. Cap the width of the text input group so it doesn't stretch */
+    .upload-group {
+        max-width: 600px !important;
+        width: 100% !important;
+        display: flex !important;
+        align-items: center !important; /* Centers them vertically */
+    }
+
+    .upload-group button {
+        margin: 0 0 0 10px !important; /* Kills rogue margins, adds gap */
+    }
+}
+/* =========================================
+   MOBILE IMAGE UPLOAD OVERFLOW FIX
+========================================= */
+@media (max-width: 767px) {
+    /* 1. If Couch uses an invisible wrapper, force it into a vertical column */
+    .k_element, 
+    span[id^="k_element_"] {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    /* 2. Kill any absolute positioning on the text field and force full width */
+    input.form-control[type="text"] {
+        display: block !important;
+        width: 100% !important;
+        position: static !important;
+        margin-bottom: 10px !important;
+    }
+
+    /* 3. Kill absolute positioning on the button, clear margins, and stretch it */
+    input[type="button"][value*="Browse"],
+    input.k_button,
+    button.popup-iframe {
+        display: block !important;
+        width: 100% !important;
+        position: static !important; /* This stops it from floating over the text box */
+        transform: none !important;
+        margin: 0 !important;
+        float: none !important;
+        box-sizing: border-box !important;
+    }
+}
+</style>
+
+<!-- MANUAL KCFINDER OVERRIDE SCRIPT -->
+<script>
+    $(document).ready(function() {
+        
+        // 1. Listen for the exact button click
+        $(document).on('click', 'button.popup-iframe', function(e) {
+            e.preventDefault(); 
+            
+            var btn = $(this);
+            var targetInputId = btn.data('kc-finder'); 
+            var iframeUrl = btn.attr('href'); 
+            
+            // 2. Tell KCFinder what to do when an image is selected
+            window.KCFinder = {
+                callBack: function(url) {
+                    window.KCFinder = null; 
+                    
+                    // Put URL in the hidden input box
+                    $('#' + targetInputId).val(url); 
+                    
+                    // NEW: Find the preview box and show the image!
+                    var previewBox = btn.closest('.upload-group').prev('.img-preview');
+                    if (previewBox.length) {
+                        previewBox.empty().append('<img src="' + url + '" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;">');
+                    }
+
+                    $.magnificPopup.close(); 
+                }
+            };
+
+            // 3. Force Magnific Popup to open the KCFinder window
+            $.magnificPopup.open({
+                items: { src: iframeUrl },
+                type: 'iframe'
+            });
+        });
+
+    });
+</script>
