@@ -112,17 +112,22 @@
             <div class="col-lg-10">
                 
                 <div class="d-flex justify-content-between align-items-center mb-4">
-					<h2 class="mb-0"><cms:if edit_id>Edit Product<cms:else />Add New Product</cms:if></h2>
+					<h2 class="mb-0"><cms:if edit_id>Edit Employee<cms:else />Add New Employee</cms:if></h2>
 
-					<cms:if edit_id>
-						<a href="<cms:link 'add-product.php' />" class="btn btn-outline-primary fw-bold shadow-sm">
-							<i class="fas fa-plus me-1"></i> Add Another Product
+					<div>
+						<!-- Return to Site Button (Always visible) -->
+						<a href="<cms:show k_site_link />" class="btn btn-outline-secondary shadow-sm <cms:if edit_id>me-2</cms:if>">
+							<i class="fas fa-arrow-left me-1"></i> Return To Site
 						</a>
-					</cms:if>
-				</div>
-                
-                
 
+						<!-- Add Another Employee Button (Only visible in edit mode) -->
+						<cms:if edit_id>
+							<a href="<cms:link 'add-about.php' />" class="btn btn-outline-primary fw-bold shadow-sm">
+								<i class="fas fa-plus me-1"></i> Add Another Employee
+							</a>
+						</cms:if>
+					</div>
+				</div>
 
                 <!-- THE MAIN DATABOUND FORM -->
                 <cms:form 

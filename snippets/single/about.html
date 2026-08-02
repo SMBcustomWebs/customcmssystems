@@ -1,29 +1,82 @@
-  <!-- ============================================-->
-  <!-- <section> begin ============================-->
-<section class="pb-6">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <img class="mb-3 w-100" src="<cms:show img />" alt="<cms:show img_alt />" />
-            </div>
-            <div class="col">
-                <h1 class="mb-3">
-                    <cms:show k_page_title />
-                </h1>
-                <h6 class="mb-4 ls-2 fw-normal">
-                    <cms:show pos />
-                </h6>
-                <p class="fw-light text-500">
-                    <cms:show desc />
-                </p>
-                <a class="link-1100" href="#!">
-                    <span class="me-1 fab fa-twitter" style="font-size:19px"></span>
-                    <span class="fw-thin">@acasalena</span>
-                </a>
-            </div>
-        </div>
-    </div>
-    <!-- end of .container-->
-</section>
-  <!-- <section> close ============================-->
-  <!-- ============================================-->
+<cms:set target_about_id="<cms:gpc 'p' method='get' />" />
+
+<cms:pages masterpage='about.php' id=target_about_id limit='1'>
+	
+	<!-- ============================================-->
+	<!-- Employee Profile Section ====================-->
+	<section class="pb-6">
+		<div class="container">
+			<div class="row align-items-start">
+
+				<!-- LEFT COLUMN: Employee Image -->
+				<div class="col-12 col-md-5 col-lg-4 mb-4 position-relative">
+
+					<!-- Image Edit Pencil -->
+					<div class="position-absolute top-0 end-0 mt-2 me-3 z-1">
+						<cms:popup_edit 'img | img_alt' link_text="<button class='btn btn-sm <cms:if img>btn-light text-dark shadow-sm<cms:else />btn-light text-dark opacity-50</cms:if> rounded-circle' type='button' title='Edit Photo'><i class='fas fa-pencil-alt'></i></button>" />
+					</div>
+
+					<cms:if img>
+						<img class="mb-3 w-100" src="<cms:show img />" alt="<cms:show img_alt />" />
+					<cms:else />
+						<img class="mb-3 w-100 opacity-50" src="<cms:show k_admin_link />uploads/image/noimg.png" alt="No Image" />
+					</cms:if>
+				</div>
+
+				<!-- RIGHT COLUMN: Details & Bio -->
+				<div class="col-12 col-md-7 col-lg-8">
+
+					<!-- Header Area: Name -->
+					<div class="d-flex align-items-start mb-3">
+						<h1 class="mb-0 me-3">
+							<cms:show k_page_title />
+						</h1>
+						<!-- Name Edit Pencil -->
+						<div class="mt-1">
+							<cms:popup_edit 'k_page_title' link_text="<button class='btn btn-sm <cms:if k_page_title>btn-light text-dark shadow-sm<cms:else />btn-light text-dark opacity-50</cms:if> rounded-circle' type='button' title='Edit Name'><i class='fas fa-pencil-alt'></i></button>" />
+						</div>
+					</div>
+
+					<!-- Employee Data Area (Position, Date) -->
+					<div class="d-flex align-items-start mb-3">
+						<div class="me-3">
+							<cms:if pos || pab>
+								<h6 class="mb-3 ls-2 fw-normal">
+									<cms:if pos><cms:show pos /></cms:if>
+									<cms:if pab> (<cms:show pab />)</cms:if>
+								</h6>
+							</cms:if>
+
+							<cms:if psd>
+								<p>Since: <cms:show psd /></p>
+							</cms:if>
+						</div>
+
+						<!-- Details Edit Pencil (Snug against the text) -->
+						<div>
+							<cms:popup_edit 'pos | pab | psd' link_text="<button class='btn btn-sm <cms:if pos || pab || psd>btn-light text-dark shadow-sm<cms:else />btn-light text-dark opacity-50</cms:if> rounded-circle' type='button' title='Edit Employee Details'><i class='fas fa-pencil-alt'></i></button>" />
+						</div>
+					</div>
+					<!-- Bio Area -->
+					<cms:if desc>
+						<p class="fw-light text-500 mb-2">
+							<cms:show desc />
+						</p>
+					</cms:if>
+					<!-- Bio Edit Pencil (Pushed to the bottom right) -->
+					<div class="d-flex justify-content-end mt-2">
+						<cms:popup_edit 'desc' link_text="<button class='btn btn-sm <cms:if desc>btn-light text-dark shadow-sm<cms:else />btn-light text-dark opacity-50</cms:if> rounded-circle' type='button' title='Edit Bio'><i class='fas fa-pencil-alt'></i></button>" />
+					</div>
+				</div>
+			</div>
+			<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >
+				<div class="mt-4">
+					<a href="<cms:link 'add-about.php' />?pid=<cms:show k_page_id />" class="btn btn-warning shadow-sm">
+						<i class="fas fa-edit me-1"></i> Edit Whole About Section
+					</a>
+				</div>
+			</cms:if>
+
+		</div>
+	</section>
+</cms:pages>

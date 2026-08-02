@@ -130,9 +130,11 @@
         
         />
         <cms:editable type='richtext' name='desc' label='Bio' desc='format as necessary'
-            order='20'
-        />
-        <cms:config_list_view exclude='default-page' searchable='1' orderby='weight' order='asc'>
+			toolbar='custom'
+			custom_toolbar='Bold, Italic, Underline, -, RemoveFormat | NumberedList, BulletedList | Link, Unlink | Source'
+			order='20'
+		/>
+				<cms:config_list_view exclude='default-page' searchable='1' orderby='weight' order='asc'>
             <cms:style>
                 .col-k_page_title{
                     width: 20% ; important!
