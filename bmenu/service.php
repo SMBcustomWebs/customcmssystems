@@ -1,13 +1,23 @@
 <?php require_once( '../ccs_dash/cms.php' ); ?>
     <cms:template title='Services Submenu Titles' parent='_donottouch_' clonable='1' icon='x' hidden='1' order='2300'  >
-        <cms:editable type='message' name='sbm_hro_msg' order='2'>
-            <h2>Page Topper</h2>
-            <h4>One Topper per page</h4>
-            <p></p>
-        </cms:editable>
-        <cms:pagebuilder name='sbm_hro_pb' label='<h3>Page Topper</h3>' skip_custom_fields='1' order='10'>
-            <cms:section label='Page Hero' name='sbm_hro_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_block_msc' />
-        </cms:pagebuilder>
+
+		
+		<!-- SUBMENU PAGEBUILDER -->
+		<cms:editable type="group" name="hro_sbm_pb_grp" label="'Service' Submenu - Hero" desc="Very top of page" order='1' >
+		<cms:editable type='message' name='sbm_hro_pb_msg' group='hro_sbm_pb_grp' order='42'>
+			<h2>Services Homepage View Hero Header</h2>
+			<h3>IMPORTANT: Only the top Hero will show on page.</h3>
+			<h4>Change order with the order arrows on the right of the tile.</h4>
+			<p>Arrows show when floating pointer over the top right corner</p>
+		</cms:editable>
+		<cms:pagebuilder name='hro_sbm_pb' label='<h3>Submenu Page Hero</h3>'  group='hro_sbm_pb_grp' skip_custom_fields='1' order='45'>
+			<cms:section label='Services Submenu Hero - Single' name='hro_sbm_pb_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_msc' />
+			<cms:section label='Serives Submenu Hero - Carousel' name='hro_crs_sbm_pb_sct'  masterpage='blocks/frame/hero_swpr.php' mosaic='ccs_hro_swpr_msc' />
+		</cms:pagebuilder>
+		
+		</cms:editable>
+		
+		
         <cms:editable type='message' name='sbm_cnt_msg' order='14'>
             <h2>Page Focus</h2>
             <h4>The main focus of this submenu item. These will usually link to seperate submenu items or direct contact pages.</h4>

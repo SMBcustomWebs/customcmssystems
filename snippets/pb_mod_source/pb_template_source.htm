@@ -1,0 +1,14 @@
+Select a Source= |
+<cms:templates orderby='weight' order='asc' >
+    <cms:if k_template_order gt '1000' && k_template_order lt '1999'>
+        
+        <!-- Output the Top-Level Template -->
+        <cms:show k_template_title /> (Entire Section)=<cms:show k_template_name />, |
+        
+        <!-- Loop and Output the Folders inside this Template -->
+        <cms:folders masterpage=k_template_name hierarchical='1'>
+            <cms:if k_level='0'>- </cms:if><cms:if k_level='1'>-- </cms:if><cms:if k_level='2'>--- </cms:if><cms:show k_folder_title />=<cms:show k_template_name />,<cms:show k_folder_name /> |
+        </cms:folders>
+        
+    </cms:if>
+</cms:templates>

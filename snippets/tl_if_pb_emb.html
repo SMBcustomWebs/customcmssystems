@@ -66,11 +66,11 @@ echo(str_replace( \"php\", \"html\", \"<cms:show k_template_name />\" ));
         <cms:popup_edit 'xtr_sng_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Endr</button>" />
     </cms:pages>
 <cms:else_if k_is_folder />
- 	<cms:pages masterpage="bmenu/<cms:show ccs_active_page_master />" limit="1" >
+ 	<cms:pages masterpage="bmenu/<cms:show ccs_active_page_master />" page_name="folder-<cms:show k_folder_id />" limit="1" >
 		<cms:show_pagebuilder 'hro_sbm_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
 			<cms:show k_content />
 		</cms:show_pagebuilder>
-		<cms:popup_edit 'hro_sbm_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+		<cms:popup_edit 'hro_sbm_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Hero</button>" />
 
 		<cms:show_pagebuilder 'cnt_sbm_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
 			<cms:show k_content />
