@@ -1,7 +1,5 @@
-<cms:capture into='about_source_options'>
-    Select Folder=- |
-    All (Entire About Section)=all | 
-    <cms:folders masterpage='about.php' hierarchical='1'>
-        <cms:if k_folder_level gt '0'>-- </cms:if><cms:show k_folder_title />=<cms:show k_folder_name /> <cms:if not k_folder_is_last> | </cms:if>
-    </cms:folders>
-</cms:capture><cms:show about_source_options />
+Select Folder=- |
+All (Entire About Section)=all | 
+<cms:folders masterpage='about.php' hierarchical='1' depth='1'>
+    <cms:show k_folder_title />=<cms:show k_folder_name /><cms:if k_folder_is_last != '1'> | </cms:if>
+</cms:folders>

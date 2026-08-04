@@ -44,7 +44,27 @@ echo(str_replace( \"php\", \"html\", \"<cms:show k_template_name />\" ));
 <!-- navigation via breadcrum 
 <cms:breadcrumbs separator='&nbsp;>>&nbsp;' include_template='1' />-->  
 <!-- break up page into views -->
-<cms:if k_is_page>
+<cms:if k_is_home>
+	<cms:pages masterpage="<cms:show k_template_name />__globals" limit="1" >
+        <cms:show_pagebuilder 'hro_hmv_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+			<cms:if k_count == '1'>
+            	<cms:show k_content />
+			</cms:if>
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'hro_hmv_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Hero</button>" />
+
+        <cms:show_pagebuilder 'cnt_hmv_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+            <cms:show k_content />
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'cnt_hmv_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+
+        <cms:show_pagebuilder 'glb_hmv_xtr_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
+            <cms:show k_content />
+        </cms:show_pagebuilder>
+        <cms:popup_edit 'xtr_hmv_pb' link_text="<button class='btn btn-sm btn-warning'>Edit Page Middle</button>" />
+
+    </cms:pages>
+<cms:else_if k_is_page />
     <cms:pages masterpage="<cms:show k_template_name />__globals" limit="1" >
         <cms:show_pagebuilder 'hro_sng_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
 			<cms:if k_count == '1'>

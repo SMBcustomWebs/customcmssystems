@@ -1,0 +1,10 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 start-0 mt-1 d-flex flex-column gap-2" style="transform: translateX(-120%); z-index: 10;">
+        
+        <cms:popup_edit height='720' width='940' 'ccs_lst1_hdr_rmv_opt|ccs_lst1_hdg_txtbx_row|ccs_lst1_hdg_txtbx_pd|ccs_lst1_hdg_txtbx_halg|ccs_lst1_hdg_txtbx_sz_opt|ccs_lst1_hdg_txtbx_cstm_sz_rpt|ccs_lst1_hdr_ovr_opt|ccs_lst1_hdg_main_row|ccs_lst1_hdg_txt_ln|ccs_lst1_hdg_main_typo_row|ccs_lst1_hdg_txt_hdg_sz|ccs_lst1_hdg_txt_clr|ccs_lst1_hdg_txt_font|ccs_lst1_hdg_txt_fnt_wt|ccs_lst1_hdg_txt_fnt_st|ccs_lst1_hdg_txt_ltr_spc|ccs_lst1_hdg_txt_ln_ht|ccs_lst1_hdg_sub_row|ccs_lst1_sub_txt_ln|ccs_lst1_hdg_sub_typo_row|ccs_lst1_sub_txt_clr|ccs_lst1_sub_txt_sz|ccs_lst1_sub_txt_font|ccs_lst1_sub_txt_fnt_wt|ccs_lst1_sub_txt_fnt_st|ccs_lst1_sub_txt_ltr_spc|ccs_lst1_sub_txt_ln_ht|ccs_lst1_hdr_hr_msg|ccs_lst1_hdg_hr_row|ccs_lst1_hdg_hr|ccs_lst1_hdg_hr_clr|ccs_lst1_hdg_hr_pd' 
+            hide_fields='ccs_lst1_hdr_grp' 
+            link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Header Content" title="Edit Header Content"><i class="fa-solid fa-expand"></i></button>' 
+        />
+        
+    </div>
+</cms:if>

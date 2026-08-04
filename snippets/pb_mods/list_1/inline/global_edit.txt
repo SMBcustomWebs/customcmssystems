@@ -1,0 +1,22 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 start-0 mt-3 ms-3 z-3 d-flex flex-column gap-2">
+        
+        <!-- Source & Layout Sizing -->
+        <cms:popup_edit 'ccs_lst1_ins_src_msg|ccs_lst1_src_row|ccs_lst1_src_opt|ccs_lst1_content_typ|ccs_lst1_ins_spc_msg|ccs_lst1_spc_row|ccs_lst1_pad_top|ccs_lst1_pad_bot|ccs_lst1_col_cnt | ccs_lst1_img_rnd |' 
+            link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Source and Layout" title="Edit Source and Layout"><i class="fa-solid fa-folder-tree"></i></button>' 
+        />
+
+        <!-- Formatting & Background Color (Master: bg_clr_opt -> Controls hidden custom color group) -->
+        <cms:popup_edit 'ccs_lst1_ins_fmt_msg|ccs_lst1_fmt_row|ccs_lst1_bg_clr_opt|ccs_lst1_bg_clr_cstm_msg|ccs_lst1_bg_clr_cstm_grdt_opt_row|ccs_lst1_bg_clr_cstm_grdt_opt|ccs_lst1_bg_clr_cstm_row|ccs_lst1_bg_clr_cstm_one|ccs_lst1_bg_clr_cstm_two|ccs_lst1_bg_clr_swp_row|ccs_lst1_bg_clr_cust_grad_split_opt|ccs_lst1_bg_clr_cstm_grad_rvrs_opt' 
+            hide_fields='ccs_lst1_bg_clr_cstm_grp' 
+            link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Background Color" title="Edit Background Color"><i class="fa-solid fa-fill-drip"></i></button>' 
+        />
+
+        <!-- Tile Typography (Master: itm_typo_opt -> Controls hidden tile typo group) -->
+        <cms:popup_edit 'ccs_lst1_txt_bg_opt|ccs_lst1_txt_bg_opc|ccs_lst1_itm_typo_opt|ccs_lst1_tl_hdg_sty_msg|ccs_lst1_itm_hdg_typo_row|ccs_lst1_itm_hdg_clr|ccs_lst1_itm_hdg_sz|ccs_lst1_itm_hdg_font|ccs_lst1_itm_hdg_fnt_wt|ccs_lst1_itm_hdg_fnt_st|ccs_lst1_itm_hdg_ltr_spc|ccs_lst1_itm_hdg_ln_ht|ccs_lst1_tl_sbh_sty_msg|ccs_lst1_itm_sub_typo_row|ccs_lst1_itm_sub_clr|ccs_lst1_itm_sub_sz|ccs_lst1_itm_sub_font|ccs_lst1_itm_sub_fnt_wt|ccs_lst1_itm_sub_fnt_st|ccs_lst1_itm_sub_ltr_spc|ccs_lst1_itm_sub_ln_ht|ccs_lst1_itm_txt_halg' 
+            hide_fields='ccs_lst1_tl_hdg_stl_grp' 
+            link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Tile Typography" title="Edit Tile Typography"><i class="fa-solid fa-font"></i></button>' 
+        />
+        
+    </div>
+</cms:if>

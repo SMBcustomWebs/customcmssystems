@@ -29,7 +29,9 @@
 			<p></p>
 		</cms:editable>
 		<cms:pagebuilder name='cnt_sbm_pb' label='<h3>Submenu Page Content</h3>' group='cnt_sbm_pb_grp' skip_custom_fields='1' order='55'>
-			<cms:section label='List Page Layout Style 1' name='cnt_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='list1_block_msc' />
+			<cms:section label='List Page Layout Style 1' name='cnt_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='abt_list1_block_msc' />
+			
+			
 			<cms:section label='List Page Layout Style 2' name='cnt_sbm_pb_lst_sty2_sct'  masterpage='blocks/lists/list_st_2.php' mosaic='list2_block_msc' />
 			<cms:section label='List Page Layout Style 3' name='cnt_sbm_pb_lst_sty3_sct'  masterpage='blocks/lists/list_st_3.php' mosaic='list3_block_msc' />
 

@@ -1,5 +1,5 @@
 <?php require_once( '../../ccs_dash/cms.php' ); ?>
-<cms:template title='Stock Inventory:: Directory Grids 1' parent='_mod_lst_' icon='excerpt' clonable='0'  order='280' >
+<cms:template title='Stock Inventory:: Category Lists Styles 1' parent='_mod_lst_' icon='excerpt' clonable='0'  order='280' >
     
     <!-- ==================================================== -->
     <!-- THE ABOUT MOSAIC                                     -->
@@ -11,12 +11,9 @@
         </cms:tile>
         
         <cms:tile name='abt_list1_cat_outs_tile' label='About Catalog - Title Outside' _pb_template='list_1/theme/list1_cat_outs' _pb_height='350'>
-             <cms:embed 'pb_mods/list_1/embed/abt_list1_cat_outs.htm' />
+             <cms:embed 'pb_mods/list_1/embed/abt_list1_cat_ins.htm' />
         </cms:tile>
-        
-        <cms:tile name='abt_list1_cat_hov_tile' label='About Catalog - Title on Hover' _pb_template='list_1/theme/list1_cat_hov' _pb_height='350'>
-             <cms:embed 'pb_mods/list_1/embed/abt_list1_cat_hov.htm' />
-        </cms:tile>
+       
         
     </cms:mosaic>
 
@@ -26,16 +23,13 @@
     <cms:mosaic name='prod_list1_block_msc' label='Products List Style 1' body_class='_pb'>
         
         <cms:tile name='prod_list1_cat_ins_tile' label='Products Catalog - Title Inside' _pb_template='list_1/theme/list1_cat_ins' _pb_height='350'>
-             <cms:embed 'pb_mods/list_1/embed/prod_list1_cat_ins.htm' />
+             <cms:embed 'pb_mods/list_1/embed/prd_list1_cat_ins.htm' />
         </cms:tile>
         
         <cms:tile name='prod_list1_cat_outs_tile' label='Products Catalog - Title Outside' _pb_template='list_1/theme/list1_cat_outs' _pb_height='350'>
-             <cms:embed 'pb_mods/list_1/embed/prod_list1_cat_outs.htm' />
+             <cms:embed 'pb_mods/list_1/embed/prd_list1_cat_ins.htm' />
         </cms:tile>
-        
-        <cms:tile name='prod_list1_cat_hov_tile' label='Products Catalog - Title on Hover' _pb_template='list_1/theme/list1_cat_hov' _pb_height='350'>
-             <cms:embed 'pb_mods/list_1/embed/prod_list1_cat_hov.htm' />
-        </cms:tile>
+       
         
     </cms:mosaic>
 
@@ -45,16 +39,14 @@
     <cms:mosaic name='srv_list1_block_msc' label='Services List Style 1' body_class='_pb'>
         
         <cms:tile name='srv_list1_cat_ins_tile' label='Services Catalog - Title Inside' _pb_template='list_1/theme/list1_cat_ins' _pb_height='350'>
-             <cms:embed 'pb_mods/list_1/embed/srv_list1_cat_ins.htm' />
+             <cms:embed 'pb_mods/list_1/embed/svc_list1_cat_ins.htm' />
         </cms:tile>
         
         <cms:tile name='srv_list1_cat_outs_tile' label='Services Catalog - Title Outside' _pb_template='list_1/theme/list1_cat_outs' _pb_height='350'>
-             <cms:embed 'pb_mods/list_1/embed/srv_list1_cat_outs.htm' />
+             <cms:embed 'pb_mods/list_1/embed/svc_list1_cat_ins.htm' />
         </cms:tile>
         
-        <cms:tile name='srv_list1_cat_hov_tile' label='Services Catalog - Title on Hover' _pb_template='list_1/theme/list1_cat_hov' _pb_height='350'>
-             <cms:embed 'pb_mods/list_1/embed/srv_list1_cat_hov.htm' />
-        </cms:tile>
+      
         
     </cms:mosaic>
 

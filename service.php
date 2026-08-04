@@ -21,7 +21,11 @@
             <cms:pagebuilder name='glb_hmv_cnt_pb' label='Home view Main Content Builder' skip_custom_fields='1' order='10'>
                 <cms:section label='Banner Transition' name='trans_sect'  masterpage='blocks/mods/transitions.php' mosaic='trns_msc' />
                 <cms:section label='Segmented with Scrolling Images' name='seg_img_scr_sect'  masterpage='blocks/mods/seg_img_scrol.php' mosaic='seg_img_scrl_msc' />
-                <cms:section label='Layout Style 1' name='lst_sty1_sect'  masterpage='blocks/lists/list_st_1.php' mosaic='list1_block_msc' />
+				
+				
+                <cms:section label='List Page Layout Style 1' name='cnt_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='svc_list1_block_msc' />>
+				
+				
                 <cms:section label='Layout Style 2' name='lst_sty2_sect'  masterpage='blocks/lists/list_st_2.php' mosaic='list2_block_msc' />
                 <cms:section label='Layout Style 3' name='lst_sty3_sect'  masterpage='blocks/lists/list_st_3.php' mosaic='list3_block_msc' />
                 <cms:section label='Additional Page Items' name='add_trns_sect'  masterpage='blocks/mods/transitions.php' mosaic='trns_msc' />
