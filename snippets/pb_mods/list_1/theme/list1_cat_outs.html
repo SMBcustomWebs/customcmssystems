@@ -116,13 +116,19 @@
                         </div>
                     </cms:no_results>
 
-                    <!-- Check for the 'img' editable region from about.php -->
+                    <!-- 1. Set the default fallback image first -->
+					<cms:set bg_img="<cms:show k_admin_link />uploads/image/no-img_f.jpg" scope='global' />
+
+					<!-- 2. Check for the About image -->
 					<cms:if img>
 						<cms:set bg_img=img scope='global' />
-					<cms:else />
-						<!-- Fallback image if 'img' is left blank -->
-						<cms:set bg_img="<cms:show k_site_link />uploads/image/no-img_f.jpg" scope='global' />
 					</cms:if>
+
+					<!-- 3. Check for the Product and Service image  -->
+					<cms:if itm_img_mn>
+						<cms:set bg_img=itm_img_mn scope='global' />
+					</cms:if>
+
 
                     <div class="col-12 col-md-6 <cms:show ccs_lst1_col_cnt /> isotope-item <cms:show k_page_foldername />">
 						<a class="text-decoration-none" href="<cms:show k_page_link />">

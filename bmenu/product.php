@@ -5,8 +5,9 @@
         <h4>One Topper per page</h4>
         <p></p>
     </cms:editable>
-    <cms:pagebuilder name='sbm_hro_pb' label='<h3>Page Topper</h3>' skip_custom_fields='1' order='10'>
-        <cms:section label='Page Hero' name='sbm_hro_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_block_msc' />
+    <cms:pagebuilder name='hro_sbm_pb' label='<h3>Page Topper</h3>' skip_custom_fields='1' order='10'>
+        <cms:section label='Product Submenu Hero - Single' name='hro_sbm_pb_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_msc' />
+		<cms:section label='Product Submenu Hero - Carousel' name='hro_crs_sbm_pb_sct'  masterpage='blocks/frame/hero_swpr.php' mosaic='ccs_hro_swpr_msc' />
     </cms:pagebuilder>
 		
 		
@@ -16,8 +17,8 @@
         <p></p>
     </cms:editable>
 		
-    <cms:pagebuilder name='sbm_cnt_pb' label='<h3>Page Focus</h3>' skip_custom_fields='1' order='15'>
-        <cms:section label='List Page Layout Style 1' name='cnt_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='prd_list1_block_msc' />
+    <cms:pagebuilder name='cnt_sbm_pb' label='<h3>Page Focus</h3>' skip_custom_fields='1' order='15'>
+        <cms:section label='List Page Layout Style 1' name='cnt_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='prod_list1_block_msc' />
 		
 		
         <cms:section label='List Page Layout Style 2' name='lst_sty2_sct'  masterpage='blocks/lists/list_st_2.php' mosaic='list2_block_msc' />

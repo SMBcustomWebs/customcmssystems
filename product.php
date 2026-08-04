@@ -18,11 +18,12 @@
                 <hr><br>
             </cms:editable>
 
-            <cms:pagebuilder name='glb_hmv_hro_pb' label='Home View Page Header (Hero)' skip_custom_fields='1' order='5'>
-                <cms:section label='Home View Page Hero' name='glb_hmv_hro_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_block_msc' />
+            <cms:pagebuilder name='hro_hmv_pb' label='Home View Page Header (Hero)' skip_custom_fields='1' order='5'>
+                <cms:section label='Product Homepage Hero - Single' name='hro_hmv_pb_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_msc' />
+				<cms:section label='Product Homepage Hero - Carousel' name='hro_crs_hmv_pb_sct'  masterpage='blocks/frame/hero_swpr.php' mosaic='ccs_hro_swpr_msc' />
             </cms:pagebuilder>
             
-            <cms:pagebuilder name='glb_hmv_cnt_pb' label='Home view Main Content Builder' skip_custom_fields='1' order='10'>
+            <cms:pagebuilder name='cnt_hmv_pb' label='Home view Main Content Builder' skip_custom_fields='1' order='10'>
                 <cms:section label='Banner Transition' name='trans_sect'  masterpage='blocks/mods/transitions.php' mosaic='trns_msc' />
                 <cms:section label='Segmented with Scrolling Images' name='seg_img_scr_sect'  masterpage='blocks/mods/seg_img_scrol.php' mosaic='seg_img_scrl_msc' />
 				
