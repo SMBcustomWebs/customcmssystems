@@ -1,7 +1,7 @@
 # =========================================
 # 1. SECURITY (CRITICAL)
 # =========================================
-comm_admin/config.php
+ccs_admin/config.php
 
 # =========================================
 # 2. SERVER & LOGS
@@ -12,9 +12,9 @@ error_log
 # =========================================
 # 3. CMS CACHE & UPLOADS
 # =========================================
-comm_admin/cache/
-comm_admin/uploads/
-comm_admin/upload/
+ccs_admin/cache/
+ccs_admin/uploads/
+ccs_admin/upload/
 ccs_dash/uploads/
 
 # =========================================
@@ -41,6 +41,7 @@ dwsync.xml
 # VS Code & JetBrains
 .vscode/
 .idea/
+.vscode/sftp.json
 
 # =========================================
 # 7. OS GENERATED JUNK
