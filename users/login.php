@@ -7,11 +7,19 @@
 <!-- 2. Listen for the Logout action -->
 <cms:if action='logout' >
     <cms:process_logout />
+    <!-- You MUST redirect immediately so it doesn't hit the block below -->
+    <cms:redirect "<cms:show k_site_link />login.php" /> 
 </cms:if>
 
-<!-- 3. If already logged in, redirect them away from the login page -->
+<!-- 3. If already logged in, route them based on access level -->
 <cms:if k_logged_in >
-    <cms:redirect "<cms:show k_site_link />users/profile.php" />
+    <cms:if k_user_access_level ge '7' >
+        <!-- Admins go to the dashboard -->
+        <cms:redirect "<cms:show k_admin_link />" />
+    <cms:else />
+        <!-- Regular users go to their profile -->
+        <cms:redirect "<cms:show k_site_link />" />
+    </cms:if>
 </cms:if>
 
 <cms:embed 'pb_mods/pg_frame/head.htm' />

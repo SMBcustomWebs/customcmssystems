@@ -1,0 +1,142 @@
+<cms:ignore>
+    Image source, best first.
+    itm_list_thumb is a jcropthumb - a guaranteed 600x600 square whose crop point
+    the admin chose by hand, so nothing important gets cut. itm_img_mn is the
+    raw upload: product.php:101 has crop='0', so it only fits WITHIN 1000x1000
+    and keeps its own aspect - a wide photo lands 1000x620, a tall one 640x1000.
+    Feeding that straight into a slider is what makes tiles ragged, so it is the
+    last resort rather than the first choice.
+</cms:ignore>
+<cms:if itm_list_thumb>
+    <cms:set slide_img=itm_list_thumb />
+<cms:else_if pp_itm_thumb />
+    <cms:set slide_img=pp_itm_thumb />
+<cms:else_if itm_img_mn />
+    <cms:set slide_img=itm_img_mn />
+<cms:else />
+    <cms:set slide_img="<cms:show k_admin_link />uploads/image/no-img_f.jpg" />
+</cms:if>
+
+<div class="swiper-slide text-<cms:show nswp_txt_align /> <cms:show nswp_txt_backing />">
+    <cms:ignore>
+        Two separate links, not one wrapping the tile: the category needs its
+        own link to the folder, and an <a> inside an <a> is invalid HTML.
+        The image link is aria-hidden with tabindex="-1" - it points at the
+        same page as the title link, so exposing both would make a screen
+        reader announce the same destination twice and double the tab stops.
+        Mouse users still get a clickable image.
+    </cms:ignore>
+    <a href="<cms:show k_page_link />" class="text-decoration-none d-block" aria-hidden="true" tabindex="-1">
+        <cms:ignore>
+            Fixed 1:1 box so every tile is the same height regardless of source.
+            .ratio stretches its child to fill, so img-fluid must NOT be here -
+            it would fight that with max-width/height:auto. overflow-hidden makes
+            the corner radius clip the image instead of just the box.
+        </cms:ignore>
+        <div class="ratio ratio-1x1 mb-3 overflow-hidden <cms:show nswp_img_rnd />">
+            <img src="<cms:show slide_img />" alt="<cms:show k_page_title />"
+                class="<cms:show nswp_img_fit />" loading="lazy" />
+        </div>
+    </a>
+    <div class="mb-3">
+            <cms:ignore>
+                Top-level folder for this product, e.g. "Commercial". cms:parentfolders
+                walks root-to-leaf with k_level starting at 0, so k_level='0' IS the
+                outermost ancestor. It reads the in-memory folder tree, so no query.
+                Uppercasing is done in CSS - the stored folder title keeps its own case.
+            </cms:ignore>
+            <cms:if ccs_nswp_tile_cat_opt='1'>
+                <cms:set tile_root_cat = '' />
+                <cms:set tile_root_link = '' />
+                <cms:if k_page_foldername>
+                    <cms:parentfolders folder=k_page_foldername masterpage=source_master>
+                        <cms:if k_level='0'>
+                            <cms:set tile_root_cat = k_folder_title scope='parent' />
+                            <cms:set tile_root_link = k_folder_link scope='parent' />
+                        </cms:if>
+                    </cms:parentfolders>
+                </cms:if>
+                <cms:ignore>
+                    Fallback: a product filed at the template root has no folder
+                    ancestry, so the template title is its category.
+                </cms:ignore>
+                <cms:if tile_root_cat=''><cms:set tile_root_cat = k_template_title /></cms:if>
+                <cms:if tile_root_link=''><cms:set tile_root_link = "<cms:link masterpage=source_master />" /></cms:if>
+                <cms:if tile_root_cat>
+                    <cms:ignore>
+                        text-reset makes the link inherit the wrapper's colour, so a
+                        chosen text-* class still governs it - link colour would
+                        otherwise ignore the parent entirely.
+                    </cms:ignore>
+                    <div class="nswp-tile-cat <cms:show nswp_tile_cat_classes />">
+                        <a href="<cms:show tile_root_link />" class="text-reset text-decoration-none"><cms:show tile_root_cat /></a>
+                    </div>
+                </cms:if>
+            </cms:if>
+
+            <a href="<cms:show k_page_link />" class="text-reset text-decoration-none d-block">
+            <h6 class="<cms:show nswp_tile_hdg_classes /> mb-0">
+                <cms:show k_page_title />
+            </h6>
+
+            <cms:ignore>
+                The price is the subheading on a product slide, so it takes the whole
+                subheading set. Deliberately NOT a heading tag: a price is data, not a
+                section label, and an hx here pollutes the screen-reader heading list.
+                ms-1 is layout spacing, not style, so it stays fixed. No forced size on
+                the markdown price - it matches the live price so it stays noticeable.
+            </cms:ignore>
+            <cms:ignore>
+                The visually-hidden labels are load-bearing, not decoration.
+                Screen readers do not announce <del> at default verbosity, so
+                without them a user hears "99 79" with nothing saying which
+                price they would actually pay. WCAG 1.3.1 - information carried
+                by presentation must also be available programmatically.
+                .visually-hidden is already in theme.css; nothing moves visually.
+            </cms:ignore>
+            <cms:if pp_price>
+                <p class="d-inline-block mt-1 mb-0 <cms:show nswp_tile_sub_classes />"><cms:if old_price><span class="visually-hidden">Sale price </span></cms:if>&dollar;<cms:show pp_price /><cms:if old_price><del class="ms-2 <cms:show nswp_tile_oldprc_classes />"><span class="visually-hidden">Original price </span>&dollar;<cms:show old_price /></del></cms:if></p>
+            </cms:if>
+            </a>
+
+            <cms:ignore>
+                Structured data for this product, accumulated into a var and
+                emitted once as a single JSON-LD ItemList after the slider.
+                PHP json_encode is used for every string so quotes, backslashes
+                and apostrophes are escaped correctly - cms:addslashes would
+                produce \' which is invalid JSON.
+                sku falls back to the page id, which is what the field's own
+                description promises. availability only claims OutOfStock when
+                inventory is actually being tracked.
+            </cms:ignore>
+            <cms:capture into='nswp_ld_one'><cms:php>
+                // cms:php runs through eval() inside a method (tags.php:3294),
+                // so $CTX is NOT in scope unless declared global here.
+                global $CTX;
+                $sku = (string)$CTX->get('itm_sku');
+                if( $sku === '' ){ $sku = (string)$CTX->get('k_page_id'); }
+                $track = (string)$CTX->get('track_inventory');
+                $stock = (string)$CTX->get('in_stock');
+                // only claim OutOfStock when inventory is actually being tracked
+                $avail = ( $track === '1' && $stock === '0' ) ? 'OutOfStock' : 'InStock';
+                echo json_encode( array(
+                    '@type'    => 'ListItem',
+                    'position' => (int)$CTX->get('k_count'),
+                    'item'     => array(
+                        '@type'  => 'Product',
+                        'name'   => (string)$CTX->get('k_page_title'),
+                        'url'    => (string)$CTX->get('k_page_link'),
+                        'image'  => (string)$CTX->get('slide_img'),
+                        'sku'    => $sku,
+                        'offers' => array(
+                            '@type'         => 'Offer',
+                            'price'         => (string)$CTX->get('pp_price'),
+                            'priceCurrency' => defined('K_PAYPAL_CURRENCY') ? K_PAYPAL_CURRENCY : 'USD',
+                            'availability'  => 'https://schema.org/' . $avail,
+                        ),
+                    ),
+                ) );
+            </cms:php></cms:capture>
+            <cms:set nswp_ld_items = "<cms:show nswp_ld_items /><cms:if nswp_ld_items>,</cms:if><cms:show nswp_ld_one />" scope='global' />
+        </div>
+</div>

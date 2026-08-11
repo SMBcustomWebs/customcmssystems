@@ -23,8 +23,14 @@
                 <cms:section label='Banner Transition' name='trans_sect'  masterpage='blocks/mods/transitions.php' mosaic='trns_msc' />
                 <cms:section label='Segmented with Scrolling Images' name='seg_img_scr_sect'  masterpage='blocks/mods/seg_img_scrol.php' mosaic='seg_img_scrl_msc' />
 				
+
+                <cms:section label='PRODUCT Navigation Swiper Block' name='prd_hmv_nswp_sld_blk_sct'  masterpage='blocks/sliders/nswp_sld_blk.php' mosaic='prd_nswp_sld_blk_msc' />
+                <cms:section label='SERVICE Navigation Swiper Block' name='svc_hmv_nswp_sld_blk_sct'  masterpage='blocks/sliders/nswp_sld_blk.php' mosaic='svc_nswp_sld_blk_msc' />
+
 				
-                <cms:section label='List Page Layout Style 1' name='cnt_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='svc_list1_block_msc' />>
+                <cms:section label='ABOUT Category Layout Style 1' name='abt_hmv_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='abt_list1_block_msc' />
+                <cms:section label='PRODUCTS Category Layout Style 1' name='prd_hmv_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='prd_list1_block_msc' />
+                <cms:section label='SERVICES Category Layout Style 1' name='svc_hmv_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='svc_list1_block_msc' />
 				
 				
                 <cms:section label='Layout Style 2' name='lst_sty2_sect'  masterpage='blocks/lists/list_st_2.php' mosaic='list2_block_msc' />

@@ -37,8 +37,10 @@
 				
 				<cms:section label='Segmented with Scrolling Images' name='seg_img_scr_sect'  masterpage='blocks/mods/seg_img_scrol.php' mosaic='seg_img_scrl_msc' />
 				
-				<cms:section label='List Page Layout Style 1' name='cnt_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='abt_list1_block_msc' />
-				
+				<cms:section label='ABOUT Category Layout Style 1' name='abt_hmv_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='abt_list1_block_msc' />
+				<cms:section label='PRODUCTS Category Layout Style 1' name='prd_hmv_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='prd_list1_block_msc' />
+                <cms:section label='SERVICES Category Layout Style 1' name='svc_hmv_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='svc_list1_block_msc' />
+
 				<cms:section label='Layout Style 2' name='cnt_hmv_lst_sty2_sect'  masterpage='blocks/lists/list_st_2.php' mosaic='list2_block_msc' />
 				
 				<cms:section label='Layout Style 3' name='cnt_hmv_lst_sty3_sect'  masterpage='blocks/lists/list_st_3.php' mosaic='list3_block_msc' />

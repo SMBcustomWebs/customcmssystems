@@ -1,0 +1,506 @@
+<cms:ignore>
+    AJAX SHORT-CIRCUIT.
+    A nav click fetches this whole page with ?ajax_module=1, so every nav_swpr
+    tile on the page used to render and the JS discarded all but one. The click
+    now also sends &ajax_block=<the clicked tile's page id>; any tile that is not
+        the target renders nothing at all - including the router, which is where the
+        folder loop and its per-folder queries live.
+        If ajax_block is absent (stale cached JS) every tile renders, i.e. the old
+        behaviour, so this cannot break a half-updated browser cache.
+</cms:ignore>
+<cms:set ajax_module="<cms:gpc 'ajax_module' method='get' />" scope='global' />
+<cms:set ajax_block="<cms:gpc 'ajax_block' method='get' />" scope='global' />
+<cms:set nswp_render='1' scope='global' />
+<cms:if ajax_module && ajax_block && ajax_block !=k_page_id>
+    <cms:set nswp_render='0' scope='global' />
+</cms:if>
+
+<cms:if nswp_render='1'>
+
+    <!-- ======================================================= -->
+    <!-- COMPILE ROUTER VARIABLES -->
+    <!-- ======================================================= -->
+    <cms:embed 'pb_mods/nav_swpr/router/nswp_sld_blk.inc' />
+
+    <!-- ======================================================= -->
+    <!-- DATA SOURCE LOGIC                                       -->
+    <!-- ======================================================= -->
+    <cms:set my_target_folder=ccs_nswp_src_opt scope='global' />
+
+    <!-- DETERMINE ACTIVE TARGET (AJAX Override vs Initial) -->
+    <cms:set cat_override="<cms:gpc 'cat_override' method='get' />" scope='global' />
+    <cms:set
+        target_load_cat="<cms:if cat_override><cms:show cat_override /><cms:else /><cms:show initial_load_cat /></cms:if>"
+        scope='global' />
+
+    <cms:ignore>
+        Title and link identify the SECTION, so they follow the configured SOURCE:
+        a specific folder names itself, 'All' names the template. Only the IMAGE
+        follows the ACTIVE category - that is the part that gives feedback about
+        which nav item you are on, and it is all that changes on a nav click.
+        One folder loop serves both lookups.
+    </cms:ignore>
+    <cms:set promo_title='' scope='global' />
+    <cms:set promo_link='' scope='global' />
+    <cms:set promo_img='' scope='global' />
+
+    <cms:folders masterpage=source_master hierarchical='1'>
+        <cms:if my_target_folder !='all'>
+            <cms:if k_folder_name=my_target_folder>
+                <cms:set promo_title=k_folder_title scope='global' />
+                <cms:set promo_link=k_folder_link scope='global' />
+            </cms:if>
+        </cms:if>
+        <cms:if target_load_cat>
+            <cms:if k_folder_name=target_load_cat>
+                <cms:if k_folder_image>
+                    <cms:set promo_img=k_folder_image scope='global' />
+                </cms:if>
+            </cms:if>
+        </cms:if>
+    </cms:folders>
+
+    <cms:ignore>Fallbacks - template title / template root / default logo.</cms:ignore>
+    <cms:if promo_title=''>
+        <cms:pages masterpage=source_master limit='1'>
+            <cms:set promo_title=k_template_title scope='global' />
+        </cms:pages>
+        <cms:if promo_title=''>
+            <cms:set promo_title="Our Collection" scope='global' />
+        </cms:if>
+    </cms:if>
+    <cms:if promo_link=''>
+        <cms:set promo_link="<cms:link masterpage=source_master />" scope='global' />
+    </cms:if>
+    <cms:if promo_img=''>
+        <cms:set promo_img="<cms:show k_site_link />assets/images/default-logo.png" scope='global' />
+    </cms:if>
+
+    <cms:ignore>
+        NOTE: this must stay ABOVE the ajax branch below - that branch emits
+        promo_img into the response for the JS to pick up, so computing it
+        afterwards would ship an empty value and the image would never update.
+    </cms:ignore>
+    <cms:if ajax_module && nswp_has_content='1'>
+        <cms:ignore>
+            The AJAX response returns only the slider, so the promo panel would go
+            stale the moment someone clicks. This carries the new category's image,
+            title and link so the JS can update the panel too - otherwise showing
+            the active category would be worse than showing a neutral logo.
+        </cms:ignore>
+        <span class="nswp-promo-data" hidden data-promo-img="<cms:show promo_img />"></span>
+        <div class="swiper-wrapper" id="ajax-swiper-wrapper-<cms:show k_page_id />">
+
+            <!-- INITIAL LOAD OR AJAX LOOP -->
+            <cms:if ccs_nswp_content_typ='folders'>
+
+                <!-- MODE B: SLIDER SHOWS SUBCATEGORY FOLDERS -->
+                <cms:folders masterpage=source_master childof=target_load_cat hierarchical='1' orderby='weight'>
+
+                    <!-- Relies purely on native variable to prove branch is not empty, avoiding variable destruction -->
+                    <cms:if k_folder_totalpagecount gt '0'>
+                        <cms:embed 'pb_mods/nav_swpr/theme/slide_folder.html' />
+                    </cms:if>
+
+                </cms:folders>
+
+                <cms:else />
+
+                <!-- MODE A: SLIDER SHOWS PRODUCT PAGES -->
+                <cms:pages masterpage=source_master folder=target_load_cat custom_field=nswp_custom_field
+                    include_subfolders='0'>
+                    <cms:embed 'pb_mods/nav_swpr/theme/slide_item.html' />
+                </cms:pages>
+
+            </cms:if>
+
+        </div>
+
+    </cms:if>
+
+    <!-- ======================================================= -->
+    <cms:if ajax_module='' && nswp_has_content='1'>
+        <!-- SECTION OUTPUT                                          -->
+        <!-- ======================================================= -->
+        <section class="position-relative <cms:show nswp_sec_spacing /> <cms:show nswp_sec_bg /> text-center" <cms:if
+            nswp_sec_inline_bg!=''>
+            style="
+            <cms:show nswp_sec_inline_bg />"
+    </cms:if>>
+    <cms:ignore>
+        Anchored to the <section>, not the .container. The container is centred
+            with a max-width, so start-0 there sits well inside the section on a wide
+            screen. The section is full-bleed and position-relative, so this pins the
+            stack to the true left edge.
+    </cms:ignore>
+    <cms:ignore>FRONT-END EDIT - section controls, upper-left.</cms:ignore>
+    <cms:if (k_user_access_level ge '7' ) && ("<cms:get_session 'inline_edit_on' />")>
+    <cms:ignore>
+        One flex row holds both clusters, so the header pair lines up with the
+        source button structurally rather than by a hand-tuned margin.
+        align-items-start keeps their tops level; gap-4 is the separation.
+    </cms:ignore>
+    <div class="position-absolute top-0 start-0 mt-3 ms-2 z-3 d-flex flex-row align-items-start gap-4">
+
+        <cms:ignore>Section-wide settings, stacked vertically.</cms:ignore>
+        <div class="d-flex flex-column gap-2">
+            <cms:popup_edit 'ccs_nswp_ins_fmt_msg|ccs_nswp_src_row|ccs_nswp_src_opt|ccs_nswp_content_typ|ccs_nswp_sec_sel_row|ccs_nswp_filter_opt'
+                link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Content Source' title='Edit Section Swiper Source'><i class='fa-solid fa-sitemap'></i></button>" />
+
+            <cms:popup_edit 'ccs_nswp_ins_fmt_msg|ccs_nswp_bg_clr_cstm_grp|ccs_nswp_bg_clr_cstm_row|ccs_nswp_bg_clr_swp_row|ccs_nswp_src_row|ccs_nswp_bg_clr_opt|ccs_nswp_bg_clr_cstm_msg|ccs_nswp_bg_clr_cstm_grdt_opt_row|ccs_nswp_bg_clr_cstm_grdt_opt|ccs_nswp_bg_clr_cstm_one|ccs_nswp_bg_clr_cstm_two|ccs_nswp_bg_clr_cust_grad_split_opt|ccs_nswp_bg_clr_cstm_grad_rvrs_opt'
+                link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Section Background' title='Edit Section Background'><i class='fa-solid fa-fill-drip'></i></button>" />
+
+            <cms:popup_edit 'ccs_nswp_ins_fmt_msg|ccs_nswp_sec_opt_row|ccs_nswp_pad_top|ccs_nswp_pad_bot'
+                link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Alignment and Spacing' title='Edit Alignment and Spacing'><i class='fa-solid fa-arrows-up-down'></i></button>" />
+
+
+
+            <cms:popup_edit 'ccs_nswp_ins_fmt_msg|ccs_nswp_sec_img_msg|ccs_nswp_sec_img_row|ccs_nswp_img_fit_opt|ccs_nswp_img_rnd'
+                link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Tile Images' title='Edit Tile Images'><i class='fa-regular fa-images'></i></button>" />
+        </div>
+
+        <cms:ignore>
+            Header pair, horizontal. Lives here rather than in .container so it
+            aligns with the stack, and stays outside the nswp_show_header gate so
+            it remains reachable when the header is removed.
+        </cms:ignore>
+        <div class="d-flex flex-row gap-2">
+            <cms:popup_edit height='760'
+                width='940' 'ccs_nswp_hdr_grp|ccs_nswp_hdr_hr_msg|ccs_nswp_hdg_hr_len_row|ccs_nswp_hdg_hr|ccs_nswp_hdg_hr_row|ccs_nswp_hdg_hr_wt|ccs_nswp_hdg_hr_clr|ccs_nswp_hdg_hr_pd|ccs_nswp_sec_opt_row|ccs_nswp_hdr_rmv_opt|ccs_nswp_hdg_txtbx_row|ccs_nswp_hdg_txtbx_pd|ccs_nswp_hdg_txtbx_halg|ccs_nswp_hdr_ovr_opt|ccs_nswp_hdg_main_row|ccs_nswp_hdg_txt_ln|ccs_nswp_hdg_txt_sz|ccs_nswp_hdg_main_typo_row|ccs_nswp_hdg_txt_clr|ccs_nswp_hdg_txt_font|ccs_nswp_hdg_txt_fnt_wt|ccs_nswp_hdg_txt_fnt_st|ccs_nswp_hdg_txt_ltr_spc|ccs_nswp_hdg_txt_ln_ht|ccs_nswp_hdg_sub_row|ccs_nswp_sub_txt_ln|ccs_nswp_hdg_sub_typo_row|ccs_nswp_sub_txt_clr|ccs_nswp_sub_txt_sz|ccs_nswp_sub_txt_font|ccs_nswp_sub_txt_fnt_wt|ccs_nswp_sub_txt_fnt_st|ccs_nswp_sub_txt_ltr_spc|ccs_nswp_sub_txt_ln_ht'
+                link_text="<button class='btn btn-sm <cms:if ccs_nswp_hdr_rmv_opt='1'>btn-outline-secondary bg-white opacity-50<cms:else />btn-light shadow-sm</cms:if> rounded-circle' type='button' aria-label='Edit Section Header' title='Edit Section Header'><i class='fa-solid fa-heading'></i></button>" />
+
+
+        </div>
+
+    </div>
+</cms:if>
+<div class="container position-relative">
+
+
+
+    <!-- SECTION HEADER -->
+    <cms:if nswp_show_header='1'>
+        <div class="row justify-content-center mb-4">
+            <div class="col-12 <cms:show nswp_hdr_wrapper_class />">
+
+                <cms:if ccs_nswp_hdg_txt_ln>
+                    <h2 class="<cms:show nswp_hdg_size /> <cms:show nswp_main_hdg_classes />">
+                        <cms:show ccs_nswp_hdg_txt_ln />
+                    </h2>
+                </cms:if>
+
+                <cms:if ccs_nswp_sub_txt_ln>
+                    <p class="<cms:show nswp_sub_hdg_classes />">
+                        <cms:show ccs_nswp_sub_txt_ln />
+                    </p>
+                </cms:if>
+
+                <cms:if ccs_nswp_hdg_hr>
+                    <hr class="<cms:show nswp_hr_classes />" />
+                </cms:if>
+
+            </div>
+        </div>
+    </cms:if>
+
+    <!-- MAIN LAYOUT ROW -->
+    <div class="row g-0">
+
+        <cms:ignore>
+            Nav side is a genuine DOM reorder, not Bootstrap's order-* utilities.
+            order-* moves a column visually while leaving source order alone, so
+            keyboard tab order and screen-reader reading order would disagree with
+            what is on screen - WCAG 1.3.2 / 2.4.3. Capturing each column and
+            emitting them in the chosen sequence keeps all three in step.
+        </cms:ignore>
+        <cms:capture into='nswp_nav_col'>
+            <!-- LEFT COLUMN: PROMO & NAV -->
+            <cms:ignore>
+                nswp-align-* carries the block alignment down to the nav so the
+                depth indent and marker spacing follow the text side rather than
+                being hardcoded left. Alignment itself comes from Bootstrap's
+                text-start/center/end on the elements; this class only handles the
+                directional bits Bootstrap has no utility for.
+            </cms:ignore>
+            <div class="col-lg-3 position-relative nswp-nav-col nswp-align-<cms:show nswp_txt_align />">
+                <cms:ignore>FRONT-END EDIT - nav panel. Side follows Nav Position so it never sits over the slider
+                </cms:ignore>
+                <cms:if (k_user_access_level ge '7' ) && ("<cms:get_session 'inline_edit_on' />")>
+                <cms:ignore>
+                    Pushed clear of the nav column with translateX, same idiom as the
+                    tile cluster, so the buttons never overlap the panel title however
+                    long it runs. Direction follows Nav Position - always outward, into
+                    the section margin, never toward the slider.
+
+                    90%, not 115%: the button clears the column by nine tenths of its
+                    own width, so its inner edge still just laps onto the nav block
+                    rather than floating free of it.
+                </cms:ignore>
+                <div class="position-absolute top-0 z-3 d-flex flex-column gap-2 mt-3 <cms:if ccs_nswp_nav_pos='right'>end-0<cms:else />start-0</cms:if>"
+                    style="transform: translateX(<cms:if ccs_nswp_nav_pos='right'>50%<cms:else />-50%</cms:if>); z-index: 10;">
+                    <cms:popup_edit height='760'
+                        width='940' 'ccs_nswp_nav_clr_row|ccs_nswp_nav_pnl_opt|ccs_nswp_nav_pnl_opc|ccs_nswp_opt_row|ccs_nswp_nav_ovr_opt|ccs_nswp_nav_stl_grp|ccs_nswp_nav_ttl_sty_msg|ccs_nswp_nav_ttl_typo_row|ccs_nswp_nav_ttl_clr|ccs_nswp_nav_ttl_sz|ccs_nswp_nav_ttl_font|ccs_nswp_nav_ttl_fnt_wt|ccs_nswp_nav_ttl_fnt_st|ccs_nswp_nav_ttl_ltr_spc|ccs_nswp_nav_ttl_ln_ht|ccs_nswp_nav_lnk_sty_msg|ccs_nswp_nav_lnk_typo_row|ccs_nswp_nav_clr|ccs_nswp_nav_lnk_sz|ccs_nswp_nav_lnk_font|ccs_nswp_nav_lnk_fnt_wt|ccs_nswp_nav_lnk_fnt_st|ccs_nswp_nav_lnk_ltr_spc|ccs_nswp_nav_lnk_ln_ht'
+                        link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Navigation Block' title='Edit Navigation Block'><i class='fa-solid fa-rectangle-list'></i></button>" />
+                    <cms:popup_edit 'ccs_nswp_nav_pos|ccs_nswp_itm_txt_halg'
+                        link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Navigation Side Left or Right' title='Navigation Side Left or Right'><i class='fa-solid fa-arrows-left-right-to-line'></i></button>" />
+                </div>
+                </cms:if>
+                <div class="row h-100">
+                    <div class="bg-holder" style="background-image:url('<cms:show promo_img />');"> </div>
+                    <div class="col-12">
+                        <div class="mx-3 my-0 nswp-nav-inner">
+                            <div class="py-4 nswp-nav-panel <cms:show nswp_nav_panel_class />">
+                                <a class="link-uppercase" href="<cms:show promo_link />">
+                                    <h5
+                                        class="p-3 mb-0 text-<cms:show nswp_txt_align /> <cms:show nswp_nav_ttl_classes />">
+                                        <cms:show promo_title />
+                                    </h5>
+                                </a>
+
+                                <cms:ignore>
+                                    The source template had d-none d-sm-block here, which
+                                    hid the whole category nav below the sm breakpoint - on a
+                                    phone there was no way to change category at all. Now
+                                    always visible; below lg the column simply stacks above
+                                    the slider. Scrolling lives in .nswp-scroll-container
+                                    rather than an inline max-height.
+                                </cms:ignore>
+                                <div class="nswp-scroll-container">
+                                    <hr class="mt-0 text-300" />
+
+                                    <!-- Use left_nav_html computed in router to avoid duplicating folder loops here -->
+                                    <cms:show left_nav_html />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </cms:capture>
+        <cms:capture into='nswp_slide_col'>
+            <!-- RIGHT COLUMN: SWIPER SLIDER -->
+            <div class="col-lg-9 position-relative">
+                <cms:ignore>FRONT-END EDIT - swiper tiles. Mirrors the nav cluster so the two never collide</cms:ignore>
+                <cms:if (k_user_access_level ge '7' ) && ("<cms:get_session 'inline_edit_on' />")>
+                <cms:ignore>
+                    Pushed fully outside the slider column with translateX so the buttons
+                    sit BESIDE the tiles rather than on top of the first one. Same idiom
+                    the hero text box uses. Direction follows Nav Position: the cluster
+                    always moves away from the nav, into the section margin.
+
+                    Bottom-aligned because these edit the tile TEXT, which sits under the
+                    image - the button should land next to what it changes, not next to
+                    the photo.
+                </cms:ignore>
+                <div class="position-absolute bottom-0 z-3 d-flex flex-column gap-2 mb-3 <cms:if ccs_nswp_nav_pos='right'>start-0<cms:else />end-0</cms:if>"
+                    style="transform: translateX(<cms:if ccs_nswp_nav_pos='right'>-115%<cms:else />115%</cms:if>); z-index: 10;">
+                    <cms:popup_edit height='800'
+                        width='940' 'ccs_nswp_nav_clr_row|ccs_nswp_tl_hdg_stl_grp|ccs_nswp_fmt_row|ccs_nswp_txt_bg_opt|ccs_nswp_txt_bg_opc|ccs_nswp_opt_row|ccs_nswp_itm_typo_opt|ccs_nswp_tile_cat_opt|ccs_nswp_tl_hdg_sty_msg|ccs_nswp_itm_hdg_typo_row|ccs_nswp_itm_hdg_clr|ccs_nswp_itm_hdg_sz|ccs_nswp_itm_hdg_font|ccs_nswp_itm_hdg_fnt_wt|ccs_nswp_itm_hdg_fnt_st|ccs_nswp_itm_hdg_ltr_spc|ccs_nswp_itm_hdg_ln_ht|ccs_nswp_tl_sbh_sty_msg|ccs_nswp_itm_sub_typo_row|ccs_nswp_itm_sub_clr|ccs_nswp_itm_sub_sz|ccs_nswp_itm_sub_font|ccs_nswp_itm_sub_fnt_wt|ccs_nswp_itm_sub_fnt_st|ccs_nswp_itm_sub_ltr_spc|ccs_nswp_itm_sub_ln_ht|ccs_nswp_tl_cat_sty_msg|ccs_nswp_itm_cat_ovr_opt|ccs_nswp_itm_cat_typo_row|ccs_nswp_itm_cat_clr|ccs_nswp_itm_cat_sz|ccs_nswp_itm_cat_font|ccs_nswp_itm_cat_fnt_wt|ccs_nswp_itm_cat_fnt_st|ccs_nswp_itm_cat_ltr_spc|ccs_nswp_itm_cat_ln_ht'
+                        link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Swiper Tile Block' title='Edit Swiper Tile Block'><i class='fa-solid fa-table-cells-large'></i></button>" />
+                </div>
+                </cms:if>
+                <div class="swiper-theme-container shop-slider"
+                    data-swiper-theme-container="data-swiper-theme-container">
+                    <cms:ignore>
+                        rewind, not loop. Loop mode duplicates slides to build a
+                        seamless cycle and needs roughly 2x slidesPerView real slides
+                        to do it - with a fractional slidesPerView and only a handful
+                        of products per category it cannot, and leaves blank track.
+                        rewind just returns to the first slide at the end, so it works
+                        with any number of products.
+                        The fractional slidesPerView is deliberate: the sliver of the
+                        next card is what tells people the row scrolls, which is the
+                        job autoplay used to do badly.
+                    </cms:ignore>
+                    <div class="swiper"
+                        data-swiper='{"spaceBetween":4,"rewind":true,"a11y":{"enabled":true},"watchSlidesProgress":true,"grabCursor":true,"breakpoints":{"0":{"slidesPerView":1.15},"600":{"slidesPerView":2.15},"1000":{"slidesPerView":3.15}}}'>
+
+                        <div class="swiper-wrapper" id="ajax-swiper-wrapper-<cms:show k_page_id />" aria-live="polite"
+                            aria-busy="false">
+
+                            <!-- INITIAL LOAD OR AJAX LOOP -->
+                            <cms:if ccs_nswp_content_typ='folders'>
+
+                                <!-- MODE B: SLIDER SHOWS SUBCATEGORY FOLDERS -->
+                                <cms:folders masterpage=source_master childof=target_load_cat hierarchical='1'
+                                    orderby='weight'>
+
+                                    <!-- Relies purely on native variable to prove branch is not empty, avoiding variable destruction -->
+                                    <cms:if k_folder_totalpagecount gt '0'>
+                                        <cms:embed 'pb_mods/nav_swpr/theme/slide_folder.html' />
+                                    </cms:if>
+
+                                </cms:folders>
+
+                                <cms:else />
+
+                                <!-- MODE A: SLIDER SHOWS PRODUCT PAGES -->
+                                <cms:pages masterpage=source_master folder=target_load_cat
+                                    custom_field=nswp_custom_field include_subfolders='0'>
+                                    <cms:embed 'pb_mods/nav_swpr/theme/slide_item.html' />
+                                </cms:pages>
+
+                            </cms:if>
+
+                        </div>
+                    </div>
+
+                    <div class="swiper-nav">
+                        <div class="swiper-button-next"> </div>
+                        <div class="swiper-button-prev"></div>
+                    </div>
+                </div>
+            </div>
+        </cms:capture>
+
+        <cms:if ccs_nswp_nav_pos='right'>
+            <cms:show nswp_slide_col />
+            <cms:show nswp_nav_col />
+            <cms:else />
+            <cms:show nswp_nav_col />
+            <cms:show nswp_slide_col />
+        </cms:if>
+
+    </div>
+</div>
+</section>
+
+<cms:ignore>
+    JSON-LD for the products shown. Emitted once, after the slider, and only on
+    a full page render - an AJAX fragment must not carry its own schema block.
+    ItemList rather than bare Product entries: these are a carousel on a
+    category page, not the page's primary subject, which is what Google's
+    guidance asks for. Renders nothing visually.
+</cms:ignore>
+<cms:if nswp_ld_items>
+    <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ItemList","itemListElement":[<cms:show nswp_ld_items />]}
+</script>
+</cms:if>
+
+</cms:if>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize per-block to avoid cross-block interference when multiple pagebuilder instances exist
+        const blockSections = Array.from(document.querySelectorAll('section')).filter(s => s.querySelector('.swiper') && s.querySelector('.ajax-nav-link'));
+        if (blockSections.length === 0) return;
+
+        blockSections.forEach(blockSection => {
+            const navLinks = Array.from(blockSection.querySelectorAll('.ajax-nav-link'));
+            if (navLinks.length === 0) return;
+
+            const swiperWrapper = blockSection.querySelector('.swiper-wrapper');
+            const promoHolder = blockSection.querySelector('.bg-holder');
+            const scroller = blockSection.querySelector('.nswp-scroll-container');
+
+            // Bring the active category into view. With a long list the active
+            // item can sit well below the fold, so the panel opens looking like
+            // an arbitrary list with nothing selected. 'nearest' avoids yanking
+            // the page around when it is already visible.
+            const activeLink = blockSection.querySelector('.ajax-nav-link.nswp-active');
+            if (activeLink && scroller) {
+                activeLink.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            }
+            const swiperInstanceContainer = blockSection.querySelector('.swiper');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+
+                    const targetCat = this.getAttribute('data-target-cat');
+                    if (!targetCat || this.classList.contains('loading')) return;
+
+                    // Single state class - appearance lives in user.php, not here,
+                    // so the active look is defined in exactly one place and the
+                    // server-rendered and click-rendered states cannot drift apart.
+                    navLinks.forEach(l => {
+                        l.classList.remove('loading', 'nswp-active');
+                        l.setAttribute('aria-pressed', 'false');
+                    });
+                    this.classList.add('loading', 'nswp-active');
+                    this.setAttribute('aria-pressed', 'true');
+
+                    if (!swiperWrapper) return;
+                    swiperWrapper.setAttribute('aria-busy', 'true');
+                    swiperWrapper.style.transition = 'opacity 0.2s ease';
+                    swiperWrapper.style.opacity = '0.35';
+                    swiperWrapper.style.pointerEvents = 'none';
+
+                    // Tell the server which block was clicked so the others can
+                    // skip rendering entirely. The wrapper id is
+                    // ajax-swiper-wrapper-<page id>, which is unique per tile.
+                    const blockId = (swiperWrapper.id || '').replace('ajax-swiper-wrapper-', '');
+                    const currentUrl = window.location.pathname;
+                    let fetchUrl = `${currentUrl}?cat_override=${encodeURIComponent(targetCat)}&ajax_module=1`;
+                    if (blockId) { fetchUrl += `&ajax_block=${encodeURIComponent(blockId)}`; }
+
+                    fetch(fetchUrl)
+                        .then(response => response.text())
+                        .then(html => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, 'text/html');
+
+                            // Match by id first. The id is unique per tile, and with
+                            // ajax_block the response contains only this block's
+                            // wrapper anyway. Index matching is kept purely as a
+                            // fallback for a stale cached script, and is unsafe as a
+                            // primary: if any block on the page renders conditionally
+                            // the counts drift and index N is somebody else's slider,
+                            // which would swap in the wrong content with no error.
+                            let newWrapper = swiperWrapper.id
+                                ? doc.getElementById(swiperWrapper.id)
+                                : null;
+
+                            if (!newWrapper) {
+                                const liveWrappers = Array.from(document.querySelectorAll('.swiper-wrapper'));
+                                const fetchedWrappers = Array.from(doc.querySelectorAll('.swiper-wrapper'));
+                                const idx = liveWrappers.indexOf(swiperWrapper);
+                                newWrapper = (idx >= 0 && fetchedWrappers[idx]) ? fetchedWrappers[idx] : null;
+                            }
+                            if (!newWrapper) newWrapper = doc.querySelector('.swiper-wrapper');
+
+                            // Keep the promo panel in step with the slider. Without
+                            // this the panel would show the previously active
+                            // category - worse than showing nothing category-specific.
+                            // Only the backing image tracks the active category.
+                            // Title and link identify the section, so they stay put.
+                            const promo = doc.querySelector('.nswp-promo-data');
+                            if (promo && promoHolder) {
+                                const img = promo.getAttribute('data-promo-img');
+                                if (img) { promoHolder.style.backgroundImage = 'url(\'' + img + '\')'; }
+                            }
+
+                            if (newWrapper) {
+                                swiperWrapper.innerHTML = newWrapper.innerHTML;
+                                swiperWrapper.setAttribute('aria-busy', 'false');
+                                swiperWrapper.style.opacity = '1';
+                                swiperWrapper.style.pointerEvents = 'auto';
+                                this.classList.remove('loading');
+
+                                if (swiperInstanceContainer && swiperInstanceContainer.swiper) {
+                                    swiperInstanceContainer.swiper.update();
+                                    swiperInstanceContainer.swiper.slideTo(0);
+                                }
+                            } else {
+                                console.warn('Ajax nav: target swiper-wrapper not found in fetched HTML.');
+                                swiperWrapper.setAttribute('aria-busy', 'false');
+                                swiperWrapper.style.opacity = '1';
+                                swiperWrapper.style.pointerEvents = 'auto';
+                                this.classList.remove('loading');
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Slider fetch error:', err);
+                            swiperWrapper.setAttribute('aria-busy', 'false');
+                            swiperWrapper.style.opacity = '1';
+                            swiperWrapper.style.pointerEvents = 'auto';
+                            this.classList.remove('loading');
+                        });
+                });
+            });
+        });
+    });
+</script>
+
+</cms:if>

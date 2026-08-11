@@ -19,8 +19,8 @@
             </cms:editable>
 
             <cms:pagebuilder name='hro_hmv_pb' label='Home View Page Header (Hero)' skip_custom_fields='1' order='5'>
-                <cms:section label='Product Homepage Hero - Single' name='hro_hmv_pb_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_msc' />
-				<cms:section label='Product Homepage Hero - Carousel' name='hro_crs_hmv_pb_sct'  masterpage='blocks/frame/hero_swpr.php' mosaic='ccs_hro_swpr_msc' />
+                <cms:section label='PRODUCT Homepage Hero - Single' name='hro_hmv_pb_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_msc' />
+				<cms:section label='PRODUCT Homepage Hero - Carousel' name='hro_crs_hmv_pb_sct'  masterpage='blocks/frame/hero_swpr.php' mosaic='ccs_hro_swpr_msc' />
             </cms:pagebuilder>
             
             <cms:pagebuilder name='cnt_hmv_pb' label='Home view Main Content Builder' skip_custom_fields='1' order='10'>
@@ -28,8 +28,12 @@
                 <cms:section label='Segmented with Scrolling Images' name='seg_img_scr_sect'  masterpage='blocks/mods/seg_img_scrol.php' mosaic='seg_img_scrl_msc' />
 				
 				
-                <cms:section label='List Page Layout Style 1' name='cnt_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='prd_list1_block_msc' />>
+                <cms:section label='PRODUCT Navigation Swiper Block' name='prd_hmv_nswp_sld_blk_sct'  masterpage='blocks/sliders/nswp_sld_blk.php' mosaic='prd_nswp_sld_blk_msc' />
+                <cms:section label='SERVICE Navigation Swiper Block' name='svc_hmv_nswp_sld_blk_sct'  masterpage='blocks/sliders/nswp_sld_blk.php' mosaic='svc_nswp_sld_blk_msc' />
 				
+				<cms:section label='ABOUT Category Layout Style 1' name='abt_hmv_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='abt_list1_block_msc' />
+                <cms:section label='PRODUCTS Category Layout Style 1' name='prd_hmv_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='prd_list1_block_msc' />
+                <cms:section label='SERVICES Category Layout Style 1' name='svc_hmv_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='svc_list1_block_msc' />
 				
                 <cms:section label='Layout Style 2' name='lst_sty2_sect'  masterpage='blocks/lists/list_st_2.php' mosaic='list2_block_msc' />
                 <cms:section label='Layout Style 3' name='lst_sty3_sect'  masterpage='blocks/lists/list_st_3.php' mosaic='list3_block_msc' />

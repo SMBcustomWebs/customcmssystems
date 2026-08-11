@@ -1,0 +1,69 @@
+<!-- Determine Folder Image with Admin Fallback -->
+<cms:if k_folder_image>
+    <cms:set slide_img=k_folder_image />
+<cms:else />
+    <cms:set slide_img="<cms:show k_admin_link />uploads/image/no-img_f.jpg" />
+</cms:if>
+
+<div class="swiper-slide text-<cms:show nswp_txt_align /> <cms:show nswp_txt_backing />">
+    <cms:ignore>
+        Two separate links - see slide_item.html. The image link duplicates the
+        title link's destination, so it is hidden from assistive tech and the
+        tab order rather than announced twice.
+    </cms:ignore>
+    <a href="<cms:show k_folder_link />" class="text-decoration-none d-block" aria-hidden="true" tabindex="-1">
+        <cms:ignore>
+            Same fixed 1:1 box as the product slides. Folder images have no
+            jcropthumb behind them, so this is the only thing keeping category
+            tiles uniform - and cropping is acceptable here, since the folder
+            image is decorative rather than the thing being sold.
+        </cms:ignore>
+        <div class="ratio ratio-1x1 mb-3 overflow-hidden <cms:show nswp_img_rnd />">
+            <img src="<cms:show slide_img />" alt="<cms:show k_folder_title />"
+                class="<cms:show nswp_img_fit />" loading="lazy" />
+        </div>
+    </a>
+    <div class="mb-3">
+            <cms:ignore>
+                Same top-level folder cue as the product slides. This is where it
+                earns its keep: folder slides come from mixed depths, so two tiles
+                side by side can sit in quite different parts of the tree.
+                skip_child='1' - this tile IS a folder, so exclude itself and take
+                its outermost ancestor.
+            </cms:ignore>
+            <cms:if ccs_nswp_tile_cat_opt='1'>
+                <cms:set tile_root_cat = '' />
+                <cms:set tile_root_link = '' />
+                <cms:set this_folder_link = k_folder_link />
+                <cms:parentfolders folder=k_folder_name masterpage=source_master skip_child='1'>
+                    <cms:if k_level='0'>
+                        <cms:set tile_root_cat = k_folder_title scope='parent' />
+                        <cms:set tile_root_link = k_folder_link scope='parent' />
+                    </cms:if>
+                </cms:parentfolders>
+                <cms:ignore>
+                    Fallback: a top-level folder has no ancestors once itself is
+                    skipped, so the template title is its category.
+                </cms:ignore>
+                <cms:if tile_root_cat=''><cms:set tile_root_cat = k_template_title /></cms:if>
+                <cms:if tile_root_link=''><cms:set tile_root_link = "<cms:link masterpage=source_master />" /></cms:if>
+                <cms:if tile_root_cat>
+                    <div class="nswp-tile-cat <cms:show nswp_tile_cat_classes />">
+                        <a href="<cms:show tile_root_link />" class="text-reset text-decoration-none"><cms:show tile_root_cat /></a>
+                    </div>
+                </cms:if>
+            </cms:if>
+
+            <a href="<cms:show this_folder_link />" class="text-reset text-decoration-none d-block">
+            <h6 class="<cms:show nswp_tile_hdg_classes /> mb-0">
+                <cms:show k_folder_title />
+            </h6>
+            
+            <cms:if k_folder_desc>
+                <p class="mt-2 mb-0 <cms:show nswp_tile_sub_classes />">
+                    <cms:excerpt count='15' ignore='img'><cms:show k_folder_desc /></cms:excerpt>
+                </p>
+            </cms:if>
+            </a>
+        </div>
+</div>

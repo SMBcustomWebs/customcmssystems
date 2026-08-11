@@ -77,7 +77,16 @@
     <link href="<cms:show k_site_link />assets/fonts/iconsmind/iconsmind.css" rel="stylesheet">
     <link href="<cms:show k_site_link />vendors/hamburgers/hamburgers.css" rel="stylesheet">
     <link href="<cms:show k_site_link />assets/css/theme.css" rel="stylesheet" />
-    <link href="<cms:show k_site_link />assets/css/user.php?page=<cms:show k_template_name />&post=<cms:show k_page_id />" rel="stylesheet" />
+    <cms:ignore>
+        &v= is a cache-buster. user.php is a generated stylesheet served from a
+        URL that never changed, so browsers happily kept serving a stale copy
+        after edits. filemtime means the URL only changes when the file does -
+        so it still caches normally between edits, unlike a timestamp.
+        NOTE: it does not change when globals.php theme settings change, since
+        those alter the OUTPUT without touching this file. Bump it by saving
+        user.php, or hard-refresh, after a theme colour/font change.
+    </cms:ignore>
+    <link href="<cms:show k_site_link />assets/css/user.php?page=<cms:show k_template_name />&post=<cms:show k_page_id />&v=<cms:php>echo @filemtime( K_SITE_DIR . 'assets/css/user.php' );</cms:php>" rel="stylesheet" />
 
 
 

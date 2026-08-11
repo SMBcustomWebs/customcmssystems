@@ -384,6 +384,35 @@ h1, h2, h3, h4, h5, h6, p {
   margin: 1.25rem auto;
 }
 
+/* Divider rules used by the pagebuilder blocks.
+   Bootstrap ships <hr> at opacity .25 so an uncoloured divider reads as soft
+   grey. That washes out an explicitly chosen colour - text-danger at 25% is
+   pink, not red - so any hr driven by a colour dropdown gets full opacity and
+   the chosen colour renders true. */
+.nswp-hr {
+  opacity: 1 !important;
+}
+
+/* hr THICKNESS - independent of the length classes above.
+   An <hr> draws as a border-top, so weight is border-top-width, not padding. */
+/* Full width - needed a real class because an empty value collided with the
+   "no line" option, and a select silently picks the LAST match. */
+.hr-full {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hr-w1 {
+  border-top-width: 1px !important;
+}
+.hr-w3 {
+  border-top-width: 3px !important;
+}
+.hr-w5 {
+  border-top-width: 5px !important;
+}
+
 /*-----------------------------------------------
 |   Font family
 -----------------------------------------------*/
@@ -728,4 +757,376 @@ a {
     background-color: transparent !important;
 }
 
+
+/* Pulsating Loading Dot */
+.ajax-nav-link {
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.ajax-nav-link.loading::after {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-left: 8px;
+    background-color: currentColor;
+    border-radius: 50%;
+    animation: pulse-dot 1s infinite ease-in-out;
+    vertical-align: middle;
+}
+
+@keyframes pulse-dot {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.4;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.6);
+        opacity: 0.4;
+    }
+}
+
+/* Scrollable category list in the nav panel.
+   The 350px was previously an inline style with no relation to anything - it
+   coincidentally matched _pb_height, which only sizes the ADMIN preview window.
+   Kept as a cap so a long list cannot stretch the section, but expressed here
+   so it is themeable, and bounded by viewport height on short screens. */
+
+/* ------------------------------------------------------------------
+   Nav height follows the slider.
+
+   The earlier attempt used height:100% and failed: that resolves against
+   the parent's SPECIFIED height, and .col-lg-3 gets its height from flex
+   stretch, so its specified height stays auto and the chain never resolves.
+   A flex-only chain fails the other way - in a flex row the tallest item
+   sets the row height, so a long nav would push the section taller.
+
+   Absolute-fill solves both at once. .col-lg-3 already carries
+   position-relative, so inset:0 on its inner row (a) takes the nav out of
+   flow, leaving the slider alone to set row height, and (b) gives the nav a
+   definite height to resolve against. Flex the chain inside it, with
+   min-height:0 at every level or overflow never engages.
+
+   lg and up only: below that the columns stack, there is no slider beside
+   the nav to match, and the max-height cap below applies instead.
+   ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------
+   Category image stacking.
+
+   theme.css gives .bg-holder z-index:-1, which only works when no ancestor
+   paints a background between it and the nearest stacking context. A tile
+   with a section background (a colour or gradient on the <section>) paints
+   straight over the image, so the same markup showed the image on one tile
+   and not on another - it tracked whether a section background was set, not
+   the listing mode.
+
+   Fixed by making the nav column its own stacking context and keeping the
+   image inside it at a non-negative level, with the nav content one above.
+   Scoped to .nswp-nav-col so every other .bg-holder on the site is untouched.
+   ------------------------------------------------------------------ */
+.nswp-nav-col {
+    position: relative;
+    z-index: 0;
+    isolation: isolate;
+}
+.nswp-nav-col .bg-holder {
+    z-index: 0;
+}
+.nswp-nav-col > .row > .col-12 {
+    position: relative;
+    z-index: 1;
+    /* Redundant gutter padding. .nswp-nav-inner's mx-3 already insets the panel
+       from the image edge, so this second layer only narrowed the label. */
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* ------------------------------------------------------------------
+   NAV LABEL WIDTH
+
+   These are .btn-link only so a button can look like a link (they filter in
+   place, they never navigate). That also drags in the theme's button metrics,
+   where --ccs-btn-padding-x is 2.5rem - sized for wide call-to-action buttons,
+   not for labels in a quarter-width column. At two sides that is 5rem of the
+   column gone, which is what forced short category names onto two lines.
+
+   Overriding the variable rather than the padding keeps the theme's own
+   mechanism intact, and leaves the level-N indent rules (which set padding-left
+   directly) working exactly as before.
+   ------------------------------------------------------------------ */
+.nswp-nav-col .ajax-nav-link {
+    --ccs-btn-padding-x: 0.25rem;
+}
+
+@media (min-width: 992px) {
+    .nswp-nav-col > .row {
+        position: absolute;
+        /* top right bottom left - the negative bottom lets the panel hang a
+           little below the tiles as a deliberate tail, rather than ending
+           dead flush. It is out of flow, so this cannot affect row height. */
+        /* Inset the sides by half a gutter so the panel and its bg-holder sit
+           inside the column's content box, restoring the space between the nav
+           and the slider. inset:0 would fill the padding box edge to edge and
+           the image would touch the neighbouring column. */
+        inset: 0 calc(var(--ccs-gutter-x, 1.875rem) * 0.5) -1.5rem calc(var(--ccs-gutter-x, 1.875rem) * 0.5);
+        /* .row carries negative side margins (-0.5 * gutter) to cancel the
+           gutters of its columns. Absolutely positioning it means left:0 /
+           right:0 anchor the margin box, so those negatives push the row - and
+           the full-width .bg-holder inside it - about 15px past the column on
+           BOTH sides, overlapping the slider. Nothing cancels them here, so
+           they are zeroed. The .col-12 keeps its own gutter padding, so inner
+           spacing is unchanged. */
+        margin-left: 0;
+        margin-right: 0;
+        display: flex;
+        flex-direction: column;
+    }
+    .nswp-nav-col > .row > .col-12,
+    .nswp-nav-inner,
+    .nswp-nav-panel {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 0;
+    }
+    .nswp-nav-panel > .nswp-scroll-container {
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: none;
+    }
+}
+
+.nswp-scroll-container {
+    max-height: min(350px, 55vh);
+    overflow-y: auto;
+    /* long category names must wrap, not push the list sideways */
+    overflow-x: hidden;
+    /* stop the page scrolling once the list hits its end - matters on touch */
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    /* Fade the bottom edge so it reads as scrollable. A hard cut-off looks
+       like a complete list and people do not scroll what looks finished. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 1.5rem), transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 1.5rem), transparent 100%);
+}
+
+/* Deliberately NOT flex. A bare text node in a flex container becomes an
+   anonymous flex item, and whether it may shrink below its content width
+   depends on min-width:auto resolution - the fragile corner of flexbox, and
+   why long category names were clipping instead of wrapping. Normal block
+   flow wraps reliably, so the marker is just an inline-block. */
+.ajax-nav-link.nswp-folder-link {
+    display: block;
+    text-align: left;
+    white-space: normal;
+    /* overflow-wrap alone breaks a word only when it genuinely cannot fit.
+       word-break: break-word was also set and is far more eager - it split
+       "Equipment &" into "Equipme / nt &" even though a space was available. */
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+/* Active ("you are here") category in the left nav.
+   Deliberately no colour: .btn-link already supplies hover/active colour from
+   the site theme, and the link's own colour comes from the block's Nav Link
+   Text Color dropdown. Weight + underline are the only affordances added here,
+   so this rule never fights a user-chosen colour.
+   This is the single definition - the router emits .nswp-active on page load
+   and the block's JS toggles the same class on click. */
+.ajax-nav-link.nswp-folder-link.nswp-active {
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+/* Top-level folder shown above a slide title when "Show Category On Tiles" is on.
+   Uppercased here, never in the data - the folder title keeps its stored case so
+   the admin sees normal text and the presentation stays changeable.
+   Caps need extra tracking to stay readable at small sizes. */
+/* Structural bits with no dropdown equivalent - these always apply. */
+.nswp-tile-cat {
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 0.15rem;
+}
+
+/* Typographic defaults. :where() carries zero specificity, so the moment the
+   user picks a size / weight / spacing / line-height the fs-*, fw-*, ls-* or
+   lh-* utility wins outright. Without this the rule would tie with those
+   single-class utilities and, loading later than theme.css, silently beat
+   them - the control would appear to do nothing. */
+:where(.nswp-tile-cat) {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+}
+
+/* Depth cue for Pages (leaf-only) mode, where ancestor folders are not listed.
+   One dot per level above. Decorative only - the real path is on the link's
+   aria-label, so this is aria-hidden in the markup. */
+.ajax-nav-link .nswp-depth-dots {
+    display: inline-block;
+    margin-right: 0.25rem;
+    opacity: 0.45;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.ajax-nav-link .nswp-folder-marker {
+    display: inline-block;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: currentColor;
+    opacity: 0.3;
+    flex-shrink: 0;
+}
+
+.ajax-nav-link.nswp-folder-link.level-0 .nswp-folder-marker {
+    opacity: 0;
+}
+
+/* Nested category indentation. The router emits level-N from k_level, so the
+   depth is however deep the folder tree goes. Levels beyond the last rule here
+   simply stop indenting further - they still render. */
+.ajax-nav-link.nswp-folder-link.level-1 {
+    padding-left: calc(0.75rem * 1) !important;
+}
+
+.ajax-nav-link.nswp-folder-link.level-2 {
+    padding-left: calc(0.75rem * 2) !important;
+}
+
+.ajax-nav-link.nswp-folder-link.level-3 {
+    padding-left: calc(0.75rem * 3) !important;
+}
+
+.ajax-nav-link.nswp-folder-link.level-4 {
+    padding-left: calc(0.75rem * 4) !important;
+}
+
+.ajax-nav-link.nswp-folder-link.level-5 {
+    padding-left: calc(0.75rem * 5) !important;
+}
+
+.ajax-nav-link.nswp-folder-link.level-6 {
+    padding-left: calc(0.75rem * 6) !important;
+}
+
+.ajax-nav-link.nswp-folder-link.level-7 {
+    padding-left: calc(0.75rem * 7) !important;
+}
+
+.ajax-nav-link.nswp-folder-link.level-8 {
+    padding-left: calc(0.75rem * 8) !important;
+}
+
+.ajax-nav-link.nswp-folder-link.level-9 {
+    padding-left: calc(0.75rem * 9) !important;
+}
+
+.ajax-nav-link.nswp-folder-link.level-10 {
+    padding-left: calc(0.75rem * 10) !important;
+}
+
+
+
+
 <?php COUCH::invoke(); ?>
+
+/* ------------------------------------------------------------------
+   NAV MIRROR - DRIVEN BY BLOCK TEXT ALIGNMENT
+
+   Bootstrap's text-start/center/end handles the alignment itself. What it
+   cannot do is flip the depth indent and marker spacing, which are physical
+   left/right values - so those follow the chosen alignment here.
+
+   Left alignment uses the rules above unchanged and remains the default.
+   Centre drops the indent entirely: an indent read from one edge is
+   meaningless when the text is not anchored to that edge.
+
+   Specificity is one class higher than the rules it overrides, so the
+   !important indents are beaten without adding more !important than the
+   originals already carry.
+   ------------------------------------------------------------------ */
+.nswp-align-end .ajax-nav-link.nswp-folder-link {
+    text-align: right;
+}
+
+.nswp-align-end .ajax-nav-link .nswp-folder-marker {
+    margin-right: 0;
+    margin-left: 0.5rem;
+}
+
+.nswp-align-end .ajax-nav-link .nswp-depth-dots {
+    margin-right: 0;
+    margin-left: 0.25rem;
+}
+
+.nswp-align-end .ajax-nav-link.nswp-folder-link.level-1 {
+    padding-left: 0 !important;
+    padding-right: calc(0.75rem * 1) !important;
+}
+
+.nswp-align-end .ajax-nav-link.nswp-folder-link.level-2 {
+    padding-left: 0 !important;
+    padding-right: calc(0.75rem * 2) !important;
+}
+
+.nswp-align-end .ajax-nav-link.nswp-folder-link.level-3 {
+    padding-left: 0 !important;
+    padding-right: calc(0.75rem * 3) !important;
+}
+
+.nswp-align-end .ajax-nav-link.nswp-folder-link.level-4 {
+    padding-left: 0 !important;
+    padding-right: calc(0.75rem * 4) !important;
+}
+
+.nswp-align-end .ajax-nav-link.nswp-folder-link.level-5 {
+    padding-left: 0 !important;
+    padding-right: calc(0.75rem * 5) !important;
+}
+
+.nswp-align-end .ajax-nav-link.nswp-folder-link.level-6 {
+    padding-left: 0 !important;
+    padding-right: calc(0.75rem * 6) !important;
+}
+
+.nswp-align-end .ajax-nav-link.nswp-folder-link.level-7 {
+    padding-left: 0 !important;
+    padding-right: calc(0.75rem * 7) !important;
+}
+
+.nswp-align-end .ajax-nav-link.nswp-folder-link.level-8 {
+    padding-left: 0 !important;
+    padding-right: calc(0.75rem * 8) !important;
+}
+
+.nswp-align-end .ajax-nav-link.nswp-folder-link.level-9 {
+    padding-left: 0 !important;
+    padding-right: calc(0.75rem * 9) !important;
+}
+
+.nswp-align-end .ajax-nav-link.nswp-folder-link.level-10 {
+    padding-left: 0 !important;
+    padding-right: calc(0.75rem * 10) !important;
+}
+
+.nswp-align-center .ajax-nav-link.nswp-folder-link[class*="level-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.nswp-align-center .ajax-nav-link .nswp-depth-dots {
+    margin-right: 0.25rem;
+    margin-left: 0.25rem;
+}

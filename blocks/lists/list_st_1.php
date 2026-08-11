@@ -1,5 +1,5 @@
 <?php require_once( '../../ccs_dash/cms.php' ); ?>
-<cms:template title='Stock Inventory:: Category Lists Styles 1' parent='_mod_lst_' icon='excerpt' clonable='0'  order='280' >
+<cms:template title='Category Lists Styles 1' parent='_stock_' icon='excerpt' clonable='0'  order='280' >
     
     <!-- ==================================================== -->
     <!-- THE ABOUT MOSAIC                                     -->
@@ -20,7 +20,7 @@
     <!-- ==================================================== -->
     <!-- THE PRODUCTS MOSAIC                                  -->
     <!-- ==================================================== -->
-    <cms:mosaic name='prod_list1_block_msc' label='Products List Style 1' body_class='_pb'>
+    <cms:mosaic name='prd_list1_block_msc' label='Products List Style 1' body_class='_pb'>
         
         <cms:tile name='prod_list1_cat_ins_tile' label='Products Catalog - Title Inside' _pb_template='list_1/theme/list1_cat_ins' _pb_height='350'>
              <cms:embed 'pb_mods/list_1/embed/prd_list1_cat_ins.htm' />

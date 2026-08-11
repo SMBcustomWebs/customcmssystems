@@ -1,0 +1,87 @@
+<cms:ignore>
+================================================================================
+  nav_swpr - FRONT-END EDIT CLUSTERS   (DRAFT - nothing embedded yet)
+
+  COVERAGE: 115 of 119 editable nodes are reachable from the ten buttons below.
+  The four absent are ccs_nswp_ins_fmt_msg / ccs_nswp_ins_src_msg /
+  ccs_nswp_ins_spc_msg - admin-panel dividers, not settings - and
+  ccs_nswp_spc_row, which is currently empty.
+
+  RULES APPLIED
+    - Ancestor ROWS are listed in 'fields'. Ancestor GROUPS go in hide_fields:
+      present so the popup resolves, invisible to the user.
+    - Every conditional controller of an included slave is present. Meaningful
+      ones stay visible; ones that would only confuse are in hide_fields.
+    - A button dims to btn-outline-secondary + opacity-50 when the thing it
+      edits is switched off, so it stays findable. The header uses this - it
+      must be reachable even when the header is removed.
+================================================================================
+</cms:ignore>
+
+<cms:ignore>------------------------------------------------------------------------
+  1. SECTION STACK - upper-left of the <section>
+  Section-wide settings. Source and background stay separate buttons - they are
+     different kinds of decision and do not belong in one popup.
+------------------------------------------------------------------------</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 start-0 mt-3 ms-3 z-3 d-flex flex-column gap-2">
+
+        <cms:ignore>Content Source - 6 field(s)</cms:ignore>
+        <cms:popup_edit 'ccs_nswp_src_row|ccs_nswp_src_opt|ccs_nswp_content_typ|ccs_nswp_nav_pos|ccs_nswp_sec_sel_row|ccs_nswp_filter_opt' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Content Source' title='Edit Content Source'><i class='fa-solid fa-sitemap'></i></button>" />
+
+        <cms:ignore>Section Background - 11 field(s), 1 hidden</cms:ignore>
+        <cms:popup_edit 'ccs_nswp_src_row|ccs_nswp_bg_clr_opt|ccs_nswp_bg_clr_cstm_msg|ccs_nswp_bg_clr_cstm_grdt_opt_row|ccs_nswp_bg_clr_cstm_grdt_opt|ccs_nswp_bg_clr_cstm_row|ccs_nswp_bg_clr_cstm_one|ccs_nswp_bg_clr_cstm_two|ccs_nswp_bg_clr_swp_row|ccs_nswp_bg_clr_cust_grad_split_opt|ccs_nswp_bg_clr_cstm_grad_rvrs_opt' hide_fields='ccs_nswp_bg_clr_cstm_grp' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Section Background' title='Edit Section Background'><i class='fa-solid fa-fill-drip'></i></button>" />
+
+        <cms:ignore>Alignment and Spacing - 4 field(s)</cms:ignore>
+        <cms:popup_edit 'ccs_nswp_sec_opt_row|ccs_nswp_itm_txt_halg|ccs_nswp_pad_top|ccs_nswp_pad_bot' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Alignment and Spacing' title='Edit Alignment and Spacing'><i class='fa-solid fa-arrows-left-right-to-line'></i></button>" />
+
+        <cms:ignore>Tile Images - 4 field(s)</cms:ignore>
+        <cms:popup_edit 'ccs_nswp_sec_img_msg|ccs_nswp_sec_img_row|ccs_nswp_img_fit_opt|ccs_nswp_img_rnd' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Tile Images' title='Edit Tile Images'><i class='fa-solid fa-crop-simple'></i></button>" />
+    </div>
+</cms:if>
+
+<cms:ignore>------------------------------------------------------------------------
+  2. HEADER - centred above the header row
+  MUST sit OUTSIDE the nswp_show_header gate, or it vanishes along with the
+     header it exists to bring back. Both buttons dim when their target is off.
+------------------------------------------------------------------------</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 start-50 translate-middle-x mt-3 z-3 d-flex flex-row gap-2">
+
+        <cms:ignore>Section Header - 26 field(s), 1 hidden</cms:ignore>
+        <cms:popup_edit height='760' width='940' 'ccs_nswp_sec_opt_row|ccs_nswp_hdr_rmv_opt|ccs_nswp_hdg_txtbx_row|ccs_nswp_hdg_txtbx_pd|ccs_nswp_hdg_txtbx_halg|ccs_nswp_hdr_ovr_opt|ccs_nswp_hdg_main_row|ccs_nswp_hdg_txt_ln|ccs_nswp_hdg_txt_sz|ccs_nswp_hdg_main_typo_row|ccs_nswp_hdg_txt_clr|ccs_nswp_hdg_txt_font|ccs_nswp_hdg_txt_fnt_wt|ccs_nswp_hdg_txt_fnt_st|ccs_nswp_hdg_txt_ltr_spc|ccs_nswp_hdg_txt_ln_ht|ccs_nswp_hdg_sub_row|ccs_nswp_sub_txt_ln|ccs_nswp_hdg_sub_typo_row|ccs_nswp_sub_txt_clr|ccs_nswp_sub_txt_sz|ccs_nswp_sub_txt_font|ccs_nswp_sub_txt_fnt_wt|ccs_nswp_sub_txt_fnt_st|ccs_nswp_sub_txt_ltr_spc|ccs_nswp_sub_txt_ln_ht' hide_fields='ccs_nswp_hdr_grp' link_text="<button class='btn btn-sm <cms:if ccs_nswp_hdr_rmv_opt='1'>btn-outline-secondary bg-white opacity-50<cms:else />btn-light shadow-sm</cms:if> rounded-circle' type='button' aria-label='Edit Section Header' title='Edit Section Header'><i class='fa-solid fa-heading'></i></button>" />
+
+        <cms:ignore>Header Divider - 7 field(s), 1 hidden</cms:ignore>
+        <cms:popup_edit 'ccs_nswp_hdr_hr_msg|ccs_nswp_hdg_hr_len_row|ccs_nswp_hdg_hr|ccs_nswp_hdg_hr_row|ccs_nswp_hdg_hr_wt|ccs_nswp_hdg_hr_clr|ccs_nswp_hdg_hr_pd' hide_fields='ccs_nswp_hdr_grp' link_text="<button class='btn btn-sm <cms:if ccs_nswp_hdg_hr=''>btn-outline-secondary bg-white opacity-50<cms:else />btn-light shadow-sm</cms:if> rounded-circle' type='button' aria-label='Edit Header Divider' title='Edit Header Divider'><i class='fa-solid fa-grip-lines'></i></button>" />
+    </div>
+</cms:if>
+
+<cms:ignore>------------------------------------------------------------------------
+  3. NAV PANEL - top of the nav column
+  Side follows Nav Position so the buttons never sit over the slider.
+------------------------------------------------------------------------</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 z-3 d-flex flex-column gap-2 mt-3 <cms:if ccs_nswp_nav_pos='right'>end-0 me-3<cms:else />start-0 ms-3</cms:if>">
+
+        <cms:ignore>Nav Panel Overlay - 3 field(s)</cms:ignore>
+        <cms:popup_edit 'ccs_nswp_nav_clr_row|ccs_nswp_nav_pnl_opt|ccs_nswp_nav_pnl_opc' link_text="<button class='btn btn-sm <cms:if ccs_nswp_nav_pnl_opt=''>btn-outline-secondary bg-white opacity-50<cms:else />btn-light shadow-sm</cms:if> rounded-circle' type='button' aria-label='Edit Nav Panel Overlay' title='Edit Nav Panel Overlay'><i class='fa-solid fa-layer-group'></i></button>" />
+
+        <cms:ignore>Nav Text Style - 20 field(s), 1 hidden</cms:ignore>
+        <cms:popup_edit height='720' width='940' 'ccs_nswp_opt_row|ccs_nswp_nav_ovr_opt|ccs_nswp_nav_ttl_sty_msg|ccs_nswp_nav_ttl_typo_row|ccs_nswp_nav_ttl_clr|ccs_nswp_nav_ttl_sz|ccs_nswp_nav_ttl_font|ccs_nswp_nav_ttl_fnt_wt|ccs_nswp_nav_ttl_fnt_st|ccs_nswp_nav_ttl_ltr_spc|ccs_nswp_nav_ttl_ln_ht|ccs_nswp_nav_lnk_sty_msg|ccs_nswp_nav_lnk_typo_row|ccs_nswp_nav_clr|ccs_nswp_nav_lnk_sz|ccs_nswp_nav_lnk_font|ccs_nswp_nav_lnk_fnt_wt|ccs_nswp_nav_lnk_fnt_st|ccs_nswp_nav_lnk_ltr_spc|ccs_nswp_nav_lnk_ln_ht' hide_fields='ccs_nswp_nav_stl_grp' link_text="<button class='btn btn-sm <cms:if ccs_nswp_nav_ovr_opt!='1'>btn-outline-secondary bg-white opacity-50<cms:else />btn-light shadow-sm</cms:if> rounded-circle' type='button' aria-label='Edit Nav Text Style' title='Edit Nav Text Style'><i class='fa-solid fa-font'></i></button>" />
+    </div>
+</cms:if>
+
+<cms:ignore>------------------------------------------------------------------------
+  4. SWIPER TILES - top of the slider column
+  Mirrors the nav cluster so the two never collide.
+------------------------------------------------------------------------</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 z-3 d-flex flex-column gap-2 mt-3 <cms:if ccs_nswp_nav_pos='right'>start-0 ms-3<cms:else />end-0 me-3</cms:if>">
+
+        <cms:ignore>Swiper Tile Overlay - 3 field(s)</cms:ignore>
+        <cms:popup_edit 'ccs_nswp_fmt_row|ccs_nswp_txt_bg_opt|ccs_nswp_txt_bg_opc' link_text="<button class='btn btn-sm <cms:if ccs_nswp_txt_bg_opt=''>btn-outline-secondary bg-white opacity-50<cms:else />btn-light shadow-sm</cms:if> rounded-circle' type='button' aria-label='Edit Swiper Tile Overlay' title='Edit Swiper Tile Overlay'><i class='fa-solid fa-layer-group'></i></button>" />
+
+        <cms:ignore>Tile Text Style - 30 field(s), 1 hidden</cms:ignore>
+        <cms:popup_edit height='780' width='940' 'ccs_nswp_opt_row|ccs_nswp_itm_typo_opt|ccs_nswp_tile_cat_opt|ccs_nswp_tl_hdg_sty_msg|ccs_nswp_itm_hdg_typo_row|ccs_nswp_itm_hdg_clr|ccs_nswp_itm_hdg_sz|ccs_nswp_itm_hdg_font|ccs_nswp_itm_hdg_fnt_wt|ccs_nswp_itm_hdg_fnt_st|ccs_nswp_itm_hdg_ltr_spc|ccs_nswp_itm_hdg_ln_ht|ccs_nswp_tl_sbh_sty_msg|ccs_nswp_itm_sub_typo_row|ccs_nswp_itm_sub_clr|ccs_nswp_itm_sub_sz|ccs_nswp_itm_sub_font|ccs_nswp_itm_sub_fnt_wt|ccs_nswp_itm_sub_fnt_st|ccs_nswp_itm_sub_ltr_spc|ccs_nswp_itm_sub_ln_ht|ccs_nswp_tl_cat_sty_msg|ccs_nswp_itm_cat_typo_row|ccs_nswp_itm_cat_clr|ccs_nswp_itm_cat_sz|ccs_nswp_itm_cat_font|ccs_nswp_itm_cat_fnt_wt|ccs_nswp_itm_cat_fnt_st|ccs_nswp_itm_cat_ltr_spc|ccs_nswp_itm_cat_ln_ht' hide_fields='ccs_nswp_tl_hdg_stl_grp' link_text="<button class='btn btn-sm <cms:if ccs_nswp_itm_typo_opt!='1'>btn-outline-secondary bg-white opacity-50<cms:else />btn-light shadow-sm</cms:if> rounded-circle' type='button' aria-label='Edit Tile Text Style' title='Edit Tile Text Style'><i class='fa-solid fa-font'></i></button>" />
+    </div>
+</cms:if>

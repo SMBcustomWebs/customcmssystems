@@ -32,6 +32,7 @@ if( defined('K_ADMIN') ){
         $FUNCS->register_admin_menuitem( array('name'=>'_mod_frm_', 'title'=>'Build Form Mods', 'is_header'=>'1', 'weight'=>'550') );
         $FUNCS->register_admin_menuitem( array('name'=>'_mod_adv_', 'title'=>'Advanced Mod', 'is_header'=>'1', 'weight'=>'600') );
         $FUNCS->register_admin_menuitem( array('name'=>'_frame_', 'title'=>'Headers &amp; Footers', 'is_header'=>'1', 'weight'=>'700') );
+        $FUNCS->register_admin_menuitem( array('name'=>'_stock_', 'title'=>'Stock Inventory', 'is_header'=>'1', 'weight'=>'750') );
         $FUNCS->register_admin_menuitem( array('name'=>'_global_', 'title'=>'Global Site Settings', 'is_header'=>'1', 'weight'=>'800') );
 		$FUNCS->register_admin_menuitem( array('name'=>'_site_', 'title'=>'General Site Settings', 'is_header'=>'1', 'weight'=>'810') );
         $FUNCS->register_admin_menuitem( array('name'=>'_donottouch_', 'title'=>'DO NOT TOUCH', 'is_header'=>'1', 'weight'=>'900') );

@@ -6,8 +6,8 @@
         <p></p>
     </cms:editable>
     <cms:pagebuilder name='hro_sbm_pb' label='<h3>Page Topper</h3>' skip_custom_fields='1' order='10'>
-        <cms:section label='Product Submenu Hero - Single' name='hro_sbm_pb_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_msc' />
-		<cms:section label='Product Submenu Hero - Carousel' name='hro_crs_sbm_pb_sct'  masterpage='blocks/frame/hero_swpr.php' mosaic='ccs_hro_swpr_msc' />
+        <cms:section label='PRODUCT Submenu Hero - Single' name='hro_sbm_pb_sct'  masterpage='blocks/frame/hero.php' mosaic='ccs_hro_msc' />
+		<cms:section label='PRODUCT Submenu Hero - Carousel' name='hro_crs_sbm_pb_sct'  masterpage='blocks/frame/hero_swpr.php' mosaic='ccs_hro_swpr_msc' />
     </cms:pagebuilder>
 		
 		
@@ -18,7 +18,14 @@
     </cms:editable>
 		
     <cms:pagebuilder name='cnt_sbm_pb' label='<h3>Page Focus</h3>' skip_custom_fields='1' order='15'>
-        <cms:section label='List Page Layout Style 1' name='cnt_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='prod_list1_block_msc' />
+		
+		<cms:section label='PRODUCT Navigation Swiper Block' name='prd_sbm_nswp_sld_blk_sct'  masterpage='blocks/sliders/nswp_sld_blk.php' mosaic='prd_nswp_sld_blk_msc' />
+        <cms:section label='SERVICE Navigation Swiper Block' name='svc_sbm_nswp_sld_blk_sct'  masterpage='blocks/sliders/nswp_sld_blk.php' mosaic='svc_nswp_sld_blk_msc' />
+        
+		
+        <cms:section label='ABOUT Category Layout Style 1' name='abt_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='abt_list1_block_msc' />
+        <cms:section label='PRODUCTS Category Layout Style 1' name='prd_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='prd_list1_block_msc' />
+        <cms:section label='SERVICES Category Layout Style 1' name='svc_sbm_pb_lst_sty1_sct'  masterpage='blocks/lists/list_st_1.php' mosaic='svc_list1_block_msc' />
 		
 		
         <cms:section label='List Page Layout Style 2' name='lst_sty2_sct'  masterpage='blocks/lists/list_st_2.php' mosaic='list2_block_msc' />
