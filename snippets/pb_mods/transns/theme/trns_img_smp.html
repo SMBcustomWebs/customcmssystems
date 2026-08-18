@@ -43,12 +43,28 @@
 </cms:ignore>
 <section id="<cms:show trns_local_id />" class="position-relative overflow-hidden has-parallax <cms:show tis_sec_pad />">
 
+<cms:ignore>
+    FRONT-END EDITING, section level. The section already carries
+    position-relative, so the cluster's position-absolute anchors to the banner
+    corner. Embedded first so it sits above the background layers in source
+    order as well as in z-index.
+</cms:ignore>
+<cms:embed 'pb_mods/transns/inline/trns_section_edit.txt' />
+
     <cms:ignore>
         Per-tile CSS. Emitted only when the engine actually produced a rule, so
         a banner with no color and no overlay adds no bytes.
     </cms:ignore>
-    <cms:if trns_local_css>
-        <style><cms:show trns_local_css /></style>
+    <cms:ignore>
+        Two sources, one style block. trns_local_css comes from the background
+        engine, which the router embeds near its top - long before the minimum
+        height is resolved further down. Folding the min-height into the
+        engine's capture looked tidier and silently produced nothing, because
+        the capture had already run. Printed side by side here instead, where
+        both are definitely resolved.
+    </cms:ignore>
+    <cms:if trns_local_css || tis_min_h_css>
+        <style><cms:show trns_local_css /><cms:show tis_min_h_css /></style>
     </cms:if>
 
     <cms:ignore>=== LAYER 1: background color / gradient ===</cms:ignore>
@@ -84,49 +100,46 @@
             not on .container. z-3 lifts the content clear of the three
             z-index:-1 background layers.
         </cms:ignore>
-        <div class="row z-3 <cms:show tis_box_halg /> <cms:show tis_box_valg />">
-            <div class="<cms:show tis_txtbx_size /> <cms:show tis_txt_halg />">
+        <div class="row z-3 trns-body <cms:show tis_box_halg /> <cms:show tis_box_valg />">
+            <div class="<cms:show tis_txtbx_size /> <cms:show tis_txt_halg /> position-relative">
 
                 <cms:ignore>
-                    TEXT, MODE 1: up to two fixed lines.
-                    The top line's tag comes from the Heading Level dropdown,
-                    which offers h3 through h6 and p - never h1 or h2. A
-                    transition banner can appear several times on one page, so
-                    minting either would wreck the document outline. With
-                    nothing chosen the router hands back div and no heading is
-                    emitted at all. Line 2 is always a div.
+                    FRONT-END EDITING, text box level. position-relative added
+                    to this column so the cluster anchors to the BOX rather
+                    than the banner - it then travels with the box when the
+                    alignment controls move it.
                 </cms:ignore>
-                <cms:if trns_txt_opt = '1'>
-                    <cms:if trns_txt1_ln>
-                        <<cms:show tis_txt1_tag /> class="<cms:show tis_txt1_classes /><cms:if tis_has_vid='1'> mb-lg-5 mb-md-3 mb-sm-2</cms:if>">
-                            <cms:show trns_txt1_ln />
-                        </<cms:show tis_txt1_tag />>
-                    </cms:if>
-                </cms:if>
+                <cms:embed 'pb_mods/transns/inline/trns_txtbx_edit.txt' />
+
 
                 <cms:ignore>
-                    TEXT, MODE 2: a repeatable of many lines. The first row is
-                    printed before the play button and the rest after it, which
-                    is what the original did - the button sits between the
-                    opening line and the body copy.
+                    FOUR FIXED LINES. trns_txt_opt is the count, so line N
+                    prints once the count reaches N.
+
+                    Line 1 takes its tag from the Heading Level dropdown - h3
+                    to h6 or p, never h1 or h2, because a banner can appear
+                    several times on one page. Lines 2-4 are always divs.
+
+                    The typed effect attaches to the LAST line shown, which the
+                    router resolved into tis_fx_line. Each line's guard is
+                    "there is text OR the effect belongs here", so switching
+                    the effect on without typing that line still renders it.
                 </cms:ignore>
-                <cms:if trns_txt_opt = '2'>
-                    <cms:show_repeatable 'trns_txtm_rpt' limit='1' order='asc'>
-                        <cms:if trns_txtm_ln>
-                            <<cms:show tis_txt1_tag /> class="<cms:show tis_txtm_classes /><cms:if tis_has_vid='1'> mb-lg-5 mb-md-3 mb-sm-2</cms:if>">
-                                <cms:show trns_txtm_ln />
-                            </<cms:show tis_txt1_tag />>
+                <cms:ignore>--- LINE 1 ---</cms:ignore>
+                <cms:if trns_txt_opt ge '1' && (trns_txt1_ln || (tis_has_fx = '1' && tis_fx_line = '1'))>
+                    <<cms:show tis_txt1_tag /> class="<cms:show tis_txt1_classes /><cms:if tis_has_vid='1'> mb-lg-5 mb-md-3 mb-sm-2</cms:if>">
+                        <cms:show trns_txt1_ln />
+                        <cms:if tis_has_fx = '1' && tis_fx_line = '1'>
+                            <span class="typed-text" data-typed-text='[<cms:show tis_fx_json />]'></span>
                         </cms:if>
-                    </cms:show_repeatable>
+                    </<cms:show tis_txt1_tag />>
                 </cms:if>
 
                 <cms:ignore>
-                    POPUP VIDEO PLAY BUTTON.
-                    One branch now, not three: the router resolved which source
-                    is active and built the BigPicture attribute for it.
-                    It is a button element, not an anchor with href="#!", because it opens a modal
-                    and never navigates - the old anchor put a nowhere-link in
-                    the screen reader's link list.
+                    POPUP VIDEO PLAY BUTTON - sits under line 1, as it always
+                    has. A button element, not an anchor with href="#!",
+                    because it opens a modal and never navigates; the old
+                    anchor put a nowhere-link in the screen reader's link list.
                 </cms:ignore>
                 <cms:if tis_has_vid = '1'>
                     <button type="button"
@@ -138,50 +151,35 @@
                     </button>
                 </cms:if>
 
-                <cms:ignore>
-                    Second fixed line, or the remaining repeatable rows.
-
-                    THE TYPED EFFECT LIVES HERE NOW. It used to print in a div
-                    of its own further down, behind its own static line - a
-                    third line of text after the user had already chosen two.
-                    The span sits inside line 2's div instead, so it continues
-                    the sentence on the same line and inherits line 2's
-                    typography rather than needing a duplicate set of controls.
-
-                    The guard is "line 2 has text OR there is an effect to
-                    show", so turning the effect on without typing a line 2
-                    still renders it rather than dropping it silently.
-                </cms:ignore>
-                <cms:if trns_txt_opt = '1'>
-                    <cms:if trns_txt2_ln || tis_has_fx = '1'>
-                        <div class="<cms:show tis_txt2_classes />">
-                            <cms:show trns_txt2_ln />
-                            <cms:if tis_has_fx = '1'>
-                                <span class="typed-text" data-typed-text='[<cms:show tis_fx_json />]'></span>
-                            </cms:if>
-                        </div>
-                    </cms:if>
-                </cms:if>
-
-                <cms:ignore>
-                    Mode 2's equivalent: the span goes on the LAST row, which
-                    is the end of the text either way. tis_txtm_total was
-                    counted in the router because show_repeatable gives k_count
-                    but no total.
-                </cms:ignore>
-                <cms:if trns_txt_opt = '2'>
-                    <cms:show_repeatable 'trns_txtm_rpt' offset='1' order='asc'>
-                        <cms:if trns_txtm_ln>
-                            <div class="<cms:show tis_txtm_classes />">
-                                <cms:show trns_txtm_ln />
-                                <cms:if tis_has_fx = '1' && k_count = tis_txtm_total>
-                                    <span class="typed-text" data-typed-text='[<cms:show tis_fx_json />]'></span>
-                                </cms:if>
-                            </div>
+                <cms:ignore>--- LINE 2 ---</cms:ignore>
+                <cms:if trns_txt_opt ge '2' && (trns_txt2_ln || (tis_has_fx = '1' && tis_fx_line = '2'))>
+                    <div class="<cms:show tis_txt2_classes />">
+                        <cms:show trns_txt2_ln />
+                        <cms:if tis_has_fx = '1' && tis_fx_line = '2'>
+                            <span class="typed-text" data-typed-text='[<cms:show tis_fx_json />]'></span>
                         </cms:if>
-                    </cms:show_repeatable>
+                    </div>
                 </cms:if>
 
+                <cms:ignore>--- LINE 3 ---</cms:ignore>
+                <cms:if trns_txt_opt ge '3' && (trns_txt3_ln || (tis_has_fx = '1' && tis_fx_line = '3'))>
+                    <div class="<cms:show tis_txt3_classes />">
+                        <cms:show trns_txt3_ln />
+                        <cms:if tis_has_fx = '1' && tis_fx_line = '3'>
+                            <span class="typed-text" data-typed-text='[<cms:show tis_fx_json />]'></span>
+                        </cms:if>
+                    </div>
+                </cms:if>
+
+                <cms:ignore>--- LINE 4 ---</cms:ignore>
+                <cms:if trns_txt_opt ge '4' && (trns_txt4_ln || (tis_has_fx = '1' && tis_fx_line = '4'))>
+                    <div class="<cms:show tis_txt4_classes />">
+                        <cms:show trns_txt4_ln />
+                        <cms:if tis_has_fx = '1' && tis_fx_line = '4'>
+                            <span class="typed-text" data-typed-text='[<cms:show tis_fx_json />]'></span>
+                        </cms:if>
+                    </div>
+                </cms:if>
 
                 <cms:ignore>CALL-TO-ACTION LINKS - all four slots, resolved in the router.</cms:ignore>
                 <cms:embed 'pb_mods/transns/theme/trnsimp_c2a.html' />
@@ -193,7 +191,7 @@
     <!-- end of .container-->
 
 </section>
-<!-- <section> close ============================-->
+<!-- section close ============================-->
 <!-- ============================================-->
 
 </cms:if>

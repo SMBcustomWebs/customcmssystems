@@ -1,0 +1,60 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <cms:ignore>
+        SECTION-LEVEL CLUSTER - top-left of the banner.
+
+        These edit things with no on-screen element to point at: the section's
+        own height and spacing, the three background layers behind everything,
+        and whether the banner carries a popup video. Same anchor and order as
+        hero's img-vid-ovl cluster.
+
+        Vertical stack. A horizontal row was tried and reverted - five icons ran
+        straight across the heading text. The router raises the minimum height
+        to 14rem while editing is on so the stack always clears.
+    </cms:ignore>
+    <cms:ignore>
+        TWO RULES THAT PRODUCE "Field not found" IF BROKEN, both learned the
+        hard way here:
+
+        1. ONLY PAGE-LEVEL FIELDS MAY BE LISTED. inline_ex.php walks
+           $PAGE->fields and dies on any name it cannot match. A field declared
+           INSIDE a cms:repeatable is not in that array - it belongs to the
+           repeatable's own row structure. So list the repeatable itself and
+           never its children. Excluded for that reason:
+               trns_txtbx_cstm_col_sz, trns_txtbx_cstm_col_val  (in trns_txtbx_cstm_sz_rpt)
+               trns_txt_fx_txt_ln                               (in trns_txt_fx_rpt)
+           Opening the repeatable in the popup still reaches every row and
+           every field in it, so nothing is lost.
+
+        2. A NAME MUST BE A REGISTERED FIELD. Adding a field to an embed is not
+           enough - Couch has to re-register the template before the name
+           exists, and until then the popup dies on it. That is what happens
+           with a freshly added field like trns_min_h.
+
+        The tag also takes skip='a|b' which suppresses the die for named
+        fields. Deliberately not used: it would hide exactly the mistakes above
+        instead of surfacing them.
+
+        QUOTING: link_text holds a whole button, so quotes inside it must be the
+        other kind. Couch rejects a backslash-escaped quote in an attribute and
+        stops at ATTRIB_NAME. plain -> single outer / double inner. toggle ->
+        double outer / single inner, because its cms:if needs single quotes.
+    </cms:ignore>
+    <div class="position-absolute top-0 start-0 mt-3 ms-3 z-3 d-flex flex-column gap-2">
+
+        <cms:popup_edit 'trns_msg|trns_gen_grp|trns_opt_init_row|trns_min_h|trns_py_ht|trns_fx_opt|trns_opt_xtr_row' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Section Height and Spacing" title="Edit Section Height and Spacing"><i class="fa-solid fa-arrows-up-down"></i></button>' />
+
+        <cms:popup_edit 'trns_bgclr_msg|trns_bgclr_row|trns_bg_clr_opt|trns_bgclr_cstm_grp|trns_bgclr_cstm_msg|trns_bgclr_cstm_opt_row|trns_bg_clr_cstm_grdt_opt|trns_bgclr_cstm_row|trns_bg_clr_cstm_one|trns_bg_clr_cstm_two|trns_bgclr_grdt_row|trns_bg_clr_grad_split_opt|trns_bg_clr_grad_rvrs_opt' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Background Color" title="Edit Background Color"><i class="fa-solid fa-fill-drip"></i></button>' />
+
+        <cms:popup_edit 'trns_bgimg_msg|trns_bgimg_opt_row|trns_bg_img_opt|trns_bgimg_grp|trns_bgimg_row|trns_bg_img|trns_bg_img_alt|trns_bgimg_fmt_row|trns_bg_img_opc|trns_bg_img_pos' link_text="<button class='btn btn-sm <cms:if trns_bg_img_opt>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Background Image' title='Edit Background Image'><i class='fa-solid fa-image'></i></button>" />
+
+        <cms:popup_edit 'trns_ovrly_msg|trns_ovrly_opt_row|trns_ovrly_clr_opt|trns_ovrly_opc|trns_ovrly_cstm_grp|trns_ovrly_cstm_msg|trns_ovrly_cstm_opt_row|trns_ovrly_grdt_opt|trns_ovrly_cstm_row|trns_ovrly_clr_cstm_one|trns_ovrly_clr_cstm_two|trns_ovrly_grdt_row|trns_ovrly_grad_split_opt|trns_ovrly_grad_rvrs_opt' link_text="<button class='btn btn-sm <cms:if trns_ovrly_clr_opt>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Overlay Color' title='Edit Overlay Color'><i class='fa-solid fa-wand-magic-sparkles'></i></button>" />
+
+        <cms:ignore>
+            Bottom of the stack. The play button this configures renders inside
+            the text box, but the setting is banner-level - whether this banner
+            carries a video, and from which source.
+        </cms:ignore>
+        <cms:popup_edit 'trns_gen_grp|trns_opt_xtr_row|trns_vid_opt|trns_fx_grp|trns_gen_xt_msg|trns_mdl_vid_row|trns_add_vid_btn_clr|trns_add_vid_btn_mgn|trns_mdl_vid_row2|trns_mdl_vid_msg|trns_mdl_vid_src_opt|trns_mdl_ytb_id|trns_mdl_vim_id|trns_mdl_vid_upl_vid_mp4' link_text="<button class='btn btn-sm <cms:if trns_vid_opt='1'>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Popup Video' title='Edit Popup Video'><i class='fa-solid fa-video'></i></button>" />
+
+    </div>
+</cms:if>

@@ -6,39 +6,63 @@
 </cms:editable>
 <cms:editable type="group" name="trns_gen_grp" label="Basic Section Options" order='3'>
     <cms:editable type='row' name='trns_opt_init_row' order='5'>
-        <cms:editable type='dropdown' name='trns_py_ht' label='Section Height' desc='adds height'
-            opt_values='dropdowns/padding.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='4' />
+        <cms:ignore>
+            HEIGHT IS TWO CONTROLS, not one, and the old single control was
+            mislabelled. trns_py_ht was called "Section Height" but it only ever
+            emitted py- on the section - padding on a box whose min-height was
+            0, so the box collapsed to its content and the padding was the whole
+            story. Choosing a small step made the banner SHORTER, and with
+            overflow-hidden on the section the surplus content was simply clipped.
+
+            Now: Minimum Height is a floor on the content, Section Padding adds
+            space above and below it. The floor is written to an element INSIDE
+            the padded section, so the two genuinely add rather than the padding
+            eating into the floor under border-box sizing.
+        </cms:ignore>
+        <cms:editable type='dropdown' name='trns_min_h' label='Minimum Height'
+            desc='A floor for the banner. Padding below adds on top of this.'
+            opt_values='dropdowns/_val/min-height.htm' dynamic='opt_values'
+            class='col-md-3 col-sm-6' order='3' />
+        <cms:editable type='dropdown' name='trns_py_ht' label='Section Padding'
+            desc='Space above and below the content, added to the minimum height'
+            opt_values='dropdowns/_tok/space.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='4' />
         <cms:editable type='dropdown' name='trns_fx_opt' label='Visual Scrolling Effects' desc=''
             opt_values='dropdowns/prlx-scrl.htm' dynamic='opt_values' class='col-md-3 col-sm-6' order='6' />
     </cms:editable>
     <cms:editable type='row' name='trns_opt_xtr_row' order='10'>
 
-        <cms:editable type='dropdown' name='trns_txt_opt' label='Text' desc=''
-            opt_values='No Text= |Up To 2 Lines Text=1 |More than 2 Lines Text=2' class='col-md-3 col-sm-6' order='2' />
+        <cms:editable type='dropdown' name='trns_txt_opt' label='Lines of Text'
+            desc='Each line is styled on its own below'
+            opt_values='No Text= |1 Line=1|2 Lines=2|3 Lines=3|4 Lines=4'
+            class='col-md-3 col-sm-6' order='2' />
         <cms:editable type='dropdown' name='trns_vid_opt' label='Popout Video'
             desc='adds a play button; pick the source below' opt_values='No Video Element= |Add Popup Video=1'
             class='col-md-3 col-sm-6' order='4' />
     </cms:editable>
+    <cms:ignore>
+        One gate per line. trns_txt_opt now holds the COUNT, so "show line 3"
+        is simply "the count reached 3" - no separate mode, no repeatable.
+
+        The old shape was two modes: '1' meant up to two fixed lines and '2'
+        meant a repeatable of many. Lines added to that repeatable were not
+        rendering, and a repeatable is the wrong tool here anyway - a banner
+        wants a handful of individually styled lines, not an unbounded list
+        where every row shares one style.
+    </cms:ignore>
     <cms:func _into='trns_txt_chc' trns_txt_opt=''>
-        <cms:if trns_txt_opt ge "1">
-            show
-            <cms:else />
-            hide
-        </cms:if>
+        <cms:if trns_txt_opt ge '1'>show<cms:else />hide</cms:if>
+    </cms:func>
+    <cms:func _into='trns_txt1_chc' trns_txt_opt=''>
+        <cms:if trns_txt_opt ge '1'>show<cms:else />hide</cms:if>
     </cms:func>
     <cms:func _into='trns_txt2_chc' trns_txt_opt=''>
-        <cms:if trns_txt_opt="1">
-            show
-            <cms:else />
-            hide
-        </cms:if>
+        <cms:if trns_txt_opt ge '2'>show<cms:else />hide</cms:if>
     </cms:func>
-    <cms:func _into='trns_txtm_chc' trns_txt_opt=''>
-        <cms:if trns_txt_opt="2">
-            show
-            <cms:else />
-            hide
-        </cms:if>
+    <cms:func _into='trns_txt3_chc' trns_txt_opt=''>
+        <cms:if trns_txt_opt ge '3'>show<cms:else />hide</cms:if>
+    </cms:func>
+    <cms:func _into='trns_txt4_chc' trns_txt_opt=''>
+        <cms:if trns_txt_opt ge '4'>show<cms:else />hide</cms:if>
     </cms:func>
     <cms:func _into='trns_vid_chc' trns_vid_opt=''>
         <cms:if trns_vid_opt ge "1">

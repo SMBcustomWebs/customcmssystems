@@ -24,11 +24,19 @@
                   purpose rather than by oversight
       gradient    a link is text, it takes a color and not a background
 
-    "Body Text Color" leads because a text link that inherits the surrounding
-    body color is the safe default, and the house rule forbids opt_selected.
+    THE FIRST OPTION EMITS NOTHING, on purpose. It used to store "body", which
+    assembles to .link-body - and that class DOES NOT EXIST. Only
+    .link-body-emphasis does. The check that cleared it originally matched
+    .link-body as a PREFIX of .link-body-emphasis, so the default option of
+    this file was emitting a dead class on every text link that did not
+    override the color.
+
+    Emitting nothing is also the better behavior: a text link with no color
+    class inherits whatever surrounds it, which is what "default" should mean.
+    Guard the use site with cms:if so no bare "link-" is printed.
     ===========================================================================
 </cms:ignore>
-Body Text Color=body
+Inherit Surrounding Color=
 |Site Theme Primary=primary
 |Site Theme Secondary=secondary
 |Site Theme Tertiary=tertiary

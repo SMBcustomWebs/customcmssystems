@@ -27,7 +27,6 @@
 <!-- cms:if would bleed into the next banner on the page.    -->
 <!-- ======================================================= -->
 <cms:set tis_txtbx_size = '' scope='global' />
-<cms:set tis_txtm_classes = '' scope='global' />
 <cms:ignore>
     TOP-LINE TAG. 'div' here is not a style default - it is the structural
     fallback meaning "no heading level was chosen", and it is exactly what the
@@ -39,7 +38,7 @@
 <cms:set tis_txt2_classes = '' scope='global' />
 <cms:set tis_fx_json = '' scope='global' />
 <cms:set tis_has_fx = '0' scope='global' />
-<cms:set tis_txtm_total = '0' scope='global' />
+<cms:set tis_fx_line = '' scope='global' />
 <cms:set tis_vid_src = '' scope='global' />
 <cms:set tis_vid_attr = '' scope='global' />
 <cms:set tis_c2a_grp_classes = '' scope='global' />
@@ -51,6 +50,49 @@
 <!-- ======================================================= -->
 <!-- 3. SECTION SPACING & TEXT BOX PLACEMENT                 -->
 <!-- ======================================================= -->
+<cms:ignore>
+    MINIMUM HEIGHT, written as a per-tile rule rather than a utility class
+    because the scale is rem and no rem min-height utility exists. It targets
+    .trns-body, which sits INSIDE the padded section, so section padding adds
+    on top of the floor instead of being absorbed into it.
+
+    EDIT MODE gets a floor of its own. The edit clusters are position-absolute,
+    so they contribute nothing to layout height and get clipped by the section's
+    overflow-hidden - measured at 141px hidden on a 69px banner.
+
+    THE FLOOR IS 14rem, and that number is arithmetic rather than a guess:
+        btn-sm height = padding-y 0.4rem x2 + line-height 1.5 x font 0.75rem
+                        + 1px border x2            = 2.05rem
+        tallest stack = 5 buttons + 4 gaps of 0.5rem + mt-3 of 1rem
+                      = 10.25 + 2 + 1              = 13.25rem
+        14rem clears that with room to spare.
+    Recalculate this if a sixth button is ever added to either stack.
+
+    Horizontal layout was tried and reverted - five icons in a row ran straight
+    across the heading text. Vertical keeps them in the corner; the height is
+    what has to give instead.
+
+    Visitors are unaffected: this branch only runs for a logged-in editor with
+    editing switched on, so the published banner is exactly the height chosen.
+</cms:ignore>
+<cms:set tis_min_h = '' scope='global' />
+<cms:if trns_min_h><cms:set tis_min_h = trns_min_h scope='global' /></cms:if>
+<cms:ignore>
+    Four of the six choices sit below the 14rem edit floor - unset, 6rem, 9rem
+    and 12rem - so a plain string test covers it. No cms:lt, no stripping the
+    unit off to compare numbers: the scale is a known short list, and matching
+    against it cannot misparse the way "12rem" -> 12 can. If the scale grows,
+    extend this list rather than making it clever.
+</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <cms:if tis_min_h = '' || tis_min_h = '6rem' || tis_min_h = '9rem' || tis_min_h = '12rem'>
+        <cms:set tis_min_h = '14rem' scope='global' />
+    </cms:if>
+</cms:if>
+<cms:if tis_min_h>
+    <cms:capture into='tis_min_h_css' scope='global'>#<cms:show trns_local_id /> .trns-body { min-height: <cms:show tis_min_h />; }</cms:capture>
+</cms:if>
+
 <cms:capture into='tis_sec_pad' scope='global'><cms:if trns_py_ht>py-<cms:show trns_py_ht /></cms:if></cms:capture>
 
 <cms:ignore>
@@ -67,7 +109,13 @@
 <cms:else />
     <cms:set tis_txtbx_size = trns_txtbx_sz_opt scope='global' />
 </cms:if>
-<cms:if tis_txtbx_size = ''><cms:set tis_txtbx_size = 'col-12' scope='global' /></cms:if>
+<cms:ignore>
+    No col-12 backup here. That was a fabricated default: it made "never saved"
+    and "deliberately Full width" compile to the same markup, and the router
+    was choosing a layout nobody asked for. txt-box_size.htm leads with
+    "Full width=col-12", so the first option already IS the default - which is
+    the house rule, and it lives in the dropdown file where it can be seen.
+</cms:ignore>
 
 <cms:ignore>
     h-align.htm and v-align.htm have no empty option, so these always resolve.
@@ -87,78 +135,42 @@
 <!-- 4. TEXT                                                 -->
 <!-- ======================================================= -->
 <cms:ignore>
-    trns_txt_opt: '' = none, '1' = up to two fixed lines, '2' = a repeatable of
-    many lines. Resolved to a single flag plus the mode so the theme branches
-    once instead of testing the raw field repeatedly.
+    Four fixed lines. trns_txt_opt holds HOW MANY, so the theme prints line N
+    when the count reaches N - there is no mode flag and no repeatable any
+    more. Each line owns its full set of typography fields, which is the point:
+    a large opening line above a smaller supporting one was impossible when
+    every row of a repeatable shared one style set.
 </cms:ignore>
 <cms:if trns_txt_opt><cms:set tis_has_text = '1' scope='global' /></cms:if>
 
-<cms:capture into='tis_txtm_classes' scope='global'>
-    <cms:if trns_txtm_clr>text-<cms:show trns_txtm_clr /> </cms:if>
-    <cms:if trns_txtm_sz>fs-<cms:show trns_txtm_sz /> </cms:if>
-    <cms:if trns_txtm_font>font-<cms:show trns_txtm_font /> </cms:if>
-    <cms:if trns_txtm_fnt_wt>fw-<cms:show trns_txtm_fnt_wt /> </cms:if>
-    <cms:if trns_txtm_fnt_st>fst-<cms:show trns_txtm_fnt_st /> </cms:if>
-    <cms:if trns_txtm_ltr_spc>ls-<cms:show trns_txtm_ltr_spc /> </cms:if>
-</cms:capture>
-
+<cms:ignore>
+    TOP-LINE TAG. 'div' is not a style default - it is the structural fallback
+    meaning "no heading level chosen", and it is what the theme emitted before
+    the dropdown existed. A heading is minted only when asked for.
+</cms:ignore>
+<cms:set tis_txt1_tag = 'div' scope='global' />
 <cms:if trns_txt1_tag><cms:set tis_txt1_tag = trns_txt1_tag scope='global' /></cms:if>
 
-<cms:capture into='tis_txt1_classes' scope='global'>
-    <cms:if trns_txt1_clr>text-<cms:show trns_txt1_clr /> </cms:if>
-    <cms:if trns_txt1_sz>fs-<cms:show trns_txt1_sz /> </cms:if>
-    <cms:if trns_txt1_font>font-<cms:show trns_txt1_font /> </cms:if>
-    <cms:if trns_txt1_fnt_wt>fw-<cms:show trns_txt1_fnt_wt /> </cms:if>
-    <cms:if trns_txt1_fnt_st>fst-<cms:show trns_txt1_fnt_st /> </cms:if>
-    <cms:if trns_txt1_ltr_spc>ls-<cms:show trns_txt1_ltr_spc /> </cms:if>
-</cms:capture>
+<cms:ignore>
+    The old file read trns_txt1_font for line 2's font-family - a copy-paste
+    slip that made line 2's font follow line 1. All four are generated from one
+    template now, so that class of bug cannot recur.
+</cms:ignore>
+<cms:capture into='tis_txt1_classes' scope='global'><cms:if trns_txt1_clr>text-<cms:show trns_txt1_clr /> </cms:if><cms:if trns_txt1_sz>fs-<cms:show trns_txt1_sz /> </cms:if><cms:if trns_txt1_font>font-<cms:show trns_txt1_font /> </cms:if><cms:if trns_txt1_fnt_wt>fw-<cms:show trns_txt1_fnt_wt /> </cms:if><cms:if trns_txt1_fnt_st>fst-<cms:show trns_txt1_fnt_st /> </cms:if><cms:if trns_txt1_ltr_spc>ls-<cms:show trns_txt1_ltr_spc /> </cms:if></cms:capture>
+<cms:capture into='tis_txt2_classes' scope='global'><cms:if trns_txt2_clr>text-<cms:show trns_txt2_clr /> </cms:if><cms:if trns_txt2_sz>fs-<cms:show trns_txt2_sz /> </cms:if><cms:if trns_txt2_font>font-<cms:show trns_txt2_font /> </cms:if><cms:if trns_txt2_fnt_wt>fw-<cms:show trns_txt2_fnt_wt /> </cms:if><cms:if trns_txt2_fnt_st>fst-<cms:show trns_txt2_fnt_st /> </cms:if><cms:if trns_txt2_ltr_spc>ls-<cms:show trns_txt2_ltr_spc /> </cms:if></cms:capture>
+<cms:capture into='tis_txt3_classes' scope='global'><cms:if trns_txt3_clr>text-<cms:show trns_txt3_clr /> </cms:if><cms:if trns_txt3_sz>fs-<cms:show trns_txt3_sz /> </cms:if><cms:if trns_txt3_font>font-<cms:show trns_txt3_font /> </cms:if><cms:if trns_txt3_fnt_wt>fw-<cms:show trns_txt3_fnt_wt /> </cms:if><cms:if trns_txt3_fnt_st>fst-<cms:show trns_txt3_fnt_st /> </cms:if><cms:if trns_txt3_ltr_spc>ls-<cms:show trns_txt3_ltr_spc /> </cms:if></cms:capture>
+<cms:capture into='tis_txt4_classes' scope='global'><cms:if trns_txt4_clr>text-<cms:show trns_txt4_clr /> </cms:if><cms:if trns_txt4_sz>fs-<cms:show trns_txt4_sz /> </cms:if><cms:if trns_txt4_font>font-<cms:show trns_txt4_font /> </cms:if><cms:if trns_txt4_fnt_wt>fw-<cms:show trns_txt4_fnt_wt /> </cms:if><cms:if trns_txt4_fnt_st>fst-<cms:show trns_txt4_fnt_st /> </cms:if><cms:if trns_txt4_ltr_spc>ls-<cms:show trns_txt4_ltr_spc /> </cms:if></cms:capture>
 
 <cms:ignore>
-    The old theme read trns_txt1_font for the SECOND line's font-family - a
-    copy-paste slip that made line 2's font follow line 1. Corrected to
-    trns_txt2_font.
+    TYPED EFFECT. The animated span lands at the end of the LAST line shown,
+    which is line trns_txt_opt. tis_fx_line carries that number so the theme
+    does not have to work it out per line.
 </cms:ignore>
-<cms:capture into='tis_txt2_classes' scope='global'>
-    <cms:if trns_txt2_clr>text-<cms:show trns_txt2_clr /> </cms:if>
-    <cms:if trns_txt2_sz>fs-<cms:show trns_txt2_sz /> </cms:if>
-    <cms:if trns_txt2_font>font-<cms:show trns_txt2_font /> </cms:if>
-    <cms:if trns_txt2_fnt_wt>fw-<cms:show trns_txt2_fnt_wt /> </cms:if>
-    <cms:if trns_txt2_fnt_st>fst-<cms:show trns_txt2_fnt_st /> </cms:if>
-    <cms:if trns_txt2_ltr_spc>ls-<cms:show trns_txt2_ltr_spc /> </cms:if>
-</cms:capture>
-
-<cms:ignore>
-    TYPED-TEXT EFFECT.
-    trns_txt_fx_opt is a single-option checkbox, so it is compared with plain
-    '=' at runtime - cms:is is correct only inside a cms:func, where the code
-    compiles to JavaScript.
-
-    NO class set at all now. The effect owns no static lead-in line and no
-    per-word overrides: the typed span prints INSIDE line 2's div and inherits
-    line 2's typography whole. The animation is the emphasis - a second color
-    and weight on top of it only fought with the sentence it belongs to.
-    All that is left to resolve here is the word list itself.
-
-    The JSON array is built here rather than in the theme. It is data, and the
-    separator logic - comma before every row except the first, because
-    k_paginated_bottom is not available inside show_repeatable - is exactly the
-    kind of thing that should not be sitting in markup.
-</cms:ignore>
+<cms:set tis_fx_line = trns_txt_opt scope='global' />
 <cms:if trns_txt_fx_opt = '1'>
     <cms:capture into='tis_fx_json' scope='global'><cms:show_repeatable 'trns_txt_fx_rpt'><cms:if trns_txt_fx_txt_ln><cms:if k_count gt '1'>,</cms:if>"<cms:show trns_txt_fx_txt_ln />"</cms:if></cms:show_repeatable></cms:capture>
     <cms:if tis_fx_json><cms:set tis_has_fx = '1' scope='global' /></cms:if>
 </cms:if>
-
-<cms:ignore>
-    Mode 2 prints an unknown number of lines, and the typed span has to land on
-    the LAST one. show_repeatable exposes k_count but no total, so count the
-    rows first - after the loop, tis_txtm_total holds the final k_count - and
-    the render loop then tests k_count against it.
-</cms:ignore>
-<cms:if trns_txt_opt = '2'>
-    <cms:show_repeatable 'trns_txtm_rpt'><cms:set tis_txtm_total = k_count scope='global' /></cms:show_repeatable>
-</cms:if>
-
 
 <!-- ======================================================= -->
 <!-- 5. POPUP VIDEO                                          -->
@@ -190,7 +202,13 @@
     </cms:if>
 </cms:if>
 
-<cms:capture into='tis_vid_btn_mgn' scope='global'><cms:if trns_add_vid_btn_mgn>mt-<cms:show trns_add_vid_btn_mgn /></cms:if></cms:capture>
+<cms:ignore>
+    my-, not mt-. The field is labelled "Play Button Space" and its help text
+    promises space ABOVE AND BELOW the button, but this emitted a top margin
+    only, so the bottom half of that promise never happened. Vertical margin
+    honours the label.
+</cms:ignore>
+<cms:capture into='tis_vid_btn_mgn' scope='global'><cms:if trns_add_vid_btn_mgn>my-<cms:show trns_add_vid_btn_mgn /></cms:if></cms:capture>
 
 
 <!-- ======================================================= -->

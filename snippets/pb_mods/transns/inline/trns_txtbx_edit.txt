@@ -1,0 +1,59 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <cms:ignore>
+        TEXT BOX CLUSTER - hovers at the top-left OF THE TEXT BOX, so it travels
+        with the box wherever the alignment controls put it. The section cluster
+        stays pinned to the banner corner.
+
+        Ordered the way the box reads: the box itself, its lines, then the typed
+        effect that ends the last line, then the links underneath. The popup
+        video lives in the section stack instead - see the note there.
+
+        Buttons for features that can be switched off render faded when off, so
+        the controls to turn something ON stay reachable. That is why the CTA
+        button is still visible at zero links.
+    </cms:ignore>
+    <cms:ignore>
+        TWO RULES THAT PRODUCE "Field not found" IF BROKEN, both learned the
+        hard way here:
+
+        1. ONLY PAGE-LEVEL FIELDS MAY BE LISTED. inline_ex.php walks
+           $PAGE->fields and dies on any name it cannot match. A field declared
+           INSIDE a cms:repeatable is not in that array - it belongs to the
+           repeatable's own row structure. So list the repeatable itself and
+           never its children. Excluded for that reason:
+               trns_txtbx_cstm_col_sz, trns_txtbx_cstm_col_val  (in trns_txtbx_cstm_sz_rpt)
+               trns_txt_fx_txt_ln                               (in trns_txt_fx_rpt)
+           Opening the repeatable in the popup still reaches every row and
+           every field in it, so nothing is lost.
+
+        2. A NAME MUST BE A REGISTERED FIELD. Adding a field to an embed is not
+           enough - Couch has to re-register the template before the name
+           exists, and until then the popup dies on it. That is what happens
+           with a freshly added field like trns_min_h.
+
+        The tag also takes skip='a|b' which suppresses the die for named
+        fields. Deliberately not used: it would hide exactly the mistakes above
+        instead of surfacing them.
+
+        QUOTING: link_text holds a whole button, so quotes inside it must be the
+        other kind. Couch rejects a backslash-escaped quote in an attribute and
+        stops at ATTRIB_NAME. plain -> single outer / double inner. toggle ->
+        double outer / single inner, because its cms:if needs single quotes.
+    </cms:ignore>
+    <div class="position-absolute top-0 start-0 mt-2 ms-2 z-3 d-flex flex-column gap-2">
+
+        <cms:popup_edit 'trns_txt_grp|trns_txtblk_gen_row|trns_txtblk_gen_msg|trns_txtbx_sz_opt|trns_txtbx_valg|trns_txtbx_halg|trns_txt_halg|trns_txtbx_cstm_sz_row|trns_txtbx_cstm_sz_msg|trns_txtbx_cstm_sz_rpt' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Text Box Layout" title="Edit Text Box Layout"><i class="fa-solid fa-up-down-left-right"></i></button>' />
+
+        <cms:popup_edit 'trns_gen_grp|trns_opt_xtr_row|trns_txt_opt|trns_txt_grp|trns_txt1_row|trns_txt1_msg|trns_txt1_ln|trns_txt1_tag|trns_txt1_clr|trns_txt1_sz|trns_txt1_font|trns_txt1_fnt_wt|trns_txt1_fnt_st|trns_txt1_ltr_spc|trns_txt2_row|trns_txt2_msg|trns_txt2_ln|trns_txt2_clr|trns_txt2_sz|trns_txt2_font|trns_txt2_fnt_wt|trns_txt2_fnt_st|trns_txt2_ltr_spc|trns_txt3_row|trns_txt3_msg|trns_txt3_ln|trns_txt3_clr|trns_txt3_sz|trns_txt3_font|trns_txt3_fnt_wt|trns_txt3_fnt_st|trns_txt3_ltr_spc|trns_txt4_row|trns_txt4_msg|trns_txt4_ln|trns_txt4_clr|trns_txt4_sz|trns_txt4_font|trns_txt4_fnt_wt|trns_txt4_fnt_st|trns_txt4_ltr_spc' link_text="<button class='btn btn-sm <cms:if trns_txt_opt>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Text Lines' title='Edit Text Lines'><i class='fa-solid fa-align-left'></i></button>" />
+
+        <cms:popup_edit 'trns_txt_grp|trns_txtblk_gen_row|trns_txt_fx_opt|trns_txt_fx_row|trns_txtblk_txt_msg|trns_txt_fx_rpt' link_text="<button class='btn btn-sm <cms:if trns_txt_fx_opt='1'>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Typed Effect' title='Edit Typed Effect'><i class='fa-solid fa-keyboard'></i></button>" />
+
+        <cms:ignore>
+            ONE window for all four link slots, opening with the count that
+            controls how many exist - so "add a second button" is reachable from
+            the same place you edit the first.
+        </cms:ignore>
+        <cms:popup_edit 'trns_gen_grp|trns_c2a_opt_row|trns_c2a_ct_opt|trns_c2a_ml_row|trns_c2a_cust_lnk_msg|trns_c2a_mult_ord|trns_frmt_c2a_mg|trns_c2a_halg|trns_c2a1_grp|trns_c2a1_msg|trns_c2a1_core_row|trns_c2a1_txt|trns_c2a1_clr|trns_c2a1_lnk_clr_row|trns_c2a1_lnk_clr|trns_c2a1_fmt_row|trns_c2a1_fill|trns_c2a1_st|trns_c2a1_sz|trns_c2a1_w|trns_c2a1_dest_row|trns_c2a1_lnk|trns_c2a1_cstm_row|trns_c2a1_cst_lnk|trns_c2a1_icon_pos_row|trns_c2a1_icon_pos|trns_c2a1_icon_msg|trns_c2a1_icon_fa_row|trns_c2a1_icon_fa|trns_c2a2_grp|trns_c2a2_msg|trns_c2a2_core_row|trns_c2a2_txt|trns_c2a2_clr|trns_c2a2_lnk_clr_row|trns_c2a2_lnk_clr|trns_c2a2_fmt_row|trns_c2a2_fill|trns_c2a2_st|trns_c2a2_sz|trns_c2a2_w|trns_c2a2_dest_row|trns_c2a2_lnk|trns_c2a2_cstm_row|trns_c2a2_cst_lnk|trns_c2a2_icon_pos_row|trns_c2a2_icon_pos|trns_c2a2_icon_msg|trns_c2a2_icon_fa_row|trns_c2a2_icon_fa|trns_c2a3_grp|trns_c2a3_msg|trns_c2a3_core_row|trns_c2a3_txt|trns_c2a3_clr|trns_c2a3_lnk_clr_row|trns_c2a3_lnk_clr|trns_c2a3_fmt_row|trns_c2a3_fill|trns_c2a3_st|trns_c2a3_sz|trns_c2a3_w|trns_c2a3_dest_row|trns_c2a3_lnk|trns_c2a3_cstm_row|trns_c2a3_cst_lnk|trns_c2a3_icon_pos_row|trns_c2a3_icon_pos|trns_c2a3_icon_msg|trns_c2a3_icon_fa_row|trns_c2a3_icon_fa|trns_c2a4_grp|trns_c2a4_msg|trns_c2a4_core_row|trns_c2a4_txt|trns_c2a4_clr|trns_c2a4_lnk_clr_row|trns_c2a4_lnk_clr|trns_c2a4_fmt_row|trns_c2a4_fill|trns_c2a4_st|trns_c2a4_sz|trns_c2a4_w|trns_c2a4_dest_row|trns_c2a4_lnk|trns_c2a4_cstm_row|trns_c2a4_cst_lnk|trns_c2a4_icon_pos_row|trns_c2a4_icon_pos|trns_c2a4_icon_msg|trns_c2a4_icon_fa_row|trns_c2a4_icon_fa' link_text="<button class='btn btn-sm <cms:if trns_c2a_ct_opt>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Call To Action Links' title='Edit Call To Action Links'><i class='fa-solid fa-link'></i></button>" />
+
+    </div>
+</cms:if>

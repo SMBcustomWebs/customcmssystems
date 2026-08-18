@@ -1,0 +1,32 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/letter-spacing.htm
+
+    EMITS   a bare letter-spacing step.
+    USE AS  ls-{token}
+
+    MUST BE GUARDED  the first option emits an empty string, so wrap the use
+    site in cms:if or an untouched field prints a bare "ls-".
+
+    VERIFIED IN theme.css: .ls-0 .ls-1 .ls-2 .ls-3 .ls-n1 .ls-n2 all exist.
+    The n prefix is how a NEGATIVE step is written, since a class name cannot
+    start with a minus sign - n1 is -1, tightening the tracking.
+
+    ALSO AVAILABLE but not offered here: .ls-sm .ls-md .ls-lg .ls-xl, a
+    separate named scale. Mixing two scales in one dropdown would make the
+    ordering meaningless, so they are left out.
+
+    REPLACES  dropdowns/hdr_ltr-spc.htm, whose first line reads "Default" with
+    NO equals sign at all. Couch falls back to using the label as the value
+    when there is no "=", so picking Default stored the literal string
+    "Default" and the use site emitted ls-Default - a class that matches
+    nothing. Every text line in the transition banner defaulted to it.
+    ===========================================================================
+</cms:ignore>
+Default=
+|None (0)=0
+|Slight=1
+|Wide=2
+|Widest=3
+|Tight=n1
+|Tightest=n2

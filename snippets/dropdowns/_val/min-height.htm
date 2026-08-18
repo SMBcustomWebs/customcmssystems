@@ -1,0 +1,38 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_val/min-height.htm
+
+    EMITS   a complete CSS length, unit included. NOT a class.
+    USE AS  min-height: {token};   inside a per-tile style block
+
+    WHY REM AND NOT VH  a vh unit is a percentage of the browser WINDOW, so the
+    same value renders 256px on a 1022px-tall desktop viewport, 98px on a
+    landscape phone and 350px on a tall monitor. That is correct for a hero,
+    whose job is to fill the screen. A transition banner is a divider strip: its
+    intent is "be about this tall", which is a fixed measure, so rem is right.
+    rem also avoids the mobile trap where the address bar hides on scroll,
+    changes the viewport height, and makes vh-sized blocks visibly jump.
+
+    STILL ACCESSIBLE  rem is a multiple of the root font size, so a visitor who
+    has raised their browser text size gets a proportionally taller banner. A px
+    value would ignore that preference; vh would too.
+
+    MEASURED AT THE DEFAULT 16px ROOT
+        6rem 96px   9rem 144px   12rem 192px   16rem 256px   20rem 320px
+
+    MUST BE GUARDED  the first option emits nothing, meaning "no floor - the
+    banner is exactly as tall as its content". Wrap the use site in cms:if or
+    an empty value produces "min-height: ;" which invalidates the whole rule.
+
+    THIS IS A FLOOR, NOT A HEIGHT. It goes on an element INSIDE the padded
+    section, so section padding adds on top of it rather than eating into it.
+    Put it on the same element as the padding and border-box sizing would make
+    the padding subtract from the visible content area instead.
+    ===========================================================================
+</cms:ignore>
+No Minimum=
+|Short 6rem=6rem
+|Small 9rem=9rem
+|Medium 12rem=12rem
+|Tall 16rem=16rem
+|Tallest 20rem=20rem
