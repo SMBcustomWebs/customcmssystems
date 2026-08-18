@@ -29,10 +29,61 @@
         it is how "return me to the page I was on" works. Honour it before
         falling back to a role-based destination.
     </cms:ignore>
-    <cms:set want="<cms:gpc 'redirect' method='get' />" />
+    <cms:ignore>
+        The redirect target MUST be validated. alter_login_link sets it to
+        REQUEST_URI, and this page embeds the nav, which renders a login
+        link - so a link generated while sitting on the login page carries
+        redirect=<the login page itself>. Following that unconditionally
+        produced an infinite redirect loop and locked the admin out.
 
-    <cms:if want>
-        <cms:redirect url=want />
+        Two rules, same shape as users/logout.php:
+          - same-origin only, so a caller-supplied URL cannot bounce
+            someone off-site
+          - never an auth page, or we loop straight back here
+        Anything rejected falls through to the role-based destination.
+    </cms:ignore>
+    <cms:php>
+        global $CTX;
+
+        $site = K_SITE_URL;
+        $want = isset($_GET['redirect']) ? trim($_GET['redirect']) : '';
+        $safe = '';
+
+        if( strlen($want) ){
+            $abs = $want;
+
+            /* REQUEST_URI is root-relative, so rebuild it against the origin
+               rather than against K_SITE_URL, which would double the subdir. */
+            if( strpos($want, '/') === 0 ){
+                $parts = parse_url( $site );
+                $origin = $parts['scheme'] . '://' . $parts['host'];
+                if( isset($parts['port']) ){ $origin .= ':' . $parts['port']; }
+                $abs = $origin . $want;
+            }
+
+            if( strpos($abs, $site) === 0 ){
+                $tail = strtolower( substr($abs, strlen($site)) );
+
+                $blocked = array(
+                    'users/login.php',
+                    'users/logout.php',
+                    'users/register.php',
+                    'users/lost-password.php'
+                );
+
+                $ok = true;
+                foreach( $blocked as $b ){
+                    if( strpos($tail, $b) === 0 ){ $ok = false; break; }
+                }
+                if( $ok ){ $safe = $abs; }
+            }
+        }
+
+        $CTX->set( 'ccs_login_dest', $safe, 'global' );
+    </cms:php>
+
+    <cms:if ccs_login_dest>
+        <cms:redirect url=ccs_login_dest />
     <cms:else_if k_user_access_level ge '7' />
         <!-- Admins go to the dashboard -->
         <cms:redirect url="<cms:show k_admin_link />" />

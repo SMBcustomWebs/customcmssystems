@@ -258,7 +258,7 @@
     Otherwise: {{fill}}-{{color}} assembles in ONE place, which is what stops
     btn--outline and btn-outlineprimary from ever appearing again.
 </cms:ignore>
-<cms:capture into='tis_c2a1_classes' scope='global'><cms:if trns_c2a1_clr = 'link'><cms:if trns_c2a1_lnk_clr>link-<cms:show trns_c2a1_lnk_clr /> </cms:if><cms:else /><cms:if trns_c2a1_clr><cms:if trns_c2a1_fill><cms:show trns_c2a1_fill /><cms:else />btn</cms:if>-<cms:show trns_c2a1_clr /> </cms:if><cms:if trns_c2a1_st><cms:show trns_c2a1_st /> </cms:if><cms:if trns_c2a1_sz><cms:show trns_c2a1_sz /> </cms:if><cms:if trns_c2a1_w><cms:show trns_c2a1_w /> </cms:if><cms:if tis_c2a1_icon = '1'><cms:show trns_c2a1_icon_pos /> </cms:if></cms:if></cms:capture>
+<cms:capture into='tis_c2a1_classes' scope='global'><cms:if trns_c2a1_clr = 'link'><cms:if trns_c2a1_lnk_clr>link-<cms:show trns_c2a1_lnk_clr /> </cms:if><cms:else />btn <cms:if trns_c2a1_clr><cms:if trns_c2a1_fill><cms:show trns_c2a1_fill /><cms:else />btn</cms:if>-<cms:show trns_c2a1_clr /> </cms:if><cms:if trns_c2a1_st><cms:show trns_c2a1_st /> </cms:if><cms:if trns_c2a1_sz><cms:show trns_c2a1_sz /> </cms:if><cms:if trns_c2a1_w><cms:show trns_c2a1_w /> </cms:if><cms:if tis_c2a1_icon = '1'><cms:show trns_c2a1_icon_pos /> </cms:if></cms:if></cms:capture>
 
 <cms:ignore>--- SLOT 2 ---</cms:ignore>
 <cms:set tis_c2a2_href = '' scope='global' />
@@ -301,7 +301,7 @@
     Otherwise: {{fill}}-{{color}} assembles in ONE place, which is what stops
     btn--outline and btn-outlineprimary from ever appearing again.
 </cms:ignore>
-<cms:capture into='tis_c2a2_classes' scope='global'><cms:if trns_c2a2_clr = 'link'><cms:if trns_c2a2_lnk_clr>link-<cms:show trns_c2a2_lnk_clr /> </cms:if><cms:else /><cms:if trns_c2a2_clr><cms:if trns_c2a2_fill><cms:show trns_c2a2_fill /><cms:else />btn</cms:if>-<cms:show trns_c2a2_clr /> </cms:if><cms:if trns_c2a2_st><cms:show trns_c2a2_st /> </cms:if><cms:if trns_c2a2_sz><cms:show trns_c2a2_sz /> </cms:if><cms:if trns_c2a2_w><cms:show trns_c2a2_w /> </cms:if><cms:if tis_c2a2_icon = '1'><cms:show trns_c2a2_icon_pos /> </cms:if></cms:if></cms:capture>
+<cms:capture into='tis_c2a2_classes' scope='global'><cms:if trns_c2a2_clr = 'link'><cms:if trns_c2a2_lnk_clr>link-<cms:show trns_c2a2_lnk_clr /> </cms:if><cms:else />btn <cms:if trns_c2a2_clr><cms:if trns_c2a2_fill><cms:show trns_c2a2_fill /><cms:else />btn</cms:if>-<cms:show trns_c2a2_clr /> </cms:if><cms:if trns_c2a2_st><cms:show trns_c2a2_st /> </cms:if><cms:if trns_c2a2_sz><cms:show trns_c2a2_sz /> </cms:if><cms:if trns_c2a2_w><cms:show trns_c2a2_w /> </cms:if><cms:if tis_c2a2_icon = '1'><cms:show trns_c2a2_icon_pos /> </cms:if></cms:if></cms:capture>
 
 <cms:ignore>--- SLOT 3 ---</cms:ignore>
 <cms:set tis_c2a3_href = '' scope='global' />
@@ -344,7 +344,7 @@
     Otherwise: {{fill}}-{{color}} assembles in ONE place, which is what stops
     btn--outline and btn-outlineprimary from ever appearing again.
 </cms:ignore>
-<cms:capture into='tis_c2a3_classes' scope='global'><cms:if trns_c2a3_clr = 'link'><cms:if trns_c2a3_lnk_clr>link-<cms:show trns_c2a3_lnk_clr /> </cms:if><cms:else /><cms:if trns_c2a3_clr><cms:if trns_c2a3_fill><cms:show trns_c2a3_fill /><cms:else />btn</cms:if>-<cms:show trns_c2a3_clr /> </cms:if><cms:if trns_c2a3_st><cms:show trns_c2a3_st /> </cms:if><cms:if trns_c2a3_sz><cms:show trns_c2a3_sz /> </cms:if><cms:if trns_c2a3_w><cms:show trns_c2a3_w /> </cms:if><cms:if tis_c2a3_icon = '1'><cms:show trns_c2a3_icon_pos /> </cms:if></cms:if></cms:capture>
+<cms:capture into='tis_c2a3_classes' scope='global'><cms:if trns_c2a3_clr = 'link'><cms:if trns_c2a3_lnk_clr>link-<cms:show trns_c2a3_lnk_clr /> </cms:if><cms:else />btn <cms:if trns_c2a3_clr><cms:if trns_c2a3_fill><cms:show trns_c2a3_fill /><cms:else />btn</cms:if>-<cms:show trns_c2a3_clr /> </cms:if><cms:if trns_c2a3_st><cms:show trns_c2a3_st /> </cms:if><cms:if trns_c2a3_sz><cms:show trns_c2a3_sz /> </cms:if><cms:if trns_c2a3_w><cms:show trns_c2a3_w /> </cms:if><cms:if tis_c2a3_icon = '1'><cms:show trns_c2a3_icon_pos /> </cms:if></cms:if></cms:capture>
 
 <cms:ignore>--- SLOT 4 ---</cms:ignore>
 <cms:set tis_c2a4_href = '' scope='global' />
@@ -387,7 +387,7 @@
     Otherwise: {{fill}}-{{color}} assembles in ONE place, which is what stops
     btn--outline and btn-outlineprimary from ever appearing again.
 </cms:ignore>
-<cms:capture into='tis_c2a4_classes' scope='global'><cms:if trns_c2a4_clr = 'link'><cms:if trns_c2a4_lnk_clr>link-<cms:show trns_c2a4_lnk_clr /> </cms:if><cms:else /><cms:if trns_c2a4_clr><cms:if trns_c2a4_fill><cms:show trns_c2a4_fill /><cms:else />btn</cms:if>-<cms:show trns_c2a4_clr /> </cms:if><cms:if trns_c2a4_st><cms:show trns_c2a4_st /> </cms:if><cms:if trns_c2a4_sz><cms:show trns_c2a4_sz /> </cms:if><cms:if trns_c2a4_w><cms:show trns_c2a4_w /> </cms:if><cms:if tis_c2a4_icon = '1'><cms:show trns_c2a4_icon_pos /> </cms:if></cms:if></cms:capture>
+<cms:capture into='tis_c2a4_classes' scope='global'><cms:if trns_c2a4_clr = 'link'><cms:if trns_c2a4_lnk_clr>link-<cms:show trns_c2a4_lnk_clr /> </cms:if><cms:else />btn <cms:if trns_c2a4_clr><cms:if trns_c2a4_fill><cms:show trns_c2a4_fill /><cms:else />btn</cms:if>-<cms:show trns_c2a4_clr /> </cms:if><cms:if trns_c2a4_st><cms:show trns_c2a4_st /> </cms:if><cms:if trns_c2a4_sz><cms:show trns_c2a4_sz /> </cms:if><cms:if trns_c2a4_w><cms:show trns_c2a4_w /> </cms:if><cms:if tis_c2a4_icon = '1'><cms:show trns_c2a4_icon_pos /> </cms:if></cms:if></cms:capture>
 
 
 <!-- ======================================================= -->

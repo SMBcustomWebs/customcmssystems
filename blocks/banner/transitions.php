@@ -1,4 +1,4 @@
-<?php require_once( '../../ccs_vsp_dash/cms.php' ); ?>
+<?php require_once( '../../ccs_dash/cms.php' ); ?>
 <cms:template title='Page Transitions' parent='_stock_' icon='puzzle-piece' clonable='0'  order='600' >
     <cms:mosaic name='trns_msc' label='Page Transitions' body_class='_pb'>
         <cms:tile name='trns_img_smp_tl' label='Transition Simple- Color, Image, Text, Link' _pb_template='transns/theme/trns_img_smp' _pb_height='300'>
