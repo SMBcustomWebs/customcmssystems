@@ -10,12 +10,7 @@
             <cms:embed 'pb_mods/transns/embed/common/trns_btn.htm' />
             <cms:embed 'pb_mods/transns/embed/common/trns_vid.htm' />
         </cms:tile>
-        <cms:tile name='trnsadv_lnks' label='Transition with Multiple Links' _pb_template='transns/theme/trnsadv_lnks' _pb_height='300'>
-            <cms:embed 'pb_mods/transns/embed/trns_img.htm' /> 
-            <cms:embed 'pb_mods/transns/embed/trns_img_smp.htm' />
-            <cms:embed 'pb_mods/transns/embed/trnsmp_c2a.htm' />
-            <cms:embed 'pb_mods/transns/embed/trnsadv_lnks.htm' />
-        </cms:tile>
+
         <cms:tile name='trns_img_adv_tl' label='Transition - Advanced - Forms columns more' _pb_template='transns/theme/trns_img_adv' _pb_height='300'>
             <cms:embed 'pb_mods/transns/embed/trns_img_adv.htm' />
         </cms:tile>

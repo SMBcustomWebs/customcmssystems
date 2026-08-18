@@ -33,6 +33,13 @@
     render, and an inline style also outranks any stylesheet override, so it
     could not be retuned site-wide without editing this file.
 
+    THE DIVIDER sits INSIDE the slot's own cms:if, immediately after the
+    anchor - so it can never be printed for a slot that did not render, and
+    never after the last one. The router decided whether each gap qualifies;
+    all this markup does is print the glyph. aria-hidden because it is
+    punctuation between links, not content: "Visitor pipe Information" read
+    aloud is worse than silence.
+
     THE RENDER GUARD tests the label or a RESOLVED icon (tis_icon), not the raw
     Font Awesome field. On an external URL the router suppresses any icon saved
     before the destination was switched, so testing the raw field would let a
@@ -66,6 +73,9 @@
             </cms:if>
             <cms:if tis_c2a1_new = '1'><span class="visually-hidden">(opens in a new tab)</span></cms:if>
         </a>
+        <cms:if tis_c2a1_dvd = '1'>
+            <span class="<cms:show tis_dvd_classes />" aria-hidden="true"><cms:show trns_lnk_dvd_opt /></span>
+        </cms:if>
     </cms:if>
 
     <cms:ignore>--- SLOT 2 ---</cms:ignore>
@@ -86,6 +96,9 @@
             </cms:if>
             <cms:if tis_c2a2_new = '1'><span class="visually-hidden">(opens in a new tab)</span></cms:if>
         </a>
+        <cms:if tis_c2a2_dvd = '1'>
+            <span class="<cms:show tis_dvd_classes />" aria-hidden="true"><cms:show trns_lnk_dvd_opt /></span>
+        </cms:if>
     </cms:if>
 
     <cms:ignore>--- SLOT 3 ---</cms:ignore>
@@ -106,6 +119,9 @@
             </cms:if>
             <cms:if tis_c2a3_new = '1'><span class="visually-hidden">(opens in a new tab)</span></cms:if>
         </a>
+        <cms:if tis_c2a3_dvd = '1'>
+            <span class="<cms:show tis_dvd_classes />" aria-hidden="true"><cms:show trns_lnk_dvd_opt /></span>
+        </cms:if>
     </cms:if>
 
     <cms:ignore>--- SLOT 4 ---</cms:ignore>

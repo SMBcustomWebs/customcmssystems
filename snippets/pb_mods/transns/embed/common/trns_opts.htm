@@ -124,5 +124,24 @@
             opt_values='dropdowns/_tok/space-gap.htm' dynamic='opt_values' class='col-md-4' order='10' />
         <cms:editable type='dropdown' name='trns_c2a_halg' label='Alignment'
             opt_values='dropdowns/_tok/align-h.htm' dynamic='opt_values' class='col-md-4' order='12' />
+
+        <cms:ignore>
+            DIVIDER between text links - the "Visitor | Information | Virtual
+            tours" treatment. separator='@' is required: the options ARE pipe
+            and slash characters, so the default pipe separator would eat them.
+
+            The router only prints it where it makes sense: between two slots
+            that are BOTH text links, only when the row runs horizontally, and
+            never after the last one. Between two filled buttons it would read
+            as a rendering fault, and a stacked row is already separated by the
+            line break.
+        </cms:ignore>
+        <cms:editable type='dropdown' name='trns_lnk_dvd_opt' label='Divider Between Text Links'
+            desc='Only appears between two plain text links on one line'
+            opt_values='dropdowns/_val/link-divider.htm' dynamic='opt_values' separator='@'
+            class='col-md-4' order='14' />
+        <cms:editable type='dropdown' name='trns_lnk_dvd_clr_opt' label='Divider Color'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values'
+            class='col-md-4' order='16' />
     </cms:editable>
 </cms:editable>

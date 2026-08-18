@@ -15,18 +15,23 @@
     default; a user who really wants them flush picks None, which emits gap-0
     and says so out loud in the markup.
 
-    STOPS AT 5 (3rem)  the full scale runs to 11 (15rem), but steps 6 and up
-    are section-scale. A 4rem gap between two buttons looks like a broken
+    STOPS AT "Wide"  the full scale runs to 11, but the upper steps are
+    section-scale. A gap that size between two buttons looks like a broken
     layout, not a design decision. Use _tok/space.htm for section padding where
-    those steps are the point.
+    those steps are the point. For maintainers: the values are the same rem
+    scale, 0 .25 .5 1 1.8 3 - the labels carry no units on purpose.
+
+    "Touching" EMITS 0 AND NEEDS A != '' GUARD. PHP reads the string "0" as
+    false, so a plain cms:if swallows it. Consume as
+        cms:if field != ''    gap-{field}
 
     VARIANT OF _tok/space.htm, per the house rule that a shared file is never
     edited to suit one block. Same tokens, narrower range, different default.
     ===========================================================================
 </cms:ignore>
-Small 1rem=3
-|None=0
-|Hairline .25rem=1
-|Tiny .5rem=2
-|Medium 1.8rem=4
-|Large 3rem=5
+Comfortable=3
+|Touching - no space at all=0
+|Hairline=1
+|Very Tight=2
+|Roomy=4
+|Wide=5

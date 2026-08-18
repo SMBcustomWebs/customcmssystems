@@ -42,6 +42,7 @@
 <cms:set tis_vid_src = '' scope='global' />
 <cms:set tis_vid_attr = '' scope='global' />
 <cms:set tis_c2a_grp_classes = '' scope='global' />
+<cms:set tis_dvd_classes = '' scope='global' />
 <cms:set tis_has_text = '0' scope='global' />
 <cms:set tis_has_cta = '0' scope='global' />
 <cms:set tis_has_vid = '0' scope='global' />
@@ -93,7 +94,28 @@
     <cms:capture into='tis_min_h_css' scope='global'>#<cms:show trns_local_id /> .trns-body { min-height: <cms:show tis_min_h />; }</cms:capture>
 </cms:if>
 
-<cms:capture into='tis_sec_pad' scope='global'><cms:if trns_py_ht>py-<cms:show trns_py_ht /></cms:if></cms:capture>
+<cms:ignore>
+    WHY THESE GUARDS SAY  != ''  RATHER THAN JUST THE FIELD NAME
+
+    PHP - and therefore Couch - reads the STRING "0" as false. So a plain
+    cms:if field silently swallows a deliberate zero, and any dropdown option
+    that stores 0 can never render. Seven fields here offer one:
+    section padding, the four letter-spacing fields, the play-button spacing,
+    and the gap between links.
+
+    That is not theoretical. It is what made a banner COLLAPSE when its padding
+    was moved off zero. theme.css line 22001 gives every section 4rem of
+    padding, 7.5rem above 1200px wide. Choosing 0 was swallowed, no class was
+    printed, and the section kept that 4rem - so it looked roomy. Choosing the
+    next step up printed py-1, which is a quarter of one rem with !important,
+    and it overrode the 4rem down to almost nothing. Raising the number made
+    the banner shorter and clipped the text.
+
+    Hero avoids this by not guarding at all - it writes py-{field} bare, so its
+    zero works but an empty field emits a dangling "py-". Testing != '' is the
+    only form with neither fault: empty prints nothing, zero prints zero.
+</cms:ignore>
+<cms:capture into='tis_sec_pad' scope='global'><cms:if trns_py_ht != ''>py-<cms:show trns_py_ht /></cms:if></cms:capture>
 
 <cms:ignore>
     TEXT BOX WIDTH.
@@ -156,10 +178,10 @@
     slip that made line 2's font follow line 1. All four are generated from one
     template now, so that class of bug cannot recur.
 </cms:ignore>
-<cms:capture into='tis_txt1_classes' scope='global'><cms:if trns_txt1_clr>text-<cms:show trns_txt1_clr /> </cms:if><cms:if trns_txt1_sz>fs-<cms:show trns_txt1_sz /> </cms:if><cms:if trns_txt1_font>font-<cms:show trns_txt1_font /> </cms:if><cms:if trns_txt1_fnt_wt>fw-<cms:show trns_txt1_fnt_wt /> </cms:if><cms:if trns_txt1_fnt_st>fst-<cms:show trns_txt1_fnt_st /> </cms:if><cms:if trns_txt1_ltr_spc>ls-<cms:show trns_txt1_ltr_spc /> </cms:if></cms:capture>
-<cms:capture into='tis_txt2_classes' scope='global'><cms:if trns_txt2_clr>text-<cms:show trns_txt2_clr /> </cms:if><cms:if trns_txt2_sz>fs-<cms:show trns_txt2_sz /> </cms:if><cms:if trns_txt2_font>font-<cms:show trns_txt2_font /> </cms:if><cms:if trns_txt2_fnt_wt>fw-<cms:show trns_txt2_fnt_wt /> </cms:if><cms:if trns_txt2_fnt_st>fst-<cms:show trns_txt2_fnt_st /> </cms:if><cms:if trns_txt2_ltr_spc>ls-<cms:show trns_txt2_ltr_spc /> </cms:if></cms:capture>
-<cms:capture into='tis_txt3_classes' scope='global'><cms:if trns_txt3_clr>text-<cms:show trns_txt3_clr /> </cms:if><cms:if trns_txt3_sz>fs-<cms:show trns_txt3_sz /> </cms:if><cms:if trns_txt3_font>font-<cms:show trns_txt3_font /> </cms:if><cms:if trns_txt3_fnt_wt>fw-<cms:show trns_txt3_fnt_wt /> </cms:if><cms:if trns_txt3_fnt_st>fst-<cms:show trns_txt3_fnt_st /> </cms:if><cms:if trns_txt3_ltr_spc>ls-<cms:show trns_txt3_ltr_spc /> </cms:if></cms:capture>
-<cms:capture into='tis_txt4_classes' scope='global'><cms:if trns_txt4_clr>text-<cms:show trns_txt4_clr /> </cms:if><cms:if trns_txt4_sz>fs-<cms:show trns_txt4_sz /> </cms:if><cms:if trns_txt4_font>font-<cms:show trns_txt4_font /> </cms:if><cms:if trns_txt4_fnt_wt>fw-<cms:show trns_txt4_fnt_wt /> </cms:if><cms:if trns_txt4_fnt_st>fst-<cms:show trns_txt4_fnt_st /> </cms:if><cms:if trns_txt4_ltr_spc>ls-<cms:show trns_txt4_ltr_spc /> </cms:if></cms:capture>
+<cms:capture into='tis_txt1_classes' scope='global'><cms:if trns_txt1_clr>text-<cms:show trns_txt1_clr /> </cms:if><cms:if trns_txt1_sz>fs-<cms:show trns_txt1_sz /> </cms:if><cms:if trns_txt1_font>font-<cms:show trns_txt1_font /> </cms:if><cms:if trns_txt1_fnt_wt>fw-<cms:show trns_txt1_fnt_wt /> </cms:if><cms:if trns_txt1_fnt_st>fst-<cms:show trns_txt1_fnt_st /> </cms:if><cms:if trns_txt1_ltr_spc != ''>ls-<cms:show trns_txt1_ltr_spc /> </cms:if></cms:capture>
+<cms:capture into='tis_txt2_classes' scope='global'><cms:if trns_txt2_clr>text-<cms:show trns_txt2_clr /> </cms:if><cms:if trns_txt2_sz>fs-<cms:show trns_txt2_sz /> </cms:if><cms:if trns_txt2_font>font-<cms:show trns_txt2_font /> </cms:if><cms:if trns_txt2_fnt_wt>fw-<cms:show trns_txt2_fnt_wt /> </cms:if><cms:if trns_txt2_fnt_st>fst-<cms:show trns_txt2_fnt_st /> </cms:if><cms:if trns_txt2_ltr_spc != ''>ls-<cms:show trns_txt2_ltr_spc /> </cms:if></cms:capture>
+<cms:capture into='tis_txt3_classes' scope='global'><cms:if trns_txt3_clr>text-<cms:show trns_txt3_clr /> </cms:if><cms:if trns_txt3_sz>fs-<cms:show trns_txt3_sz /> </cms:if><cms:if trns_txt3_font>font-<cms:show trns_txt3_font /> </cms:if><cms:if trns_txt3_fnt_wt>fw-<cms:show trns_txt3_fnt_wt /> </cms:if><cms:if trns_txt3_fnt_st>fst-<cms:show trns_txt3_fnt_st /> </cms:if><cms:if trns_txt3_ltr_spc != ''>ls-<cms:show trns_txt3_ltr_spc /> </cms:if></cms:capture>
+<cms:capture into='tis_txt4_classes' scope='global'><cms:if trns_txt4_clr>text-<cms:show trns_txt4_clr /> </cms:if><cms:if trns_txt4_sz>fs-<cms:show trns_txt4_sz /> </cms:if><cms:if trns_txt4_font>font-<cms:show trns_txt4_font /> </cms:if><cms:if trns_txt4_fnt_wt>fw-<cms:show trns_txt4_fnt_wt /> </cms:if><cms:if trns_txt4_fnt_st>fst-<cms:show trns_txt4_fnt_st /> </cms:if><cms:if trns_txt4_ltr_spc != ''>ls-<cms:show trns_txt4_ltr_spc /> </cms:if></cms:capture>
 
 <cms:ignore>
     TYPED EFFECT. The animated span lands at the end of the LAST line shown,
@@ -208,7 +230,7 @@
     only, so the bottom half of that promise never happened. Vertical margin
     honours the label.
 </cms:ignore>
-<cms:capture into='tis_vid_btn_mgn' scope='global'><cms:if trns_add_vid_btn_mgn>my-<cms:show trns_add_vid_btn_mgn /></cms:if></cms:capture>
+<cms:capture into='tis_vid_btn_mgn' scope='global'><cms:if trns_add_vid_btn_mgn != ''>my-<cms:show trns_add_vid_btn_mgn /></cms:if></cms:capture>
 
 
 <!-- ======================================================= -->
@@ -233,7 +255,39 @@
     GROUP WRAPPER. Direction, gap and alignment come straight from the
     _cls / _tok files, so nothing is assembled by hand here.
 </cms:ignore>
-<cms:capture into='tis_c2a_grp_classes' scope='global'>d-flex flex-wrap w-100 <cms:if trns_c2a_mult_ord><cms:show trns_c2a_mult_ord /> </cms:if><cms:if trns_frmt_c2a_mg>gap-<cms:show trns_frmt_c2a_mg /> </cms:if><cms:if trns_c2a_halg>justify-content-<cms:show trns_c2a_halg /> align-items-<cms:show trns_c2a_halg /> </cms:if>mt-4</cms:capture>
+<cms:capture into='tis_c2a_grp_classes' scope='global'>d-flex flex-wrap w-100 <cms:if trns_c2a_mult_ord><cms:show trns_c2a_mult_ord /> </cms:if><cms:if trns_frmt_c2a_mg != ''>gap-<cms:show trns_frmt_c2a_mg /> </cms:if><cms:if trns_c2a_halg>justify-content-<cms:show trns_c2a_halg /> align-items-<cms:show trns_c2a_halg /> </cms:if>mt-4</cms:capture>
+
+<cms:ignore>
+    DIVIDER. One class set, reused by every gap that draws one.
+
+    A divider is only correct between two PLAIN TEXT links sitting side by side,
+    so the per-slot flags below require: a glyph chosen, this slot and the next
+    both on, both with color 'link', and a horizontal row. flex-column and
+    flex-column-reverse are the stacked layouts - a line break already separates
+    those, and a glyph hanging under a link looks like a typo.
+
+    Reversed row order is deliberately NOT excluded: flex-row-reverse only flips
+    the paint order, so the dividers still land between neighbours.
+</cms:ignore>
+<cms:capture into='tis_dvd_classes' scope='global'>d-inline-block<cms:if trns_lnk_dvd_clr_opt> text-<cms:show trns_lnk_dvd_clr_opt /></cms:if></cms:capture>
+
+<cms:set tis_row_horizontal = '1' scope='global' />
+<cms:if trns_c2a_mult_ord = 'flex-column' || trns_c2a_mult_ord = 'flex-column-reverse'>
+    <cms:set tis_row_horizontal = '0' scope='global' />
+</cms:if>
+
+<cms:set tis_c2a1_dvd = '0' scope='global' />
+<cms:if trns_lnk_dvd_opt && tis_row_horizontal = '1' && trns_c2a_ct_opt ge '2' && trns_c2a1_clr = 'link' && trns_c2a2_clr = 'link'>
+    <cms:set tis_c2a1_dvd = '1' scope='global' />
+</cms:if>
+<cms:set tis_c2a2_dvd = '0' scope='global' />
+<cms:if trns_lnk_dvd_opt && tis_row_horizontal = '1' && trns_c2a_ct_opt ge '3' && trns_c2a2_clr = 'link' && trns_c2a3_clr = 'link'>
+    <cms:set tis_c2a2_dvd = '1' scope='global' />
+</cms:if>
+<cms:set tis_c2a3_dvd = '0' scope='global' />
+<cms:if trns_lnk_dvd_opt && tis_row_horizontal = '1' && trns_c2a_ct_opt ge '4' && trns_c2a3_clr = 'link' && trns_c2a4_clr = 'link'>
+    <cms:set tis_c2a3_dvd = '1' scope='global' />
+</cms:if>
 
 <cms:ignore>--- SLOT 1 ---</cms:ignore>
 <cms:set tis_c2a1_href = '' scope='global' />

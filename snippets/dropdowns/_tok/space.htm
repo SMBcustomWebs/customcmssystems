@@ -12,12 +12,30 @@
     site in cms:if or an unset field prints a bare "py-" that Bootstrap ignores
     but that shows up in the class attribute as noise.
 
-    THE SCALE  read off theme.css, not guessed. Every step below is confirmed
-    to exist for gap-, and Bootstrap generates the same steps for p- and m-.
-      0 zero    1 .25rem   2 .5rem    3 1rem    4 1.8rem    5 3rem
-      6 4rem    7 5rem     8 7.5rem   9 10rem   10 12.5rem  11 15rem
+    THE SCALE, in rem, read off theme.css rather than guessed. This mapping is
+    for whoever maintains the file - the LABELS deliberately carry no units,
+    because "1.8rem" tells an editor nothing about how the page will look.
+      0 zero      1 .25rem   2 .5rem    3 1rem     4 1.8rem   5 3rem
+      6 4rem      7 5rem     8 7.5rem   9 10rem    10 12.5rem 11 15rem
     Steps 6 and up are section-scale, not element-scale. On a button row they
     will look broken, which is why _tok/space-gap.htm exists and stops at 5.
+
+    THE FIRST TWO OPTIONS ARE NOT THE SAME THING, and the old labels hid that:
+      Theme Default emits NOTHING, so the element keeps whatever it already
+        has. On a section that is NOT zero - theme.css line 22001 sets
+        section { padding: 4rem 0 }, rising to 7.5rem above 1200px wide.
+      None emits 0, which prints py-0 and strips that 4rem away with
+        !important.
+    So "Theme Default" means roughly 64px of breathing room on a section, and
+    "None" means flush to the edges. Very different results.
+
+    THE ZERO OPTION NEEDS A != '' GUARD, not a truthiness guard. PHP reads the
+    string "0" as false, so <cms:if field> silently swallows it and the None
+    option can never render. Consume this file as
+        cms:if field != ''    py-{field}
+    Getting that wrong is what made a transition banner COLLAPSE when its
+    padding was raised off zero: zero was swallowed and kept the 4rem default,
+    while 1 emitted py-1 and overrode 4rem down to a quarter of one.
 
     AN hr NEEDS MARGIN, NOT PADDING  a horizontal rule has no box to pad, so
     consume this with my- there. That has bitten this codebase before.
@@ -28,16 +46,16 @@
     fields here.
     ===========================================================================
 </cms:ignore>
-Default=
-|None=0
-|Hairline .25rem=1
-|Tiny .5rem=2
-|Small 1rem=3
-|Medium 1.8rem=4
-|Large 3rem=5
-|X-Large 4rem=6
-|2X-Large 5rem=7
-|3X-Large 7.5rem=8
-|4X-Large 10rem=9
-|5X-Large 12.5rem=10
-|6X-Large 15rem=11
+Theme Default - leave the built-in spacing alone=
+|None - remove all spacing=0
+|Hairline=1
+|Very Tight=2
+|Tight=3
+|Comfortable=4
+|Roomy=5
+|Spacious=6
+|Wide=7
+|Very Wide=8
+|Extra Wide=9
+|Huge=10
+|Maximum=11

@@ -17,8 +17,12 @@
     has raised their browser text size gets a proportionally taller banner. A px
     value would ignore that preference; vh would too.
 
-    MEASURED AT THE DEFAULT 16px ROOT
-        6rem 96px   9rem 144px   12rem 192px   16rem 256px   20rem 320px
+    FOR MAINTAINERS, measured at the default 16px root. The LABELS carry no
+    units, because a number in rem tells an editor nothing about how tall the
+    banner will look on the page - "Thin Strip" does.
+        Thin Strip 6rem/96px      Short Banner 9rem/144px
+        Medium Banner 12rem/192px Tall Banner 16rem/256px
+        Full Banner 20rem/320px
 
     MUST BE GUARDED  the first option emits nothing, meaning "no floor - the
     banner is exactly as tall as its content". Wrap the use site in cms:if or
@@ -30,9 +34,9 @@
     the padding subtract from the visible content area instead.
     ===========================================================================
 </cms:ignore>
-No Minimum=
-|Short 6rem=6rem
-|Small 9rem=9rem
-|Medium 12rem=12rem
-|Tall 16rem=16rem
-|Tallest 20rem=20rem
+No Minimum - only as tall as the words inside=
+|Thin Strip=6rem
+|Short Banner=9rem
+|Medium Banner=12rem
+|Tall Banner=16rem
+|Full Banner=20rem

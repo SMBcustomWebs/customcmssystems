@@ -1,0 +1,33 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_val/link-divider.htm
+
+    EMITS   a literal glyph to print BETWEEN two text links. NOT a class.
+    USE AS  the content of a span, e.g.
+                span class="d-inline-block text-500" aria-hidden="true"  {token}  /span
+
+    READ THIS FIELD WITH separator='@'  the options ARE pipe and slash
+    characters, so the default pipe separator would eat the first one. The
+    consuming editable MUST carry separator='@'.
+
+    MARK THE SPAN aria-hidden. A divider is punctuation between links, not
+    content - a screen reader announcing "Visitor pipe Information pipe Virtual
+    tours" is worse than silence. The links carry their own accessible names.
+
+    ONLY BETWEEN TEXT LINKS, and only when the row runs horizontally. A glyph
+    between two filled buttons reads as a rendering fault, and stacked links
+    are already separated by the line break. The router checks all of that; this
+    file only supplies the character.
+
+    NO DIVIDER LEADS. dropdowns/link-dividers.htm, which this replaces, leads
+    with the pipe glyph - so its default was dividers ON, and every field
+    pointed at it turned them on until someone chose otherwise. Off is the
+    right default for decoration.
+    ===========================================================================
+</cms:ignore>
+No Divider=
+@Pipe  |  =|
+@Slash  /  =/
+@Backslash  \  =\
+@Dash  -  =-
+@Bullet  •  =&bull;
