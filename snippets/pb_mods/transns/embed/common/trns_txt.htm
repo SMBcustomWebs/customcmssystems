@@ -68,13 +68,12 @@
             <h4></h4>
             <p></p>
         </cms:editable>
-        <cms:repeatable name='trns_txtm_rpt' label='Section Text Lines - New Row = New Line' stacked_layout='1' not_active=trns_m_txtm_chc order='4' >
+        <cms:repeatable name='trns_txtm_rpt' label='Section Text Lines - New Row = New Line' stacked_layout='1' not_active=trns_txtm_chc order='4' >
             <cms:editable type='text' name='trns_txtm_ln' label='Text'
                 order='6' 
             />
             <cms:editable type='dropdown' name='trns_txtm_clr' label='Text Color' 
                 opt_values='dropdowns/solid-colors.htm'
-                opt_selected='white'
                 dynamic='opt_values'
                 order='8'  
             />
@@ -127,9 +126,34 @@
             class='col-md-12'
             order='2' 
         />
+        <cms:ignore>
+            HEADING LEVEL for the top line only. Line 2 stays a plain div - one
+            heading and one supporting line is the right shape for a banner.
+
+            The list starts at H3 and there is no H1 or H2 in it, by design. A
+            transition banner can appear several times on one page; h1 belongs
+            to the page, h2 to its major sections. Minting either here breaks
+            the document outline for screen readers and for search engines.
+
+            "Plain Paragraph" is the choice for a line that reads as a heading
+            but should not BE one in the outline. If the field is never set at
+            all the theme falls back to a div, which is what it rendered before
+            this dropdown existed - no heading is emitted unless one is asked
+            for.
+
+            The tag also carries a size of its own: h3 2.37rem, h4 1.78rem,
+            h5 1.33rem, h6 0.75rem. Text Size below overrides it when set,
+            because every fs- rule is !important.
+        </cms:ignore>
+        <cms:editable type='dropdown' name='trns_txt1_tag' label='Heading Level'
+            desc='Sets the outline level. Never H1 or H2 on a banner.'
+            opt_values='dropdowns/heading-tag_sub.htm'
+            dynamic='opt_values'
+            class='col-md-4'
+            order='3'
+        />
         <cms:editable type='dropdown' name='trns_txt1_clr' label='Text Color' 
             opt_values='dropdowns/solid-colors.htm'
-            opt_selected='white'
             dynamic='opt_values'
             class='col-md-4'
             order='4'  
@@ -180,7 +204,6 @@
         />
         <cms:editable type='dropdown' name='trns_txt2_clr' label='Text Color' 
             opt_values='dropdowns/solid-colors.htm'
-            opt_selected='white'
             dynamic='opt_values'
             class='col-md-4'
             order='24'  
@@ -236,84 +259,43 @@
             hide
         </cms:if>
     </cms:func>
+    <cms:ignore>
+        TYPED EFFECT. This used to carry its own static line, "Text Before
+        Effect", plus a full set of typography controls to style it. That made
+        a THIRD line of text appear after the user had already chosen "up to
+        two lines" - and the third one styled itself independently, so matching
+        it to the lines above was manual work that never quite matched.
+
+        Gone. The typed words now append to the END of line 2, inside line 2's
+        own div, so they inherit line 2's color, size, font, weight, style and
+        letter spacing automatically. Line 2 IS the static part of the
+        sentence now.
+
+        That also removed the six typography fields that used to style the old
+        static line - they had nothing left to style - and, in a second pass,
+        the two overrides that used to recolor and re-weight the typed words.
+        The animation IS the emphasis. Words that appear letter by letter on a
+        loop already draw the eye; giving them a second color and weight on top
+        of that fought with the line they belong to, and it was two more
+        decisions for the user in exchange for nothing.
+
+        So this row is now just the word list. The typed words inherit Line 2
+        completely, and the sentence reads as one sentence.
+    </cms:ignore>
     <cms:editable type='row' name='trns_txt_fx_row' not_active=trns_txt_fx_chc order='25' >
         <cms:editable type='message' name='trns_txtblk_txt_msg' order='2'>
              <hr><br>
-             <h2>Type a sentence that ends with a typed effect.</h2>
-             <h4>The below settings are for the static words of the sentence.</h4>
+             <h2>End the last line with a typed effect.</h2>
+             <h4>These words type themselves out at the end of Line 2, one after
+                 another, on a loop. They take Line 2's formatting - the
+                 animation is what makes them stand out.</h4>
              <p></p>
         </cms:editable>
-            <cms:editable type='dropdown' name='trns_txt_fx_txt_clr' label='Text Color' 
-                opt_values='dropdowns/solid-colors.htm'
-                opt_selected='white'
-                dynamic='opt_values'
-                class='col-md-4 col-sm-6'
-                order='8'  
-            />
-            <cms:editable type='dropdown' name='trns_txt_fx_txt_txt_sz' label='Text Size' 
-                opt_values='dropdowns/text-size.htm'
-                dynamic='opt_values'
-                class='col-md-4 col-sm-6'
-                order='12'  
-            />
-            <cms:editable type='dropdown' name='trns_txt_fx_fnt_wt' label='Font Weight' 
-                opt_values='dropdowns/font-weight.htm'
-                dynamic='opt_values'
-                class='col-md-4 col-sm-6'
-                order='14'  
-            />
-            <cms:editable type='dropdown' name='trns_txt_fx_ltr_spc' label='Letter Spacing' 
-                opt_values='dropdowns/hdr_ltr-spc.htm'
-                dynamic='opt_values'
-                class='col-md-4 col-sm-6'
-                order='16'  
-            />
-            <cms:editable type='dropdown' name='trns_txt_fx_fnt_st' label='Font Style' 
-                opt_values='dropdowns/font-style.htm'
-                dynamic='opt_values'
-                class='col-md-4 col-sm-6'
-                order='18'  
-            />
-            <cms:editable type='dropdown' name='trns_txt_fx_font' label='Font Family' 
-                opt_values='dropdowns/font-family.htm'
-                dynamic='opt_values'
-                class='col-md-4 col-sm-6'
-                order='20'  
-            />
-            <cms:editable type='text' name='trns_fx_txt_ln' label='Text Before Effect' desc='Create a highlighted sentence'
-                class='col-md-12'
-                order='26' 
-            />
-            <cms:editable type='message' name='trns_txt_fx_txt_msg'  class='col-md-12' order='27'>
-                 <br>
-                 <h2>Finish the sentence with a typed effect.</h2>
-                 <h4>Each row will be typed individually.</h4>
-                 <p>the new typed words will replace the old, the loop is continuous.</p>
-            </cms:editable>
             <cms:repeatable name='trns_txt_fx_rpt' label='Add words or short phrases. New Row = New Line' stacked_layout='1' order='28' >
                 <cms:editable type='text' name='trns_txt_fx_txt_ln' label='Text'
                     order='29' 
                 /> 
             </cms:repeatable>
-                <cms:editable type='message' name='trns_txt_fx_txt_msg'  class='col-md-12' order='30'>
-                 <br>
-                 <h2>Enhance the typed words.</h2>
-                 <h4>Set the color and weight of the TYPED words.</h4>
-                 <p></p>
-            </cms:editable>
-            <cms:editable type='dropdown' name='trns_txt_fx_txt_clr_rp' label='Typed Word Color' 
-                opt_values='dropdowns/solid-colors.htm'
-                opt_selected='white'
-                dynamic='opt_values'
-                class='col-md-4 col-sm-6'
-                order='35'
-           />
-           <cms:editable type='dropdown' name='trns_txt_fx_fnt_wt_rp' label='Typed Word Weight' 
-                opt_values='dropdowns/font-weight.htm'
-                dynamic='opt_values'
-                class='col-md-4 col-sm-6'
-                order='37'  
-            />
     </cms:editable>
 </cms:editable>
 

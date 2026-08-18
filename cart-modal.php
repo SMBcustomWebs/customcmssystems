@@ -1,7 +1,17 @@
 <?php require_once( 'ccs_dash/cms.php' ); ?>
 <cms:template title="Cart Modal Fragment" parent='_donottouch_' hidden='1' />
-<!-- SECURITY LOCKDOWN: Only allow POST requests, unless user is Super Admin -->
-<cms:if k_method ne 'POST'>
+<!-- SECURITY LOCKDOWN: Only allow POST requests, unless user is Super Admin.
+     'k_method' is NOT a Couch variable - it is set nowhere in core or any
+     addon, so the old test read as ('' ne 'POST'), which is ALWAYS true.
+     That silently locked this fragment to access level 10 for every request
+     method, which is why the cart sidebar returned the homepage for normal
+     customers. $_SERVER['REQUEST_METHOD'] is what core itself uses
+     (header.php:79). -->
+<cms:php>
+    global $CTX;
+    $CTX->set( 'ccs_req_method', $_SERVER['REQUEST_METHOD'], 'global' );
+</cms:php>
+<cms:if ccs_req_method ne 'POST'>
     <cms:if k_user_access_level lt '10'>
         <cms:redirect k_site_link />
     </cms:if>

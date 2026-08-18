@@ -1,0 +1,132 @@
+<cms:ignore>
+    ============================================================
+    WISHLIST PANEL BODY - shared fragment
+    ------------------------------------------------------------
+    Embedded by TWO callers, and must render identically in both:
+
+      snippets/e_modals/wishlist.html  - the offcanvas shell, on
+                                         first page load
+      wishlist-modal.php (render mode) - re-fetched by
+                                         refreshWishlistModal() in
+                                         assets/js/ccs_js.js
+
+    This split is what lets the panel update without a page reload.
+    Before it existed the panel was server-rendered once and never
+    refreshed, so saving an item ticked the badge (client-side
+    arithmetic in the product page's JS) while the list itself
+    stayed stale until the user navigated away.
+
+    Mirrors how the cart already works: e_modals/cart.html is the
+    shell, cart-modal.php renders the body, refreshCartModal()
+    re-fetches it.
+
+    The wrapper div carrying id="wishlist-modal-body" lives in the
+    SHELL, not here - the JS replaces this fragment INTO it.
+    ============================================================
+</cms:ignore>
+
+<cms:if k_logged_in>
+    <div class="d-flex flex-column h-100 m-0">
+        <!-- id here so the JS empty-state fallback can replace only the
+             item list and not wipe the footer buttons below it -->
+        <div class="flex-grow-1 overflow-auto p-3" id="wishlist-scroll-area">
+
+            <cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show ccs_auth_uid />">
+                <cms:set my_saved_variants = wish_variants />
+                <cms:set my_saved_variants_display = wish_variants_display />
+                <cms:set my_wishlist_entry_id = k_page_id />
+                <cms:set my_saved_masterpage = wish_masterpage />
+
+                <!-- A blank masterpage would silently fall back to the current
+                     template (tags.php:294) and render nothing while the badge
+                     still counts the row. Fail visibly instead.
+                     Carries wishlist-item-row + the row id so the JS can remove
+                     it and the empty-state check counts it - otherwise a broken
+                     row would be stuck, since the Remove button normally lives
+                     inside the lookup loop that cannot run here. -->
+                <cms:if my_saved_masterpage eq ''>
+                    <div class="alert alert-warning small m-2 wishlist-item-row" id="wishlist-item-<cms:show my_wishlist_entry_id />">
+                        This saved item is no longer available.
+                        <cms:if k_user_access_level ge '7'>
+                            <span class="text-muted d-block">Entry <cms:show my_wishlist_entry_id /> has no wish_masterpage.</span>
+                        </cms:if>
+                        <button type="button" class="btn btn-link text-danger p-0 mt-1 text-decoration-none shadow-none remove-wishlist-btn" data-entry-id="<cms:show my_wishlist_entry_id />" style="font-size: 0.85rem;">
+                            <i class="fas fa-trash-alt"></i> Remove
+                        </button>
+                    </div>
+                </cms:if>
+
+                <!-- Resolve against the template the item was saved from,
+                     not a hardcoded product.php. -->
+                <cms:pages masterpage=my_saved_masterpage id=wish_product_id limit='1'>
+                    <div class="row border-bottom py-3 mx-0 wishlist-item-row" id="wishlist-item-<cms:show my_wishlist_entry_id />">
+                        <div class="col-12 px-2">
+                            <a href="<cms:show k_page_link />" class="text-decoration-none">
+                                <p class="mb-1 fw-bold"><cms:show k_page_title /></p>
+                            </a>
+
+                            <cms:if my_saved_variants_display>
+                                <div class="mb-0 text-muted small">
+                                    <cms:show my_saved_variants_display />
+                                </div>
+                            </cms:if>
+
+                            <div class="mt-3 d-flex justify-content-between align-items-center">
+
+                                <button type="button" class="btn btn-link text-danger p-0 text-decoration-none shadow-none remove-wishlist-btn" data-entry-id="<cms:show my_wishlist_entry_id />" style="font-size: 0.85rem;">
+                                    <i class="fas fa-trash-alt"></i> Remove
+                                </button>
+
+                                <cms:if track_inventory ne '1' || in_stock gt '0'>
+                                    <button type="button" class="btn btn-sm btn-outline-success move-to-cart-btn"
+                                            data-product-link="<cms:show k_page_link />"
+                                            data-variants="<cms:show my_saved_variants />"
+                                            data-entry-id="<cms:show my_wishlist_entry_id />">
+                                        <i class="fas fa-shopping-cart"></i> Move to Cart
+                                    </button>
+                                <cms:else />
+                                    <span class="text-danger small fw-bold" style="font-size: 0.85rem;">
+                                        <i class="fas fa-exclamation-circle"></i> Temp Out of Stock
+                                    </span>
+                                </cms:if>
+                            </div>
+                        </div>
+                    </div>
+                </cms:pages>
+
+                <cms:no_results>
+                    <div class="text-center text-muted mt-5 py-4 empty-wishlist-msg">
+                        <i class="far fa-heart fa-3x mb-3 opacity-50"></i>
+                        <h5>Your wishlist is empty.</h5>
+                    </div>
+                </cms:no_results>
+            </cms:pages>
+
+        </div>
+
+        <!-- Sticky footer, mirroring the cart offcanvas's "View Full Cart".
+             Without this there is no route anywhere in the UI to the
+             saved-items page - the utility bar only opens this panel. -->
+        <div class="p-3 border-top mt-auto bg-light d-grid gap-2">
+            <!-- saved-items.php, NOT wishlist.php: the latter is the data
+                 template, whose bare URL is a k_is_home view that never
+                 embeds the list. -->
+            <a href="<cms:link 'saved-items.php' />" class="btn btn-secondary btn-sm">
+                <i class="far fa-heart me-1" aria-hidden="true"></i>View Saved Items
+            </a>
+            <a href="<cms:link 'cart.php' />" class="btn btn-outline-secondary btn-sm">
+                <i class="fas fa-shopping-cart me-1" aria-hidden="true"></i>View Cart
+            </a>
+        </div>
+
+    </div>
+<cms:else />
+    <div class="p-4 mt-5 text-center">
+        <i class="fas fa-lock fa-3x mb-3 text-muted"></i>
+        <h5>Please <a href="<cms:login_link />">log in</a> to view saved items.</h5>
+    </div>
+</cms:if>
+
+<!-- Read by refreshWishlistModal() to sync the utility-bar badge with the
+     server's real count, replacing the client-side +1/-1 arithmetic. -->
+<span id="ajax-wishlist-count" class="d-none"><cms:if k_logged_in && ccs_auth_uid><cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show ccs_auth_uid />" count_only='1' /><cms:else />0</cms:if></span>

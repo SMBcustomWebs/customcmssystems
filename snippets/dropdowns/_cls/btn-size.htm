@@ -1,0 +1,26 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_cls/btn-size.htm
+
+    EMITS   a complete class. Print it as-is. NEVER prefix it.
+    USE AS  class="btn-primary {this}"
+
+    WHY IT IS COMPLETE  the older dropdowns/button-size.htm emits -xs, -sm and
+    -lg, expecting the consumer to write btn{size}. Every router that instead
+    wrote btn-{size} produced btn--sm, which matches nothing. Emitting the
+    finished class removes the guesswork: there is no correct prefix to
+    remember because there is no prefix.
+
+    VERIFIED IN theme.css  .btn-xs sets --ccs-btn-padding-x .8rem and -y .2rem.
+    .btn-sm and .btn-lg come from Bootstrap. All three also have matching
+    .btn-icon.btn-{size} rules that resize the icon well, so the icon system
+    tracks the size automatically.
+
+    MUST BE GUARDED  "Normal" emits an empty string. Wrap the use site in
+    cms:if or the class attribute collects a stray space.
+    ===========================================================================
+</cms:ignore>
+Normal=
+|Smaller=btn-xs
+|Small=btn-sm
+|Large=btn-lg

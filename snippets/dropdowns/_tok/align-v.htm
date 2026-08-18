@@ -1,0 +1,28 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/align-v.htm
+
+    EMITS   a bare flex alignment token.
+    USE AS  align-items-{token}    all flex children against the cross axis
+            align-content-{token}  wrapped flex lines as a group
+            align-self-{token}     one flex child on its own
+
+    PUT IT ON THE RIGHT ELEMENT  align-items- belongs on the flex container.
+    On a Bootstrap grid that is the .row, never the .container, because
+    .container is not a flex box and the class does nothing there. That exact
+    mistake is why a transition banner's text box would not move vertically.
+
+    ALWAYS EMITS SOMETHING  no empty option, no cms:if guard needed.
+    "Middle" leads because centered is what a banner wants most of the time.
+
+    SAME VALUES AS align-h.htm, different labels. Both files exist so the admin
+    reads "Top / Middle / Bottom" for a vertical field and "Left / Center /
+    Right" for a horizontal one, instead of one file with labels that are wrong
+    half the time.
+
+    REPLACES  dropdowns/v-align.htm. Point new fields here.
+    ===========================================================================
+</cms:ignore>
+Middle=center
+|Top=start
+|Bottom=end

@@ -1,0 +1,39 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_cls/btn-icon-pos.htm
+
+    EMITS   a complete class PAIR. Print it as-is. NEVER prefix it.
+    USE AS  class="btn-primary {this}"
+
+    THE MARKUP THIS CLASS REQUIRES  the icon must be wrapped in a span with
+    class btn-brand, INSIDE the anchor. theme.css positions that span
+    absolutely against the button box, which is what draws the tinted icon
+    well. A bare i tag with no btn-brand wrapper gets no well and sits in the
+    text flow, so the reserved padding shows up as a gap.
+
+        a class="btn-primary btn-icon btn-icon-right"
+            span class="btn-brand"  i class="fa-solid fa-arrow-right"  /span
+            Read More
+        /a
+
+    Left or right is decided ENTIRELY by the stylesheet. Print the icon span in
+    the same place every time - first child, before the label - and let the
+    class move it. Do not branch the markup on position.
+
+    WHY IT EMITS TWO CLASSES  every positioning rule in theme.css is written
+    .btn-icon.btn-icon-left and .btn-icon.btn-icon-right, so the btn-icon base
+    is required for the modifier to match anything. It also carries the
+    padding that reserves room for the well, and the size-aware overrides for
+    btn-xs, btn-sm and btn-lg key off it. Bundling both classes in one value
+    means the consumer cannot ship one without the other.
+
+    MUST BE GUARDED  "No Icon" emits an empty string. Guard the icon span on
+    the same field, so a button with no icon chosen prints no empty span.
+
+    REPLACES  dropdowns/button-icon.htm, which emits the modifier alone and
+    leaves the required btn-icon base to the use site. Point new fields here.
+    ===========================================================================
+</cms:ignore>
+No Icon=
+|Icon on Left=btn-icon btn-icon-left
+|Icon on Right=btn-icon btn-icon-right

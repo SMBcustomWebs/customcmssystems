@@ -1,0 +1,33 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_cls/flex-dir.htm
+
+    EMITS   a complete class. Print it as-is. NEVER prefix it.
+    USE AS  class="d-flex flex-wrap {this} gap-3 justify-content-center"
+
+    PUT IT ON THE FLEX CONTAINER, and make sure that element actually is one -
+    d-flex, or a Bootstrap .row. On a plain div with no display:flex it does
+    nothing at all.
+
+    WHAT REVERSED DOES  it flips the PAINT order, not the source order. The
+    first button in the markup renders last on screen. Keyboard and screen
+    reader users still get source order, so a reversed row reads in the
+    opposite sequence to how it looks. Worth it for a deliberate design, but do
+    not reach for it just to move one button to the other end - that is what
+    justify-content and ms-auto are for.
+
+    ALWAYS EMITS SOMETHING  no empty option, no cms:if guard needed. Bootstrap
+    defaults a flex container to row anyway, so printing flex-row is harmless
+    and makes the intent visible in the markup.
+
+    STACKED PLUS align-items  once stacked, align-items-{token} from
+    _tok/align-h.htm controls the horizontal edge the buttons line up on, and
+    justify-content controls the vertical distribution. The two swap meaning
+    the moment the direction changes to column - the single most common source
+    of "why did my alignment class stop working."
+    ===========================================================================
+</cms:ignore>
+Side by Side=flex-row
+|Stacked=flex-column
+|Side by Side Reversed=flex-row-reverse
+|Stacked Reversed=flex-column-reverse

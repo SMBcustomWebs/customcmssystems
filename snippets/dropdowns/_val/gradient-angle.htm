@@ -1,0 +1,43 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_val/gradient-angle.htm
+
+    EMITS   a raw CSS angle in degrees. NOT a class. Never print it into a
+            class attribute.
+    USE AS  linear-gradient({token}deg, {color1}, {color2})
+            inside a per-tile style block
+
+    READ THIS FIELD WITH separator='@'  the labels contain pipe and slash and
+    backslash glyphs, so the default pipe separator would split them into
+    nonsense. The consuming editable MUST carry separator='@' or the dropdown
+    fills with fragments:
+
+        cms:editable type='dropdown' name='..._grad_angle'
+            opt_values='dropdowns/_val/gradient-angle.htm'
+            dynamic='opt_values' separator='@'
+
+    HOW TO READ THE LABELS  the words say where the gradient TRAVELS, meaning
+    where color 1 starts and color 2 ends up. The glyph in parentheses is the
+    SEAM - the line the two colors meet along, which is always perpendicular to
+    the travel. Both are given because users think in one or the other and
+    guessing wrong wastes a save-and-look cycle.
+
+    THE ANGLES ARE CSS ANGLES, and CSS measures them clockwise from "toward the
+    top": 0 is up, 90 is right, 180 is down, 270 is left. So 180 puts color 1 at
+    the top, which reads as a horizontal seam. This trips people up every time,
+    which is why no bare degree values appear in the labels.
+
+    ALWAYS EMITS SOMETHING  no empty option. Top to Bottom leads, being the
+    ordinary case for a banner.
+
+    REPLACES  dropdowns/gradient-split.htm. Same four angles, so a field
+    repointed here keeps rendering identically. What changed is the labels: the
+    old file spells diagonal as "Diagnal" twice, lowercases only the first
+    option, and describes the seam without saying so, so "horizontal" reading
+    180 looks like a mistake when it is correct.
+    ===========================================================================
+</cms:ignore>
+Top to Bottom  ( -- seam )=180
+@Left to Right  ( | seam )=90
+@Top-Left to Bottom-Right  ( / seam )=135
+@Bottom-Left to Top-Right  ( \ seam )=45

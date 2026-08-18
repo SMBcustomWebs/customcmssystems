@@ -1,8 +1,11 @@
 <cms:set my_wishlist_count='0' scope='global' />
-<cms:if k_logged_in>
-    <!-- Use capture to silently trap the printed number into our variable -->
+<cms:if k_logged_in && ccs_auth_uid>
+    <!-- Use capture to silently trap the printed number into our variable.
+         Filters on ccs_auth_uid, matching what the save writes and what the
+         two display views read. Previously this used k_user_id, which the
+         extended-users addon overwrites - see snippets/utils/auth_uid.htm. -->
     <cms:capture into='my_wishlist_count' scope='global'>
-        <cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show k_user_id />" count_only='1' />
+        <cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show ccs_auth_uid />" count_only='1' />
     </cms:capture>
 </cms:if>
 <section

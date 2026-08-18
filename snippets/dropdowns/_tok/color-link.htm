@@ -1,0 +1,55 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/color-link.htm
+
+    EMITS   a bare color token.
+    USE AS  link-{token}     colors an anchor, with hover state
+            text-{token}     also valid for the gray numbers and the theme
+                             names, so the same choice can color a heading
+
+    FOR     anchors rendered as plain text links, not as buttons. When the
+            row-level choice in _val/c2a-format.htm is "lnk", this is the
+            color field; when it is "btn", use _tok/color-btn.htm instead.
+
+    WHY THIS LIST  every token is verified against theme.css as .link-{token}.
+    The grays double as .text-{token}, which is why they carry the same labels
+    as all-colors.htm and overlay-colors.htm. Keeping the labels identical
+    across color files matters more than it looks: the user reads the same
+    words everywhere and does not have to relearn the palette per field.
+
+    NOT INCLUDED
+      oxford      .link-oxford exists but there is no .text-oxford or
+                  .bg-oxford, so offering it here would be the only place in
+                  the whole admin where that color appears. Left out on
+                  purpose rather than by oversight
+      gradient    a link is text, it takes a color and not a background
+
+    "Body Text Color" leads because a text link that inherits the surrounding
+    body color is the safe default, and the house rule forbids opt_selected.
+    ===========================================================================
+</cms:ignore>
+Body Text Color=body
+|Site Theme Primary=primary
+|Site Theme Secondary=secondary
+|Site Theme Tertiary=tertiary
+|Site Theme Quaternary=quaternary
+|Site Theme Light=light
+|Site Theme Dark=dark
+|White=white
+|Black=black
+|Almost Black=1200
+|Darkest Gray=1100
+|Dark Gray level 10=1000
+|Dark Gray level 9=900
+|Dark Gray level 8=800
+|Gray level 7=700
+|Mid Shade=600
+|Gray level 5=500
+|Light Gray level 4=400
+|Light Gray level=300
+|Lightest Gray=200
+|Almost White=100
+|Success=success
+|Info=info
+|Warning=warning
+|Danger=danger

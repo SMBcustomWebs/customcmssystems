@@ -83,12 +83,24 @@
                     <cms:else />
 
                         <!-- Process Stripe Payment -->
-                        <cms:if frm_gateway = 'stripe' >
+                        <!-- Was 'frm_gateway', which never existed: frm_* is only
+                             populated from registered cms:input fields (tags.php:5636),
+                             and 'gateway' is a raw HTML radio. The test was always
+                             false, so this entire branch never ran. selected_gateway
+                             is captured from the POST above and is the real value. -->
+                        <cms:if selected_gateway = 'stripe' >
+
+                            <!-- pp_total is a TAG, not a variable. 'k_cart_total'
+                                 does not exist anywhere in the cart addon, so the
+                                 old lookup returned null and charged 0 cents.
+                                 Capture the tag's output first, then read it. -->
+                            <cms:set ccs_cart_total="<cms:pp_total />" />
+
                             <cms:php>
                                 // 1. Retrieve the token and the cart total
                                 global $CTX;
                                 $token = $_POST['stripeToken'];
-                                $cart_total = $CTX->get('k_cart_total'); // CouchCart's native total variable
+                                $cart_total = $CTX->get('ccs_cart_total');
 
                                 // Stripe requires the amount in cents (e.g., $10.50 must be 1050)
                                 $amount_in_cents = round($cart_total * 100);
@@ -136,14 +148,29 @@
                                     <p class="mb-0">Your card has been charged successfully.</p>
                                 </div>
 
+                                <!-- NOTE: this deduction is superseded by the orders
+                                     flow we are about to build - it will move into a
+                                     single deduct-once step keyed off the order record,
+                                     so that PayPal reaches it too and a refresh cannot
+                                     double-deduct. Corrected here so the branch is not
+                                     silently dead in the meantime. -->
+
                                 <!-- 1. Loop through all items in the purchased cart -->
                                 <cms:pp_cart_items>
 
-                                    <!-- 2. Access the specific cloned page for this product -->
-                                    <cms:pages id="<cms:show id />" limit='1'>
+                                    <!-- 2. Access the specific cloned page for this product.
+                                         masterpage was missing: tags.php:294 defaults it to
+                                         the CURRENT template, so this was querying
+                                         checkout.php for a product id and always matching
+                                         nothing. -->
+                                    <cms:pages masterpage='product.php' id="<cms:show id />" limit='1'>
 
-                                        <!-- 3. Check if inventory tracking is turned on for this item -->
-                                        <cms:if "<cms:is '1' in=track_inventory />" >
+                                        <!-- 3. Check if inventory tracking is turned on.
+                                             cms:is at runtime aliases arr_val_exists and only
+                                             returns 1 when the value is genuinely an array,
+                                             which is inconsistent for checkboxes. Direct
+                                             compare is the reliable idiom. -->
+                                        <cms:if track_inventory = '1'>
 
                                             <!-- 4. Calculate the new inventory number -->
                                             <cms:set current_stock = in_stock />

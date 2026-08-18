@@ -1,0 +1,331 @@
+<cms:set target_product_id="<cms:gpc 'p' method='get' />" />
+
+<cms:pages masterpage='product.php' id=target_product_id limit='1'>
+	<section class="py-3 py-lg-5">
+		<div class="container mt-2 mt-lg-4">
+			<div class="row">
+				<div class="col-12 col-lg ps-lg-8 order-2 order-lg-2">
+	
+    				<cms:popup_edit 'track_inventory | in_stock' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Inventory' title='Edit Stock Levels'><i class='fas fa-boxes'></i></button>" />
+
+					<div class="text-warning mb-2">
+						<span class="fas fa-star me-1" style="width:15px"></span>
+						<span class="fas fa-star me-1" style="width:15px"></span>
+						<span class="fas fa-star me-1" style="width:15px"></span>
+						<i class="fas fa-star-half-alt me-1" style="width:15px"></i>
+						<span class="far fa-star me-0" style="width:15px"></span>
+					</div>
+					
+					<!-- Title & Edit Details -->
+					<div class="d-flex align-items-center mb-2">
+						<h1 class="fs-6 mb-0 me-2"><cms:show k_page_title /></h1>
+						<cms:popup_edit 'k_page_title | feature | value | itm_desc' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Details' title='Edit Details'><i class='fas fa-pencil-alt'></i></button>" />
+					</div>
+
+					<!-- Feature and Value Badges -->
+					<cms:if feature>
+						<div class="badge text-bg-warning me-2">Feature Item</div>
+					</cms:if>
+					<cms:if value>
+						<div class="badge text-bg-info text-white">Great Value</div>
+					</cms:if>
+
+					<!-- Pricing Section Header & Edit Button -->
+					<div class="d-flex align-items-center mt-3 mb-1">
+						<span class="text-700 me-2 fw-bold">
+							<cms:if old_price>Now Only<cms:else />Only</cms:if>
+						</span>
+						<cms:popup_edit 'group_price | group_variants | group_shipping' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Pricing' title='Edit Pricing & Cart'><i class='fas fa-pencil-alt'></i></button>" />
+					</div>
+
+					<div class="pb-3 mb-3 border-bottom border-300"> 
+						<span class="fs-7">$<cms:number_format pp_price /></span>
+						<cms:if old_price>
+							&nbsp;<del class="text-muted">$<cms:number_format old_price /></del>
+						</cms:if>
+						<cms:if pp_requires_shipping == '0'>
+							&nbsp;<strong class="text-success"><i class="fas fa-download"></i> Digital / No Shipping</strong>
+						</cms:if>
+					</div>
+
+					<h6 class="mb-3">SKU: 
+						<cms:if itm_sku>
+							<cms:show itm_sku />
+						<cms:else />
+							<cms:show k_page_id />
+						</cms:if>
+					</h6>
+
+					<!-- Description Section -->
+					<h5 class="mt-4"><cms:show k_page_title /> Description</h5>
+					<div class="mb-4">
+						<cms:show itm_desc />
+					</div>
+
+					<!-- 1. Evaluate Inventory Logic -->
+					<cms:set allow_purchase='1' />
+					<cms:set max_limit='' />
+
+					<cms:if track_inventory>
+						<!-- If tracking is ON, evaluate the stock number -->
+						<cms:if in_stock && in_stock gt '0'>
+							<cms:set max_limit=in_stock />
+						<cms:else />
+							<cms:set allow_purchase='0' />
+						</cms:if>
+					</cms:if>
+
+					<!-- 2. Render Form or Out of Stock Badge -->
+					<cms:if allow_purchase>
+
+						<cms:pp_product_form id="add-to-cart-form" class="mb-4 d-flex flex-wrap align-items-center gap-3 cart-form">
+
+							<cms:if k_error>
+								<div class="alert alert-danger w-100 mb-3">
+									<strong>COUCH REJECTED THE CART:</strong> <cms:show k_error />
+								</div>
+							</cms:if>
+
+							<cms:pp_product_options>
+								<div class="form-group mb-md-0 d-md-flex align-items-md-center me-3">
+									<label class="mb-md-0 fw-bold me-2"><cms:show option_name />:</label>
+									<cms:pp_option_values class="form-select form-select-sm" style="min-width: 7.5rem;" />
+								</div>
+							</cms:pp_product_options>
+
+							<div class="form-group mb-md-0 d-md-flex align-items-md-center">
+								<label class="mb-md-0 fw-bold" for="qty">Quantity: </label>
+								<!-- Dynamically insert the max attribute ONLY if a limit exists -->
+								<input type="number" class="ms-md-2 form-control" id="qty" name="qty" value="1" min="1" <cms:if max_limit>max="<cms:show max_limit />"</cms:if> style="min-width: 5rem;">
+							</div>
+
+							<button type="submit" class="btn btn-danger ms-3">Add to Cart</button>
+
+							<!-- Optional UI: Only show the stock remaining if tracking is turned on -->
+							<cms:if track_inventory>
+								<div class="w-100 mt-2">
+									<small class="text-success"><i class="fas fa-check-circle"></i> <cms:show in_stock /> in stock</small>
+								</div>
+							</cms:if>
+
+						</cms:pp_product_form>
+						<!-- ========================================== -->
+						<!-- WISHLIST BUTTON  -->
+						<!-- ========================================== -->
+						<!-- ========================================== -->
+						<!-- 1. COUCH BACKEND LISTENER (Listens for AJAX) -->
+						<!-- ========================================== -->
+						<cms:set my_wishlist_action="<cms:gpc 'wishlist_action' method='post' />" />
+						<cms:if my_wishlist_action='save_item' && k_logged_in >
+							<!-- Grab the data sent by our Javascript -->
+							<cms:set my_prod_id="<cms:gpc 'product_id' method='post' />" />
+							<cms:set my_vars="<cms:gpc 'variants' method='post' />" />
+
+							<!-- Create a new record in the wishlist database -->
+							<cms:db_persist
+								_masterpage='wishlist.php'
+								_mode='create'
+								k_page_title="Wishlist-<cms:show k_user_id />-<cms:show my_prod_id />"
+								wish_user_id=k_user_id
+								wish_product_id=my_prod_id
+								wish_variants=my_vars
+							/>
+
+							<!-- Check if Couch rejected the save -->
+							<cms:if k_error>
+								<cms:abort>ERROR: <cms:show k_error /></cms:abort>
+							<cms:else />
+								<!-- Stop page load and send success flag back to browser -->
+								<cms:abort>WISHLIST_SUCCESS</cms:abort>
+							</cms:if>
+						</cms:if>
+
+						<!-- ========================================== -->
+						<!-- 2. FRONTEND BUTTON & JAVASCRIPT              -->
+						<!-- ========================================== -->
+						<div class="mt-3">
+							<cms:if k_logged_in>
+
+								<button type="button" id="save-wishlist-btn" class="btn btn-sm btn-outline-primary fw-bold">
+									<i class="far fa-heart me-1"></i> Save for Later
+								</button>
+								<div id="wishlist_feedback" class="mt-2" style="display:none; font-size: 0.9rem; font-weight: bold;"></div>
+
+								<script>
+								document.addEventListener('DOMContentLoaded', function() {
+									const btn = document.getElementById('save-wishlist-btn');
+
+									if(btn) {
+										btn.addEventListener('click', function(e) {
+											e.preventDefault();
+
+											// 1. Locate the exact cart form you updated earlier
+											const cartForm = document.getElementById('add-to-cart-form');
+											const feedback = document.getElementById('wishlist_feedback');
+
+											if(!cartForm) {
+												console.error('Cart form not found. Check the ID.');
+												return;
+											}
+
+											// 2. Read all the data currently selected in the form
+											const formData = new FormData(cartForm);
+											let variantString = '';
+
+											// 3. Loop through the form data to build our variant string
+											formData.forEach(function(value, key) {
+												// Skip the quantity field (usually named 'qty' or 'quantity' in CouchCart)
+												// and skip hidden submit fields. We only want the options!
+												if(key.toLowerCase() !== 'qty' && key.toLowerCase() !== 'quantity' && key !== 'submit') {
+													variantString += key + ': ' + value + ' | ';
+												}
+											});
+
+											// Clean up the trailing ' | ' from the end of the string
+											if(variantString.endsWith(' | ')) {
+												variantString = variantString.slice(0, -3);
+											}
+
+											// 4. Bundle the final data to send to CouchCMS
+											const sendData = new FormData();
+											sendData.append('wishlist_action', 'save_item');
+											sendData.append('product_id', '<cms:show k_page_id />');
+											sendData.append('variants', variantString);
+
+											// 5. Update UI to show processing
+											btn.disabled = true;
+											btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Saving...';
+
+											// 6. Send silently to the background listener we built above
+											fetch(window.location.href, {
+												method: 'POST',
+												body: sendData,
+												headers: { 'X-Requested-With': 'XMLHttpRequest' }
+											})
+											.then(response => response.text())
+											.then(data => {
+												if(data.includes('WISHLIST_SUCCESS')) {
+													// Update Button state
+													btn.className = 'btn btn-sm btn-outline-secondary fw-bold';
+													btn.innerHTML = '<i class="fas fa-check me-1"></i> Saved to Wishlist';
+													// Show success message
+													feedback.className = 'mt-2 text-success';
+													feedback.innerHTML = '<i class="fas fa-check-circle me-1"></i> Added with your selected options!';
+
+													// Update the header badge live!
+													const badge = document.getElementById('wishlist-count-badge');
+													if(badge) {
+														badge.innerText = parseInt(badge.innerText || 0) + 1;
+													}
+												} else {
+													// Fallback error
+													feedback.className = 'mt-2 text-danger';
+													feedback.innerHTML = '<i class="fas fa-times-circle me-1"></i> Error saving to wishlist.';
+												}
+												feedback.style.display = 'block';
+												})
+												.catch(error => {
+													btn.disabled = false;
+													btn.innerHTML = '<i class="far fa-heart me-1"></i> Save for Later';
+												});
+										});
+									}
+								});
+							</script>
+
+							<cms:else />
+								<a href="<cms:login_link />" class="btn btn-sm btn-outline-secondary fw-bold">
+									<i class="far fa-heart me-1"></i> Log in to Save for Later
+								</a>
+							</cms:if>
+						</div>
+					
+					
+					<cms:else />
+
+						<!-- Fallback if tracking is ON and inventory is 0 (or blank) -->
+						<div class="alert alert-secondary d-inline-block px-4 py-3 border border-300">
+							<h5 class="mb-0 text-muted"><i class="fas fa-box-open me-2"></i> Temporarily Out of Stock</h5>
+						</div>
+
+					</cms:if>
+
+
+					<!-- Mosaic Accordion: Specifications -->
+					<!-- Only shows if specs exist, OR if user is admin (so they have the button to add them) -->
+					<cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>" || k_user_access_level ge '7'>
+						<div class="mt-5">
+							<div class="d-flex align-items-center mb-3">
+								<h5 class="mb-0 me-2">Specifications & Highlights</h5>
+								<cms:popup_edit 'itm_specs_msc' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Specs' title='Edit Specifications'><i class='fas fa-pencil-alt'></i></button>" />
+							</div>
+
+							<cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>">
+								<div class="accordion" id="specsAccordion">
+									<cms:show_mosaic 'itm_specs_msc'>
+										<div class="accordion-item">
+											<h2 class="accordion-header" id="heading<cms:show k_count />">
+												<!-- The first item gets 'true' and no 'collapsed' class -->
+												<button class="accordion-button <cms:if k_count!='1'>collapsed</cms:if>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<cms:show k_count />" aria-expanded="<cms:if k_count=='1'>true<cms:else />false</cms:if>" aria-controls="collapse<cms:show k_count />">
+													<cms:show spec_title />
+												</button>
+											</h2>
+											<!-- The first item gets 'show' to remain open by default -->
+											<div id="collapse<cms:show k_count />" class="accordion-collapse collapse <cms:if k_count=='1'>show</cms:if>" aria-labelledby="heading<cms:show k_count />" data-bs-parent="#specsAccordion">
+												<div class="accordion-body fw-light text-wrap overflow-hidden">
+													<cms:show spec_content />
+												</div>
+											</div>
+										</div>
+									</cms:show_mosaic>
+								</div>
+							</cms:if>
+						</div>
+					</cms:if>
+				</div>
+
+				<div class="col-6 col-sm-5 col-md-6 col-lg-4 mx-auto ms-lg-0 order-1 order-lg-1 mb-3 mb-lg-0">
+					<!-- Media / Images Edit Button -->
+					<div class="d-flex justify-content-end mb-2">
+						<cms:popup_edit 'itm_img_mn | itm_sldrs_msc' hide_fields='itm_img_grp' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Media' title='Edit Media & Images'><i class='fas fa-pencil-alt'></i></button>" />
+					</div>
+
+					<div class="swiper-theme-container product-slider" data-swiper-theme-container="data-swiper-theme-container">
+						<div class="swiper" data-swiper='{"effect":"fade","fadeEffect":{"crossFade":true},"spaceBetween":5,"loop":true,"loopedSlides":5,"thumb":{"spaceBetween":5,"slidesPerView":5,"loop":true,"freeMode":true,"grabCursor":true,"loopedSlides":5,"centeredSlides":true,"slideToClickedSlide":true,"watchSlidesVisibility":true,"watchSlidesProgress":true},"slideToClickedSlide":true}'>
+							<div class="swiper-wrapper">
+
+									<div class="swiper-slide">
+										<cms:if itm_img_mn>
+											<img class="w-100" src="<cms:show itm_img_mn />" alt="<cms:show k_page_title />" />
+										<cms:else />
+											<!-- Fallback if the client forgot to upload an image -->
+											<img class="w-100" src="<cms:show k_admin_link />uploads/image/noimg.png" alt="Image Not Available" />
+										</cms:if>
+									</div>
+
+
+								<cms:show_mosaic 'itm_sldrs_msc'>
+									<div class="swiper-slide">
+										<img class="w-100" src="<cms:show itm_slider_img />" alt="<cms:show itm_slider_img_alt />" />
+									</div>
+								</cms:show_mosaic>
+
+								<div class="swiper-nav">
+									<div class="swiper-button-next"></div>
+									<div class="swiper-button-prev"></div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			
+			</div>
+		</div>
+	<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >
+				<a href="<cms:link 'add-product.php' />?pid=<cms:show k_page_id />" class="btn btn-warning fw-bold">
+					Edit Whole Product
+				</a>
+			</cms:if>
+	</section>
+</cms:pages>

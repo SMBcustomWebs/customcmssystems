@@ -1,0 +1,32 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/space-gap.htm
+
+    EMITS   a bare step number on the site spacing scale, element range only.
+    USE AS  gap-{token}  row-gap-  column-gap-
+            also valid behind ms- me- mt- mb- for nudging one item
+
+    FOR     the space between items that sit next to each other: buttons in a
+            call-to-action row, chips, inline icons.
+
+    ALWAYS EMITS SOMETHING  no empty option, so no cms:if guard is needed. That
+    is deliberate. A row of buttons with no gap class has its buttons touching,
+    which always reads as a bug rather than a choice. "Small 1rem" leads as the
+    default; a user who really wants them flush picks None, which emits gap-0
+    and says so out loud in the markup.
+
+    STOPS AT 5 (3rem)  the full scale runs to 11 (15rem), but steps 6 and up
+    are section-scale. A 4rem gap between two buttons looks like a broken
+    layout, not a design decision. Use _tok/space.htm for section padding where
+    those steps are the point.
+
+    VARIANT OF _tok/space.htm, per the house rule that a shared file is never
+    edited to suit one block. Same tokens, narrower range, different default.
+    ===========================================================================
+</cms:ignore>
+Small 1rem=3
+|None=0
+|Hairline .25rem=1
+|Tiny .5rem=2
+|Medium 1.8rem=4
+|Large 3rem=5

@@ -1,0 +1,30 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_val/c2a-format.htm
+
+    EMITS   a data key. NOT a class. Never print this value into markup.
+    USE AS  a router branch:
+                cms:if {field} eq 'btn'   assemble from _tok/btn-fill.htm plus
+                                          _tok/color-btn.htm plus the _cls
+                                          button files
+                cms:else                  assemble from _tok/color-link.htm
+
+    ROW LEVEL, NOT PER BUTTON  one choice for the whole call-to-action row. A
+    row where one item is a filled button and its neighbor is bare text reads
+    as a rendering fault rather than a design, and asking the user to make that
+    call four times over is four chances to end up mismatched.
+
+    WHY THIS FIELD EXISTS AT ALL  the older dropdowns/btn-colors.htm carries a
+    final option "Link Only (not a button)=link", folding this decision into the
+    color list. Two problems with that. It makes button-or-link a per-button
+    choice by construction, and the sentinel value "link" assembles into
+    btn-link, which is a REAL Bootstrap class - so a router that forgets to
+    branch on the sentinel first renders a Bootstrap link-button and looks like
+    it worked. Splitting the decision out means the color dropdowns hold nothing
+    but colors, and no value in them can silently become the wrong class.
+
+    ALWAYS EMITS SOMETHING  no empty option. "Buttons" leads as the default.
+    ===========================================================================
+</cms:ignore>
+Buttons=btn
+|Plain Text Links=lnk

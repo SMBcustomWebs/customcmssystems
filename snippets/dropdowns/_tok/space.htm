@@ -1,0 +1,43 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/space.htm
+
+    EMITS   a bare step number on the site spacing scale.
+    USE AS  py-{token}  pt-  pb-  px-  ps-  pe-  p-     padding
+            my-{token}  mt-  mb-  mx-  ms-  me-  m-     margin
+            g-{token}   gx-  gy-                        grid gutters
+            gap-{token} row-gap-  column-gap-           flex gaps
+
+    MUST BE GUARDED  the first option emits an empty string, so wrap the use
+    site in cms:if or an unset field prints a bare "py-" that Bootstrap ignores
+    but that shows up in the class attribute as noise.
+
+    THE SCALE  read off theme.css, not guessed. Every step below is confirmed
+    to exist for gap-, and Bootstrap generates the same steps for p- and m-.
+      0 zero    1 .25rem   2 .5rem    3 1rem    4 1.8rem    5 3rem
+      6 4rem    7 5rem     8 7.5rem   9 10rem   10 12.5rem  11 15rem
+    Steps 6 and up are section-scale, not element-scale. On a button row they
+    will look broken, which is why _tok/space-gap.htm exists and stops at 5.
+
+    AN hr NEEDS MARGIN, NOT PADDING  a horizontal rule has no box to pad, so
+    consume this with my- there. That has bitten this codebase before.
+
+    REPLACES  dropdowns/padding.htm, which emits 0-11 with no labels at all so
+    the admin shows bare numbers, and dropdowns/gutter_space.htm, which labels
+    the steps by rem value with no hint of what the number does. Point new
+    fields here.
+    ===========================================================================
+</cms:ignore>
+Default=
+|None=0
+|Hairline .25rem=1
+|Tiny .5rem=2
+|Small 1rem=3
+|Medium 1.8rem=4
+|Large 3rem=5
+|X-Large 4rem=6
+|2X-Large 5rem=7
+|3X-Large 7.5rem=8
+|4X-Large 10rem=9
+|5X-Large 12.5rem=10
+|6X-Large 15rem=11

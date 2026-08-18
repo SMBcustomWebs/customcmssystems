@@ -1,0 +1,54 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/bg-opacity.htm
+
+    EMITS   a decimal fraction between 1.0 and 0.0.
+    USE AS  bg-opacity-{token}   a class, when the layer takes a bg- color
+            opacity: {token}     an inline style, when the layer is an image
+
+    ONE FILE, BOTH USES, and that is not a coincidence. Every value in this list
+    has a matching class in assets/css/user.php, in the block headed
+    "BACKGROUND OPACITY EXPANSION PACK (DECIMAL ESCAPES)" - the selectors are
+    written .bg-opacity-0\.5 and so on, escaping the dot so a decimal survives
+    as a class name. Verified present: 0.0 0.1 0.2 0.25 0.3 0.4 0.5 0.6 0.7
+    0.75 0.8 0.9 1.0. The same decimal is also exactly what the CSS opacity
+    property wants, so an image layer can use the value raw.
+
+    KNOW WHICH ONE YOU NEED. bg-opacity- only affects a background COLOR, by
+    feeding --ccs-bg-opacity. It does nothing to a background IMAGE. To fade an
+    image, set the opacity property on the image layer itself - which is how the
+    base color underneath is made to bleed up through the photo.
+
+    ALWAYS EMITS SOMETHING  no empty option. "Solid" leads and emits 1.0, so an
+    untouched field prints bg-opacity-1.0, which is correct and costs nothing.
+    That is deliberate: an opacity field that silently emits no class leaves the
+    reader guessing whether the layer is opaque by choice or by omission.
+
+    DO NOT CONFUSE WITH .opacity-{n}  theme.css also carries opacity-0, -25,
+    -50, -75, -85 and -100, which fade the WHOLE element including its text and
+    its children. Those are a different, coarser scale for a different job.
+
+    LABELS SAY TRANSPARENT, VALUES SAY OPACITY  kept that way on purpose. The
+    labels match dropdowns/img-transparency.htm, which this file replaces, so
+    the wording in the admin does not change under the user's feet.
+
+    REPLACES  dropdowns/img-transparency.htm (same thirteen values, no header
+    explaining what to prefix) and dropdowns/bg-transparency.htm, whose first
+    option is written "No Transparancy" with no equals sign at all - so it
+    stores that misspelled label as its value, and whose remaining values are
+    whole numbers on a scale this project does not have classes for.
+    ===========================================================================
+</cms:ignore>
+Solid (no transparency)=1.0
+|10% Transparent=0.9
+|20% Transparent=0.8
+|25% Transparent=0.75
+|30% Transparent=0.7
+|40% Transparent=0.6
+|50% Transparent=0.5
+|60% Transparent=0.4
+|70% Transparent=0.3
+|75% Transparent=0.25
+|80% Transparent=0.2
+|90% Transparent=0.1
+|100% Transparent (hidden)=0.0

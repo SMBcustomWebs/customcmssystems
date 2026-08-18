@@ -1,0 +1,73 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/color-bg.htm
+
+    EMITS   a bare color token, or the sentinel "custom".
+    USE AS  bg-{token}
+
+    MUST BE GUARDED  the first option emits an empty string. Without a cms:if
+    the use site prints a bare "bg-" into the class attribute.
+
+    THE SENTINEL  "Custom Color or Gradient" stores the value custom. It is NOT
+    a class. The router branches on it and reads the hex or gradient fields
+    instead:
+
+        cms:if {field} eq 'custom'    build the custom rule
+        cms:else_if {field}           print bg-{field}
+
+    WHY THE SENTINEL CHANGED FROM "gradient"  bg-gradient IS A REAL CLASS. It
+    is defined in theme.css at line 12203 and sets background-image to
+    var(--ccs-bg-gradient). So the older all-colors.htm and trns-bg.htm, which
+    store gradient for their Custom Color option, hand the use site a value that
+    assembles into a working class. A router that forgets to branch on the
+    sentinel first does not fail loudly - it paints the theme's gradient image
+    and looks like it half worked. bg-custom matches nothing, so the same
+    mistake now renders plainly wrong and gets found.
+
+    TRANSPARENT IS A REAL CHOICE, NOT AN ABSENCE. bg-transparent sets
+    background-color to transparent with !important, which actively cancels a
+    background inherited from a parent or from an earlier utility. That is
+    different from picking None, which emits no class at all and lets whatever
+    is underneath show through untouched. Both are useful; they are not the same
+    thing.
+
+    NOT INCLUDED  oxford. .btn-oxford and .link-oxford exist but there is no
+    .bg-oxford, so it is left out here for the same reason it is left out of
+    _tok/color-btn.htm and _tok/color-link.htm - one color that appears in two
+    fields out of a dozen is worse than no color at all.
+
+    REPLACES  dropdowns/all-colors.htm (same palette, unsafe sentinel),
+    dropdowns/shades_gray.htm (grays only, and its first option stores the
+    literal transparent rather than an empty value), and dropdowns/trns-bg.htm
+    (which folds a layer TYPE, "Single Image=img", into a list of colors - the
+    old design where an image and a color could not coexist).
+    ===========================================================================
+</cms:ignore>
+None=
+|Custom Color or Gradient=custom
+|Site Theme Primary=primary
+|Site Theme Secondary=secondary
+|Site Theme Tertiary=tertiary
+|Site Theme Quaternary=quaternary
+|Site Theme Light=light
+|Site Theme Dark=dark
+|Page Body Color=body
+|White=white
+|Almost White=100
+|Lightest Gray=200
+|Light Gray level 3=300
+|Light Gray level 4=400
+|Gray level 5=500
+|Mid Shade=600
+|Gray level 7=700
+|Dark Gray level 8=800
+|Dark Gray level 9=900
+|Dark Gray level 10=1000
+|Darkest Gray=1100
+|Almost Black=1200
+|Black=black
+|Success=success
+|Info=info
+|Warning=warning
+|Danger=danger
+|Transparent (cancels a background)=transparent

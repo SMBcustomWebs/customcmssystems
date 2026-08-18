@@ -1,0 +1,28 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_cls/btn-width.htm
+
+    EMITS   a complete class. Print it as-is. NEVER prefix it.
+    USE AS  class="btn-primary {this}"
+
+    VERIFIED IN theme.css  only w-25, w-50, w-75 and w-100 exist. There is no
+    w-33 or w-66, so a three-across button row wants Full Width inside grid
+    columns rather than a thirds class that does not exist.
+
+    THE PERCENTAGE IS OF THE PARENT, NOT THE PAGE. Inside a flex row that
+    already has justify-content set, w-50 on two buttons plus a gap overflows.
+    Either drop the width and let the buttons size to their text, or set the
+    row to stacked with _cls/flex-dir.htm so each button gets its own line.
+
+    MUST BE GUARDED  "Fit Text" emits an empty string, which is the correct
+    default: a button with no width class sizes to its label plus padding.
+
+    REPLACES  dropdowns/button-width.htm. Same four values, ordered smallest
+    to largest instead of Full first, and labeled in words rather than "1/4".
+    ===========================================================================
+</cms:ignore>
+Fit Text=
+|Quarter Width=w-25
+|Half Width=w-50
+|Three Quarter Width=w-75
+|Full Width=w-100

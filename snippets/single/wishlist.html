@@ -4,18 +4,50 @@
             <div class="col-12">
             
                 <cms:if k_logged_in>
-                    <h3 class="mb-4 fw-bold">Your Saved Items</h3>
-                    
+                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+                        <h3 class="mb-0 fw-bold">Your Saved Items</h3>
+                        <a href="<cms:link 'cart.php' />" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-shopping-cart me-1" aria-hidden="true"></i>View Cart
+                        </a>
+                    </div>
+
                     <div class="wishlist-container">
                         <!-- 1. Outer Loop: Find records in wishlist.php for this specific user -->
-                        <cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show k_user_id />">
-                            
+                        <cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show ccs_auth_uid />">
+
                             <!-- Save outer variables before entering the inner loop so Couch doesn't forget them -->
                             <cms:set my_saved_variants = wish_variants />
+                            <cms:set my_saved_variants_display = wish_variants_display />
                             <cms:set my_wishlist_entry_id = k_page_id />
-                
-                            <!-- 2. Inner Loop: Fetch the live product data using the saved Product ID -->
-                            <cms:pages masterpage='product.php' id=wish_product_id limit='1'>
+                            <cms:set my_saved_masterpage = wish_masterpage />
+
+                            <!-- 2. Inner Loop: fetch the live item using the template it was
+                                 SAVED FROM. This was hardcoded to product.php, so a saved
+                                 service matched the outer loop (and the badge) but resolved
+                                 to nothing here - the list looked empty while the count said 1. -->
+                            <!-- GUARD: an empty masterpage is NOT harmless. tags.php:294
+                                 defaults cms:pages to the CURRENT template, so a blank
+                                 wish_masterpage would silently query wishlist.php for a
+                                 product id, match nothing, and render an empty list while
+                                 the badge still counts the row. Fail visibly instead.
+                                 Carries wishlist-item-row + the row id so the JS can
+                                 remove it - the normal Remove button lives inside the
+                                 lookup loop, which cannot run for a broken row. -->
+                            <cms:if my_saved_masterpage eq ''>
+                                <div class="card mb-3 p-3 border border-warning bg-light wishlist-item-row" id="wishlist-item-<cms:show my_wishlist_entry_id />">
+                                    <p class="mb-1 fw-bold">This saved item is no longer available.</p>
+                                    <cms:if k_user_access_level ge '7'>
+                                        <p class="small text-muted mb-1">Entry <cms:show my_wishlist_entry_id /> has no wish_masterpage.</p>
+                                    </cms:if>
+                                    <div>
+                                        <button type="button" class="btn btn-link text-danger p-0 text-decoration-none shadow-none remove-wishlist-btn" data-entry-id="<cms:show my_wishlist_entry_id />">
+                                            <i class="fas fa-trash-alt"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </cms:if>
+
+                            <cms:pages masterpage=my_saved_masterpage id=wish_product_id limit='1'>
                                 
                                 <!-- JS HOOKS ADDED HERE: class="wishlist-item-row" and id="..." -->
                                 <div class="card mb-3 p-3 border shadow-sm wishlist-item-row" id="wishlist-item-<cms:show my_wishlist_entry_id />">
@@ -25,10 +57,13 @@
                                                 <a href="<cms:show k_page_link />" class="text-decoration-none text-dark"><cms:show k_page_title /></a>
                                             </h5>
                                             
-                                            <!-- Display the raw captured string -->
-                                            <p class="text-muted small mb-2">
-                                                <em>Saved Data: <cms:show my_saved_variants /></em>
-                                            </p>
+                                            <!-- Readable copy. The raw string (my_saved_variants)
+                                                 is machine-parseable and deliberately NOT shown. -->
+                                            <cms:if my_saved_variants_display>
+                                                <p class="text-muted small mb-2">
+                                                    <cms:show my_saved_variants_display />
+                                                </p>
+                                            </cms:if>
                                             
                                             <!-- 3. Live Stock Checking Logic -->
                                             <cms:if track_inventory>

@@ -116,7 +116,7 @@
                     <cms:else />
                     <li class="nav-item">
                         <a class="nav-link <cms:show ccs_nav_typography />"
-                            href="<cms:login_link redirect='1' />">Login</a>
+                            href="<cms:login_link />">Login</a>
                     </li>
                 </cms:if>
                 <cms:if (k_user_access_level ge '7' ) && ("<cms:get_session 'inline_edit_on' />") >

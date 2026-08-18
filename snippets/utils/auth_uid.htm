@@ -1,0 +1,32 @@
+<cms:php>
+    /* ============================================================
+       STABLE AUTHENTICATED USER ID  ->  ccs_auth_uid
+       ------------------------------------------------------------
+       Do NOT use k_user_id to identify a user. It means two
+       different things depending on install state:
+
+         functions.php:1492   core sets k_user_id = $AUTH->user->id
+         extended-users.php:181  the addon then OVERWRITES it with the
+                                 users-template PAGE id
+
+       and _get_associated_page() (extended-users.php:41-81) has three
+       exits:
+         - page found      -> that page's id
+         - field exists,
+           no row for user -> -1  (and -1 is truthy, so the addon's
+                                   `if(!$pg_id) return` guard misses it)
+         - field missing    -> null, guard fires, core's value survives
+
+       So one logged-in person can present as a page id, as -1, or as
+       their real user id, from two different numbering spaces, and
+       which one you get flips when a template is registered. Anything
+       keyed on k_user_id silently stops matching its own old rows.
+
+       $AUTH->user->id is the real user id, is never overwritten, and
+       is -1 for anonymous (see functions.php:1499, which uses exactly
+       that test to decide k_logged_in).
+       ============================================================ */
+    global $AUTH, $CTX;
+    $ccs_uid = ( isset($AUTH->user) && $AUTH->user->id != -1 ) ? $AUTH->user->id : '';
+    $CTX->set( 'ccs_auth_uid', $ccs_uid, 'global' );
+</cms:php>

@@ -1,0 +1,23 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/btn-fill.htm
+
+    EMITS   the button class STEM, complete up to the color.
+    USE AS  {this}-{color}   where color comes from _tok/color-btn.htm
+            Solid   plus primary  ->  btn-primary
+            Outline plus primary  ->  btn-outline-primary
+
+    WHY IT IS SHAPED THIS WAY  the older dropdowns/button-fill.htm emits an
+    empty string for Solid and "-outline" for Outline, so the consumer has to
+    write btn{fill}-{color}. That works for Solid but produces
+    btn-outline-primary only if the hyphen lands exactly right, and every
+    router that got it slightly wrong emitted btn--outlineprimary. Emitting a
+    whole stem removes the chance of a stray or missing hyphen: the consumer
+    always writes exactly one.
+
+    ALWAYS EMITS SOMETHING  there is no empty option. A button always needs a
+    base class, so no cms:if guard is required at the use site.
+    ===========================================================================
+</cms:ignore>
+Solid=btn
+|Outline=btn-outline

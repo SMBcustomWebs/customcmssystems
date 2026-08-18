@@ -1,0 +1,63 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/color-overlay.htm
+
+    EMITS   a bare color token, or the sentinel "custom".
+    USE AS  bg-{token}   on the overlay layer element
+
+    VARIANT OF _tok/color-bg.htm - identical tokens, reordered for the job.
+    Per the house rule, a shared file is never edited to suit one use; a variant
+    is made instead. What differs is the running order, which is the only thing
+    that sets the default, since opt_selected is never used.
+
+    WHY THE ORDER DIFFERS  an overlay is nearly always used to knock a busy
+    photo back so text stays readable, so the darks come first. Picking a bright
+    theme color as an overlay is legitimate but rare, so those sit lower.
+
+    MUST BE GUARDED  "No Overlay" emits an empty string.
+
+    PAIR IT WITH TRANSPARENCY  a solid overlay at full strength hides
+    everything under it, which makes the image and base color pointless. Always
+    put _tok/bg-opacity.htm beside this field, not inside the custom-color
+    group - the transparency applies to theme colors just as much as custom ones.
+
+    CHEAPER ALTERNATIVE FOR PLAIN DARKENING  if all that is wanted is "make the
+    photo darker," _cls/overlay-tint.htm does it with a class that already
+    exists in theme.css and generates no per-tile CSS at all. Reach for this
+    file when the overlay needs to be a specific color.
+
+    THE SENTINEL  "custom" is inert as a class on purpose. See the long note in
+    _tok/color-bg.htm for why it is no longer the word gradient.
+
+    REPLACES  dropdowns/overlay-colors.htm, which used the unsafe gradient
+    sentinel, and the never-existing dropdowns/overly-colors.htm that several
+    transition embeds still referenced - note the missing "a" - which is why
+    those overlay dropdowns rendered with no options in them at all.
+    ===========================================================================
+</cms:ignore>
+No Overlay=
+|Custom Color or Gradient=custom
+|Black=black
+|Almost Black=1200
+|Darkest Gray=1100
+|Dark Gray level 10=1000
+|Dark Gray level 9=900
+|Dark Gray level 8=800
+|Gray level 7=700
+|Mid Shade=600
+|Gray level 5=500
+|Light Gray level 4=400
+|Light Gray level 3=300
+|Lightest Gray=200
+|Almost White=100
+|White=white
+|Site Theme Primary=primary
+|Site Theme Secondary=secondary
+|Site Theme Tertiary=tertiary
+|Site Theme Quaternary=quaternary
+|Site Theme Light=light
+|Site Theme Dark=dark
+|Success=success
+|Info=info
+|Warning=warning
+|Danger=danger

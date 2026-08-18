@@ -1,0 +1,24 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_cls/btn-shape.htm
+
+    EMITS   a complete class. Print it as-is. NEVER prefix it.
+    USE AS  class="btn-primary {this}"
+
+    VERIFIED IN theme.css  .rounded-capsule sets border-radius 3.125rem. It is
+    a house class, not Bootstrap's .rounded-pill, and the icon system knows
+    about it: .btn-icon.rounded-capsule.btn-icon-left .btn-brand rounds the
+    left two corners of the icon well and the -right rule rounds the right two.
+    So a capsule button with an icon comes out correct with no extra work,
+    provided the icon class comes from _cls/btn-icon-pos.htm.
+
+    MUST BE GUARDED  "Square" emits an empty string.
+
+    REPLACES  dropdowns/button-style.htm, whose "Square" option stores a single
+    space rather than an empty string. That happens to survive because Couch
+    trims every option value, but it is a trap: read the file and it looks like
+    the value is " ".
+    ===========================================================================
+</cms:ignore>
+Square=
+|Rounded=rounded-capsule

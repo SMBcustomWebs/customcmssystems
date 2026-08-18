@@ -134,10 +134,14 @@
 
                                 <!-- WISHLIST BUTTON -->
                                 <cms:set my_wishlist_action="<cms:gpc 'wishlist_action' method='post' />" />
-                                <cms:if my_wishlist_action='save_item' && k_logged_in >
+                                <cms:if my_wishlist_action='save_item' && k_logged_in && ccs_auth_uid >
                                     <cms:set my_prod_id="<cms:gpc 'product_id' method='post' />" />
                                     <cms:set my_vars="<cms:gpc 'variants' method='post' />" />
-                                    <cms:db_persist _masterpage='wishlist.php' _mode='create' k_page_title="Wishlist-<cms:show k_user_id />-<cms:show my_prod_id />" wish_user_id=k_user_id wish_product_id=my_prod_id wish_variants=my_vars />
+                                    <cms:set my_vars_display="<cms:gpc 'variants_display' method='post' />" />
+                                    <!-- wish_masterpage = k_template_name so a saved service
+                                         resolves back to service.php, not product.php.
+                                         wish_user_id = ccs_auth_uid, never k_user_id. -->
+                                    <cms:db_persist _masterpage='wishlist.php' _mode='create' k_page_title="Wishlist-<cms:show ccs_auth_uid />-<cms:show my_prod_id />" wish_user_id=ccs_auth_uid wish_masterpage=k_template_name wish_product_id=my_prod_id wish_variants=my_vars wish_variants_display=my_vars_display />
                                     <cms:if k_error><cms:abort>ERROR: <cms:show k_error /></cms:abort><cms:else /><cms:abort>WISHLIST_SUCCESS</cms:abort></cms:if>
                                 </cms:if>
 
@@ -182,6 +186,19 @@
                                                                 btn.innerHTML = '<i class="fas fa-check me-1"></i> Saved to Wishlist';
                                                                 feedback.className = 'mt-1 text-success';
                                                                 feedback.innerHTML = 'Added with your options!';
+
+                                                                // This page never touched the badge or the panel at
+                                                                // all, so saving a service updated neither. Bump the
+                                                                // count immediately, then re-render the panel so the
+                                                                // item appears and the count reconciles.
+                                                                if(typeof window.bumpWishlistCount === 'function') {
+                                                                    window.bumpWishlistCount(1);
+                                                                }
+                                                                // LIST ONLY (false) - see product.html for why the
+                                                                // server count must not write the badge here.
+                                                                if(typeof window.refreshWishlistModal === 'function') {
+                                                                    window.refreshWishlistModal(false);
+                                                                }
                                                             } else {
                                                                 feedback.className = 'mt-1 text-danger';
                                                                 feedback.innerHTML = 'Error saving to wishlist.';

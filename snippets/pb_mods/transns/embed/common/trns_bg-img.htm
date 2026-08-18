@@ -1,34 +1,75 @@
+<cms:ignore>
+    =========================================================================
+    TRANSITION BANNER  -  LAYER 2 of 3: BACKGROUND IMAGE
+    snippets/pb_mods/transns/embed/common/trns_bg-img.htm
 
-<cms:editable type="group" name="trns_img_grp" label="Background Image" not_active=bg_img_chc order='20' > 
-    <cms:editable type='message' name='trnsimg_bg_clr_cstm_msg' order='2'>
-        <h2>Custom Background Color</h2>
-        <h4>These colors will cover the background image and overlay colors. Use Transparancy as needed to see the images.</h4>
+    ORDER BAND: 30-39.
+
+    SELF-CONTAINED: controller, func and slaves all at root in this file.
+
+    INDEPENDENT OF THE COLOR. Previously the image group was gated on
+    bg_clr_opt='img', which meant choosing an image ruled out choosing a
+    color. Now a plain checkbox turns the image on, so a banner can carry
+    color AND image at once - and the transparency dropdown below is what lets
+    the color bleed through, which was the whole point.
+
+    TRANSPARENCY uses dropdowns/img-transparency.htm, NOT bg-transparency.htm.
+    The latter's first option is written 'No Transparancy' with no =value, so it
+    emits its own label as the value and you get opacity: No Transparancy.
+    img-transparency.htm emits real decimals (1.0 down to 0.0) and is what hero
+    already uses. bg-transparency.htm is left untouched - it is outside this
+    directory.
+    =========================================================================
+</cms:ignore>
+
+<cms:editable type='message' name='trns_bgimg_msg' order='30'>
+    <br><hr><br>
+    <h2>Layer 2 &ndash; Background Image</h2>
+    <h4>Sits above the background color and below the overlay. Lower its
+        transparency to let the color below show through.</h4>
+    <hr>
+</cms:editable>
+
+<cms:editable type='row' name='trns_bgimg_opt_row' order='31'>
+    <cms:editable type='checkbox' name='trns_bg_img_opt' label='Use a Background Image'
+        desc='Can be combined with a background color' opt_values='Show Image=1' class='col-sm-6 col-md-4'
+        order='2' />
+</cms:editable>
+
+<cms:func _into='trns_bgimg_chc' trns_bg_img_opt=''>
+    <cms:if "<cms:is '1' in=trns_bg_img_opt />">show<cms:else />hide</cms:if>
+</cms:func>
+
+<cms:editable type='group' name='trns_bgimg_grp' collapsed='1' label='Background Image'
+    not_active=trns_bgimg_chc order='32'>
+
+    <cms:editable type='row' name='trns_bgimg_row' order='5'>
+        <cms:editable type='image' name='trns_bg_img' label='Background Image'
+            desc='16:9 works best - 2560x1440, 1920x1080' width='2560' height='1440' enforce_max='1'
+            show_preview='1' preview_width='120' class='col-md-6' order='2' />
+        <cms:ignore>
+            The alt text is load-bearing, not optional. The theme puts role="img"
+            on the layer that carries this image, so a screen reader announces it
+            as an image and needs a name. Left empty it announces an unlabelled
+            image on every banner.
+        </cms:ignore>
+        <cms:editable type='text' name='trns_bg_img_alt' label='Image Description'
+            desc='For screen readers and SEO. Describe what the image shows.' class='col-md-6' order='4' />
     </cms:editable>
-    <cms:editable type='row' name='trns_img_row'  order='5' >
-        <cms:editable type='image' name='trns_bg_img' label='Section Background Image' desc='16:9 ratio - 2560x1440,1920x1080,etc'
-            width='2560'
-            height='1440'
-            enforce_max='1'
-            show_preview='1'
-            preview_width='75'
-            class='col-md-12'
-            order='2'
-        />
-        <cms:editable type='text' name='trns_bg_img_alt' label='Image Description'  desc='for screen readers and SEO'
-            class='col-md-12'
-            order='3' 
-            />
-        <cms:editable type='dropdown' name='bg_img_pos' label='Image Anchor Position' desc=''
-            opt_values='dropdowns/bg-img-pos.htm'
-            dynamic='opt_values'
-            class='col-md-4 col-sm-6'
-            order='6'
-        />
-        <cms:editable type='dropdown' name='ovrly_clr_opt' label='Image Color Overlay Option' desc=''
-            opt_values='dropdowns/overly-colors.htm'
-            dynamic='opt_values'
-            class='col-md-4 col-sm-6'  
-            order='10'
-        />
+
+    <cms:editable type='row' name='trns_bgimg_fmt_row' order='10'>
+        <cms:editable type='dropdown' name='trns_bg_img_opc' label='Image Transparency'
+            desc='Lower this to let the background color bleed through'
+            opt_values='dropdowns/img-transparency.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+        <cms:ignore>
+            bg-img-anchor.htm is a NEW file. The existing bg-img-pos.htm offers
+            only Top and Bottom, with no way back to center - and .bg-holder's
+            own default is background-position: center, so there was no way to
+            restore it once changed.
+        </cms:ignore>
+        <cms:editable type='dropdown' name='trns_bg_img_pos' label='Image Anchor Position'
+            desc='Which part of the image stays visible when it crops'
+            opt_values='dropdowns/bg-img-anchor.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='4' />
     </cms:editable>
+
 </cms:editable>

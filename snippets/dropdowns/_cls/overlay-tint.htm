@@ -1,0 +1,43 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_cls/overlay-tint.htm
+
+    EMITS   a complete class. Print it as-is. NEVER prefix it.
+    USE AS  class="bg-holder {this}"
+
+    MUST SIT ON THE .bg-holder ELEMENT. Every rule is written
+    .bg-holder.overlay-N:before, so the class does nothing anywhere else. The
+    tint is drawn by a :before pseudo-element pinned to all four edges, which is
+    why it needs no extra markup - no overlay div, no generated CSS, nothing
+    per-tile. That is the whole reason to prefer this file.
+
+    WHAT EACH ONE IS, read out of theme.css around line 23734:
+        overlay      rgba(0, 0, 0, 0.25)
+        overlay-2    rgba(0, 0, 0, 0.4)
+        overlay-1    rgba(0, 0, 0, 0.55)
+        overlay-0    rgba(0, 0, 0, 0.7)
+
+    THE NUMBERING RUNS BACKWARD. overlay-0 is the DARKEST and overlay-2 the
+    lightest, and the unnumbered .overlay is lighter than all three. Nothing in
+    the class names says so. The options below are therefore ordered by how dark
+    they actually are and labeled with the real percentage, so nobody has to
+    remember the inversion. Do not reorder them into numeric order.
+
+    BLACK ONLY. These four are hardcoded rgba black. For any other overlay color
+    use _tok/color-overlay.htm with _tok/bg-opacity.htm, which costs a generated
+    rule per tile but takes any color in the palette.
+
+    NOT AVAILABLE: overlay-gradient. theme.css defines
+    .bg-holder.overlay-gradient:before but the whole rule is COMMENTED OUT, so
+    the class exists in name only and silently does nothing. That is why the
+    transition banners write their own gradient overlay into a per-tile style
+    block instead of using it, and it is why this file offers no gradient option.
+
+    MUST BE GUARDED  "No Tint" emits an empty string.
+    ===========================================================================
+</cms:ignore>
+No Tint=
+|Light Tint (25% black)=overlay
+|Medium Tint (40% black)=overlay-2
+|Strong Tint (55% black)=overlay-1
+|Heaviest Tint (70% black)=overlay-0

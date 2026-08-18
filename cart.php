@@ -203,8 +203,10 @@
                                 </a>
                             </cms:if>
 
-                            <!-- NEW: Return to Shopping Button -->
-                            <a href="<cms:link 'products.php' />" class="btn btn-outline-secondary w-100">
+                            <!-- Return to Shopping Button.
+                                 Was 'products.php', which does not exist in this
+                                 install - the products template is 'product.php'. -->
+                            <a href="<cms:link 'product.php' />" class="btn btn-outline-secondary w-100">
                                 <i class="fas fa-arrow-left me-2"></i> Return to Shopping
                             </a>
                         </div>

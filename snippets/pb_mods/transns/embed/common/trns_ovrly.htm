@@ -1,67 +1,125 @@
-<cms:func _into='ovrly_chc' bg_clr_opt='' ovrly_clr_opt=''>
-    <cms:if bg_clr_opt=="img" && ovrly_clr_opt=="gradient" >
-        show
-    <cms:else />
-        hide
+<cms:ignore>
+    =========================================================================
+    TRANSITION BANNER - LAYER 3 of 3: COLOR OVERLAY
+    snippets/pb_mods/transns/embed/common/trns_ovrly.htm
+
+    ORDER BAND: 40-49.
+
+    SELF-CONTAINED: controller, func and slaves all at root in this file.
+
+    THE OLD WARNING IS GONE. The previous version of this file carried the
+    message:
+
+    "IMPORTANT: Page can only have one image overlay set. Page will cascade
+    the last image overlay set to any image on the page with an overlay."
+
+    That was not a limitation of the design - it was the theme writing
+    .bg-holder.overlay-gradient:before into a plain style block, a GLOBAL
+    selector, so the last banner rendered on the page overwrote every earlier
+    one. The router now scopes every rule to a per-tile id built from
+    cms:random_name, exactly as hero does with local_hero_id, so any number of
+    banners on one page keep their own overlays.
+
+    INDEPENDENT OF THE IMAGE. The old gate was
+    bg_clr_opt=='img' && ovrly_clr_opt=='gradient', which meant a SOLID overlay
+    could never be configured at all - only a gradient one, and only over an
+    image. An overlay over a flat color is perfectly reasonable, so this is now
+    gated on nothing but its own dropdown.
+    =========================================================================
+</cms:ignore>
+
+<cms:editable type='message' name='trns_ovrly_msg' order='40'>
+    <br>
+    <hr><br>
+    <h2>Layer 3 &ndash; Color Overlay</h2>
+    <h4>The top layer, painted over both the color and the image. Use it to
+        knock back a busy photo so text stays readable.</h4>
+    <hr>
+</cms:editable>
+
+<cms:ignore>
+    The original reference here was dropdowns/overly-colors.htm - note the
+    missing "a" - and no such file has ever existed, so this dropdown rendered
+    with no options in it at all.
+
+    Now points at _tok/color-overlay.htm. Two things follow from that. It leads
+    with "No Overlay=" (empty), which per the house rule makes off the default
+    without an opt_selected. And its custom escape stores the value custom, NOT
+    gradient - because bg-gradient is a real class in theme.css, so the old
+    sentinel assembled into working CSS and a missed branch failed quietly.
+    bg-custom matches nothing, so the same mistake now shows itself.
+</cms:ignore>
+<cms:editable type='row' name='trns_ovrly_opt_row' order='41'>
+    <cms:editable type='dropdown' name='trns_ovrly_clr_opt' label='Overlay Color' desc='Leave on "No Overlay" for none'
+        opt_values='dropdowns/_tok/color-overlay.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+    <cms:ignore>
+        A theme color has no alpha channel of its own, so it needs this dropdown
+        or a solid overlay would hide everything beneath it.
+
+        A CUSTOM color does NOT need it. The color pickers below are declared
+        alpha='1', which puts a real transparency slider on the swatch, so the
+        user sets opacity on the color itself - finer control than this list,
+        and per-color on a gradient rather than one value for both. Showing both
+        controls would mean two transparency settings fighting over one layer.
+
+        So the func hides this whenever the color dropdown is on Custom, and
+        again on No Overlay where there is nothing to fade. That is exactly what
+        hero does with ccs_hro_ovrly_opc - same rule, same reason.
+
+        Func sits inside this row, the same level as its slave, matching hero.
+    </cms:ignore>
+    <cms:func _into='trns_ovrly_opc_chc' trns_ovrly_clr_opt=''>
+        <cms:if trns_ovrly_clr_opt='custom' || trns_ovrly_clr_opt=''>hide
+            <cms:else />show
+        </cms:if>
+    </cms:func>
+    <cms:editable type='dropdown' name='trns_ovrly_opc' label='Overlay Transparency'
+        desc='How much of the layers below shows through' opt_values='dropdowns/_tok/bg-opacity.htm'
+        dynamic='opt_values' not_active=trns_ovrly_opc_chc class='col-sm-6 col-md-4' order='4' />
+</cms:editable>
+
+<cms:func _into='trns_ovrly_cust_chc' trns_ovrly_clr_opt=''>
+    <cms:if trns_ovrly_clr_opt='custom'>show
+        <cms:else />hide
     </cms:if>
 </cms:func>
-<cms:editable type='group' name='trns_ovrly_grp' label='Image Color Overlay' not_active=ovrly_chc order='23' >
-    <cms:editable type='message' name='trns_ovrly_clr_cstm_msg' order='2'>
-        <h2>Custom Image Overlay Color</h2>
-        <h3>IMPORTANT: Page can only have one image overlay set. Page will cascade the last image overlay set to any image on the page with an overlay set.</h3>
-        <h4>These colors will cover any image. Set Transparancy below 100% To Reveal any Image</h4>
+
+<cms:editable type='group' name='trns_ovrly_cstm_grp' collapsed='1' label='Overlay Custom Color'
+    not_active=trns_ovrly_cust_chc order='42'>
+
+    <cms:editable type='message' name='trns_ovrly_cstm_msg' order='2'>
+        <h2>Custom Overlay Color</h2>
+        <h4>A solid hex/rgba value, or a two-color gradient. Use the alpha
+            channel on the color itself for fine control.</h4>
     </cms:editable>
-    <cms:editable name='ovrly_clr_cstm_grdt_opt_row' type='row' order='5'>
-        <cms:editable type='dropdown' name='ovrly_clr_grdt_opt' label='Image Overlay' desc=''
-            opt_values='Solid=0|Gradient=1' 
-            class='col-md-3'  
-            order='2'
-        />
-        <cms:func _into='ovrly_clr_grdt_chc' ovrly_clr_grdt_opt=''>
-            <cms:if ovrly_clr_grdt_opt="1" >
-                show
-            <cms:else />
-                hide
-            </cms:if>
-        </cms:func> 
+
+    <cms:editable type='row' name='trns_ovrly_cstm_opt_row' order='5'>
+        <cms:editable type='dropdown' name='trns_ovrly_grdt_opt' label='Solid or Gradient' desc=''
+            opt_values='dropdowns/solid-gradient.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
     </cms:editable>
-    <cms:editable name='trns_ovrly_cstm_row' type='row' order='10'>
-        <cms:editable type='color'
-            name='ovrly_clr_cstm_one'
-            label='Color 1'
-            desc='Solid Color or First of Gradient'
-            color='#000000'
-            alpha='1'
-            width='50%'
-            height='100px'
-            class='col-md-6'
-            order='2'
-        >#00000000</cms:editable>
-        <cms:editable type='color'
-            name='ovrly_clr_cstm_two'
-            label='Color 2'
-            desc='Second Color of Gradient - Ramp'
-            color='#000000'
-            alpha='1'
-            width='50%'
-            height='100px'
-            class='col-md-6'
-            not_active=ovrly_clr_grdt_chc
-            order='4' 
-        >#00000000</cms:editable>
-        <cms:editable type='dropdown'  name='ovrly_cust_grad_split_opt' label='Gradient Split Style' desc='vision division of gradient'
-            opt_values='dropdowns/gradient-split.htm'
-            dynamic='opt_values'
-            separator='@'
-            class='col-md-3'
-            not_active=ovrly_clr_grdt_chc 
-            order='6'
-        />
-        <cms:editable type='checkbox' name='ovrly_clr_cstm_grdt_rvrs_opt' label='Reverse Overlay Gradient Colors' 
-            opt_values='Swap=1' 
-            class='col-md-3' 
-            not_active=ovrly_clr_grdt_chc  
-            order='8'
-        />
+
+    <cms:ignore>Func at group level - the same level as all three of its slaves.</cms:ignore>
+    <cms:func _into='trns_ovrly_grdt_chc' trns_ovrly_grdt_opt=''>
+        <cms:if trns_ovrly_grdt_opt='0'>hide
+            <cms:else />show
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='trns_ovrly_cstm_row' order='10'>
+        <cms:editable type='color' name='trns_ovrly_clr_cstm_one' label='Overlay Color'
+            desc='Solid color, or the first of the gradient' color='#000000' alpha='1' width='50%' height='100px'
+            class='col-sm-6 col-md-4' order='2'>#00000000</cms:editable>
+        <cms:editable type='color' name='trns_ovrly_clr_cstm_two' label='Gradient Color'
+            desc='Second color of the gradient ramp' color='#000000' alpha='1' width='50%' height='100px'
+            not_active=trns_ovrly_grdt_chc class='col-sm-6 col-md-4' order='4'>#00000000</cms:editable>
     </cms:editable>
+
+    <cms:editable type='row' name='trns_ovrly_grdt_row' not_active=trns_ovrly_grdt_chc order='15'>
+        <cms:editable type='dropdown' name='trns_ovrly_grad_split_opt' label='Gradient Direction'
+            desc='Visual division of the gradient' opt_values='dropdowns/gradient-split.htm' dynamic='opt_values'
+            separator='@' class='col-sm-6 col-md-4' order='2' />
+        <cms:editable type='checkbox' name='trns_ovrly_grad_rvrs_opt' label='Reverse Gradient Colors'
+            opt_values='Swap=1' class='col-sm-6 col-md-4' order='4' />
+    </cms:editable>
+
 </cms:editable>

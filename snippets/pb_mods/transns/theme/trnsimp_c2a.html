@@ -1,270 +1,126 @@
-<!-- set custom links-->
-<cms:if trns_c2a_ct_opt!='0'>
-    <cms:if trns_c2a1_lnk='custom'>
-        <cms:set trns_c2a1_link="<cms:show trns_c2a1_cst_lnk />" "global" />
-    <cms:else />
-        <cms:set trns_c2a1_link="<cms:show trns_c2a1_lnk />" "global" />
+<cms:ignore>
+    =========================================================================
+    TRANSITION BANNER  -  call-to-action links
+    snippets/pb_mods/transns/theme/trnsimp_c2a.html
+
+    Every class and href printed here was resolved in router/trns_img_smp.inc.
+    Four slots, generated from one template.
+
+    WHY THE ICON IS RENDERED TWO DIFFERENT WAYS
+
+    On a BUTTON the icon goes in span.btn-brand. theme.css positions that span
+    absolutely against the button box to draw the tinted icon well, and pairs
+    it with the padding reserved by btn-icon. Left or right is decided purely
+    by the class on the anchor, so the span is always printed in the same
+    place - first child - and never moved.
+
+    On a LINK there is no button box, so the well machinery does not apply.
+    The icon is a bare i tag with a margin, and it really does move: before the
+    text for left, after it for right.
+
+    THE EXTERNAL-LINK MARKER is automatic on a custom URL, always on the right,
+    together with target="_blank" and rel="noopener" - the same treatment
+    utlbar/ubr_ctct gives it. The embed hides both icon fields once Custom is
+    chosen, and the router suppresses any icon saved earlier, so the marker is
+    the only icon an external link can ever have.
+
+    The visually-hidden "(opens in a new tab)" rides along with it. The marker
+    is aria-hidden because it is decoration; this sentence is the part a screen
+    reader user actually needs, and it costs nothing visually.
+
+    THE RENDER GUARD tests the label or a RESOLVED icon (tis_icon), not the raw
+    Font Awesome field. On an external URL the router suppresses any icon saved
+    before the destination was switched, so testing the raw field would let a
+    slot with no text still emit an anchor whose only content is the
+    external-link marker - a link with no accessible name at all.
+
+    The old file opened a .row/.col/.btn-group inside a cms:if but closed it
+    unconditionally, so a single-link banner emitted three stray closing divs.
+    One wrapper now, opened and closed by the same test.
+    =========================================================================
+</cms:ignore>
+
+<cms:if tis_has_cta = '1'>
+    <div class="<cms:show tis_c2a_grp_classes />">
+
+    <cms:ignore>--- SLOT 1 ---</cms:ignore>
+    <cms:if trns_c2a_ct_opt ge '1' && (trns_c2a1_txt || tis_c2a1_icon = '1')>
+        <a class="<cms:show tis_c2a1_classes />" href="<cms:show tis_c2a1_href />"<cms:if tis_c2a1_new = '1'> target="_blank" rel="noopener"</cms:if>>
+            <cms:if tis_c2a1_icon = '1' && trns_c2a1_clr != 'link'>
+                <span class="btn-brand"><i class="<cms:show trns_c2a1_icon_fa />" aria-hidden="true"></i></span>
+            </cms:if>
+            <cms:if tis_c2a1_icon = '1' && trns_c2a1_clr = 'link' && tis_c2a1_side = 'left'>
+                <i class="<cms:show trns_c2a1_icon_fa /> me-2" aria-hidden="true"></i>
+            </cms:if>
+            <cms:show trns_c2a1_txt />
+            <cms:if tis_c2a1_icon = '1' && trns_c2a1_clr = 'link' && tis_c2a1_side = 'right'>
+                <i class="<cms:show trns_c2a1_icon_fa /> ms-2" aria-hidden="true"></i>
+            </cms:if>
+            <cms:if tis_c2a1_ext = '1'>
+                <i class="fa-solid fa-arrow-up-right-from-square ms-2 opacity-75" style="font-size:0.85em;" aria-hidden="true"></i>
+            </cms:if>
+            <cms:if tis_c2a1_new = '1'><span class="visually-hidden">(opens in a new tab)</span></cms:if>
+        </a>
     </cms:if>
-    <cms:if trns_c2a2_lnk='custom'>
-        <cms:set trns_c2a2_link="<cms:show trns_c2a2_cst_lnk />" "global" />
-    <cms:else />
-        <cms:set trns_c2a2_link="<cms:show trns_c2a2_lnk />" "global" />
-    </cms:if>
-    <cms:if trns_c2a3_lnk='custom'>
-        <cms:set trns_c2a3_link="<cms:show trns_c2a3_cst_lnk />" "global" />
-    <cms:else />
-        <cms:set trns_c2a3_link="<cms:show trns_c2a3_lnk />" "global" />
-    </cms:if>
-    <cms:if trns_c2a4_lnk='custom'>
-        <cms:set trns_c2a4_link="<cms:show trns_c2a4_cst_lnk />" "global" />
-    <cms:else />
-        <cms:set trns_c2a4_link="<cms:show trns_c2a4_lnk />" "global" />
-    </cms:if>
-    <!-- set inline or block for display of multiple-->
-    <cms:if trns_c2a_mult_ord="" >
 
-
-    </cms:if>
-    <!-- set text or button links-->
-    <cms:if >
-
-
-
+    <cms:ignore>--- SLOT 2 ---</cms:ignore>
+    <cms:if trns_c2a_ct_opt ge '2' && (trns_c2a2_txt || tis_c2a2_icon = '1')>
+        <a class="<cms:show tis_c2a2_classes />" href="<cms:show tis_c2a2_href />"<cms:if tis_c2a2_new = '1'> target="_blank" rel="noopener"</cms:if>>
+            <cms:if tis_c2a2_icon = '1' && trns_c2a2_clr != 'link'>
+                <span class="btn-brand"><i class="<cms:show trns_c2a2_icon_fa />" aria-hidden="true"></i></span>
+            </cms:if>
+            <cms:if tis_c2a2_icon = '1' && trns_c2a2_clr = 'link' && tis_c2a2_side = 'left'>
+                <i class="<cms:show trns_c2a2_icon_fa /> me-2" aria-hidden="true"></i>
+            </cms:if>
+            <cms:show trns_c2a2_txt />
+            <cms:if tis_c2a2_icon = '1' && trns_c2a2_clr = 'link' && tis_c2a2_side = 'right'>
+                <i class="<cms:show trns_c2a2_icon_fa /> ms-2" aria-hidden="true"></i>
+            </cms:if>
+            <cms:if tis_c2a2_ext = '1'>
+                <i class="fa-solid fa-arrow-up-right-from-square ms-2 opacity-75" style="font-size:0.85em;" aria-hidden="true"></i>
+            </cms:if>
+            <cms:if tis_c2a2_new = '1'><span class="visually-hidden">(opens in a new tab)</span></cms:if>
+        </a>
     </cms:if>
 
-    <cms:if trns_c2a_ct_opt ge '2'>
-        <div class="row">
-            <div class="col">
-                <div class="btn-group<cms:show trns_c2a_mult_ord /> mt-4" role="group" aria-label="Call To Action Group for Section" >
-        </cms:if>
-                <cms:if trns_c2a_ct_opt ge '1'><!--1st c2a -->
-                    <a class="
-                        <cms:if trns_frmt_c2a_opt='lnk'>
-                            link-<cms:show trns_c2a1_clr />
-                        <cms:else />
-                            btn <cms:show trns_c2a1_st /> 
-                            btn<cms:show trns_c2a1_clr_out_chk />-<cms:show trns_c2a1_clr /> 
-                            btn<cms:show trns_c2a_sz />
-                        </cms:if> 
-                            fw-<cms:show trns_c2a1_lnk_fnt_wt /> 
-                            font-<cms:show trns_c2a1_lnk_font /> 
-                            fst-<cms:show trns_c2a1_lnk_fnt_st /> 
-                            ls-<cms:show trns_c2a1_lnk_ltr_spc /> 
-                            fs-<cms:show trns_c2a1_lnk_sz /> 
-                            " 
-                            type="button" 
-                            href="<cms:show trns_c2a1_link />" 
-                            <cms:if trns_c2a1_lnk='custom'>target="_blank" </cms:if>
-                            >
-                            <cms:if trns_c2a1_st !='' && trns_c2a1_st !="rounded-capsule" >
-                            <span class="btn-brand">
-                                <i class="<cms:show trns_c2a1_icon_fa />"> </i>
-                            </span>
-                        </cms:if>
-                        <cms:show trns_c2a1_txt />
-                    </a>
-                        <cms:if trns_c2a_ct_opt ge '2'>
-                            <cms:if trns_frmt_c2a_opt="lnk" >
-                                <cms:if trns_c2a_mult_ord !="-vertical">
-                                    <span class="
-                                        d-inline-block
-                                        text-<cms:show trns_lnk_dvd_clr_opt />
-                                        fs-<cms:show trns_c2a1_lnk_sz />
-                                        ms-<cms:show trns_frmt_c2a_mg />
-                                    ">
-                                        <cms:show trns_lnk_dvd_opt /> 
-                                    </span>
-                                </cms:if>
-                            </cms:if>
-                        </cms:if>
-                </cms:if>
-                <cms:if trns_c2a_ct_opt ge '2'><!--2nd c2a -->
-                    <a class="
-                        <cms:if trns_c2a_mult_ord !='-vertical'>
-                            ms-<cms:show trns_frmt_c2a_mg />
-                        <cms:else />
-                            mt-<cms:show trns_frmt_c2a_mg />
-                        </cms:if>
-                        <cms:if trns_frmt_c2a_opt='lnk'>
-                            link-<cms:show trns_c2a2_clr />
-                        <cms:else />
-                            btn <cms:show trns_c2a2_st /> 
-                            btn<cms:show trns_c2a2_clr_out_chk />-<cms:show trns_c2a2_clr /> 
-                            btn<cms:show trns_c2a_sz />
-                        </cms:if> 
-                            fw-<cms:show trns_c2a2_lnk_fnt_wt /> 
-                            font-<cms:show trns_c2a2_lnk_font /> 
-                            fst-<cms:show trns_c2a2_lnk_fnt_st /> 
-                            ls-<cms:show trns_c2a2_lnk_ltr_spc /> 
-                            fs-<cms:show trns_c2a2_lnk_sz /> 
-                            " 
-                            type="button" 
-                            href="<cms:show trns_c2a2_link />" 
-                            <cms:if trns_c2a2_lnk='custom'>target="_blank" </cms:if>
-                            >
-                            <cms:if trns_c2a2_st !='' && trns_c2a2_st !="rounded-capsule" >
-                            <span class="btn-brand">
-                                <i class="<cms:show trns_c2a2_icon_fa />"> </i>
-                            </span>
-                        </cms:if>
-                        <cms:show trns_c2a2_txt />
-                    </a>
-                            <cms:if trns_frmt_c2a_opt="lnk" >
-                                <cms:if trns_c2a_mult_ord !="-vertical">
-                                    <span class="
-                                        d-inline-block
-                                        text-<cms:show trns_lnk_dvd_clr_opt />
-                                        fs-<cms:show trns_c2a1_lnk_sz />
-                                        ms-<cms:show trns_frmt_c2a_mg />
-                                    ">
-                                        <cms:show trns_lnk_dvd_opt /> 
-                                    </span>
-                                </cms:if>
-                            </cms:if>
-                </cms:if>
-                <cms:if trns_c2a_ct_opt ge '3'><!-- 3rd c2a -->
-                    <a class="
-                        <cms:if trns_c2a_mult_ord !='-vertical'>
-                            ms-<cms:show trns_frmt_c2a_mg />
-                        <cms:else />
-                            mt-<cms:show trns_frmt_c2a_mg />
-                        </cms:if>
-                        <cms:if trns_frmt_c2a_opt='lnk'>
-                            link-<cms:show trns_c2a3_clr />
-                        <cms:else />
-                            btn 
-                            <cms:if trns_c2a3_st='rounded-capsule'>
-                                <cms:if trns_c2a3_icn_opt!=''>
-                                    btn-icon 
-                                </cms:if>
-                                <cms:show trns_c2a3_st />
-                            </cms:if>
-                            <cms:if trns_c2a3_icn_opt!=''>
-                                <cms:show trns_c2a3_icn_opt />
-                            </cms:if>
-                            btn<cms:show trns_c2a3_clr_out_chk />-<cms:show trns_c2a3_clr /> 
-                            btn<cms:show trns_c2a_sz />
-                        </cms:if> 
-                            fw-<cms:show trns_c2a3_lnk_fnt_wt /> 
-                            font-<cms:show trns_c2a3_lnk_font /> 
-                            fst-<cms:show trns_c2a3_lnk_fnt_st /> 
-                            ls-<cms:show trns_c2a3_lnk_ltr_spc /> 
-                            fs-<cms:show trns_c2a3_lnk_sz /> 
-                            " 
-                            type="button" 
-                            href="<cms:show trns_c2a3_link />" 
-                            <cms:if trns_c2a3_lnk='custom'>target="_blank" </cms:if>
-                            >
-                        <cms:if trns_c2a3_icn_opt!=''>
-                            <span class="btn-brand">
-                                <i class="<cms:show trns_c2a3_icon_fa />"> </i>
-                            </span>
-                        </cms:if>
-                        <cms:show trns_c2a3_txt />
-                    </a>
-                            <cms:if trns_frmt_c2a_opt="lnk" >
-                                <cms:if trns_c2a_mult_ord !="-vertical">
-                                    <span class="
-                                        d-inline-block
-                                        text-<cms:show trns_lnk_dvd_clr_opt />
-                                        fs-<cms:show trns_c2a1_lnk_sz />
-                                        ms-<cms:show trns_frmt_c2a_mg />
-                                    ">
-                                        <cms:show trns_lnk_dvd_opt /> 
-                                    </span>
-                                </cms:if>
-                            </cms:if>
-                </cms:if>
-                <cms:if trns_c2a_ct_opt ge '4'><!--4th c2a -->
-                    <a class="
-                        <cms:if trns_c2a_mult_ord !='-vertical'>
-                            ms-<cms:show trns_frmt_c2a_mg />
-                        <cms:else />
-                            mt-<cms:show trns_frmt_c2a_mg />
-                        </cms:if>
-                        <cms:if trns_frmt_c2a_opt='lnk'>
-                            link-<cms:show trns_c2a4_clr />
-                        <cms:else />
-                            btn <cms:show trns_c2a4_st /> 
-                            btn<cms:show trns_c2a4_clr_out_chk />-<cms:show trns_c2a4_clr /> 
-                            btn<cms:show trns_c2a_sz />
-                        </cms:if> 
-                            fw-<cms:show trns_c2a4_lnk_fnt_wt /> 
-                            font-<cms:show trns_c2a4_lnk_font /> 
-                            fst-<cms:show trns_c2a4_lnk_fnt_st /> 
-                            ls-<cms:show trns_c2a4_lnk_ltr_spc /> 
-                            fs-<cms:show trns_c2a4_lnk_sz /> 
-                            " 
-                            type="button" 
-                            href="<cms:show trns_c2a4_link />" 
-                            <cms:if trns_c2a4_lnk='custom'>target="_blank" </cms:if>
-                            >
-                            <cms:if trns_c2a4_st !='' && trns_c2a4_st !="rounded-capsule" >
-                            <span class="btn-brand">
-                                <i class="<cms:show trns_c2a4_icon_fa />"> </i>
-                            </span>
-                        </cms:if>
-                        <cms:show trns_c2a4_txt />
-                        
-                    </a>
-                </cms:if>
+    <cms:ignore>--- SLOT 3 ---</cms:ignore>
+    <cms:if trns_c2a_ct_opt ge '3' && (trns_c2a3_txt || tis_c2a3_icon = '1')>
+        <a class="<cms:show tis_c2a3_classes />" href="<cms:show tis_c2a3_href />"<cms:if tis_c2a3_new = '1'> target="_blank" rel="noopener"</cms:if>>
+            <cms:if tis_c2a3_icon = '1' && trns_c2a3_clr != 'link'>
+                <span class="btn-brand"><i class="<cms:show trns_c2a3_icon_fa />" aria-hidden="true"></i></span>
+            </cms:if>
+            <cms:if tis_c2a3_icon = '1' && trns_c2a3_clr = 'link' && tis_c2a3_side = 'left'>
+                <i class="<cms:show trns_c2a3_icon_fa /> me-2" aria-hidden="true"></i>
+            </cms:if>
+            <cms:show trns_c2a3_txt />
+            <cms:if tis_c2a3_icon = '1' && trns_c2a3_clr = 'link' && tis_c2a3_side = 'right'>
+                <i class="<cms:show trns_c2a3_icon_fa /> ms-2" aria-hidden="true"></i>
+            </cms:if>
+            <cms:if tis_c2a3_ext = '1'>
+                <i class="fa-solid fa-arrow-up-right-from-square ms-2 opacity-75" style="font-size:0.85em;" aria-hidden="true"></i>
+            </cms:if>
+            <cms:if tis_c2a3_new = '1'><span class="visually-hidden">(opens in a new tab)</span></cms:if>
+        </a>
+    </cms:if>
 
-
-
-
-
-            <!-- need to figure out if it will be block or in-line display 'd' set those vars and then build each new button up to 4-->
-
-
-  
-            <!-- 3 equal size blocked button links from education-->
-            <!--<div class="container">
-                <div class="row justify-content-end align-items-center vh-50 py-8">
-                    <div class="col-sm-6 col-md-4 col-lg-3">
-                        <a class="btn d-block w-100 " href="#!">
-                            Apply
-                        </a>
-                        <a class="btn d-block w-100 mt-2" href="#!" >
-                            Request info
-                        </a>
-                        <a class="btn d-block w-100 mt-2" href="#!" >
-                            Visit
-                        </a>
-                    </div>
-                </div>
-            -->
-            <!-- 4 inline text links from education-->
-            <!--
-                <div class="row">
-                    <div class="col">
-                        <a class="link-300 fs-8 me-3" href="#!">
-                            Visitor
-                            <span class="ms-3 d-inline-block">|</span>
-                        </a>
-                        <a class="link-300 fs-8 me-3" href="#!">
-                            Information
-                            <span class="ms-3 d-inline-block">|</span>
-                        </a>
-                        <a class="link-300 fs-8 me-3" href="#!">
-                            Virtual tours
-                            <span class="ms-3 d-inline-block">|</span>
-                        </a>
-                        <a class="link-300 fs-8 me-3" href="#!">
-                            Online Courses
-                            <span class="ms-3 d-inline-block">|</span>
-                        </a>
-                        <a class="link-300 fs-8 me-3" href="#!">
-                            Maps &amp; Directions
-                        </a>
-                    </div>
-                </div>     
-            -->
-
-                </div>
-            <cms:if trns_c2a_ct_opt ge '2'>
-
-            </div>
-        </div>
-   </div>
+    <cms:ignore>--- SLOT 4 ---</cms:ignore>
+    <cms:if trns_c2a_ct_opt ge '4' && (trns_c2a4_txt || tis_c2a4_icon = '1')>
+        <a class="<cms:show tis_c2a4_classes />" href="<cms:show tis_c2a4_href />"<cms:if tis_c2a4_new = '1'> target="_blank" rel="noopener"</cms:if>>
+            <cms:if tis_c2a4_icon = '1' && trns_c2a4_clr != 'link'>
+                <span class="btn-brand"><i class="<cms:show trns_c2a4_icon_fa />" aria-hidden="true"></i></span>
+            </cms:if>
+            <cms:if tis_c2a4_icon = '1' && trns_c2a4_clr = 'link' && tis_c2a4_side = 'left'>
+                <i class="<cms:show trns_c2a4_icon_fa /> me-2" aria-hidden="true"></i>
+            </cms:if>
+            <cms:show trns_c2a4_txt />
+            <cms:if tis_c2a4_icon = '1' && trns_c2a4_clr = 'link' && tis_c2a4_side = 'right'>
+                <i class="<cms:show trns_c2a4_icon_fa /> ms-2" aria-hidden="true"></i>
+            </cms:if>
+            <cms:if tis_c2a4_ext = '1'>
+                <i class="fa-solid fa-arrow-up-right-from-square ms-2 opacity-75" style="font-size:0.85em;" aria-hidden="true"></i>
+            </cms:if>
+            <cms:if tis_c2a4_new = '1'><span class="visually-hidden">(opens in a new tab)</span></cms:if>
+        </a>
+    </cms:if>
+    </div>
 </cms:if>
-</cms:if>               

@@ -1,312 +1,414 @@
+<!-- ============================================================ -->
+<!-- ALTERNATIVE SINGLE PRODUCT DISPLAY                          -->
+<!-- Framework: Posh "project detail" layout                     -->
+<!-- Data access mirrors the original single product template.   -->
+<!-- Inline popup_edit affordances are deliberately absent -      -->
+<!-- they get added once the layout is signed off.               -->
+<!-- ============================================================ -->
+
 <cms:set target_product_id="<cms:gpc 'p' method='get' />" />
 
 <cms:pages masterpage='product.php' id=target_product_id limit='1'>
-	<section class="py-3 py-lg-5">
-		<div class="container mt-2 mt-lg-4">
+
+	<!-- ======================================================== -->
+	<!-- INVENTORY LOGIC - resolved once, before any markup        -->
+	<!-- ======================================================== -->
+	<cms:set allow_purchase='1' />
+	<cms:set max_limit='' />
+
+	<cms:if track_inventory>
+		<cms:if in_stock && in_stock gt '0'>
+			<cms:set max_limit=in_stock />
+		<cms:else />
+			<cms:set allow_purchase='0' />
+		</cms:if>
+	</cms:if>
+
+
+	<!-- ======================================================== -->
+	<!-- WISHLIST BACKEND LISTENER                                 -->
+	<!-- Outside the purchase gate so an out-of-stock item can     -->
+	<!-- still be saved for later.                                 -->
+	<!-- ======================================================== -->
+	<cms:set my_wishlist_action="<cms:gpc 'wishlist_action' method='post' />" />
+	<cms:if my_wishlist_action='save_item' && k_logged_in && ccs_auth_uid >
+		<cms:set my_prod_id="<cms:gpc 'product_id' method='post' />" />
+		<cms:set my_vars="<cms:gpc 'variants' method='post' />" />
+		<cms:set my_vars_display="<cms:gpc 'variants_display' method='post' />" />
+
+		<!-- wish_masterpage comes from k_template_name, which is correct here
+		     because this listener runs inside the cms:pages loop above. No need
+		     to trust the browser for it.
+		     wish_user_id comes from ccs_auth_uid, NOT k_user_id - see
+		     snippets/utils/auth_uid.htm for why that distinction matters. -->
+		<cms:db_persist
+			_masterpage='wishlist.php'
+			_mode='create'
+			k_page_title="Wishlist-<cms:show ccs_auth_uid />-<cms:show my_prod_id />"
+			wish_user_id=ccs_auth_uid
+			wish_masterpage=k_template_name
+			wish_product_id=my_prod_id
+			wish_variants=my_vars
+			wish_variants_display=my_vars_display
+		/>
+
+		<cms:if k_error>
+			<cms:abort>ERROR: <cms:show k_error /></cms:abort>
+		<cms:else />
+			<cms:abort>WISHLIST_SUCCESS</cms:abort>
+		</cms:if>
+	</cms:if>
+
+
+	<!-- ======================================================== -->
+	<!-- SEO :: Product structured data                            -->
+	<!-- Built with json_encode rather than string-stitching, so   -->
+	<!-- quotes, backslashes and the newlines in the itm_desc      -->
+	<!-- textarea are escaped correctly. Reading values through    -->
+	<!-- $CTX->get() avoids interpolating page data into PHP       -->
+	<!-- source. Same pattern as assets/css/user.php.              -->
+	<!-- Currency comes from cart config.php: USD.                 -->
+	<!-- ======================================================== -->
+	<script type="application/ld+json">
+	<cms:php>
+		global $CTX;
+
+		$sku = trim( (string) $CTX->get('itm_sku') );
+		if( !strlen($sku) ) $sku = (string) $CTX->get('k_page_id');
+
+		$price = number_format( (float) $CTX->get('pp_price'), 2, '.', '' );
+
+		$avail = $CTX->get('allow_purchase')
+				 ? 'https://schema.org/InStock'
+				 : 'https://schema.org/OutOfStock';
+
+		$link = (string) $CTX->get('k_page_link');
+
+		$ld = array(
+			'@context' => 'https://schema.org',
+			'@type'    => 'Product',
+			'name'     => (string) $CTX->get('k_page_title'),
+			'sku'      => $sku,
+			'url'      => $link,
+			'offers'   => array(
+				'@type'         => 'Offer',
+				'price'         => $price,
+				'priceCurrency' => 'USD',
+				'availability'  => $avail,
+				'url'           => $link,
+			),
+		);
+
+		$desc = trim( (string) $CTX->get('itm_desc') );
+		if( strlen($desc) ) $ld['description'] = $desc;
+
+		$img = trim( (string) $CTX->get('itm_img_mn') );
+		if( strlen($img) ) $ld['image'] = $img;
+
+		echo json_encode(
+			$ld,
+			JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE
+		);
+	</cms:php>
+	</script>
+
+
+	<!-- ============================================================ -->
+	<!-- SCOPED STYLES                                                -->
+	<!-- cms:pp_option_values builds its controls as raw strings and   -->
+	<!-- never reads $params, so what it emits carries NO class:       -->
+	<!--   cart.php:947  select name="osN"          - dropdown variant -->
+	<!--   cart.php:919  input type=text name="osN" - *TEXT* variant   -->
+	<!--   cart.php:934  label.radio-label          - '*' variant      -->
+	<!-- The theme's .form-select therefore never applies. Styled      -->
+	<!-- structurally here rather than hand-rolling the markup, which  -->
+	<!-- would mean re-implementing Couch's price/radio/text logic.    -->
+	<!-- Kept local per the house rule: never patch theme.css.         -->
+	<!-- ============================================================ -->
+	<style>
+		.cart-form select,
+		.cart-form input[type="text"] {
+			display: block;
+			width: 100%;
+			padding: 0.75rem 1rem;
+			font-size: 0.85rem;
+			font-weight: 600; /* theme.css uses var(--ccs-font-weight-semi-bold) here,
+			                     but that variable is never defined - .fw-semi-bold = 600 */
+			line-height: 1.5;
+			color: #464a4c;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			background-color: var(--ccs-quaternary-bg);
+			border: var(--ccs-border-width) solid var(--ccs-gray-300);
+			border-radius: var(--ccs-border-radius-sm);
+			-webkit-box-shadow: var(--ccs-box-shadow-inset);
+			box-shadow: var(--ccs-box-shadow-inset);
+			-webkit-transition: border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
+			transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+		}
+
+		/* Chevron matches the one theme.css uses for .form-select */
+		.cart-form select {
+			padding-right: 2.75rem;
+			cursor: pointer;
+			background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23555555' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+			background-repeat: no-repeat;
+			background-position: right 1rem center;
+			background-size: 14px 10px;
+		}
+
+		.cart-form select:hover {
+			border-color: var(--ccs-gray-500);
+		}
+
+		.cart-form select:focus,
+		.cart-form input[type="text"]:focus,
+		.cart-form input[type="number"]:focus {
+			border-color: var(--ccs-input-focus-border-color-global);
+			outline: 0;
+			-webkit-box-shadow: var(--ccs-box-shadow-inset), 0 0 0 0.25rem rgba(0, 122, 255, 0.25);
+			box-shadow: var(--ccs-box-shadow-inset), 0 0 0 0.25rem rgba(0, 122, 255, 0.25);
+		}
+
+		/* Match the qty box to the variant control beside it */
+		.cart-form input[type="number"] {
+			padding: 0.75rem 1rem;
+			font-size: 0.85rem;
+			border-radius: var(--ccs-border-radius-sm);
+		}
+
+		/* '*' modifier renders radios instead of a dropdown */
+		.cart-form .radio-label {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			margin-right: 1.25rem;
+			font-weight: 400;
+			cursor: pointer;
+		}
+
+		/* fieldset must not reintroduce the browser's default box */
+		.p2-buy-fieldset {
+			border: 0;
+			padding: 0;
+			margin: 0;
+			min-width: 0;
+		}
+
+		/* Visible keyboard focus everywhere in the buy box and specs.
+		   :focus-visible only fires for keyboard users, so mouse users
+		   see no change. */
+		.p2-buy-box :focus-visible,
+		.p2-specs :focus-visible {
+			outline: 3px solid var(--ccs-input-focus-border-color-global);
+			outline-offset: 2px;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.product-slider .swiper-wrapper {
+				-webkit-transition-duration: 0ms !important;
+				transition-duration: 0ms !important;
+			}
+			.cart-form select,
+			.cart-form input {
+				-webkit-transition: none;
+				transition: none;
+			}
+		}
+
+		/* ---------------------------------------------------------- */
+		/* ADMIN EDIT AFFORDANCES                                      */
+		/* popup_edit emits <a class="k_inline{class}">{link_text}</a> */
+		/* (inline.php:147). Nothing in the codebase styles .k_inline, */
+		/* so the class param is free to carry .btn utilities. Styling */
+		/* the anchor and keeping link_text to an icon avoids nesting  */
+		/* a <button> inside an <a>, which is invalid and produces two */
+		/* focus stops for one control.                                */
+		/* .btn's own --ccs-btn-padding-x is 2.5rem, far too wide for  */
+		/* a round icon button, so both padding vars are overridden.   */
+		/* ---------------------------------------------------------- */
+		.p2-edit {
+			--ccs-btn-padding-x: 0;
+			--ccs-btn-padding-y: 0;
+			width: 2rem;
+			height: 2rem;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			flex: 0 0 auto;
+			line-height: 1;
+			font-size: 0.8rem;
+			text-decoration: none;
+			vertical-align: middle;
+		}
+	</style>
+
+
+	<!-- ======================================================== -->
+	<!-- ADMIN EDIT GATE                                           -->
+	<!-- Set once rather than repeating the compound test at every  -->
+	<!-- button. Same capture-a-cms:if idiom the page frame uses    -->
+	<!-- for its no_cache attribute.                                -->
+	<!-- ======================================================== -->
+	<cms:set p2_can_edit="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>1</cms:if>" />
+
+
+	<!-- ======================================================== -->
+	<!-- The variants button is captured because the form it       -->
+	<!-- belongs beside does not exist when the item is out of     -->
+	<!-- stock, and pp_product_options renders nothing when        -->
+	<!-- pp_options is empty. Without this the admin could never    -->
+	<!-- add the first variant.                                     -->
+	<!-- ======================================================== -->
+	<cms:capture into='p2_variants_btn'>
+		<cms:if p2_can_edit>
+			<cms:popup_edit 'group_variants|explain_options|pp_options'
+				height='680' width='900'
+				class='btn btn-sm btn-light shadow-sm rounded-circle p2-edit'
+				link_text="<i class='fas fa-sliders-h' aria-hidden='true'></i><span class='visually-hidden'>Edit product variants</span>" />
+		</cms:if>
+	</cms:capture>
+
+
+	<!-- ======================================================== -->
+	<!-- The wishlist control is captured once and shown in both   -->
+	<!-- the in-stock grid and the out-of-stock branch, so the      -->
+	<!-- markup exists in exactly one place.                        -->
+	<!-- ======================================================== -->
+	<cms:capture into='p2_wishlist_btn'>
+		<cms:if k_logged_in>
+			<button type="button" id="save-wishlist-btn"
+				class="btn btn-outline-primary fw-bold flex-fill"
+				style="--ccs-btn-padding-x: 1rem;">
+				<i class="far fa-heart me-1" aria-hidden="true"></i>Save for Later<span class="visually-hidden"> - <cms:show k_page_title /></span>
+			</button>
+		<cms:else />
+			<a href="<cms:login_link />"
+				class="btn btn-outline-secondary fw-bold flex-fill d-flex align-items-center justify-content-center"
+				style="--ccs-btn-padding-x: 1rem;">
+				<i class="far fa-heart me-1" aria-hidden="true"></i>Log in to Save for Later
+			</a>
+		</cms:if>
+	</cms:capture>
+
+
+	<section class="py-5" aria-labelledby="p2-product-title">
+		<div class="container">
+
+			<!-- ================================================ -->
+			<!-- ROW 1 :: IDENTITY - title, SKU, description      -->
+			<!-- ================================================ -->
 			<div class="row">
-				<div class="col-12 col-lg ps-lg-8 order-2 order-lg-2">
-	
-    				<cms:popup_edit 'track_inventory | in_stock' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Inventory' title='Edit Stock Levels'><i class='fas fa-boxes'></i></button>" />
+				<div class="col-12 col-xl-8">
 
-					<div class="text-warning mb-2">
-						<span class="fas fa-star me-1" style="width:15px"></span>
-						<span class="fas fa-star me-1" style="width:15px"></span>
-						<span class="fas fa-star me-1" style="width:15px"></span>
-						<i class="fas fa-star-half-alt me-1" style="width:15px"></i>
-						<span class="far fa-star me-0" style="width:15px"></span>
-					</div>
-					
-					<!-- Title & Edit Details -->
-					<div class="d-flex align-items-center mb-2">
-						<h1 class="fs-6 mb-0 me-2"><cms:show k_page_title /></h1>
-						<cms:popup_edit 'k_page_title | feature | value | itm_desc' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Details' title='Edit Details'><i class='fas fa-pencil-alt'></i></button>" />
-					</div>
-
-					<!-- Feature and Value Badges -->
-					<cms:if feature>
-						<div class="badge text-bg-warning me-2">Feature Item</div>
-					</cms:if>
-					<cms:if value>
-						<div class="badge text-bg-info text-white">Great Value</div>
+					<!-- Badges can both be off, so the edit button lives -->
+					<!-- outside their gates - otherwise it would vanish   -->
+					<!-- along with the flags it exists to switch back on. -->
+					<cms:if feature || value || p2_can_edit>
+						<div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+							<cms:if feature>
+								<span class="badge text-bg-warning">Feature Item</span>
+							</cms:if>
+							<cms:if value>
+								<span class="badge text-bg-info text-white">Great Value</span>
+							</cms:if>
+							<cms:if p2_can_edit>
+								<cms:popup_edit 'group_visibility|feature|value|noshow'
+									height='520' width='840'
+									class='btn btn-sm btn-light shadow-sm rounded-circle p2-edit'
+									link_text="<i class='fas fa-eye' aria-hidden='true'></i><span class='visually-hidden'>Edit visibility and listing badges</span>" />
+							</cms:if>
+						</div>
 					</cms:if>
 
-					<!-- Pricing Section Header & Edit Button -->
-					<div class="d-flex align-items-center mt-3 mb-1">
-						<span class="text-700 me-2 fw-bold">
-							<cms:if old_price>Now Only<cms:else />Only</cms:if>
+					<div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+						<h1 id="p2-product-title" class="fs-6 fs-md-5 mb-0"><cms:show k_page_title /></h1>
+						<cms:if p2_can_edit>
+							<cms:popup_edit 'k_page_title'
+								height='480' width='840'
+								class='btn btn-sm btn-light shadow-sm rounded-circle p2-edit'
+								link_text="<i class='fas fa-pencil-alt' aria-hidden='true'></i><span class='visually-hidden'>Edit product name</span>" />
+						</cms:if>
+					</div>
+
+					<!-- SKU is data, not a section heading -->
+					<p class="text-700 fw-semi-bold mb-4 d-flex align-items-center flex-wrap gap-2">
+						<span>SKU:
+							<cms:if itm_sku>
+								<cms:show itm_sku />
+							<cms:else />
+								<cms:show k_page_id />
+							</cms:if>
 						</span>
-						<cms:popup_edit 'group_price | group_variants | group_shipping' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Pricing' title='Edit Pricing & Cart'><i class='fas fa-pencil-alt'></i></button>" />
-					</div>
-
-					<div class="pb-3 mb-3 border-bottom border-300"> 
-						<span class="fs-7">$<cms:number_format pp_price /></span>
-						<cms:if old_price>
-							&nbsp;<del class="text-muted">$<cms:number_format old_price /></del>
+						<cms:if p2_can_edit>
+							<cms:popup_edit 'itm_sku'
+								height='480' width='760'
+								class='btn btn-sm btn-light shadow-sm rounded-circle p2-edit'
+								link_text="<i class='fas fa-barcode' aria-hidden='true'></i><span class='visually-hidden'>Edit product SKU</span>" />
 						</cms:if>
-						<cms:if pp_requires_shipping == '0'>
-							&nbsp;<strong class="text-success"><i class="fas fa-download"></i> Digital / No Shipping</strong>
-						</cms:if>
-					</div>
+					</p>
 
-					<h6 class="mb-3">SKU: 
-						<cms:if itm_sku>
-							<cms:show itm_sku />
-						<cms:else />
-							<cms:show k_page_id />
-						</cms:if>
-					</h6>
-
-					<!-- Description Section -->
-					<h5 class="mt-4"><cms:show k_page_title /> Description</h5>
-					<div class="mb-4">
-						<cms:show itm_desc />
-					</div>
-
-					<!-- 1. Evaluate Inventory Logic -->
-					<cms:set allow_purchase='1' />
-					<cms:set max_limit='' />
-
-					<cms:if track_inventory>
-						<!-- If tracking is ON, evaluate the stock number -->
-						<cms:if in_stock && in_stock gt '0'>
-							<cms:set max_limit=in_stock />
-						<cms:else />
-							<cms:set allow_purchase='0' />
-						</cms:if>
-					</cms:if>
-
-					<!-- 2. Render Form or Out of Stock Badge -->
-					<cms:if allow_purchase>
-
-						<cms:pp_product_form id="add-to-cart-form" class="mb-4 d-flex flex-wrap align-items-center gap-3 cart-form">
-
-							<cms:if k_error>
-								<div class="alert alert-danger w-100 mb-3">
-									<strong>COUCH REJECTED THE CART:</strong> <cms:show k_error />
-								</div>
-							</cms:if>
-
-							<cms:pp_product_options>
-								<div class="form-group mb-md-0 d-md-flex align-items-md-center me-3">
-									<label class="mb-md-0 fw-bold me-2"><cms:show option_name />:</label>
-									<cms:pp_option_values class="form-select form-select-sm" style="min-width: 7.5rem;" />
-								</div>
-							</cms:pp_product_options>
-
-							<div class="form-group mb-md-0 d-md-flex align-items-md-center">
-								<label class="mb-md-0 fw-bold" for="qty">Quantity: </label>
-								<!-- Dynamically insert the max attribute ONLY if a limit exists -->
-								<input type="number" class="ms-md-2 form-control" id="qty" name="qty" value="1" min="1" <cms:if max_limit>max="<cms:show max_limit />"</cms:if> style="min-width: 5rem;">
-							</div>
-
-							<button type="submit" class="btn btn-danger ms-3">Add to Cart</button>
-
-							<!-- Optional UI: Only show the stock remaining if tracking is turned on -->
-							<cms:if track_inventory>
-								<div class="w-100 mt-2">
-									<small class="text-success"><i class="fas fa-check-circle"></i> <cms:show in_stock /> in stock</small>
-								</div>
-							</cms:if>
-
-						</cms:pp_product_form>
-						<!-- ========================================== -->
-						<!-- WISHLIST BUTTON  -->
-						<!-- ========================================== -->
-						<!-- ========================================== -->
-						<!-- 1. COUCH BACKEND LISTENER (Listens for AJAX) -->
-						<!-- ========================================== -->
-						<cms:set my_wishlist_action="<cms:gpc 'wishlist_action' method='post' />" />
-						<cms:if my_wishlist_action='save_item' && k_logged_in >
-							<!-- Grab the data sent by our Javascript -->
-							<cms:set my_prod_id="<cms:gpc 'product_id' method='post' />" />
-							<cms:set my_vars="<cms:gpc 'variants' method='post' />" />
-
-							<!-- Create a new record in the wishlist database -->
-							<cms:db_persist
-								_masterpage='wishlist.php'
-								_mode='create'
-								k_page_title="Wishlist-<cms:show k_user_id />-<cms:show my_prod_id />"
-								wish_user_id=k_user_id
-								wish_product_id=my_prod_id
-								wish_variants=my_vars
-							/>
-
-							<!-- Check if Couch rejected the save -->
-							<cms:if k_error>
-								<cms:abort>ERROR: <cms:show k_error /></cms:abort>
+					<cms:if itm_desc || p2_can_edit>
+						<div class="d-flex align-items-start flex-wrap gap-2">
+							<cms:if itm_desc>
+								<p class="lead text-700 mb-0"><cms:show itm_desc /></p>
 							<cms:else />
-								<!-- Stop page load and send success flag back to browser -->
-								<cms:abort>WISHLIST_SUCCESS</cms:abort>
+								<p class="lead text-500 fst-italic mb-0">No description has been added yet.</p>
 							</cms:if>
-						</cms:if>
-
-						<!-- ========================================== -->
-						<!-- 2. FRONTEND BUTTON & JAVASCRIPT              -->
-						<!-- ========================================== -->
-						<div class="mt-3">
-							<cms:if k_logged_in>
-
-								<button type="button" id="save-wishlist-btn" class="btn btn-sm btn-outline-primary fw-bold">
-									<i class="far fa-heart me-1"></i> Save for Later
-								</button>
-								<div id="wishlist_feedback" class="mt-2" style="display:none; font-size: 0.9rem; font-weight: bold;"></div>
-
-								<script>
-								document.addEventListener('DOMContentLoaded', function() {
-									const btn = document.getElementById('save-wishlist-btn');
-
-									if(btn) {
-										btn.addEventListener('click', function(e) {
-											e.preventDefault();
-
-											// 1. Locate the exact cart form you updated earlier
-											const cartForm = document.getElementById('add-to-cart-form');
-											const feedback = document.getElementById('wishlist_feedback');
-
-											if(!cartForm) {
-												console.error('Cart form not found. Check the ID.');
-												return;
-											}
-
-											// 2. Read all the data currently selected in the form
-											const formData = new FormData(cartForm);
-											let variantString = '';
-
-											// 3. Loop through the form data to build our variant string
-											formData.forEach(function(value, key) {
-												// Skip the quantity field (usually named 'qty' or 'quantity' in CouchCart)
-												// and skip hidden submit fields. We only want the options!
-												if(key.toLowerCase() !== 'qty' && key.toLowerCase() !== 'quantity' && key !== 'submit') {
-													variantString += key + ': ' + value + ' | ';
-												}
-											});
-
-											// Clean up the trailing ' | ' from the end of the string
-											if(variantString.endsWith(' | ')) {
-												variantString = variantString.slice(0, -3);
-											}
-
-											// 4. Bundle the final data to send to CouchCMS
-											const sendData = new FormData();
-											sendData.append('wishlist_action', 'save_item');
-											sendData.append('product_id', '<cms:show k_page_id />');
-											sendData.append('variants', variantString);
-
-											// 5. Update UI to show processing
-											btn.disabled = true;
-											btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Saving...';
-
-											// 6. Send silently to the background listener we built above
-											fetch(window.location.href, {
-												method: 'POST',
-												body: sendData,
-												headers: { 'X-Requested-With': 'XMLHttpRequest' }
-											})
-											.then(response => response.text())
-											.then(data => {
-												if(data.includes('WISHLIST_SUCCESS')) {
-													// Update Button state
-													btn.className = 'btn btn-sm btn-outline-secondary fw-bold';
-													btn.innerHTML = '<i class="fas fa-check me-1"></i> Saved to Wishlist';
-													// Show success message
-													feedback.className = 'mt-2 text-success';
-													feedback.innerHTML = '<i class="fas fa-check-circle me-1"></i> Added with your selected options!';
-
-													// Update the header badge live!
-													const badge = document.getElementById('wishlist-count-badge');
-													if(badge) {
-														badge.innerText = parseInt(badge.innerText || 0) + 1;
-													}
-												} else {
-													// Fallback error
-													feedback.className = 'mt-2 text-danger';
-													feedback.innerHTML = '<i class="fas fa-times-circle me-1"></i> Error saving to wishlist.';
-												}
-												feedback.style.display = 'block';
-												})
-												.catch(error => {
-													btn.disabled = false;
-													btn.innerHTML = '<i class="far fa-heart me-1"></i> Save for Later';
-												});
-										});
-									}
-								});
-							</script>
-
-							<cms:else />
-								<a href="<cms:login_link />" class="btn btn-sm btn-outline-secondary fw-bold">
-									<i class="far fa-heart me-1"></i> Log in to Save for Later
-								</a>
-							</cms:if>
-						</div>
-					
-					
-					<cms:else />
-
-						<!-- Fallback if tracking is ON and inventory is 0 (or blank) -->
-						<div class="alert alert-secondary d-inline-block px-4 py-3 border border-300">
-							<h5 class="mb-0 text-muted"><i class="fas fa-box-open me-2"></i> Temporarily Out of Stock</h5>
-						</div>
-
-					</cms:if>
-
-
-					<!-- Mosaic Accordion: Specifications -->
-					<!-- Only shows if specs exist, OR if user is admin (so they have the button to add them) -->
-					<cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>" || k_user_access_level ge '7'>
-						<div class="mt-5">
-							<div class="d-flex align-items-center mb-3">
-								<h5 class="mb-0 me-2">Specifications & Highlights</h5>
-								<cms:popup_edit 'itm_specs_msc' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Specs' title='Edit Specifications'><i class='fas fa-pencil-alt'></i></button>" />
-							</div>
-
-							<cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>">
-								<div class="accordion" id="specsAccordion">
-									<cms:show_mosaic 'itm_specs_msc'>
-										<div class="accordion-item">
-											<h2 class="accordion-header" id="heading<cms:show k_count />">
-												<!-- The first item gets 'true' and no 'collapsed' class -->
-												<button class="accordion-button <cms:if k_count!='1'>collapsed</cms:if>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<cms:show k_count />" aria-expanded="<cms:if k_count=='1'>true<cms:else />false</cms:if>" aria-controls="collapse<cms:show k_count />">
-													<cms:show spec_title />
-												</button>
-											</h2>
-											<!-- The first item gets 'show' to remain open by default -->
-											<div id="collapse<cms:show k_count />" class="accordion-collapse collapse <cms:if k_count=='1'>show</cms:if>" aria-labelledby="heading<cms:show k_count />" data-bs-parent="#specsAccordion">
-												<div class="accordion-body fw-light text-wrap overflow-hidden">
-													<cms:show spec_content />
-												</div>
-											</div>
-										</div>
-									</cms:show_mosaic>
-								</div>
+							<cms:if p2_can_edit>
+								<cms:popup_edit 'itm_desc'
+									height='560' width='860'
+									class='btn btn-sm btn-light shadow-sm rounded-circle p2-edit'
+									link_text="<i class='fas fa-align-left' aria-hidden='true'></i><span class='visually-hidden'>Edit product description</span>" />
 							</cms:if>
 						</div>
 					</cms:if>
+
 				</div>
+			</div>
 
-				<div class="col-6 col-sm-5 col-md-6 col-lg-4 mx-auto ms-lg-0 order-1 order-lg-1 mb-3 mb-lg-0">
-					<!-- Media / Images Edit Button -->
-					<div class="d-flex justify-content-end mb-2">
-						<cms:popup_edit 'itm_img_mn | itm_sldrs_msc' hide_fields='itm_img_grp' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Media' title='Edit Media & Images'><i class='fas fa-pencil-alt'></i></button>" />
-					</div>
+			<!-- ================================================ -->
+			<!-- ROW 2 :: IMAGE CAROUSEL                          -->
+			<!-- Centred rather than full-bleed: source images are -->
+			<!-- 1000x1000, so 12 cols would upscale them.         -->
+			<!-- theme.js builds the thumbnail strip from these    -->
+			<!-- img tags at runtime, which is why no thumb markup -->
+			<!-- appears here.                                     -->
+			<!-- ================================================ -->
+			<div class="row mt-5">
+				<div class="col-12 col-md-10 col-lg-8 mx-auto">
 
-					<div class="swiper-theme-container product-slider" data-swiper-theme-container="data-swiper-theme-container">
+					<cms:if p2_can_edit>
+						<div class="d-flex justify-content-end mb-2">
+							<cms:popup_edit 'itm_img_mn|pp_itm_thumb|itm_list_thumb|itm_sldrs_msc'
+								height='780' width='980'
+								class='btn btn-sm btn-light shadow-sm rounded-circle p2-edit'
+								link_text="<i class='fas fa-images' aria-hidden='true'></i><span class='visually-hidden'>Edit main image and gallery slides</span>" />
+						</div>
+					</cms:if>
+
+					<div class="swiper-theme-container product-slider"
+						data-swiper-theme-container="data-swiper-theme-container"
+						role="group"
+						aria-roledescription="carousel"
+						aria-label="Product images">
+
 						<div class="swiper" data-swiper='{"effect":"fade","fadeEffect":{"crossFade":true},"spaceBetween":5,"loop":true,"loopedSlides":5,"thumb":{"spaceBetween":5,"slidesPerView":5,"loop":true,"freeMode":true,"grabCursor":true,"loopedSlides":5,"centeredSlides":true,"slideToClickedSlide":true,"watchSlidesVisibility":true,"watchSlidesProgress":true},"slideToClickedSlide":true}'>
 							<div class="swiper-wrapper">
 
-									<div class="swiper-slide">
-										<cms:if itm_img_mn>
-											<img class="w-100" src="<cms:show itm_img_mn />" alt="<cms:show k_page_title />" />
-										<cms:else />
-											<!-- Fallback if the client forgot to upload an image -->
-											<img class="w-100" src="<cms:show k_admin_link />uploads/image/noimg.png" alt="Image Not Available" />
-										</cms:if>
-									</div>
-
+								<div class="swiper-slide">
+									<cms:if itm_img_mn>
+										<img class="w-100" src="<cms:show itm_img_mn />" alt="<cms:show k_page_title />" />
+									<cms:else />
+										<img class="w-100" src="<cms:show k_admin_link />uploads/image/noimg.png" alt="No image available for <cms:show k_page_title />" />
+									</cms:if>
+								</div>
 
 								<cms:show_mosaic 'itm_sldrs_msc'>
 									<div class="swiper-slide">
-										<img class="w-100" src="<cms:show itm_slider_img />" alt="<cms:show itm_slider_img_alt />" />
+										<img class="w-100" src="<cms:show itm_slider_img />"
+											alt="<cms:if itm_slider_img_alt><cms:show itm_slider_img_alt /><cms:else /><cms:show k_page_title /> - additional view <cms:show k_count /></cms:if>" />
 									</div>
 								</cms:show_mosaic>
 
@@ -318,14 +420,401 @@
 							</div>
 						</div>
 					</div>
+
 				</div>
-			
 			</div>
-		</div>
-	<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >
-				<a href="<cms:link 'add-product.php' />?pid=<cms:show k_page_id />" class="btn btn-warning fw-bold">
-					Edit Whole Product
-				</a>
+
+			<!-- ================================================ -->
+			<!-- ROW 3 :: BUY BOX (left) + SPECS ACCORDION (right)-->
+			<!-- ================================================ -->
+			<div class="row mt-8">
+
+				<!-- ------------------------------------------- -->
+				<!-- LEFT :: price and purchase                   -->
+				<!-- ------------------------------------------- -->
+				<div class="col-12 col-md-6 col-lg-5 p2-buy-box">
+
+					<h2 id="p2-buy-heading" class="fs-8 mb-0">
+						<cms:if old_price>Now Only<cms:else />Only</cms:if>
+					</h2>
+					<hr class="short text-400" aria-hidden="true" />
+
+					<!-- Strikethrough alone carries no meaning to a screen -->
+					<!-- reader, so both figures get a spoken label.         -->
+					<p class="mb-2 d-flex align-items-center flex-wrap gap-2">
+						<span>
+							<span class="visually-hidden">Current price:</span>
+							<span class="fs-7 fw-semi-bold">$<cms:number_format pp_price /></span>
+							<cms:if old_price>
+								<span class="visually-hidden">Original price:</span>
+								<del class="text-700 ms-2">$<cms:number_format old_price /></del>
+							</cms:if>
+						</span>
+						<cms:if p2_can_edit>
+							<cms:popup_edit 'group_price|pp_price|pp_tax_class|explain_discount_scale|pp_discount_scale|old_price'
+								height='740' width='940'
+								class='btn btn-sm btn-light shadow-sm rounded-circle p2-edit'
+								link_text="<i class='fas fa-tag' aria-hidden='true'></i><span class='visually-hidden'>Edit pricing, tax class and quantity discounts</span>" />
+						</cms:if>
+					</p>
+
+					<!-- Shipping line is conditional but its button is not: -->
+					<!-- pp_requires_shipping='1' hides the text, and a button -->
+					<!-- inside that gate could never be used to change it back. -->
+					<cms:if (pp_requires_shipping == '0') || p2_can_edit>
+						<div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+							<cms:if pp_requires_shipping == '0'>
+								<span class="text-success fw-semi-bold">
+									<i class="fas fa-download me-1" aria-hidden="true"></i>Digital / No Shipping
+								</span>
+							</cms:if>
+							<cms:if p2_can_edit>
+								<cms:popup_edit 'group_shipping|pp_requires_shipping|explain_shipping_scale|pp_shipping_scale'
+									height='660' width='900'
+									class='btn btn-sm btn-light shadow-sm rounded-circle p2-edit'
+									link_text="<i class='fas fa-truck' aria-hidden='true'></i><span class='visually-hidden'>Edit shipping requirement and charges</span>" />
+							</cms:if>
+						</div>
+					</cms:if>
+
+					<!-- Same reasoning: the stock line only renders when -->
+					<!-- tracking is on, so its button sits outside both gates. -->
+					<cms:if (allow_purchase && track_inventory) || p2_can_edit>
+						<div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+							<cms:if allow_purchase>
+								<cms:if track_inventory>
+									<span class="text-success fw-semi-bold">
+										<i class="fas fa-check-circle me-1" aria-hidden="true"></i><cms:show in_stock /> in stock
+									</span>
+								</cms:if>
+							</cms:if>
+							<cms:if p2_can_edit>
+								<cms:popup_edit 'track_inventory|in_stock'
+									height='500' width='760'
+									class='btn btn-sm btn-light shadow-sm rounded-circle p2-edit'
+									link_text="<i class='fas fa-boxes' aria-hidden='true'></i><span class='visually-hidden'>Edit inventory tracking and stock count</span>" />
+							</cms:if>
+						</div>
+					</cms:if>
+
+
+					<cms:if allow_purchase>
+
+						<!-- aria-labelledby passes straight through to the      -->
+						<!-- <form> element (cart.php:832 forwards every param). -->
+						<cms:pp_product_form id="add-to-cart-form" class="cart-form" aria-labelledby="p2-buy-heading">
+
+							<cms:if k_error>
+								<div class="alert alert-danger mb-3" role="alert">
+									<strong>Could not add to cart:</strong> <cms:show k_error />
+								</div>
+							</cms:if>
+
+							<fieldset class="p2-buy-fieldset">
+								<legend class="visually-hidden">Purchase options for <cms:show k_page_title /></legend>
+
+								<!-- ------------------------------------------------ -->
+								<!-- QUADRANTS                                         -->
+								<!--   upper-left  Quantity   upper-right Save for Later-->
+								<!--   lower-left  Variant    lower-right Add to Cart   -->
+								<!-- Built column-major (inputs column, then actions    -->
+								<!-- column) for two reasons:                           -->
+								<!--   1. the select ends up with nothing beneath it,   -->
+								<!--      so its open list can no longer cover a button; -->
+								<!--   2. focus order stays inputs-then-actions instead  -->
+								<!--      of interleaving a button between two fields.   -->
+								<!-- ------------------------------------------------ -->
+								<div class="row g-3">
+
+									<!-- LEFT COLUMN :: inputs -->
+									<div class="col-12 col-sm-6">
+
+										<div class="mb-3">
+											<label class="d-block fw-bold mb-1" for="qty">Quantity</label>
+											<input type="number" class="form-control" id="qty" name="qty"
+												value="1" min="1" step="1" inputmode="numeric"
+												<cms:if max_limit>max="<cms:show max_limit />" aria-describedby="p2-qty-help"</cms:if>>
+											<cms:if max_limit>
+												<span id="p2-qty-help" class="visually-hidden">Maximum <cms:show max_limit /> available.</span>
+											</cms:if>
+										</div>
+
+										<cms:pp_product_options>
+											<!-- The label WRAPS the control on purpose.            -->
+											<!-- cart.php:947 emits a bare select with no id, so    -->
+											<!-- implicit association is the only reliable way to   -->
+											<!-- name it. Passing class= here does nothing: the     -->
+											<!-- handler never reads $params.                       -->
+											<div class="mb-3">
+												<label class="d-block fw-bold mb-1">
+													<span class="d-block mb-1"><cms:show option_name /></span>
+													<cms:pp_option_values />
+												</label>
+											</div>
+										</cms:pp_product_options>
+
+										<!-- Outside the loop above, which renders nothing -->
+										<!-- when this product has no variants defined.    -->
+										<cms:if p2_can_edit>
+											<div class="mb-3 d-flex align-items-center gap-2">
+												<cms:show p2_variants_btn />
+												<span class="fs-10 text-500">Variants</span>
+											</div>
+										</cms:if>
+
+									</div>
+
+									<!-- RIGHT COLUMN :: actions -->
+									<div class="col-12 col-sm-6 d-flex flex-column gap-3">
+
+										<cms:show p2_wishlist_btn />
+
+										<button type="submit" class="btn btn-danger fw-bold flex-fill"
+											style="--ccs-btn-padding-x: 1rem;">
+											Add to Cart<span class="visually-hidden"> - <cms:show k_page_title /></span>
+										</button>
+
+									</div>
+
+								</div>
+							</fieldset>
+
+						</cms:pp_product_form>
+
+					<cms:else />
+
+						<div class="alert alert-secondary px-4 py-3 border border-300 mb-3">
+							<h3 class="fs-9 mb-0 text-muted">
+								<i class="fas fa-box-open me-2" aria-hidden="true"></i>Temporarily Out of Stock
+							</h3>
+						</div>
+
+						<div class="d-flex flex-column gap-3">
+							<cms:show p2_wishlist_btn />
+						</div>
+
+						<!-- The cart form is absent here, so the variant control -->
+						<!-- would be unreachable without this second placement.  -->
+						<cms:if p2_can_edit>
+							<div class="mt-3 d-flex align-items-center gap-2">
+								<cms:show p2_variants_btn />
+								<span class="fs-10 text-500">Variants</span>
+							</div>
+						</cms:if>
+
+					</cms:if>
+
+
+					<cms:if k_logged_in>
+
+						<!-- role="status" already implies aria-live="polite"; -->
+						<!-- declaring both can double-announce.                -->
+						<div id="wishlist_feedback" class="mt-2 fs-10 fw-bold" role="status"></div>
+
+						<script>
+						document.addEventListener('DOMContentLoaded', function() {
+							var btn = document.getElementById('save-wishlist-btn');
+							if(!btn) { return; }
+
+							btn.addEventListener('click', function(e) {
+								e.preventDefault();
+
+								var cartForm = document.getElementById('add-to-cart-form');
+								var feedback = document.getElementById('wishlist_feedback');
+								var variantString = '';
+
+								// The cart form is absent when the item is out of stock.
+								// Wishlisting still proceeds, just with no variants.
+								//
+								// FORMAT IS LOAD-BEARING: assets/js/ccs_js.js:261-269 splits
+								// this string on '|' then ':' and injects each pair back into
+								// the cart FormData as a field name/value. The keys must stay
+								// the raw control names (os0, on0, pp_id) and the values the
+								// raw option indices - readable text would break Move to Cart.
+								var displayParts = [];
+
+								if(cartForm) {
+									var formData = new FormData(cartForm);
+									formData.forEach(function(value, key) {
+										var k = key.toLowerCase();
+										if(k !== 'qty' && k !== 'quantity' && key !== 'submit') {
+											variantString += key + ': ' + value + ' | ';
+										}
+									});
+									if(variantString.endsWith(' | ')) {
+										variantString = variantString.slice(0, -3);
+									}
+
+									// Readable copy for humans, built from what the user can
+									// actually see. os<N> is the chosen option, on<N> is that
+									// option's name, so pair them up and use the <option> text
+									// rather than its index. Stored separately - the raw string
+									// above must stay machine-parseable.
+									var ctrls = cartForm.querySelectorAll('select[name^="os"], input[type="text"][name^="os"]');
+									Array.prototype.forEach.call(ctrls, function (ctrl) {
+										var idx = ctrl.name.substring(2);
+										var nameInput = cartForm.querySelector('input[name="on' + idx + '"]');
+										var label = nameInput ? nameInput.value : ('Option ' + idx);
+										var shown = (ctrl.tagName === 'SELECT' && ctrl.selectedIndex > -1)
+													? ctrl.options[ctrl.selectedIndex].text.trim()
+													: ctrl.value;
+										if (shown) { displayParts.push(label + ': ' + shown); }
+									});
+								}
+
+								var sendData = new FormData();
+								sendData.append('wishlist_action', 'save_item');
+								sendData.append('product_id', '<cms:show k_page_id />');
+								sendData.append('variants', variantString);
+								sendData.append('variants_display', displayParts.join(', '));
+
+								btn.disabled = true;
+								btn.setAttribute('aria-busy', 'true');
+								btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1" aria-hidden="true"></i>Saving...';
+
+								fetch(window.location.href, {
+									method: 'POST',
+									body: sendData,
+									headers: { 'X-Requested-With': 'XMLHttpRequest' }
+								})
+								.then(function(response) { return response.text(); })
+								.then(function(data) {
+									btn.removeAttribute('aria-busy');
+									if(data.indexOf('WISHLIST_SUCCESS') !== -1) {
+										// class list must match the markup above, or the
+										// button resizes out of the action column on success
+										btn.className = 'btn btn-outline-secondary fw-bold flex-fill';
+										btn.innerHTML = '<i class="fas fa-check me-1" aria-hidden="true"></i>Saved to Wishlist';
+										feedback.className = 'mt-2 fs-10 fw-bold text-success';
+										feedback.textContent = 'Added to your wishlist with the options you selected.';
+
+										// Move the badge NOW, then reconcile. Waiting on the
+										// server round trip made the save feel broken; remove
+										// and move-to-cart always felt right because they do
+										// this same local arithmetic first.
+										if(typeof window.bumpWishlistCount === 'function') {
+											window.bumpWishlistCount(1);
+										} else {
+											var badge = document.getElementById('wishlist-count-badge');
+											if(badge) {
+												badge.textContent = (parseInt(badge.textContent, 10) || 0) + 1;
+											}
+										}
+
+										// Re-render the panel so the new item is in the list.
+										// LIST ONLY (false): the count query can still report
+										// the pre-save value for a beat, and letting it write
+										// the badge here made the number flash up then snap
+										// back. The bump above is authoritative; the server
+										// reconciles next time the panel is opened.
+										if(typeof window.refreshWishlistModal === 'function') {
+											window.refreshWishlistModal(false);
+										}
+									} else {
+										btn.disabled = false;
+										btn.innerHTML = '<i class="far fa-heart me-1" aria-hidden="true"></i>Save for Later';
+										feedback.className = 'mt-2 fs-10 fw-bold text-danger';
+										feedback.textContent = 'Sorry, that could not be saved to your wishlist. Please try again.';
+									}
+								})
+								.catch(function(error) {
+									btn.disabled = false;
+									btn.removeAttribute('aria-busy');
+									btn.innerHTML = '<i class="far fa-heart me-1" aria-hidden="true"></i>Save for Later';
+									feedback.className = 'mt-2 fs-10 fw-bold text-danger';
+									feedback.textContent = 'Sorry, that could not be saved to your wishlist. Please try again.';
+								});
+							});
+						});
+						</script>
+
+					</cms:if>
+
+				</div>
+
+				<!-- ------------------------------------------- -->
+				<!-- RIGHT :: Specifications & Highlights         -->
+				<!-- ------------------------------------------- -->
+				<div class="col-12 col-md-6 col-lg-7 mt-5 mt-md-0">
+
+					<!-- Admins see the section even when empty, otherwise there -->
+					<!-- is no button anywhere to add the first spec category.   -->
+					<cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>" || p2_can_edit>
+
+						<section class="p2-specs" aria-labelledby="p2-specs-heading">
+
+							<!-- The product name rides inside the h2 as an eyebrow rather -->
+							<!-- than sitting in its own heading. By the time you scroll   -->
+							<!-- here the h1 is off screen, so this restores context - but  -->
+							<!-- a second heading with the same text would give screen      -->
+							<!-- reader users a duplicate entry in the heading list. This   -->
+							<!-- way the section's accessible name becomes                  -->
+							<!-- "<product> Specifications & Highlights" in one go.         -->
+							<div class="d-flex align-items-start flex-wrap gap-2">
+								<h2 id="p2-specs-heading" class="fs-8 mb-0">
+									<span class="d-block fs-10 fw-semi-bold text-700 text-uppercase ls-1 mb-1"><cms:show k_page_title /></span>
+									Specifications &amp; Highlights
+								</h2>
+								<cms:if p2_can_edit>
+									<cms:popup_edit 'itm_specs_msc'
+										height='800' width='980'
+										class='btn btn-sm btn-light shadow-sm rounded-circle p2-edit'
+										link_text="<i class='fas fa-list-ul' aria-hidden='true'></i><span class='visually-hidden'>Edit specification categories</span>" />
+								</cms:if>
+							</div>
+							<hr class="short text-400" aria-hidden="true" />
+
+							<cms:if "<cms:show_mosaic 'itm_specs_msc'><cms:show k_count /></cms:show_mosaic>">
+							<div class="accordion" id="p2SpecsAccordion">
+								<cms:show_mosaic 'itm_specs_msc'>
+									<div class="accordion-item">
+										<h3 class="accordion-header" id="p2SpecHead<cms:show k_count />">
+											<button class="accordion-button <cms:if k_count!='1'>collapsed</cms:if>" type="button"
+												data-bs-toggle="collapse"
+												data-bs-target="#p2SpecPanel<cms:show k_count />"
+												aria-expanded="<cms:if k_count=='1'>true<cms:else />false</cms:if>"
+												aria-controls="p2SpecPanel<cms:show k_count />">
+												<cms:show spec_title />
+											</button>
+										</h3>
+										<div id="p2SpecPanel<cms:show k_count />"
+											class="accordion-collapse collapse <cms:if k_count=='1'>show</cms:if>"
+											aria-labelledby="p2SpecHead<cms:show k_count />"
+											data-bs-parent="#p2SpecsAccordion">
+											<div class="accordion-body fw-light text-wrap overflow-auto">
+												<cms:show spec_content />
+											</div>
+										</div>
+									</div>
+								</cms:show_mosaic>
+							</div>
+							<cms:else />
+								<p class="text-500 fst-italic mb-0">
+									No specification categories yet. Use the edit button above to add the first one.
+								</p>
+							</cms:if>
+
+						</section>
+
+					</cms:if>
+
+				</div>
+
+			</div>
+
+			<!-- Admin: jump to the full product form -->
+			<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >
+				<div class="row mt-5">
+					<div class="col-12">
+						<a href="<cms:link 'add-product.php' />?pid=<cms:show k_page_id />" class="btn btn-warning fw-bold">
+							Edit Whole Product
+						</a>
+					</div>
+				</div>
 			</cms:if>
+
+		</div>
+		<!-- end of .container-->
 	</section>
+
 </cms:pages>

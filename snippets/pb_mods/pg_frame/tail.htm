@@ -18,7 +18,21 @@
             window.cartModalUrl = "<cms:link 'cart-modal.php' />";
 			window.wishlistModalUrl = "<cms:link 'wishlist-modal.php' />";
         </script>
-		<script src="<cms:show k_site_link />assets/js/ccs_js.js?v=15"></script>
+		<!-- v20: cart-modal fetches GET -> POST (must match the corrected
+		     POST-only guard); wishlist listeners moved off the offcanvas onto
+		     document so the saved-items page works; refreshWishlistModal()
+		     added so the panel re-renders instead of going stale; and both
+		     count badges now re-query on write instead of holding a
+		     reference captured once at DOMContentLoaded.
+		     v21: both save paths bump the badge locally before the refresh,
+		     matching what remove/move already did, and service saves touch
+		     the badge and panel at all for the first time.
+		     v22: after a mutation the refresh updates the LIST ONLY. The count
+		     query can lag the change by a beat, and letting it write the badge
+		     made the number flash to the right value then snap back. Local
+		     arithmetic owns the badge for actions; the server reconciles on
+		     panel open and page load. -->
+		<script src="<cms:show k_site_link />assets/js/ccs_js.js?v=22"></script>
 		<script src="<cms:show k_site_link />vendors/typed.js/typed.umd.js"></script>
 	</body>
 </html>

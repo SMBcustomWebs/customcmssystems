@@ -1,0 +1,40 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/color-btn.htm
+
+    EMITS   a bare color token.
+    USE AS  btn-{token}          solid button
+            btn-outline-{token}  outline button
+            pair it with _tok/btn-fill.htm, which emits the stem
+            "btn" or "btn-outline", and concatenate: {stem}-{token}
+
+    WHY THIS LIST  every color here is verified to exist in theme.css as BOTH
+    .btn-{token} AND .btn-outline-{token}. That is the whole point of the file:
+    fill and color are chosen independently, so any combination the user can
+    build must resolve to a real rule. Adding a color that only has a solid
+    variant would let the user pick Outline and get a dead class.
+
+    NOT INCLUDED
+      grays 100-1200  no .btn-{n} rules exist at all, solid or outline
+      oxford          .btn-oxford exists but .btn-outline-oxford does not
+      link            a button is never a plain text link. That choice is
+                      row-level and lives in _val/c2a-format.htm, so the
+                      value "link" can never assemble into .btn-link and
+                      silently render a Bootstrap link-button
+
+    NO EMPTY OPTION   a button with no color is not a button. The first entry
+    is the default, per the house rule that opt_selected is never used.
+    ===========================================================================
+</cms:ignore>
+Site Theme Primary=primary
+|Site Theme Secondary=secondary
+|Site Theme Tertiary=tertiary
+|Site Theme Quaternary=quaternary
+|Site Theme Light=light
+|Site Theme Dark=dark
+|White=white
+|Black=black
+|Success=success
+|Info=info
+|Warning=warning
+|Danger=danger

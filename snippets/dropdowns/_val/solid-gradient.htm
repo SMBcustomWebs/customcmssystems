@@ -1,0 +1,32 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_val/solid-gradient.htm
+
+    EMITS   a data key. NOT a class.
+    USE AS  a router branch, and as the controller for the second color field:
+
+        cms:if {field} eq 'gradient'   build linear-gradient from both colors
+        cms:else                       build a flat background-color
+
+    ALSO THE CONTROLLER for whichever fields only make sense on a gradient - the
+    second color and the angle. Guard those with a cms:func on this field, so
+    picking Solid hides them rather than leaving the user to wonder which of two
+    colors is being used.
+
+    VALUES ARE WORDS, NOT 0 AND 1  the older dropdowns/solid-gradient.htm stores
+    Solid=0 and Gradient=1. Two problems with digits here. A test written
+    cms:if {field} treats the string "0" as present-and-truthy in Couch while
+    reading as false to anyone skimming the file, and a func that returns the
+    field's raw value lands on 0 or 1, which are two of the eight tokens the
+    conditional-field compiler reads as show and hide - so the polarity of an
+    unrelated control can flip by accident. Words cannot do either.
+
+    ALWAYS EMITS SOMETHING  no empty option. Solid leads.
+
+    REPLACES  dropdowns/solid-gradient.htm. Repointing a field here means the
+    router's test changes from eq '1' to eq 'gradient', so update both together
+    or the gradient branch stops firing.
+    ===========================================================================
+</cms:ignore>
+Solid=solid
+|Gradient=gradient

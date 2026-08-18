@@ -1,0 +1,27 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/align-h.htm
+
+    EMITS   a bare flex or text alignment token.
+    USE AS  text-{token}             aligns text inside a block
+            justify-content-{token}  distributes flex children across the main
+                                     axis, so this is the one that moves a row
+                                     of buttons left, center or right
+            align-self-{token}       one flex child against the cross axis
+
+    ALWAYS EMITS SOMETHING  no empty option, so no cms:if guard is needed.
+    "Left" is first because it is the reading default for this site.
+
+    DELIBERATELY ONLY THREE VALUES  justify-content also accepts between,
+    around and evenly, but text- and align-items- do not. One token that is
+    valid behind every one of those prefixes is what makes the file safe to
+    reuse. A field that genuinely needs space-between wants a _cls file that
+    emits the finished justify-content- class, not this one.
+
+    REPLACES  dropdowns/h-align.htm and dropdowns/jst-align.htm, which hold
+    identical content under two names. Point new fields here.
+    ===========================================================================
+</cms:ignore>
+Left=start
+|Center=center
+|Right=end
