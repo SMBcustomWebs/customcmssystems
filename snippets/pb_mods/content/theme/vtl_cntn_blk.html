@@ -1,0 +1,118 @@
+<cms:ignore>
+    =========================================================================
+    VERTICAL TITLE CONTENT BLOCK  -  front-end render
+    snippets/pb_mods/content/theme/vtl_cntn_blk.html
+
+    Resolved by the tile's _pb_template='content/theme/vtl_cntn_blk'
+    in blocks/content/cntnt_blk_1.php.
+
+    ONE <section>, ONE row, three columns: rotated title rail, main richtext,
+    side richtext. Widths are the source's own - col-lg-2 / col-lg-6 / col-lg-4
+    - except that the main column widens to col-lg-8 when the title is removed
+    so the row still totals 12.
+
+    Every content gate is OR'd against vtl_edit_on so an empty tile still shows
+    its edit affordances - see the router.
+    =========================================================================
+</cms:ignore>
+
+<!-- ======================================================= -->
+<!-- COMPILE ROUTER VARIABLES                                -->
+<!-- ======================================================= -->
+<cms:embed 'pb_mods/content/router/vtl_cntn_blk.inc' />
+
+<cms:if vtl_has_content = '1' || vtl_edit_on = '1'>
+
+<!-- ============================================-->
+<!-- <section> begin ============================-->
+<section class="position-relative <cms:show vtl_sec_spacing /> <cms:show vtl_sec_bg />"<cms:if vtl_sec_inline_bg != ''> style="<cms:show vtl_sec_inline_bg />"</cms:if>>
+
+    <cms:ignore>
+        FRONT-END EDIT - background, spacing and the title button, pinned to the
+        section's own top-left. Must sit here rather than inside .container: the
+        container is centred with a max-width, so start-0 there is not the
+        section edge.
+    </cms:ignore>
+    <cms:embed 'pb_mods/content/inline/vtl_section_edit.txt' />
+
+    <div class="container">
+        <div class="row">
+
+            <cms:if vtl_show_title = '1'>
+
+                <cms:ignore>
+                    TITLE, ROTATED - large screens only.
+
+                    position-relative is an addition, not source markup, and it
+                    is load-bearing: .perpendicular is position:absolute with
+                    bottom:0, so without a positioned parent it anchors to
+                    whichever ancestor happens to be positioned and the title
+                    lands somewhere unrelated to its own column. Pinning it here
+                    makes the rail the reference box, which is what the rotation
+                    and bottom:0 were written for.
+
+                    The source's lh-0 is dropped: .perpendicular already sets
+                    line-height: 0 itself.
+                </cms:ignore>
+                <div class="col-lg-2 d-none d-lg-block position-relative">
+                    <div class="perpendicular">
+                        <cms:show vtl_ttl_open_v /><cms:show ccs_vtl_cntn_ttl_txt /><cms:show vtl_ttl_close />
+                    </div>
+                </div>
+
+                <cms:ignore>
+                    THE SAME TITLE, HORIZONTAL - below lg only.
+
+                    The source markup duplicated this text by hand; both now come
+                    from the one field, so they cannot drift apart.
+
+                    Duplicating a heading in the DOM is safe for assistive tech
+                    here because d-none / d-lg-none resolve to display:none, which
+                    removes the element from the accessibility tree entirely - so
+                    exactly one of the two is ever exposed, never both.
+                </cms:ignore>
+                <div class="col-12 d-lg-none">
+                    <cms:show vtl_ttl_open_m /><cms:show ccs_vtl_cntn_ttl_txt /><cms:show vtl_ttl_close />
+                </div>
+
+            </cms:if>
+
+
+            <cms:ignore>
+                MAIN COLUMN. col-lg-6, or col-lg-8 when the title rail is off.
+                The source's two sub-heading + paragraph pairs come from inside
+                the richtext now.
+            </cms:ignore>
+            <cms:if ccs_vtl_cntn_main || vtl_edit_on = '1'>
+                <div class="<cms:show vtl_main_col /> position-relative <cms:show vtl_main_align /> <cms:show vtl_main_classes />">
+
+                    <cms:embed 'pb_mods/content/inline/vtl_main_edit.txt' />
+
+                    <cms:show ccs_vtl_cntn_main />
+                </div>
+            </cms:if>
+
+
+            <cms:ignore>
+                SIDE COLUMN. col-lg-4 with the source's ps-lg-5 indent kept, so
+                it stays visually separated from the main column at lg and above
+                and closes up when the columns stack.
+            </cms:ignore>
+            <cms:if ccs_vtl_cntn_side || vtl_edit_on = '1'>
+                <div class="col-lg-4 ps-lg-5 position-relative <cms:show vtl_side_align /> <cms:show vtl_side_classes />">
+
+                    <cms:embed 'pb_mods/content/inline/vtl_side_edit.txt' />
+
+                    <cms:show ccs_vtl_cntn_side />
+                </div>
+            </cms:if>
+
+        </div>
+    </div>
+    <!-- end of .container-->
+
+</section>
+<!-- <section> close ============================-->
+<!-- ============================================-->
+
+</cms:if>

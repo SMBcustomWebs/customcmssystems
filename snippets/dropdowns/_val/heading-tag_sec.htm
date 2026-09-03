@@ -1,0 +1,37 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_val/heading-tag_sec.htm
+
+    EMITS   a raw HTML tag name - h2, h3, h4, h5, h6 or p.
+    USE AS  the element name itself, opened and closed around the heading text.
+            It is data, not a class, which is why it lives in _val.
+
+    THE SECTION-LEVEL PARTNER to the existing heading-tag_sub.htm. That file
+    starts at h3 and is correct for a block that sits BETWEEN other sections,
+    where h2 would claim an outline level it has not earned. This one starts at
+    h2 and is correct for a block that IS a major landmark of the page - a
+    contact section, an about section, the one thing the page is for.
+
+    Same labels, same order, same wording as heading-tag_sub.htm on every line
+    they share. Pick by what the block is, not by how big you want the words:
+    size is a separate control and always has been.
+
+    H1 IS ABSENT AND STAYS ABSENT. A page has exactly one h1 and it belongs to
+    the page, not to a block dropped into it. heading-size.htm does offer h1;
+    that file predates the rule and should not be pointed at from a PageBuilder
+    tile.
+
+    NO EMPTY FIRST OPTION, on purpose. Every other file in this folder leads
+    with a "leave it alone" choice, because emitting no class is a real and
+    useful outcome. An element NAME has no such outcome - a tag has to be
+    something or the markup does not close. So the consumer never needs a
+    guard, and the field should carry h2 as its starting value in the body of
+    the editable rather than being defaulted in a router.
+    ===========================================================================
+</cms:ignore>
+Section Heading (H2)=h2
+|Sub-Heading (H3)=h3
+|Small Heading (H4)=h4
+|Smaller Heading (H5)=h5
+|Smallest Heading (H6)=h6
+|Plain Paragraph (no heading)=p

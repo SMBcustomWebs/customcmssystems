@@ -1,4 +1,30 @@
 <!DOCTYPE html>
+<cms:ignore>
+    CONSENT IS RESOLVED FIRST, BEFORE ANYTHING ELSE IN THE DOCUMENT.
+
+    utils/consent.htm reads the visitor's stored choice out of their cookies and
+    sets ccs_consent_set / _analytics / _marketing. Everything downstream that
+    could reach a third party gates on those, so this has to run before any of
+    it - hence line 2 rather than somewhere tidier.
+
+    It emits no markup. It only answers the question "what is this person
+    willing to load", so that the rest of the page can be built accordingly
+    rather than built and then apologised for.
+</cms:ignore>
+<cms:embed 'utils/consent.htm' />
+
+<cms:ignore>
+    STABLE USER ID, set for every page that uses this frame.
+    utils/auth_uid.htm sets ccs_auth_uid from $AUTH->user->id, and empty for
+    anonymous. Anything that asks "who is this" reads that, never k_user_id -
+    the reasoning is in the snippet itself.
+
+    Previously the only file embedding it was wishlist-modal.php, so every
+    other consumer (the product page save gate, saved-items.php, the offcanvas
+    panel on first load) read it as empty.
+</cms:ignore>
+<cms:embed 'utils/auth_uid.htm' />
+
 <cms:set ccs_thm="<cms:get_custom_field 'ccs_gl_site_thm_opt' masterpage='globals.php' />" />
 
 <cms:set bs_theme_mode='light' />
@@ -7,113 +33,71 @@
 </cms:if>
 
 <html data-bs-theme="<cms:show bs_theme_mode />" lang="en-US" dir="ltr">
-	<head>
+
+<head>
     <!-- =======change when site goes live==============-->
-    <meta name="robots" content="noindex, nofollow">
+    <cms:ignore>
+        <meta name="robots" content="noindex, nofollow">
+    </cms:ignore>
     <!-- ===============================================-->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="<cms:get_field 'ccs_gl_site_desc' masterpage='globals.php' />">
     <cms:ignore>
-        ============================================================
-        PER-PAGE SEO IDENTITY
-        ------------------------------------------------------------
-        head.htm is embedded as the FIRST thing in every template
-        (tl_if_pb_emb.html:6, cart.php:7, checkout.php:7), which is
-        before any cms:pages loop runs. The context here is therefore
-        the ACTUAL requested page, so k_page_title / k_page_link are
-        the real page's values, not a loop's.
+        k_page_link, NOT k_site_link. k_site_link is the site root, so the old
+        form told every search engine that every page on this site was a
+        duplicate of the home page. Left that way at launch, it keeps
+        everything except the root out of the index.
 
-        k_page_link is set for every view type, not just single pages
-        (page.php:2025), so it is safe as the canonical everywhere.
-
-        Previously canonical was hardcoded to k_site_link and the
-        title to the global site name, which meant every page on the
-        site declared itself a duplicate of the home page. That is
-        the strongest possible signal to de-index everything, and it
-        also contradicted the Product structured data on the product
-        pages. Masked today only by the noindex above.
-        ============================================================
+        k_page_link resolves to the current page on a clonable template and to
+        the template's own URL otherwise, which is what a canonical is for. On
+        the home page it still resolves to the root, so nothing is lost there.
     </cms:ignore>
-    <cms:set ccs_site_name="<cms:get_field 'ccs_gl_site_name' masterpage='globals.php' />" />
-    <cms:set ccs_site_desc="<cms:get_field 'ccs_gl_site_desc' masterpage='globals.php' />" />
-
-    <cms:capture into='ccs_page_title'><cms:if k_page_title><cms:show k_page_title /> | <cms:show ccs_site_name /><cms:else /><cms:show ccs_site_name /></cms:if></cms:capture>
-
-    <meta name="description" content="<cms:show ccs_site_desc />">
     <link rel="canonical" href="<cms:show k_page_link />" />
-
-    <cms:ignore>
-        The <base href> tag that used to sit here has been removed.
-        It was a leftover from the theme conversion: themes ship with
-        relative asset paths, and a base tag is the usual one-line fix.
-        This frame no longer has any - 47 references use k_site_link
-        and zero relative assets/ or vendors/ paths remain - so it was
-        solving a problem that no longer exists.
-
-        It was not harmless. base rewrites EVERY relative URL, including
-        fragment-only ones, so href="#cartOffcanvas" and href="#" (which
-        inline.php:147 emits for every popup_edit trigger) resolved to
-        the site root rather than the current page. Bootstrap and the
-        onclick handlers call preventDefault, which masked it - but any
-        JS failure would have silently navigated the user home.
-    </cms:ignore>
+    <base href="<cms:show k_site_link />">
 
     <!-- ===============================================-->
     <!--    Document Title-->
     <!-- ===============================================-->
-    <title><cms:show ccs_page_title /></title>
-      
+    <title>
+        <cms:get_field 'ccs_gl_site_name' masterpage='globals.php' />
+    </title>
+
     <!-- ===============================================-->
     <!--    Social Cards -->
     <!-- ===============================================-->
-    <cms:ignore>
-        These were literal placeholders - "DESCRIPTION OF PAGE CONTENT",
-        "LINK TO THE IMAGE FILE", "PERMALINK", "SITE NAME" - being served
-        verbatim to every crawler and social scraper.
-
-        og:image uses the square light logo: ccs_gl_site_logo_sqr_lgt is
-        the name that actually exists in globals.php (the _drk/_lgt suffixes
-        matter - the unsuffixed names appear only in the !globals_bu.php
-        backup). Emitted only if set, since an empty og:image tag is worse
-        than none.
-
-        og:type is 'website' rather than 'article' - most pages here are
-        products, services and listings, not articles.
-    </cms:ignore>
-    <cms:set ccs_og_image="<cms:get_field 'ccs_gl_site_logo_sqr_lgt' masterpage='globals.php' />" />
-
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="<cms:show ccs_page_title />" />
-    <meta property="og:description" content="<cms:show ccs_site_desc />" />
-    <cms:if ccs_og_image>
-        <meta property="og:image" content="<cms:show ccs_og_image />" />
-    </cms:if>
-    <meta property="og:url" content="<cms:show k_page_link />" />
-    <meta property="og:site_name" content="<cms:show ccs_site_name />" />
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="<cms:show ccs_page_title />">
-    <meta name="twitter:description" content="<cms:show ccs_site_desc />">
-    <cms:if ccs_og_image>
-        <meta name="twitter:image" content="<cms:show ccs_og_image />">
-    </cms:if>
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="" />
+    <meta property="og:description" content="DESCRIPTION OF PAGE CONTENT" />
+    <meta property="og:image" content="LINK TO THE IMAGE FILE" />
+    <meta property="og:url" content="PERMALINK" />
+    <meta property="og:site_name" content="SITE NAME" />
+    <meta name="x:card" content="summary_large_image">
+    <meta name="x:title" content="">
+    <meta name="x:description" content="">
+    <meta name="x:image" content="">
     <meta name="x:image:alt" content="">
-      
+
     <!-- ===============================================-->
     <!--    Favicons-->
     <!-- ===============================================-->
-	<cms:set site_favicon="<cms:get_field 'ccs_gl_site_favicon' masterpage='globals.php' />" />
-    
+    <cms:set site_favicon="<cms:get_field 'ccs_gl_site_favicon' masterpage='globals.php' />" />
+
     <cms:if site_favicon>
-        <link rel="apple-touch-icon" sizes="180x180" href="<cms:thumbnail site_favicon width='180' height='180' crop='1' />">
-        <link rel="icon" type="image/png" sizes="32x32" href="<cms:thumbnail site_favicon width='32' height='32' crop='1' />">
-        <link rel="icon" type="image/png" sizes="16x16" href="<cms:thumbnail site_favicon width='16' height='16' crop='1' />">
-        <link rel="shortcut icon" type="image/x-icon" href="<cms:thumbnail site_favicon width='32' height='32' crop='1' />">
+        <link rel="apple-touch-icon" sizes="180x180"
+            href="<cms:thumbnail site_favicon width='180' height='180' crop='1' />">
+        <link rel="icon" type="image/png" sizes="32x32"
+            href="<cms:thumbnail site_favicon width='32' height='32' crop='1' />">
+        <link rel="icon" type="image/png" sizes="16x16"
+            href="<cms:thumbnail site_favicon width='16' height='16' crop='1' />">
+        <link rel="shortcut icon" type="image/x-icon"
+            href="<cms:thumbnail site_favicon width='32' height='32' crop='1' />">
     </cms:if>
-    
+
     <link rel="manifest" href="<cms:show k_site_link />assets/images/favicons/manifest.json">
     <meta name="msapplication-TileImage" content="<cms:show k_site_link />assets/images/favicons/mstile-150x150.png">
-    <meta name="theme-color" content="#ffffff">      
+    <meta name="theme-color" content="#ffffff">
     <!-- ===============================================-->
     <!--    Font Awesome Styles -->
     <!-- ===============================================-->
@@ -123,17 +107,56 @@
     <!--<link href="<cms:show k_site_link />assets/fontawesome/css/sharp-thin.css" rel="stylesheet" />-->
     <!--<link href="<cms:show k_site_link />assets/fontawesome/css/duotone-thin.css" rel="stylesheet" />-->
     <!--<link href="<cms:show k_site_link />assets/fontawesome/css/sharp-duotone-thin.css" rel="stylesheet" />-->
-      
+
     <!-- ===============================================-->
     <!--    Privacy Consent Here -->
     <!-- ===============================================-->
+    <cms:ignore>
+        HEAD SCRIPT SLOT, GATED.
+
+        ccs_gl_header_scripts has existed in globals.php since before this
+        change and was rendered NOWHERE - declared, editable, and silently
+        discarded. It is wired up here rather than left dangling, because the
+        moment someone pastes a tag into a field labelled "Header Scripts" they
+        are entitled to assume it runs.
+
+        It only prints once analytics consent is granted. That is the whole
+        mechanism: a visitor who has not agreed does not receive a page with a
+        tracker in it that is politely switched off - they receive a page that
+        does not contain one.
+
+        WHY ANALYTICS AND NOT MARKETING GOVERNS THIS SLOT. A head slot is where
+        measurement tags go, and measurement is the analytics category. Anything
+        genuinely marketing belongs in the footer slot below, which is gated on
+        marketing consent. If a tag needs both, it needs the stricter of the two
+        - put it in the footer.
+
+        A tag that must run for the site to FUNCTION is not analytics and does
+        not belong in either slot; it belongs in the theme, where consent does
+        not apply because it is strictly necessary.
+    </cms:ignore>
+    <cms:if ccs_consent_analytics == '1'>
+        <cms:get_custom_field 'ccs_gl_header_scripts' masterpage='globals.php' />
+    </cms:if>
 
     <!-- ===============================================-->
     <!--    Stylesheets-->
     <!-- ===============================================-->
     <link rel="stylesheet" href="<cms:show k_site_link />vendors/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="<cms:show k_site_link />vendors/prism/prism.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <cms:ignore>
+        THE PRECONNECT TO fonts.gstatic.com THAT USED TO SIT HERE IS GONE.
+
+        A preconnect opens the TCP and TLS handshake to a host before anything
+        asks for a file. It was there to make the Google font request faster -
+        but the fonts are self-hosted now, so there is nothing to speed up, and
+        leaving it would have kept opening a connection to Google on every page
+        load for no reason at all. A connection nobody needs is still a
+        connection a visitor did not agree to.
+
+        google_fonts.htm keeps its name but no longer contacts Google; it links
+        font CSS from assets/fonts/webfonts/. See its header.
+    </cms:ignore>
     <cms:embed 'utils/google_fonts.htm' />
     <link href="<cms:show k_site_link />assets/fonts/iconsmind/iconsmind.css" rel="stylesheet">
     <link href="<cms:show k_site_link />vendors/hamburgers/hamburgers.css" rel="stylesheet">
@@ -147,40 +170,58 @@
         those alter the OUTPUT without touching this file. Bump it by saving
         user.php, or hard-refresh, after a theme colour/font change.
     </cms:ignore>
-    <link href="<cms:show k_site_link />assets/css/user.php?page=<cms:show k_template_name />&post=<cms:show k_page_id />&v=<cms:php>echo @filemtime( K_SITE_DIR . 'assets/css/user.php' );</cms:php>" rel="stylesheet" />
+    <link
+        href="<cms:show k_site_link />assets/css/user.php?page=<cms:show k_template_name />&post=<cms:show k_page_id />&v=<cms:php>echo @filemtime( K_SITE_DIR . 'assets/css/user.php' );</cms:php>"
+        rel="stylesheet" />
+
+    <cms:ignore>
+        THE CONSENT BAR'S STYLESHEET, LOADED LAST ON PURPOSE.
+
+        After theme.css and after user.php, so nothing the theme or the site
+        owner's settings emit can win on load order. Combined with its #id
+        scoping that puts it at specificity (1,1,0), and it uses !important only
+        on the properties that would break contrast or legibility.
+
+        This is the one component whose appearance has legal weight - a refusal
+        harder to see than an acceptance is a finable dark pattern, and a notice
+        nobody can read is not notice. So it is deliberately unreachable from
+        the theme. See the file's own header before changing anything in it.
+
+        Small, cacheable, and versioned by filemtime so an edit busts the cache
+        without a timestamp defeating caching entirely.
+    </cms:ignore>
+    <link rel="stylesheet"
+        href="<cms:show k_site_link />assets/css/ccs_consent.css?v=<cms:php>echo @filemtime( K_SITE_DIR . 'assets/css/ccs_consent.css' );</cms:php>" />
 
 
 
-	<!-- ===============================================-->
+    <!-- ===============================================-->
     <!--    For Site Wide Styling -->
     <!-- ===============================================-->
-	<cms:embed 'utils/format_typography.htm' />
+    <cms:embed 'utils/format_typography.htm' />
 
-    <!-- Sets ccs_auth_uid: the stable authenticated user id. Use this,
-         never k_user_id, to identify a user. See the snippet for why. -->
-    <cms:embed 'utils/auth_uid.htm' />
-		 
     <!-- ===============================================-->
     <!--    For Site Editing -->
     <!-- ===============================================-->
-     <cms:if k_user_access_level ge '7' && "<cms:not "<cms:get_session 'inline_edit_on' />" />" > 
-        <cms:no_edit />
+    <cms:if k_user_access_level ge '7' && "<cms:not " <cms:get_session 'inline_edit_on' />" />" >
+    <cms:no_edit />
     </cms:if>
-    <cms:load_edit /> 
-	<!-- ===============================================-->
+    <cms:load_edit />
+    <!-- ===============================================-->
     <!--    Edit Modal Sizing -->
     <!-- ===============================================-->
-	<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >
+    <cms:if (k_user_access_level ge '7' ) && ("<cms:get_session 'inline_edit_on' />") >
 
-		<!-- Accessibility enhancement for the inline-edit popups:
+    <!-- Accessibility enhancement for the inline-edit popups:
 		     role/keyboard on the trigger anchors, and dialog semantics,
 		     focus handling and Escape on the TINY2 lightbox, none of
 		     which the addon provides. Enhancement only - it creates no
 		     edit affordance and exits inert if none are present.
 		     Inside this gate so it is never served to non-admins or to
 		     an admin with editing switched off. -->
-		<script defer src="<cms:show k_site_link />assets/js/ccs_inline_a11y.js?v=1"></script>
+    <script defer src="<cms:show k_site_link />assets/js/ccs_inline_a11y.js?v=1"></script>
 
-</cms:if>
-  </head>
-  <body>
+    </cms:if>
+</head>
+
+<body>

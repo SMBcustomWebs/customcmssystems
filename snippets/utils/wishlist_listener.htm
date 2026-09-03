@@ -1,0 +1,91 @@
+<cms:ignore>
+    ============================================================
+    SAVE TO WISHLIST - the POST handler.
+    ------------------------------------------------------------
+    WHERE TO EMBED
+    Inside the cms:pages loop that opened the item, near the top
+    of any single view, BEFORE any markup. It answers the browser
+    with cms:abort, so anything printed before it would be sent
+    as part of the reply.
+
+    TEMPLATE-AGNOSTIC. Nothing here names a template. The item is
+    whatever page the surrounding loop opened and the template is
+    k_template_name, read from that loop rather than trusted from
+    the browser. Embed it in a single view for shirts, shoes,
+    memberships, anything - it needs no edit and no argument.
+
+    That is the whole point: which template a sellable item comes
+    from is the item's business, not the wishlist's.
+    wish_masterpage carries it so every view downstream reopens
+    the item from the right place (snippets/utils/item_tpl.htm
+    does the same job for cart and order lines).
+
+    wish_user_id is ccs_auth_uid, never k_user_id - see
+    snippets/utils/auth_uid.htm for why those are different
+    things.
+
+    Deliberately OUTSIDE any purchase or stock gate: an
+    out-of-stock item is exactly the kind of thing people want to
+    save for later.
+    ============================================================
+</cms:ignore>
+
+<cms:set wl_action = "<cms:gpc 'wishlist_action' method='post' />" />
+
+<cms:if wl_action eq 'save_item' && k_logged_in && ccs_auth_uid>
+
+    <cms:ignore>
+        The posted product_id is checked against the page this loop
+        actually opened. Without that, a signed-in visitor could post any
+        id and file someone else's item - or a non-item - onto their own
+        wishlist. The id has to agree with the page being viewed.
+    </cms:ignore>
+    <cms:set wl_posted_id = "<cms:gpc 'product_id' method='post' />" />
+
+    <cms:if wl_posted_id ne k_page_id>
+        <cms:abort>ERROR: item mismatch</cms:abort>
+    </cms:if>
+
+    <cms:set wl_vars         = "<cms:gpc 'variants' method='post' />" />
+    <cms:set wl_vars_display = "<cms:gpc 'variants_display' method='post' />" />
+
+    <cms:ignore>
+        Same item, same options, already saved. Without this a second
+        click just makes a duplicate row, which then has to be removed
+        twice. Matches cart_to_wishlist.htm, which dedupes the same way.
+    </cms:ignore>
+    <cms:set wl_exists = '' scope='global' />
+    <cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show ccs_auth_uid /> | wish_product_id==<cms:show k_page_id />" limit='50'>
+        <cms:if wish_variants eq wl_vars>
+            <cms:set wl_exists = '1' scope='global' />
+        </cms:if>
+    </cms:pages>
+
+    <cms:if wl_exists>
+        <cms:abort>WISHLIST_SUCCESS</cms:abort>
+    </cms:if>
+
+    <cms:ignore>
+        db_persist_ex, not db_persist. db_persist opens a context of its
+        own (registered with supports_scope=1, data-bound-form.php), so
+        k_error is set inside it and gone by the next tag - a silent
+        failure would be reported to the customer as a success.
+    </cms:ignore>
+    <cms:db_persist_ex
+        _masterpage='wishlist.php'
+        _mode='create'
+        k_page_title="Wishlist-<cms:show ccs_auth_uid />-<cms:show k_page_id />"
+        wish_user_id=ccs_auth_uid
+        wish_masterpage=k_template_name
+        wish_product_id=k_page_id
+        wish_variants=wl_vars
+        wish_variants_display=wl_vars_display
+    />
+
+    <cms:if k_error>
+        <cms:abort>ERROR: <cms:show k_error /></cms:abort>
+    <cms:else />
+        <cms:abort>WISHLIST_SUCCESS</cms:abort>
+    </cms:if>
+
+</cms:if>

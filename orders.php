@@ -1,5 +1,5 @@
 <?php require_once( 'ccs_dash/cms.php' ); ?>
-<cms:template title='Orders' clonable='1' hidden='0' executable='0' parent='_site_' icon='shopping-cart' order='82'>
+<cms:template title='Orders' clonable='1' hidden='0' executable='0' parent='_site_' icon='shopping-cart' order='82' access_level='7'>
 
     <!-- ==============================================================
          ORDER RECORD
@@ -46,7 +46,7 @@
          machine tokens; labels are for humans only. -->
     <cms:editable type='dropdown' name='order_status' label='Order Status'
         desc='pending = created but not paid. paid = gateway confirmed.'
-        opt_values='Pending=pending | Paid=paid | Failed=failed | Cancelled=cancelled | Refunded=refunded'
+        opt_values='Pending=pending | Paid=paid | Failed=failed | Cancelled=cancelled | Refunded=refunded | Partially Refunded=refunded_part'
         order='10' />
 
     <!-- IDEMPOTENCY FLAG - the whole reason inventory deduction is safe.
@@ -63,6 +63,25 @@
         opt_values='No=0 | Yes=1'
         order='15' />
 
+
+    <!-- Line items are separate pages in order-items.php - db_persist can only
+         write fields that exist on THIS page, so they cannot live here. A
+         type='message' field returns its content raw and unparsed (field.php:
+         "if( $this->k_type=='message' ){ return $this->default_data; }"), so a
+         cms:pages loop would render as literal text. A plain link works, and
+         is the shortest route from here to the list of what was bought. -->
+    <cms:editable type='message' name='msg_items' order='17'>
+        <div style="background:#e4efe7; border:1px solid #1f6b4a; border-left:4px solid #1f6b4a; padding:14px 16px; border-radius:4px; margin:10px 0;">
+            <h4 style="margin:0 0 4px 0; color:#1f6b4a; font-family:sans-serif;">What was purchased</h4>
+            <p style="margin:0 0 12px 0; color:#5a5c69; font-size:13px; font-family:sans-serif;">
+                Line items are stored separately and cannot be shown on this form.
+                Open Orders &amp; Returns to see them &mdash; and to put returned items back on the shelf.
+            </p>
+            <p style="margin:0;">
+                <a href="/restock.php" target="_blank" rel="noopener" style="display:inline-block; background:#1f6b4a; color:#fff; text-decoration:none; font-weight:600; padding:8px 14px; border-radius:4px; font-size:13px; font-family:sans-serif;">Open Orders &amp; Returns &nearr;</a>
+            </p>
+        </div>
+    </cms:editable>
 
     <!-- ============================== -->
     <!-- ZONE 2 :: CUSTOMER             -->
@@ -135,6 +154,46 @@
             desc='Written by the system when the gateway confirms.'
             class='col-md-4' order='15' />
 
+        <!-- REFUNDS
+             Written by stripe-webhook.php or paypal-ipn.php when the gateway
+             reports money going back. Recorded here rather than inferred,
+             because a refund is a fact the gateway owns.
+
+             STOCK IS DELIBERATELY NOT TOUCHED BY A REFUND. Whether a returned
+             item can be sold again depends on what condition it comes back in,
+             and sometimes it never comes back at all. The system cannot know
+             that, so it does not guess - adjust Inventory Count by hand once
+             the item is in front of you. -->
+
+        <cms:editable type='text' name='order_refunded_amount' label='Amount Refunded'
+            desc='Running total refunded against this order. Written by the system.'
+            search_type='decimal' validator='non_negative_decimal'
+            width='120' class='col-md-3' order='20' />
+
+        <cms:editable type='text' name='order_refunded_on' label='Refunded On'
+            desc='Written by the system when the gateway reports a refund.'
+            class='col-md-4' order='25' />
+
+        <!-- APPLIED REFUND TRANSACTIONS - the idempotency key for gateways
+             that report each refund on its own rather than a running total.
+
+             Stripe sends charge.refunded with amount_refunded ALREADY
+             cumulative, so storing that figure is naturally replay-safe:
+             writing "42.00 refunded" twice leaves 42.00.
+
+             PayPal does not. It sends one IPN per refund carrying only THAT
+             refund's amount, so the amounts have to be added up - and the
+             moment you add, a replayed IPN double-counts. This field holds
+             the refund txn_ids already applied, whitespace separated, so an
+             increment is added exactly once no matter how many times PayPal
+             re-sends it.
+
+             System-written. Editing it by hand will make the next refund
+             either double-count or be ignored. -->
+        <cms:editable type='textarea' name='order_refund_txns' label='Applied Refund Transactions'
+            desc='System-written. Gateway refund transaction ids already counted. Do not edit.'
+            height='60' class='col-md-12' order='30' />
+
     </cms:editable>
 
 
@@ -172,6 +231,7 @@
         <cms:field 'order_total' />
         <cms:field 'order_gateway' />
         <cms:field 'order_stock_deducted' header='Stock Out' />
+        <cms:field 'order_refunded_amount' header='Refunded' />
         <cms:field 'k_publish_date' label='Placed' />
         <cms:field 'k_actions' />
         <cms:field 'k_selector_checkbox' />

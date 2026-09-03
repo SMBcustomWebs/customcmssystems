@@ -1,0 +1,110 @@
+<cms:ignore>
+    ============================================================
+    SIGNED-IN USER'S NAME  ->  ccs_user_first / ccs_user_last
+    ------------------------------------------------------------
+    CONTRACT
+      in  : none - reads the current session
+      out : ccs_user_first    first name, or '' when not signed in
+            ccs_user_last     last name, or ''
+            ccs_user_display  the Display Name - what the visitor
+                              typed into their own profile, and what
+                              they expect to be greeted by
+            ccs_user_display_esc  the same, HTML-escaped and ready to
+                              print with a plain cms:show
+
+    WHICH ONE TO USE
+    ccs_user_display for anything the visitor reads about themselves.
+    It is the user page's k_page_title, which is exactly the field
+    users/profile.php labels "Display Name", so what they typed is
+    what they see. first/last are for forms that need the two halves
+    separately - checkout prefill, and anything that has to match how
+    a card is authenticated.
+
+    WHY A SNIPPET AND NOT k_user_<field>
+    There is no such variable. The extended-users addon sets
+    exactly five k_user_* values (extended-users.php:478-482,
+    functions.php:1492-1496) - id, name, title, email,
+    access_level - and nothing loops the user page's own custom
+    fields into the context. Reading k_user_user_first_name
+    returns empty every time, silently, which then looks like a
+    user who simply never filled the field in.
+
+    WHY extended_user_id AND NOT k_user_id
+    k_user_id is ambiguous by construction. The addon overwrites
+    it with the users-template PAGE id, but _get_associated_page()
+    (extended-users.php:41-81) also returns -1 when no row exists,
+    and returns nothing at all when the field is missing - in
+    which case core's value, the real USER id, survives. Looking
+    that up as a page id can land on a different person's page.
+
+    extended_user_id is written on every user page
+    (extended-users.php:134) with search_type='integer'
+    (extended-users.php:210) and holds $AUTH->user->id, which is
+    exactly what ccs_auth_uid carries. One value, one meaning.
+
+    FALLBACK
+    Accounts created before the name fields existed have only the
+    display title. Splitting it on the first space is a guess -
+    "Mary Jane Watson" gives first "Mary", last "Jane Watson" -
+    so it is a last resort, never the primary path.
+
+    ESCAPING IS DONE HERE, NOT AT THE POINT OF DISPLAY.
+    cms:html_encode is a BLOCK tag (tags.php:6632 encodes
+    $node->children and ignores $params), so it only works written
+    tight on one line - and an HTML formatter reflowing a template
+    will happily split it across lines, which silently pads the
+    output with encoded whitespace or, self-closed, prints nothing
+    at all. A template that cannot survive a reformat is a trap.
+
+    So the escaped copy is built once in PHP here and printed with
+    an ordinary self-closing cms:show, which no amount of
+    reformatting can break. Use ccs_user_display_esc anywhere the
+    value lands in HTML; the raw ccs_user_display is for
+    comparisons and for values passed on to other tags.
+    ============================================================
+</cms:ignore>
+
+<cms:embed 'utils/auth_uid.htm' />
+
+<cms:set ccs_user_first       = '' scope='global' />
+<cms:set ccs_user_last        = '' scope='global' />
+<cms:set ccs_user_display     = '' scope='global' />
+<cms:set ccs_user_display_esc = '' scope='global' />
+
+<cms:if k_logged_in && ccs_auth_uid && k_user_template>
+    <cms:pages masterpage=k_user_template custom_field="extended_user_id==<cms:show ccs_auth_uid />" limit='1'>
+        <cms:set ccs_user_first   = user_first_name scope='global' />
+        <cms:set ccs_user_last    = user_last_name  scope='global' />
+        <cms:set ccs_user_display = k_page_title    scope='global' />
+    </cms:pages>
+
+    <cms:ignore>
+        The page title is what profile.php edits, so it is the freshest
+        copy. k_user_title is the same value mirrored onto the account by
+        sync_user_to_page (extended-users.php:255) and is the fallback for
+        an account with no user page at all. k_user_name, the login name,
+        is the last resort - never blank, so the greeting always has
+        something to say to a signed-in visitor.
+    </cms:ignore>
+    <cms:php>
+        global $CTX;
+
+        $display = trim( (string)$CTX->get('ccs_user_display') );
+        if( $display === '' ){ $display = trim( (string)$CTX->get('k_user_title') ); }
+        if( $display === '' ){ $display = trim( (string)$CTX->get('k_user_name') ); }
+        $CTX->set( 'ccs_user_display', $display, 'global' );
+        $CTX->set( 'ccs_user_display_esc',
+                   htmlspecialchars( $display, ENT_QUOTES, K_CHARSET ), 'global' );
+
+        // Split the display name only when the real name fields are empty.
+        // "Mary Jane Watson" would give first "Mary", last "Jane Watson" -
+        // a guess, so it is a fallback and never the primary path.
+        $first = trim( (string)$CTX->get('ccs_user_first') );
+        $last  = trim( (string)$CTX->get('ccs_user_last') );
+        if( $first === '' && $last === '' && $display !== '' ){
+            $parts = explode( ' ', $display, 2 );
+            $CTX->set( 'ccs_user_first', $parts[0], 'global' );
+            $CTX->set( 'ccs_user_last', ( isset($parts[1]) ? $parts[1] : '' ), 'global' );
+        }
+    </cms:php>
+</cms:if>

@@ -7,13 +7,17 @@
 </cms:if>
 
 <section id="tpb_mnu"
-    class="bg-<cms:show ccs_ubr_mnu_bg_clr_opt /> py-<cms:show ccs_ubr_mnu_pd /> <cms:if ccs_ubr_mnu_stky>sticky-top top-0 start-0 z-3</cms:if>"
+    class="ccs-utlbar bg-<cms:show ccs_ubr_mnu_bg_clr_opt /> py-<cms:show ccs_ubr_mnu_pd /> <cms:if ccs_ubr_mnu_stky>sticky-top top-0 start-0 z-3</cms:if>"
     aria-label="Secondary Navigation">
 
     <cms:if ccs_gl_edt_ok>
-        <div class="position-absolute top-0 start-0 mt-1 ms-1 z-3">
+        <div class="d-flex gap-1 position-absolute top-0 start-0 mt-1 ms-1 z-3">
             <cms:popup_edit 'ccs_ubr_mnu_gen_grp|ccs_ubr_mnu_gen_msg|ccs_ubr_mnu_stl_row|ccs_ubr_mnu_pd|ccs_ubr_mnu_bg_clr_opt|ccs_ubr_mnu_swap|ccs_ubr_mnu_stky_row|ccs_ubr_mnu_frmt_msg|ccs_ubr_mnu_stky'
                 link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit Top Bar Settings'><i class='fas fa-cog text-warning' style='font-size: 12px;'></i></span>" />
+            <cms:pages masterpage='globals.php' limit='1'>
+                <cms:popup_edit 'ccs_gl_site_ftr_msg|ccs_gl_site_ubr_lnk_hvr_clr'
+                    link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit utility bar link hover color'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+            </cms:pages>
         </div>
     </cms:if>
 

@@ -34,6 +34,54 @@
         
         <cms:editable type='dropdown' name='ccs_nav_sdd_logo_theme' label='Logo Color Theme' opt_values='dropdowns/logo-theme.htm' dynamic='opt_values' not_active=ccs_nav_sdd_theme_cond class='col-md-6' order='20' />
     </cms:editable>
+
+    <cms:ignore>
+        COMPANY NAME APPEARANCE, per navbar.
+
+        The site-wide size and colour live in globals.php and remain the
+        fallback. These two override them for THIS navbar only, which is the
+        whole point: the same company name has to read light on a dark bar and
+        dark on a light one, and one global value cannot be both.
+
+        WHY THE SIZE LIST IS heading-size_sec.htm AND NOT heading-size.htm.
+        The global field uses the latter, which starts at H1 - far too large for
+        a bar that also has to hold a menu. This one runs X-Large down to
+        Smallest, emits a bare number for fs-N, and leads with an empty
+        "Default" that falls back to the global. It is a shared file already
+        used elsewhere on the site; nothing new was invented for this.
+
+        NO not_active ON THESE TWO, DELIBERATELY, and the reason is worth
+        recording because it is not obvious.
+
+        not_active does not merely hide a field in the panel. When its condition
+        resolves to hide, the field is marked inactive server-side -
+        functions.php:4772 on the plain save path, register.php:929 on the admin
+        form path, edit-mosaic-ex.php:290 for PageBuilder tiles - and
+        field.php:236 then returns from store_posted_changes BEFORE writing
+        anything. The value the author picked is DISCARDED on save.
+
+        So keying these to Brand Display Style would mean: choose a colour, later
+        switch this navbar to a horizontal logo, save, switch back - and the
+        colour is gone, with nothing on screen to explain where it went.
+
+        There is a second reason, specific to this block. The company name does
+        not only render on the Site Name path. When a logo style is chosen but no
+        image has been uploaded, the theme falls back to printing the name, and
+        that fallback reads these exact two fields. A condition keyed to Site
+        Name would hide them in one of the cases that needs them most.
+
+        Two extra dropdowns in the panel is the smaller cost.
+    </cms:ignore>
+    <cms:editable type='row' name='ccs_nav_sdd_name_row' order='30'>
+        <cms:editable type='dropdown' name='ccs_nav_sdd_name_sz' label='Company Name Size'
+            desc='Leave on Default to use the size set in Global Site Settings'
+            opt_values='dropdowns/heading-size_sec.htm' dynamic='opt_values'
+            class='col-md-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_nav_sdd_name_clr' label='Company Name Color'
+            desc='Leave on Default to use the color set in Global Site Settings'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values'
+            class='col-md-6' order='20' />
+    </cms:editable>
 </cms:editable>
 <cms:editable type="group" name="ccs_nav_sdd_nav_txt_grp" label="Style Navigation Bar Text" order="20">
     <cms:editable type='message' name='ccs_nav_sdd_nav_msg' order='5'>

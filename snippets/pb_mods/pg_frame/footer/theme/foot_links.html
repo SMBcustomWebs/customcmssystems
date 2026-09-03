@@ -1,9 +1,13 @@
 <footer
-    class="py-<cms:show ccs_ftr_lnk_pad_y /> bg-<cms:show ccs_ftr_lnk_bg_clr_opt /> fs-<cms:show ccs_ftr_lnk_txt_sz /> fst-<cms:show ccs_ftr_lnk_txt_fnt_st /> fw-<cms:show ccs_ftr_lnk_txt_fnt_wt /> ls-<cms:show ccs_ftr_lnk_txt_ltr_spc /> font-<cms:show ccs_ftr_lnk_txt_font /> text-<cms:show ccs_ftr_lnk_txt_clr_opt />">
+    class="ccs-footer py-<cms:show ccs_ftr_lnk_pad_y /> bg-<cms:show ccs_ftr_lnk_bg_clr_opt /> fs-<cms:show ccs_ftr_lnk_txt_sz /> fst-<cms:show ccs_ftr_lnk_txt_fnt_st /> fw-<cms:show ccs_ftr_lnk_txt_fnt_wt /> ls-<cms:show ccs_ftr_lnk_txt_ltr_spc /> font-<cms:show ccs_ftr_lnk_txt_font /> text-<cms:show ccs_ftr_lnk_txt_clr_opt />">
     <cms:if ccs_gl_edt_ok>
-        <div class="container-fluid pt-2">
+        <div class="container-fluid pt-2 d-flex gap-1 align-items-center">
             <cms:popup_edit 'ccs_ftr_lnk_gen_stng_grp|ccs_ftr_lnk_gen_stng_msg|ccs_ftr_lnk_gen_set_row|ccs_ftr_lnk_pad_y|ccs_ftr_lnk_bg_clr_opt|ccs_ftr_lnk_txt_clr_opt|ccs_ftr_lnk_frmt_row|ccs_ftr_lnk_txt_sz|ccs_ftr_lnk_txt_fnt_wt|ccs_ftr_lnk_txt_ltr_spc|ccs_ftr_lnk_txt_fnt_st|ccs_ftr_lnk_txt_font'
                 link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit footer format'><i class='fas fa-cog text-warning' style='font-size: 12px;'></i></span>" />
+            <cms:pages masterpage='globals.php' limit='1'>
+                <cms:popup_edit 'ccs_gl_site_ftr_msg|ccs_gl_site_ftr_lnk_hvr_clr'
+                    link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit footer link hover color'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+            </cms:pages>
         </div>
     </cms:if>
     <div class="container">
@@ -79,6 +83,9 @@
 
     </div>
 
+
+    <cms:set lgl_fs=ccs_ftr_lnk_txt_sz />
+    <cms:embed 'pb_mods/pg_frame/footer/legal_links.htm' />
 
     <cms:if ccs_gl_edt_ok>
         <div class="position-absolute top-50 end-0 translate-middle-y me-3" style="z-index: 1060; line-height: 1;">

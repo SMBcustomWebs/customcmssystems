@@ -1,0 +1,327 @@
+<cms:ignore>
+    ================================================================
+    order_email.htm - the receipt the thank-you page promises.
+
+    CALLER MUST SET:
+      ccs_mail_order_id     k_page_id of a PAID order (required)
+
+    CALLER MAY SET (both optional, both consumed and cleared on read):
+      ccs_mail_override_to  send the customer copy here instead of the address
+                            stored on the order. The order record is NOT changed.
+                            For a support resend when the buyer mistyped it.
+      ccs_mail_skip_shop    '1' suppresses the shop notification. A resend is for
+                            the customer; the shop already knows about the order.
+
+    Both are blanked immediately after they are read. They are set with
+    scope='global', which writes __ROOT__ and survives for the whole request, so
+    leaving them set would silently apply to any later embed of this file.
+
+    WHERE IT RUNS
+    Embedded from order_fulfil.htm, immediately after stock has moved.
+    That placement matters: fulfilment happens in the gateway's
+    server-to-server callback, so the receipt is sent whether or not the
+    customer ever returns to the site. Sending from order-complete.php
+    would mean a closed tab equals no receipt.
+
+    It therefore inherits order_fulfil's idempotency for free - that
+    routine only ever reaches this point once per order, so a replayed
+    webhook cannot send a second receipt.
+
+    HONESTY RULES FOR THE WORDING
+    Do not promise anything the site cannot do. There is no order
+    tracking, no shipping notification, and no order-history page a
+    customer can log into. The receipt says what was bought and what
+    was paid, and tells them how to reach a human. Nothing more.
+    ================================================================
+</cms:ignore>
+
+<cms:set ccs_mail_result = 'skipped' scope='global' />
+
+<cms:if ccs_mail_order_id>
+
+<cms:set om_override  = ccs_mail_override_to scope='global' />
+<cms:set om_skip_shop = ccs_mail_skip_shop   scope='global' />
+<cms:set ccs_mail_override_to = '' scope='global' />
+<cms:set ccs_mail_skip_shop   = '' scope='global' />
+
+<cms:pages masterpage='orders.php' id=ccs_mail_order_id limit='1'>
+
+    <cms:set om_num    = order_number     scope='global' />
+    <cms:set om_token  = k_page_name      scope='global' />
+    <cms:set om_to     = order_email      scope='global' />
+    <cms:if om_override><cms:set om_to = om_override scope='global' /></cms:if>
+    <cms:set om_first  = order_first_name scope='global' />
+    <cms:set om_last   = order_last_name  scope='global' />
+    <cms:set om_gw     = order_gateway    scope='global' />
+    <cms:set om_sub    = order_subtotal   scope='global' />
+    <cms:set om_ship   = order_shipping   scope='global' />
+    <cms:set om_tax    = order_tax        scope='global' />
+    <cms:set om_total  = order_total      scope='global' />
+    <cms:set om_addr   = order_ship_address scope='global' />
+    <cms:set om_city   = order_ship_city  scope='global' />
+    <cms:set om_state  = order_ship_state scope='global' />
+    <cms:set om_zip    = order_ship_zip   scope='global' />
+
+    <cms:ignore>
+        Shop identity comes from globals rather than being hard-coded, so
+        renaming the business does not leave stale receipts going out.
+    </cms:ignore>
+    <cms:set om_shop  = "<cms:get_field 'ccs_gl_site_name' masterpage='globals.php' />" scope='global' />
+    <cms:set om_admin = "<cms:get_field 'ccs_gl_form_email' masterpage='globals.php' />" scope='global' />
+    <cms:if "<cms:not om_shop />"><cms:set om_shop = k_site_title scope='global' /></cms:if>
+    <cms:ignore>
+        The customer receipt is sent FROM an unmonitored address and points the
+        customer at a monitored one. Both are set here, in one place.
+
+        om_from_addr also becomes the SMTP envelope sender - the kfunctions.php
+        alter_send_mail listener derives -f from the From address - so bounces
+        for undeliverable receipts land in that mailbox. It must exist as a real
+        mailbox, and forwarding it to a monitored address is worth doing: a
+        receipt that starts failing again would otherwise fail silently.
+
+        The shop notification below is unchanged and still sends from
+        K_EMAIL_FROM with the customer as Reply-To.
+    </cms:ignore>
+    <cms:set om_from_addr = "<cms:get_field 'ccs_gl_ordml_from'    masterpage='globals.php' />" scope='global' />
+    <cms:set om_contact   = "<cms:get_field 'ccs_gl_ordml_contact' masterpage='globals.php' />" scope='global' />
+
+    <cms:ignore>
+        Receipt wording, all from globals. Each field carries its own default in
+        the editable body, and get_data() falls back to that whenever the stored
+        value is empty (see baseline note on default_data) - so a field cleared in
+        the admin returns to the shipped wording rather than printing nothing.
+    </cms:ignore>
+    <cms:set om_w_subject   = "<cms:get_field 'ccs_gl_ordml_subject'   masterpage='globals.php' />" scope='global' />
+    <cms:set om_w_greeting  = "<cms:get_field 'ccs_gl_ordml_greeting'  masterpage='globals.php' />" scope='global' />
+    <cms:set om_w_confirm   = "<cms:get_field 'ccs_gl_ordml_confirm'   masterpage='globals.php' />" scope='global' />
+    <cms:set om_w_reference = "<cms:get_field 'ccs_gl_ordml_reference' masterpage='globals.php' />" scope='global' />
+    <cms:set om_w_next      = "<cms:get_field 'ccs_gl_ordml_next'      masterpage='globals.php' />" scope='global' />
+    <cms:set om_w_help      = "<cms:get_field 'ccs_gl_ordml_help'      masterpage='globals.php' />" scope='global' />
+    <cms:set om_w_btn       = "<cms:get_field 'ccs_gl_ordml_btn'       masterpage='globals.php' />" scope='global' />
+    <cms:set om_w_footer    = "<cms:get_field 'ccs_gl_ordml_footer'    masterpage='globals.php' />" scope='global' />
+
+    <cms:php>
+        global $CTX;
+        // Fall back to the configured addresses if globals are blank, so a
+        // receipt is never dropped merely because a field was left empty.
+        if( trim((string)$CTX->get('om_admin')) === '' ){ $CTX->set('om_admin', K_EMAIL_TO, 'global'); }
+        $CTX->set( 'om_link', rtrim(K_SITE_URL,'/') . '/order-complete.php?t=' . rawurlencode($CTX->get('om_token')), 'global' );
+    </cms:php>
+
+    <cms:ignore>
+        Placeholder substitution for the wording fields above.
+
+        Two maps, deliberately. The subject line is a mail header and must stay
+        plain text, so {contact} resolves to a bare address there. Everything that
+        renders inside the HTML body gets the linked form instead, which is the
+        only way a user-editable sentence can carry a working mailto link.
+
+        Values coming off the order are HTML-escaped before they reach the body;
+        the admin's own wording is not, so bold or a link typed into a field still
+        works. A greeting whose name is empty would read "Thank you, ." - the
+        comma tidy-up below removes it.
+    </cms:ignore>
+    <cms:php>
+        global $CTX;
+
+        $esc = function( $v ){ return htmlspecialchars( (string)$v, ENT_QUOTES, K_CHARSET ); };
+
+        // Safety net for one specific mistake: order_email.htm uploaded before
+        // globals.php has been re-registered. Until the fields exist, get_field
+        // returns empty and default_data has nothing to fall back to - so the
+        // receipt would go out with no subject. Blank body lines are ugly; a
+        // subject-less email to a paying customer is not acceptable, and email
+        // cannot be recalled. Everything else deliberately has no duplicate copy.
+        if( trim( (string)$CTX->get('om_w_subject') ) === '' ){
+            $CTX->set( 'om_w_subject', 'Your {shop} order {order}', 'global' );
+        }
+
+        $contact   = (string)$CTX->get('om_contact');
+        $order_ref = (string)$CTX->get('om_num');
+
+        $base = array(
+            '{shop}'       => (string)$CTX->get('om_shop'),
+            '{order}'      => $order_ref,
+            '{first_name}' => (string)$CTX->get('om_first'),
+            '{last_name}'  => (string)$CTX->get('om_last'),
+            '{email}'      => (string)$CTX->get('om_to'),
+            '{total}'      => number_format( (float)$CTX->get('om_total'), 2 ),
+        );
+
+        $plain = $base;
+        $plain['{contact}'] = $contact;
+
+        $html = array();
+        foreach( $base as $k=>$v ){ $html[$k] = $esc($v); }
+        $html['{contact}'] = $contact !== ''
+            ? '<a href="mailto:' . $esc($contact) . '?subject=' . rawurlencode('Order ' . $order_ref)
+              . '" style="color:#1f6b4a;font-weight:bold;text-decoration:underline">' . $esc($contact) . '</a>'
+            : '';
+
+        $tidy = function( $v ){
+            $v = preg_replace( '/,\s*([.!?])/', '$1', $v );   // "Thank you, ." -> "Thank you."
+            $v = preg_replace( '/[ \t]{2,}/', ' ', $v );
+            return trim( $v );
+        };
+
+        $CTX->set( 'om_w_subject', $tidy( strtr((string)$CTX->get('om_w_subject'), $plain) ), 'global' );
+
+        foreach( array('greeting','confirm','reference','next','help','btn','footer') as $k ){
+            $CTX->set( 'om_w_'.$k, $tidy( strtr((string)$CTX->get('om_w_'.$k), $html) ), 'global' );
+        }
+    </cms:php>
+
+    <cms:ignore>
+        Line items, built once and used by both messages. Inline styles
+        only - email clients discard stylesheets.
+    </cms:ignore>
+    <cms:capture into='om_rows' scope='global'>
+        <cms:pages masterpage='order-items.php' custom_field="item_order_id==<cms:show ccs_mail_order_id />" limit='500'>
+            <tr>
+                <td style="padding:9px 0;border-bottom:1px solid #e6e8ea;font-size:14px;color:#22252a">
+                    <cms:show item_title />
+                    <cms:if item_variants><br><span style="font-size:12px;color:#7a8a90"><cms:show item_variants /></span></cms:if>
+                </td>
+                <td style="padding:9px 0;border-bottom:1px solid #e6e8ea;font-size:14px;color:#22252a;text-align:center;white-space:nowrap"><cms:show item_qty /></td>
+                <td style="padding:9px 0;border-bottom:1px solid #e6e8ea;font-size:14px;color:#22252a;text-align:right;white-space:nowrap">$<cms:number_format item_line_total /></td>
+            </tr>
+        </cms:pages>
+    </cms:capture>
+
+    <cms:ignore>
+        Field and row delimiters rather than newlines. A newline written straight
+        after a self-closing cms tag does not survive into the output, which is
+        what ran the item lines together in every notification before now. The
+        plain-text body is assembled from these markers in PHP below, where the
+        line breaks are literal and cannot be swallowed.
+    </cms:ignore>
+    <cms:capture into='om_plain_rows' scope='global'><cms:pages masterpage='order-items.php' custom_field="item_order_id==<cms:show ccs_mail_order_id />" limit='500'><cms:show item_qty />|F|<cms:show item_title /><cms:if item_variants> (<cms:show item_variants />)</cms:if>|F|<cms:number_format item_line_total />|ROW|</cms:pages></cms:capture>
+
+    <cms:if om_to>
+
+        <cms:send_mail from=om_from_addr to=om_to
+                       subject="<cms:show om_w_subject />" html='1' debug='0'>
+<div style="background:#f6f7f9;padding:24px 12px;font-family:Helvetica,Arial,sans-serif">
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border:1px solid #e3e6ea;border-radius:6px">
+<tr><td style="padding:26px 26px 8px">
+    <p style="margin:0 0 4px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#7a8a90"><cms:show om_shop /></p>
+    <h1 style="margin:0 0 10px;font-size:22px;color:#16202b"><cms:show om_w_greeting /></h1>
+    <p style="margin:0 0 4px;font-size:15px;color:#4a5a63"><cms:show om_w_confirm /></p>
+    <p style="margin:0;font-size:15px;color:#4a5a63"><cms:show om_w_reference /></p>
+</td></tr>
+<tr><td style="padding:16px 26px 0">
+    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            <th align="left"  style="padding:0 0 6px;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#7a8a90;border-bottom:2px solid #16202b">Item</th>
+            <th align="center" style="padding:0 0 6px;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#7a8a90;border-bottom:2px solid #16202b">Qty</th>
+            <th align="right" style="padding:0 0 6px;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#7a8a90;border-bottom:2px solid #16202b">Total</th>
+        </tr>
+        <cms:show om_rows />
+        <tr><td colspan="2" style="padding:10px 0 0;font-size:14px;color:#4a5a63">Subtotal</td><td align="right" style="padding:10px 0 0;font-size:14px;color:#4a5a63">$<cms:number_format om_sub /></td></tr>
+        <cms:if om_ship gt '0'><tr><td colspan="2" style="padding:3px 0;font-size:14px;color:#4a5a63">Shipping</td><td align="right" style="padding:3px 0;font-size:14px;color:#4a5a63">$<cms:number_format om_ship /></td></tr></cms:if>
+        <cms:if om_tax gt '0'><tr><td colspan="2" style="padding:3px 0;font-size:14px;color:#4a5a63">Tax</td><td align="right" style="padding:3px 0;font-size:14px;color:#4a5a63">$<cms:number_format om_tax /></td></tr></cms:if>
+        <tr><td colspan="2" style="padding:9px 0 0;font-size:16px;font-weight:bold;color:#16202b;border-top:1px solid #e6e8ea">Paid</td><td align="right" style="padding:9px 0 0;font-size:16px;font-weight:bold;color:#1f6b4a;border-top:1px solid #e6e8ea">$<cms:number_format om_total /></td></tr>
+    </table>
+</td></tr>
+<tr><td style="padding:20px 26px 0">
+    <p style="margin:0 0 4px;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#7a8a90">Shipping to</p>
+    <p style="margin:0;font-size:14px;color:#22252a;line-height:1.5">
+        <cms:show om_first /> <cms:show om_last /><br>
+        <cms:show om_addr /><br>
+        <cms:show om_city />, <cms:show om_state /> <cms:show om_zip />
+    </p>
+    <p style="margin:12px 0 0;font-size:14px;color:#4a5a63">Paid by <cms:if om_gw == 'paypal'>PayPal<cms:else />card</cms:if>.</p>
+</td></tr>
+<tr><td style="padding:20px 26px 26px">
+    <p style="margin:0 0 12px;font-size:14px;color:#4a5a63"><cms:show om_w_next /></p>
+    <p style="margin:0 0 16px;font-size:14px;color:#4a5a63"><cms:show om_w_help /></p>
+    <a href="<cms:show om_link />" style="display:inline-block;background:#1f6b4a;color:#ffffff;text-decoration:none;font-weight:bold;font-size:14px;padding:11px 20px;border-radius:4px"><cms:show om_w_btn /></a>
+</td></tr>
+</table>
+<p style="max-width:560px;margin:14px auto 0;font-size:12px;color:#9aa3ab;text-align:center"><cms:show om_w_footer /></p>
+</div>
+        </cms:send_mail>
+
+        <cms:set ccs_mail_result = 'sent' scope='global' />
+    </cms:if>
+
+    <cms:ignore>
+        Shop copy. Plain text on purpose - it is a work notification, not
+        a document, and it should be readable on a phone lock screen.
+    </cms:ignore>
+    <cms:php>
+        global $CTX;
+
+        $W    = 46;                                   // total line width
+        $g    = function($k){ global $CTX; return trim( (string)$CTX->get($k) ); };
+        $money= function($v){ return '$' . number_format( (float)$v, 2 ); };
+        $rule = str_repeat( '-', $W );
+
+        // right-align an amount against a left-hand label
+        $pair = function( $label, $amount ) use ( $W ) {
+            $label = '  ' . $label;
+            $pad   = $W - strlen($label) - strlen($amount);
+            if( $pad < 1 ){ $pad = 1; }
+            return $label . str_repeat(' ', $pad) . $amount;
+        };
+
+        $L = array();
+        $L[] = 'NEW ORDER  -  ' . $g('om_num');
+        $L[] = str_repeat( '=', $W );
+        $L[] = '';
+        $L[] = 'PAID';
+        $L[] = '  ' . $money( $g('om_total') ) . '  by ' . ( $g('om_gw') === 'paypal' ? 'PayPal' : 'card' );
+        $L[] = '';
+        $L[] = 'CUSTOMER';
+        $L[] = '  ' . trim( $g('om_first') . ' ' . $g('om_last') );
+        $L[] = '  ' . $g('om_to');
+        $L[] = '';
+        $L[] = 'SHIP TO';
+        $L[] = '  ' . $g('om_addr');
+        $L[] = '  ' . trim( $g('om_city') . ', ' . $g('om_state') . ' ' . $g('om_zip'), ', ' );
+        $L[] = '';
+        $L[] = 'ITEMS';
+
+        $rows = array_filter( explode( '|ROW|', (string)$CTX->get('om_plain_rows') ), function($r){ return trim($r) !== ''; } );
+        if( !count($rows) ){
+            $L[] = '  (no line items recorded)';
+        }
+        foreach( $rows as $r ){
+            $f     = explode( '|F|', $r );
+            $qty   = isset($f[0]) ? trim($f[0]) : '';
+            $title = isset($f[1]) ? trim($f[1]) : '';
+            $amt   = isset($f[2]) ? '$' . trim($f[2]) : '';
+            $left  = '  ' . $qty . ' x  ' . $title;
+            // wrap a long product name rather than pushing the price off the line
+            if( strlen($left) + strlen($amt) + 2 > $W ){
+                $L[] = $left;
+                $L[] = $pair( '', $amt );
+            }
+            else{
+                $pad = $W - strlen($left) - strlen($amt);
+                $L[] = $left . str_repeat(' ', $pad) . $amt;
+            }
+        }
+
+        $L[] = '';
+        $L[] = 'TOTALS';
+        $L[] = $pair( 'Subtotal', $money( $g('om_sub') ) );
+        $L[] = $pair( 'Shipping', $money( $g('om_ship') ) );
+        $L[] = $pair( 'Tax',      $money( $g('om_tax') ) );
+        $L[] = '  ' . substr( $rule, 2 );
+        $L[] = $pair( 'TOTAL',    $money( $g('om_total') ) );
+        $L[] = '';
+        $L[] = 'Stock has already been deducted for this order.';
+
+        $CTX->set( 'om_admin_body', implode( "\n", $L ), 'global' );
+    </cms:php>
+
+    <cms:if om_admin>
+      <cms:if "<cms:not om_skip_shop />">
+        <cms:send_mail from="<cms:php>echo K_EMAIL_FROM;</cms:php>" to=om_admin reply_to=om_to
+                       subject="New order <cms:show om_num /> - $<cms:number_format om_total />" debug='0'><cms:show om_admin_body /></cms:send_mail>
+      </cms:if>
+    </cms:if>
+
+</cms:pages>
+</cms:if>

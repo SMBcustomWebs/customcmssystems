@@ -6,6 +6,16 @@
     <cms:redirect link=k_site_link />
 </cms:if>
 <cms:set edit_id="<cms:gpc 'pid' method='get' />" />
+
+<cms:ignore>
+    NEW CATEGORY. Folders on about.php are dynamic, so a submenu is a
+    couch_folders row plus an auto-generated 'folder-<id>' page in its
+    folder_masterpage. Handler first, before any markup - it redirects on
+    success. See snippets/utils/folder_handler.htm.
+</cms:ignore>
+<cms:set fh_masterpage = 'about.php' />
+<cms:set fh_page       = 'add-about.php' />
+<cms:embed 'utils/folder_handler.htm' />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,6 +167,24 @@
                                 <label class="form-label fw-bold">Department (Folder)</label>
                                 <div class="form-text mb-2">Select which department this employee belongs in.</div>
                                 <cms:input type="bound" name="k_page_folder_id" class="form-select" />
+                                <cms:ignore>
+                                    The trigger sits here, where someone realises the
+                                    category they want is missing. type="button" so it
+                                    cannot submit the form it lives in; the dialog it
+                                    opens is OUTSIDE that form. See
+                                    snippets/utils/folder_dialog.htm.
+                                </cms:ignore>
+                                <button type="button" class="fc-newcat" data-fc-open>
+                                    <span class="fc-newcat-plus" aria-hidden="true">+</span>
+                                    <span class="fc-newcat-txt">New category</span>
+                                </button>
+
+                                <cms:if fc_made>
+                                    <div class="fc-made mt-2 p-2">
+                                        Created <strong><cms:show fc_made /></strong> &mdash; pick it above.
+                                    </div>
+                                </cms:if>
+
                             </div>
                         </div>
 
@@ -215,6 +243,15 @@
 
                 </cms:form>
                 
+                <cms:ignore>
+                    NEW CATEGORY DIALOG - outside the databound form above,
+                    always. A form inside a form is invalid markup and would
+                    submit both.
+                </cms:ignore>
+                <cms:set fd_masterpage = 'about.php' />
+                <cms:set fd_label      = 'About' />
+                <cms:embed 'utils/folder_dialog.htm' />
+
                 <cms:embed 'kcfinder_button_fix.htm' />
                 
             </div>

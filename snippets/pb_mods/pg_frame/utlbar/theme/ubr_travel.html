@@ -1,7 +1,11 @@
-<section class="bg-<cms:show ccs_ubr_travel_bg_clr_opt /> py-<cms:show ccs_ubr_travel_py /> <cms:show ccs_ubr_travel_dspr /> <cms:if ccs_ubr_travel_stky>sticky-top top-0 start-0 z-3</cms:if>" id="travel" aria-label="Flight Search">
+<section class="ccs-utlbar bg-<cms:show ccs_ubr_travel_bg_clr_opt /> py-<cms:show ccs_ubr_travel_py /> <cms:show ccs_ubr_travel_dspr /> <cms:if ccs_ubr_travel_stky>sticky-top top-0 start-0 z-3</cms:if>" id="travel" aria-label="Flight Search">
  <cms:if ccs_gl_edt_ok>
-        <div class="position-absolute top-50 start-0 translate-middle-y ms-2 z-3">
+        <div class="d-flex gap-1 position-absolute top-50 start-0 translate-middle-y ms-2 z-3">
             <cms:popup_edit 'ccs_ubr_travel_gen_grp|ccs_ubr_travel_init_msg|ccs_ubr_travel_gen_row|ccs_ubr_travel_bg_clr_opt|ccs_ubr_travel_py|ccs_ubr_travel_dspr|ccs_ubr_travel_stky_row|ccs_ubr_travel_stky_msg|ccs_ubr_travel_stky' link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Bar Settings"><i class="fas fa-cog text-warning" style="font-size: 12px;"></i></span>' />
+            <cms:pages masterpage='globals.php' limit='1'>
+                <cms:popup_edit 'ccs_gl_site_ftr_msg|ccs_gl_site_ubr_lnk_hvr_clr'
+                    link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit utility bar link hover color'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+            </cms:pages>
         </div>
     </cms:if>
     

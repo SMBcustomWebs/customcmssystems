@@ -1,0 +1,164 @@
+<cms:ignore>
+    ============================================================
+    SAVE TO WISHLIST - the button, and the script that drives it.
+    ------------------------------------------------------------
+    WHERE TO EMBED
+    Inside the same cms:pages loop as utils/wishlist_listener.htm,
+    wherever the button belongs in the layout. Embed it ONCE per
+    page - it carries element ids.
+
+    OPTIONAL, set before embedding:
+      wl_btn_class   classes for the button
+                     (default: btn btn-secondary fw-bold flex-fill)
+
+    TEMPLATE-AGNOSTIC. It posts back to the current URL, so the
+    listener that answers is the one in the same view. Nothing
+    here names a template, an item, or a field.
+
+    THE VARIANT STRING IS LOAD-BEARING.
+    assets/js/ccs_js.js splits it on '|' then ':' and injects each
+    pair straight back into a scraped cart form, so the keys must
+    stay the raw control names the cart uses (pp_id, on0, os0 ...)
+    and list values must stay the raw indices. A readable label
+    here would break Move to Cart later, in front of a customer.
+    The readable copy is built separately as variants_display and
+    is the one shown to people.
+
+    Both strings are sent. An earlier copy of this code in
+    service.html sent only the raw one, so saved services showed
+    no variant text anywhere.
+    ============================================================
+</cms:ignore>
+
+<cms:if wl_btn_class eq ''>
+    <cms:set wl_btn_class = 'btn btn-secondary fw-bold flex-fill' />
+</cms:if>
+
+<cms:if k_logged_in>
+
+    <button type="button" id="save-wishlist-btn" class="<cms:show wl_btn_class />" style="--ccs-btn-padding-x: 1rem;">
+        <i class="far fa-heart me-1" aria-hidden="true"></i>Save for Later<span class="visually-hidden"> - <cms:show k_page_title /></span>
+    </button>
+
+    <cms:ignore>
+        role="status" already implies aria-live="polite"; declaring both
+        can double-announce.
+    </cms:ignore>
+    <div id="wishlist_feedback" class="mt-2 fs-10 fw-bold" role="status"></div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.getElementById('save-wishlist-btn');
+        if (!btn) { return; }
+
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            var cartForm = document.getElementById('add-to-cart-form') ||
+                           document.querySelector('form.cart-form');
+            var feedback = document.getElementById('wishlist_feedback');
+            var variantString = '';
+            var displayParts = [];
+
+            // The cart form is absent when the item is out of stock.
+            // Saving still proceeds, just with no variants.
+            if (cartForm) {
+                var formData = new FormData(cartForm);
+                formData.forEach(function (value, key) {
+                    var k = key.toLowerCase();
+                    if (k !== 'qty' && k !== 'quantity' && key !== 'submit') {
+                        variantString += key + ': ' + value + ' | ';
+                    }
+                });
+                if (variantString.endsWith(' | ')) {
+                    variantString = variantString.slice(0, -3);
+                }
+
+                // Readable copy, built from what the customer can actually
+                // see. os<N> is the chosen option and on<N> is that option's
+                // name, so pair them up and take the <option> TEXT rather
+                // than its index. Stored separately - the raw string above
+                // must stay machine-parseable.
+                var ctrls = cartForm.querySelectorAll('select[name^="os"], input[type="text"][name^="os"]');
+                Array.prototype.forEach.call(ctrls, function (ctrl) {
+                    var idx = ctrl.name.substring(2);
+                    var nameInput = cartForm.querySelector('input[name="on' + idx + '"]');
+                    var label = nameInput ? nameInput.value : ('Option ' + idx);
+                    var shown = (ctrl.tagName === 'SELECT' && ctrl.selectedIndex > -1)
+                                ? ctrl.options[ctrl.selectedIndex].text.trim()
+                                : ctrl.value;
+                    if (shown) { displayParts.push(label + ': ' + shown); }
+                });
+            }
+
+            var sendData = new FormData();
+            sendData.append('wishlist_action', 'save_item');
+            sendData.append('product_id', '<cms:show k_page_id />');
+            sendData.append('variants', variantString);
+            sendData.append('variants_display', displayParts.join(', '));
+
+            var originalHTML = btn.innerHTML;
+            var originalClass = btn.className;
+            btn.disabled = true;
+            btn.setAttribute('aria-busy', 'true');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1" aria-hidden="true"></i>Saving...';
+
+            // Posts to the current URL, so the listener in this same view
+            // answers it - which is what keeps this snippet portable.
+            fetch(window.location.href, {
+                method: 'POST',
+                body: sendData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(function (response) { return response.text(); })
+            .then(function (data) {
+                btn.removeAttribute('aria-busy');
+
+                if (data.indexOf('WISHLIST_SUCCESS') !== -1) {
+                    // Class list must match the markup above, or the button
+                    // resizes out of its column on success.
+                    btn.className = originalClass;
+                    btn.innerHTML = '<i class="fas fa-check me-1" aria-hidden="true"></i>Saved to Wishlist';
+                    if (feedback) {
+                        feedback.className = 'mt-2 fs-10 fw-bold text-success-emphasis';
+                        feedback.textContent = 'Added to your wishlist with the options you selected.';
+                    }
+
+                    // Move the badge NOW, then let the panel reconcile.
+                    // Waiting on the round trip made the save feel broken.
+                    if (typeof window.bumpWishlistCount === 'function') {
+                        window.bumpWishlistCount(1);
+                    }
+                    // List only (false): the count query can still report the
+                    // pre-save value for a beat, and letting it write the badge
+                    // here makes the number flash up and snap back.
+                    if (typeof window.refreshWishlistModal === 'function') {
+                        window.refreshWishlistModal(false);
+                    }
+                } else {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHTML;
+                    if (feedback) {
+                        feedback.className = 'mt-2 fs-10 fw-bold text-danger-emphasis';
+                        feedback.textContent = 'Sorry, that could not be saved to your wishlist. Please try again.';
+                    }
+                }
+            })
+            .catch(function () {
+                btn.removeAttribute('aria-busy');
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+                if (feedback) {
+                    feedback.className = 'mt-2 fs-10 fw-bold text-danger-emphasis';
+                    feedback.textContent = 'Sorry, that could not be saved to your wishlist. Please try again.';
+                }
+            });
+        });
+    });
+    </script>
+
+<cms:else />
+    <a href="<cms:login_link />" class="<cms:show wl_btn_class /> d-flex align-items-center justify-content-center" style="--ccs-btn-padding-x: 1rem;">
+        <i class="far fa-heart me-1" aria-hidden="true"></i>Log in to Save for Later
+    </a>
+</cms:if>

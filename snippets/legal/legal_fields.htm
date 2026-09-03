@@ -1,0 +1,41 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/legal/legal_fields.htm
+
+    The editable schema shared by every legal page. Embedded INSIDE each
+    template's cms:template block, which is what that block is for - declaring
+    fields. Only logic must stay outside it.
+
+    Field names repeat across the three templates on purpose. Couch scopes
+    fields to their template, so privacy.php's lgl_body and terms.php's lgl_body
+    are separate rows that cannot collide. One snippet, three independent sets.
+
+    EFFECTIVE DATE IS TYPED, NOT TAKEN FROM THE FILE. It is tempting to print
+    the page's modification date automatically, and it would be wrong. The date
+    on a policy is a legal statement about when those terms took effect, not a
+    record of when somebody last fixed a typo. Correcting a comma should not
+    silently re-date the document people agreed to.
+    ===========================================================================
+</cms:ignore>
+
+<cms:editable type='text' name='lgl_title' label='Page Title'
+    desc='Shown as the page heading and in the browser tab'
+    required='1' order='1' />
+
+<cms:editable type='text' name='lgl_effective' label='Effective Date'
+    desc='The date these terms took effect. Type it as you want it read, for example January 1, 2026.'
+    order='2' />
+
+<cms:editable type='text' name='lgl_intro' label='Short Summary'
+    desc='Optional. One or two sentences in plain language, shown above the formal text.'
+    order='3' />
+
+<cms:ignore>
+    A rich text field rather than a PageBuilder block. Legal copy is a single
+    flowing document that a lawyer hands over as prose - it wants headings,
+    lists and links, not a layout system. Anything that needs designing is not
+    a policy page.
+</cms:ignore>
+<cms:editable type='richtext' name='lgl_body' label='Policy Text'
+    desc='The full document. Paste from your legal source and format with the toolbar.'
+    height='600' order='4' />

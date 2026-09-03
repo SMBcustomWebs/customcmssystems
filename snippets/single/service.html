@@ -1,6 +1,20 @@
 <cms:set target_service_id="<cms:gpc 'p' method='get' />" />
 
 <cms:pages masterpage='service.php' id=target_service_id limit='1'>
+
+    <cms:ignore>
+        SAVE TO WISHLIST - shared with every other single view. This file used
+        to carry its own copy of the handler and the script, and the copy had
+        already drifted: it never sent variants_display, so a saved service
+        showed no readable options anywhere.
+
+        Placed here for two reasons. It answers with cms:abort, so it must run
+        before the markup it would otherwise print past. And it sits OUTSIDE
+        the availability gate below - an unavailable item is exactly the kind
+        of thing someone wants to save for later, and gating the listener made
+        saving one fail silently.
+    </cms:ignore>
+    <cms:embed 'utils/wishlist_listener.htm' />
     <section class="py-3 py-lg-5">
         <div class="container mt-2 mt-lg-4">
             
@@ -132,91 +146,14 @@
 
                                 </cms:pp_product_form>
 
-                                <!-- WISHLIST BUTTON -->
-                                <cms:set my_wishlist_action="<cms:gpc 'wishlist_action' method='post' />" />
-                                <cms:if my_wishlist_action='save_item' && k_logged_in && ccs_auth_uid >
-                                    <cms:set my_prod_id="<cms:gpc 'product_id' method='post' />" />
-                                    <cms:set my_vars="<cms:gpc 'variants' method='post' />" />
-                                    <cms:set my_vars_display="<cms:gpc 'variants_display' method='post' />" />
-                                    <!-- wish_masterpage = k_template_name so a saved service
-                                         resolves back to service.php, not product.php.
-                                         wish_user_id = ccs_auth_uid, never k_user_id. -->
-                                    <cms:db_persist _masterpage='wishlist.php' _mode='create' k_page_title="Wishlist-<cms:show ccs_auth_uid />-<cms:show my_prod_id />" wish_user_id=ccs_auth_uid wish_masterpage=k_template_name wish_product_id=my_prod_id wish_variants=my_vars wish_variants_display=my_vars_display />
-                                    <cms:if k_error><cms:abort>ERROR: <cms:show k_error /></cms:abort><cms:else /><cms:abort>WISHLIST_SUCCESS</cms:abort></cms:if>
-                                </cms:if>
-
+                                <cms:ignore>
+                                    The BUTTON sits here, in the layout. The listener
+                                    that answers it runs at the top of the file, outside
+                                    the availability gate - see the note there.
+                                </cms:ignore>
                                 <div class="text-center">
-                                    <cms:if k_logged_in>
-                                        <button type="button" id="save-wishlist-btn" class="btn btn-link text-primary text-decoration-none">
-                                            <i class="far fa-heart me-1"></i> Save for Later
-                                        </button>
-                                        <div id="wishlist_feedback" class="mt-1" style="display:none;"></div>
-                                        <script>
-                                            document.addEventListener('DOMContentLoaded', function() {
-                                                const btn = document.getElementById('save-wishlist-btn');
-                                                if(btn) {
-                                                    btn.addEventListener('click', function(e) {
-                                                        e.preventDefault();
-                                                        const cartForm = document.getElementById('add-to-cart-form');
-                                                        const feedback = document.getElementById('wishlist_feedback');
-                                                        if(!cartForm) return;
-                                                        
-                                                        const formData = new FormData(cartForm);
-                                                        let variantString = '';
-                                                        formData.forEach(function(value, key) {
-                                                            if(key.toLowerCase() !== 'qty' && key.toLowerCase() !== 'quantity' && key !== 'submit') {
-                                                                variantString += key + ': ' + value + ' | ';
-                                                            }
-                                                        });
-                                                        if(variantString.endsWith(' | ')) variantString = variantString.slice(0, -3);
-
-                                                        const sendData = new FormData();
-                                                        sendData.append('wishlist_action', 'save_item');
-                                                        sendData.append('product_id', '<cms:show k_page_id />');
-                                                        sendData.append('variants', variantString);
-
-                                                        btn.disabled = true;
-                                                        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Saving...';
-
-                                                        fetch(window.location.href, {
-                                                            method: 'POST', body: sendData, headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                                                        }).then(response => response.text()).then(data => {
-                                                            if(data.includes('WISHLIST_SUCCESS')) {
-                                                                btn.className = 'btn btn-link text-success text-decoration-none';
-                                                                btn.innerHTML = '<i class="fas fa-check me-1"></i> Saved to Wishlist';
-                                                                feedback.className = 'mt-1 text-success';
-                                                                feedback.innerHTML = 'Added with your options!';
-
-                                                                // This page never touched the badge or the panel at
-                                                                // all, so saving a service updated neither. Bump the
-                                                                // count immediately, then re-render the panel so the
-                                                                // item appears and the count reconciles.
-                                                                if(typeof window.bumpWishlistCount === 'function') {
-                                                                    window.bumpWishlistCount(1);
-                                                                }
-                                                                // LIST ONLY (false) - see product.html for why the
-                                                                // server count must not write the badge here.
-                                                                if(typeof window.refreshWishlistModal === 'function') {
-                                                                    window.refreshWishlistModal(false);
-                                                                }
-                                                            } else {
-                                                                feedback.className = 'mt-1 text-danger';
-                                                                feedback.innerHTML = 'Error saving to wishlist.';
-                                                            }
-                                                            feedback.style.display = 'block';
-                                                        }).catch(error => {
-                                                            btn.disabled = false;
-                                                            btn.innerHTML = '<i class="far fa-heart me-1"></i> Save for Later';
-                                                        });
-                                                    });
-                                                }
-                                            });
-                                        </script>
-                                    <cms:else />
-                                        <a href="<cms:login_link />" class="btn btn-link text-primary text-decoration-none">
-                                            <i class="far fa-heart me-1"></i> Log in to Save
-                                        </a>
-                                    </cms:if>
+                                    <cms:set wl_btn_class = 'btn btn-link text-primary text-decoration-none' />
+                                    <cms:embed 'utils/wishlist_button.htm' />
                                 </div>
 
                             <cms:else />

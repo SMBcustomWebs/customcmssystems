@@ -1,14 +1,127 @@
-<cms:pages masterpage='globals.php' limit='1'>
-    <cms:set inline_edit_active="<cms:get_session 'inline_edit_on' />" />
+<cms:ignore>
+    ===========================================================================
+    WHO AM I - captured BEFORE any loop opens.
 
-    <cms:show_pagebuilder 'ccs_gl_tpb_pb' no_cache="<cms:if k_user_access_level ge '7' && inline_edit_active>1</cms:if>">
+    This is the fix for "no menu item is ever marked active", and it has to be
+    here, on these two lines, ahead of the cms:pages below.
+
+    THE PROBLEM. Line 4 of this file opens cms:pages on globals.php, and each
+    nav theme then opens cms:folders and cms:pages of its own inside that. Every
+    one of those loops calls set_context on the row it is currently on, which
+    reassigns k_template_name and k_page_name to the ITERATED page. By the time
+    a theme reaches its comparison there is nothing left to compare against -
+    both sides of the test are the loop's own row, so it can never identify the
+    visitor's actual location.
+
+    So the request's identity has to be snapshotted while it is still intact,
+    which is right here: this file is the single entry point every page uses for
+    the frame, and these two lines run before the first loop opens.
+
+    scope='global' is required, not decorative. It writes __ROOT__, which
+    survives a loop's scope being popped; a plain cms:set would be discarded the
+    moment the enclosing cms:pages closed, which is exactly the bug being fixed.
+
+    WHAT READS THESE
+    ccs_active_page_master top-level menu items, 11 sites across the three
+    nav themes, compared against the looped
+    k_template_name
+    ccs_active_page_name dropdown items, 12 sites, compared against the
+    looped k_page_name
+
+    Between them they drive every active class and every aria-current="page" in
+    the navigation - none of which rendered before, so a screen-reader user had
+    no way to tell where they were, and the global "Menu Item Color on Active
+    Page" setting had nothing to color.
+
+    A NOTE ON THE SECOND ONE. k_page_name is meaningful on a clonable template
+    and empty on a non-clonable one. On non-clonable pages the top-level match
+    carries it and the dropdown items simply do not light up, which is correct -
+    there is no individual page to point at.
+
+    WHY THE SECOND NAME CHANGED. The themes originally read a variable called
+    k_current_page_name, and that name is on its own enough to explain why the
+    dropdown active state could never have worked, no matter where anyone tried
+    to set it. Couch reserves the k_ prefix for its own context and refuses the
+    assignment outright - tags.php line 170 dies with "cannot be set because it
+    begins with k_ (considered system variable)". So the twelve read sites were
+    waiting on a variable no template was permitted to create. Renamed to
+    ccs_active_page_name, matching its sibling above, and updated at all twelve.
+
+    HISTORY: snippets/tl_if_pb_emb.html holds the first line already and had the
+    right idea, but nothing ever embedded it, so the variable was read eleven
+    times and written zero times. That file is now redundant.
+    ===========================================================================
+</cms:ignore>
+<cms:set ccs_active_page_master=k_template_name scope='global' />
+<cms:set ccs_active_page_name=k_page_name scope='global' />
+
+<cms:pages masterpage='globals.php' limit='1'>
+
+
+    <cms:ignore>
+        =======================================================================
+        CACHING, AND WHY THE TWO BARS GET DIFFERENT ANSWERS.
+
+        PageBuilder caching is on and not optional - page-builder.php:4 hardcodes
+        K_CACHE_PB to 1. On a GET with no_cache falsy, page-builder.php:265
+        returns the tile's stored HTML and never re-renders it, so anything the
+        tile printed about the CURRENT VISITOR is frozen into a single cache
+        entry keyed by tile id. Not by user. Not by session. One entry, served to
+        everybody.
+
+        Both bars print visitor-specific things, but they vary along different
+        axes, so one condition cannot serve both.
+
+        UTILITY BAR - no_cache='1', unconditionally.
+
+        ubr_shop.html prints two badges:
+
+        CART $_SESSION['kcart'] (cart.php:172). Session state, and this
+        site lets a guest shop and check out without ever logging
+        in. So the number differs between one ANONYMOUS visitor and
+        the next, and both of them read and write the same cache
+        entry. Gating on login would do nothing for them.
+
+        WISHLIST ubr_shop.html:5, counted per wish_user_id. Logged-in only,
+        so login-gating would have covered this one.
+
+        The cart is what forces the unconditional form. And it is the whole point
+        of users/logout.php: pp_empty_cart genuinely empties the session, but if
+        the bar that displays the count is a stored string, the next person is
+        still shown the previous person's number and the logout looks broken
+        while having worked perfectly.
+
+        The cost is small and already contained - ubr_shop.html:2 wraps the
+        wishlist query in cms:if k_logged_in, so an anonymous visitor pays for a
+        cheap re-render and no extra database call.
+
+        NAVBAR - gated on k_logged_in, which is enough here.
+
+        Its only per-visitor content is the Login / Logout branch. With this
+        condition a logged-in request skips BOTH the cache read (:265) and the
+        cache write (:284), so cache entries can only ever be written by an
+        anonymous render - which always prints "Login", which is right for every
+        anonymous reader. Self-consistent, and it keeps the expensive fragment
+        cached: this is the bar that walks the folder tree and runs a cms:pages
+        per menu item.
+
+        k_logged_in also covers the editing case the old condition tested for,
+        since an admin with editing on is by definition logged in.
+
+        ONE-TIME CLEANUP: entries already written while someone was logged in
+        will keep being served until they turn over. Clear the PageBuilder cache
+        once after deploying this, or a stranger keeps getting a Logout button
+        and somebody else's cart count.
+        =======================================================================
+    </cms:ignore>
+    <cms:show_pagebuilder 'ccs_gl_tpb_pb' no_cache='1'>
         <cms:if k_count le '2'>
             <cms:show k_content />
         </cms:if>
     </cms:show_pagebuilder>
-    
-    <cms:show_pagebuilder 'ccs_gl_nav_pb' no_cache="<cms:if k_user_access_level ge '7' && inline_edit_active>1</cms:if>">
-        <cms:if k_count == '1'>
+
+    <cms:show_pagebuilder 'ccs_gl_nav_pb' no_cache="<cms:if k_logged_in>1</cms:if>">
+        <cms:if k_count=='1'>
             <cms:show k_content />
         </cms:if>
     </cms:show_pagebuilder>

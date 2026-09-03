@@ -1,0 +1,271 @@
+<cms:ignore>
+    ================================================================
+    order_create.htm - write a PENDING order plus its line items.
+
+    WHERE THIS RUNS
+    Inside checkout.php's cms:form, in the k_success branch. That is
+    not optional: it reads the checkout fields as frm_<name>, and
+    tags.php only populates frm_* for registered cms:input fields
+    inside a successful cms:form. Raw HTML inputs (billing_*, gateway)
+    are read with cms:gpc instead, because they never become frm_*.
+
+    WHAT IT SETS (all scope='global', so the caller can read them)
+      ccs_new_order_id      k_page_id of the created order, '' on failure
+      ccs_new_order_number  human-readable reference, e.g. VS-1042
+      ccs_order_error       error text, '' when all went well
+
+    WHY PENDING
+    The order is written BEFORE the customer reaches the gateway, so
+    there is a record to reconcile against whatever comes back - and
+    something to look up if the customer closes the tab mid-payment.
+    Nothing here marks anything paid. Only order_fulfil.htm does that.
+
+    EVERY MONEY VALUE IS A SNAPSHOT, per the note at the top of
+    orders.php. Nothing downstream should recalculate from live
+    product data - prices change, orders must not.
+    ================================================================
+</cms:ignore>
+
+<cms:set ccs_new_order_id = '' scope='global' />
+<cms:set ccs_new_order_number = '' scope='global' />
+<cms:set ccs_order_error = '' scope='global' />
+
+<cms:ignore>
+    Billing: if the customer left "same as shipping" ticked, copy the
+    shipping values across so the order carries a complete billing
+    record of its own - orders.php documents this expectation.
+</cms:ignore>
+<cms:set oc_same = "<cms:gpc 'same_as_shipping' method='post' />" />
+<cms:if oc_same = '1'>
+    <cms:set oc_bill_address = frm_address />
+    <cms:set oc_bill_city    = frm_city />
+    <cms:set oc_bill_state   = frm_state />
+    <cms:set oc_bill_zip     = frm_zip />
+<cms:else />
+    <cms:set oc_bill_address = "<cms:gpc 'billing_address' method='post' />" />
+    <cms:set oc_bill_city    = "<cms:gpc 'billing_city'   method='post' />" />
+    <cms:set oc_bill_state   = "<cms:gpc 'billing_state'  method='post' />" />
+    <cms:set oc_bill_zip     = "<cms:gpc 'billing_zip'    method='post' />" />
+</cms:if>
+
+<cms:set oc_gateway = "<cms:gpc 'gateway' method='post' />" />
+<cms:if oc_gateway ne 'paypal'><cms:set oc_gateway = 'stripe' /></cms:if>
+
+<cms:ignore>
+    Totals. pp_sub_total / pp_shipping / pp_taxes / pp_total are TAGS,
+    not variables - the original checkout.php learned this the hard
+    way with k_cart_total. Capture each into a variable first.
+</cms:ignore>
+<cms:set oc_subtotal = "<cms:pp_sub_total />" />
+<cms:set oc_shipping = "<cms:pp_shipping />" />
+<cms:set oc_tax      = "<cms:pp_taxes />" />
+<cms:set oc_total    = "<cms:pp_total />" />
+
+<cms:ignore>
+    The four totals fields carry validator='non_negative_decimal'. An empty
+    string is not a valid decimal, and pp_shipping / pp_taxes return nothing
+    at all when no shipping or tax rule applies - which is this site's normal
+    configuration. Coerce to '0' so a free-shipping order can still be saved.
+</cms:ignore>
+<cms:php>
+    global $CTX;
+    foreach( array('oc_subtotal','oc_shipping','oc_tax','oc_total') as $k ){
+        $v = trim( (string) $CTX->get($k) );
+        if( $v==='' || !is_numeric($v) ){ $v = '0'; }
+        $CTX->set( $k, $v, 'global' );
+    }
+</cms:php>
+
+<cms:ignore>
+    ----------------------------------------------------------------
+    STEP 1 - create the order shell.
+
+    No k_page_title and no k_page_name are supplied, so db_persist's
+    _auto_title path assigns a random md5 for both. That is deliberate
+    on two counts: a per-order unique page_name is guaranteed without
+    us inventing one, and the resulting URL is unguessable. The
+    readable title is written in step 2, once we know the id.
+    ----------------------------------------------------------------
+</cms:ignore>
+<cms:ignore>
+    _auto_title='1' is REQUIRED, not decorative. data-bound-form.php declares
+    the default as '_auto_title'=>'0', so without it no title and no page_name
+    are generated, the save fails validation, and k_last_insert_id never gets
+    set - which surfaces later as "db_persist - _page_id required".
+</cms:ignore>
+<cms:db_persist_ex
+    _masterpage='orders.php'
+    _mode='create'
+    _invalidate_cache='0'
+    _auto_title='1'
+    _set_errors_in_context='1'
+
+    order_status='pending'
+    order_stock_deducted='0'
+    order_gateway=oc_gateway
+
+    <cms:ignore>
+        ccs_auth_uid, not k_user_id. k_user_id is overwritten by the
+        extended-users addon with the users-template page id, so it can be the
+        real user id, a page id, or -1 depending on install state - and which
+        one you get changes when a template is registered. An order tagged with
+        it can stop matching its own owner later. utils/auth_uid.htm has the
+        detail; head.htm sets ccs_auth_uid, and checkout embeds head.htm well
+        before this runs. Empty for a guest checkout, which is correct.
+    </cms:ignore>
+    order_user_id=ccs_auth_uid
+    order_first_name=frm_first_name
+    order_last_name=frm_last_name
+    order_email=frm_email
+
+    order_ship_address=frm_address
+    order_ship_city=frm_city
+    order_ship_state=frm_state
+    order_ship_zip=frm_zip
+
+    order_bill_address=oc_bill_address
+    order_bill_city=oc_bill_city
+    order_bill_state=oc_bill_state
+    order_bill_zip=oc_bill_zip
+
+    order_subtotal=oc_subtotal
+    order_shipping=oc_shipping
+    order_tax=oc_tax
+    order_total=oc_total
+/>
+
+<cms:ignore>
+    Capture db_persist's own outcome IMMEDIATELY, before anything else can
+    touch the context. Gating on k_success is not safe here: this snippet runs
+    inside checkout.php's cms:form, which has already set its own k_success,
+    so a failed create can leave the outer '1' visible and send us down the
+    success path with no id. The presence of an insert id is unambiguous.
+</cms:ignore>
+<cms:set oc_insert_id = k_last_insert_id scope='global' />
+<cms:set oc_insert_nm = k_last_insert_page_name scope='global' />
+<cms:set oc_insert_err = k_error scope='global' />
+
+<cms:if oc_insert_id>
+    <cms:set ccs_new_order_id = oc_insert_id scope='global' />
+    <cms:set ccs_new_order_number = "VS-<cms:show oc_insert_id />" scope='global' />
+
+    <cms:ignore>
+        The random page_name db_persist just generated becomes the order's
+        confirmation TOKEN. order-complete.php is addressed by this rather
+        than by the sequential page id, so a customer cannot walk ids and
+        read other people's names, addresses and order contents.
+    </cms:ignore>
+    <cms:set ccs_new_order_token = oc_insert_nm scope='global' />
+
+    <cms:ignore>
+        STEP 2 - stamp the reference. order_number is its own indexed
+        field (search_type='text') so a gateway callback can find the
+        order without depending on how Couch slugified anything.
+        k_page_title gets the same value purely for a readable admin list.
+    </cms:ignore>
+    <cms:db_persist_ex
+        _masterpage='orders.php'
+        _mode='edit'
+        _page_id=ccs_new_order_id
+        _invalidate_cache='0'
+        order_number=ccs_new_order_number
+        k_page_title=ccs_new_order_number
+    />
+
+    <cms:ignore>
+        ------------------------------------------------------------
+        STEP 3 - one order-items page per cart line.
+
+        Line items are a sibling template rather than a mosaic because
+        db_persist only writes keys present in $pg->_fields, and mosaic
+        tiles are separate pages - order-items.php explains this.
+
+        Inside cms:pp_cart_items the canonical vars are line_id, id,
+        name, title, link, price, quantity, line_total and
+        requires_shipping (cart.php, cart_items_handler). tax_class and
+        tax_rate are added on top by cart_ex.php's
+        cart_alter_custom_fields listener.
+        ------------------------------------------------------------
+    </cms:ignore>
+    <cms:pp_cart_items>
+
+        <cms:set oc_pid        = id />
+        <cms:set oc_title      = title />
+        <cms:set oc_qty        = quantity />
+        <cms:set oc_unit       = price />
+        <cms:set oc_line_total = line_total />
+        <cms:set oc_tax_class  = tax_class />
+        <cms:set oc_tax_rate   = tax_rate />
+
+        <cms:ignore>
+            SKU snapshot. itm_sku is optional - its own description says
+            "leave blank to use a system-generated ID" - so fall back to
+            the product's page id, which is unique by construction.
+        </cms:ignore>
+        <cms:set oc_sku = '' scope='global' />
+        <cms:set itm_tpl_id = oc_pid scope='global' />
+        <cms:embed 'utils/item_tpl.htm' />
+        <cms:pages masterpage=itm_tpl id=oc_pid limit='1'>
+            <cms:if itm_sku>
+                <cms:set oc_sku = itm_sku scope='global' />
+            <cms:else />
+                <cms:set oc_sku = k_page_id scope='global' />
+            </cms:if>
+        </cms:pages>
+
+        <cms:ignore>
+            Variants, in the raw on{N}/os{N} shape that assets/js/ccs_js.js
+            splits on '|' then ':' when re-ordering.
+
+            raw_variants is supplied by the cart_alter_custom_fields listener
+            added to cart_ex.php - it preserves the INDEX the customer chose
+            ($_POST['os0']), which is what a <select> needs to be repopulated.
+            cart.php itself keeps only the display label and discards the index,
+            so without that listener dropdown options cannot round-trip.
+
+            The fallback rebuilds the string from display labels. It matters for
+            carts that were already sitting in a session before the listener was
+            deployed - those items have no raw_variants - and for text options,
+            where the label IS the value and either path is correct.
+        </cms:ignore>
+        <cms:if raw_variants>
+            <cms:set oc_variants = raw_variants scope='global' />
+        <cms:else />
+            <cms:capture into='oc_variants' scope='global'>
+                <cms:pp_selected_options>
+                    <cms:if k_count gt '0'> | </cms:if>on<cms:show k_count />: <cms:show option_name /> | os<cms:show k_count />: <cms:show option_value />
+                </cms:pp_selected_options>
+            </cms:capture>
+        </cms:if>
+
+        <cms:db_persist_ex
+            _masterpage='order-items.php'
+            _mode='create'
+            _invalidate_cache='0'
+            _auto_title='1'
+            _set_errors_in_context='1'
+
+            item_order_id=ccs_new_order_id
+            item_product_id=oc_pid
+            item_title=oc_title
+            item_sku=oc_sku
+            item_variants=oc_variants
+            item_qty=oc_qty
+            item_unit_price=oc_unit
+            item_line_total=oc_line_total
+            item_tax_class=oc_tax_class
+            item_tax_rate=oc_tax_rate
+
+            k_page_title="<cms:show ccs_new_order_number /> / <cms:show oc_title />"
+        />
+
+        <cms:if k_error>
+            <cms:set ccs_order_error = "Line item failed: <cms:show k_error />" scope='global' />
+        </cms:if>
+
+    </cms:pp_cart_items>
+
+<cms:else />
+    <cms:set ccs_order_error = "Could not create the order record. <cms:show oc_insert_err />" scope='global' />
+
+</cms:if>

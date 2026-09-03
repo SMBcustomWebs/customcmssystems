@@ -1,0 +1,63 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_tok/color-bg_solid.htm
+
+    EMITS   a bare color token, and nothing else. No sentinel.
+    USE AS  bg-{token}
+
+    MUST BE GUARDED  the first option emits an empty string. Without a cms:if
+    the use site prints a bare "bg-" into the class attribute.
+
+    THE SAME LIST AS _tok/color-bg.htm WITH ONE LINE REMOVED - the
+    "Custom Color or Gradient=custom" escape. Every other option, value and
+    label is identical, in the same order, on purpose: an author who has used
+    one should not have to relearn the other.
+
+    WHY A SECOND FILE INSTEAD OF A GUARD AT THE USE SITE. The custom escape is
+    only half a feature on its own. It stores the word custom, and the consuming
+    router is then expected to branch on that word and read a pair of color
+    pickers and a gradient angle that the block must also declare. A block that
+    offers the option without declaring those fields gives the author a choice
+    that silently does nothing - they pick Custom, save, and the background does
+    not change. Hiding it in the router does not help either; the option is
+    still in the list.
+
+    SO THE RULE IS  point at _tok/color-bg.htm when the block carries a custom
+    color group, and at this file when it does not. The contact block is the
+    second case: its focus is the form, and a gradient behind form fields is a
+    readability problem rather than a feature.
+
+    TRANSPARENT IS STILL HERE, and is a real choice rather than an absence.
+    bg-transparent sets background-color to transparent with !important, which
+    actively cancels a background coming from a parent. None emits no class at
+    all and lets whatever is underneath show through untouched. Both are
+    useful; they are not the same thing.
+    ===========================================================================
+</cms:ignore>
+None=
+|Site Theme Primary=primary
+|Site Theme Secondary=secondary
+|Site Theme Tertiary=tertiary
+|Site Theme Quaternary=quaternary
+|Site Theme Light=light
+|Site Theme Dark=dark
+|Page Body Color=body
+|White=white
+|Almost White=100
+|Lightest Gray=200
+|Light Gray level 3=300
+|Light Gray level 4=400
+|Gray level 5=500
+|Mid Shade=600
+|Gray level 7=700
+|Dark Gray level 8=800
+|Dark Gray level 9=900
+|Dark Gray level 10=1000
+|Darkest Gray=1100
+|Almost Black=1200
+|Black=black
+|Success=success
+|Info=info
+|Warning=warning
+|Danger=danger
+|Transparent (cancels a background)=transparent

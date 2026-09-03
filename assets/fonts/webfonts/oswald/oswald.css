@@ -1,0 +1,68 @@
+/* ==========================================================================
+   Oswald Font Declarations
+   ========================================================================== */
+
+/* Extra-Light 200 Normal */
+@font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 200;
+    font-display: swap;
+    src: url('./oswald-latin-200-normal.woff2') format('woff2');
+}
+
+/* Light 300 Normal */
+@font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('./oswald-latin-300-normal.woff2') format('woff2');
+}
+
+/* Regular 400 Normal */
+@font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('./oswald-latin-400-normal.woff2') format('woff2');
+}
+
+/* Medium 500 Normal */
+@font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: url('./oswald-latin-500-normal.woff2') format('woff2');
+}
+
+/* Semi-Bold 600 Normal */
+@font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('./oswald-latin-600-normal.woff2') format('woff2');
+}
+
+/* Bold 700 Normal */
+@font-face {
+    font-family: 'Oswald';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('./oswald-latin-700-normal.woff2') format('woff2');
+}
+
+/* Variable Font (Weights 200-700) */
+/*
+@font-face {
+  font-family: 'Oswald Variable';
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: swap;
+  src: url('./oswald-latin-wght-normal.woff2') format('woff2-variations');
+}
+*/

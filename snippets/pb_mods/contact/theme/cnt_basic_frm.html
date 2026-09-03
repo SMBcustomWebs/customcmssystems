@@ -1,0 +1,209 @@
+<cms:ignore>
+    =========================================================================
+    CONTACT BLOCK  -  BASIC CONTACT FORM
+    snippets/pb_mods/contact/theme/cnt_basic_frm.html
+
+    Name, email and message, with an optional heading and up to two
+    lines above. The ordinary contact form.
+
+    ACCESSIBILITY, and every one of these is a real failure mode rather than a
+    box-tick:
+
+      LABEL ELEMENTS ALWAYS EXIST, paired to their input by for= and id=. The
+      author can hide them visually; visually-hidden keeps them in the
+      accessibility tree where display:none would not. A placeholder is not a
+      label - it vanishes on first keystroke, most screen readers ignore it as
+      a name, and its grey default fails contrast almost everywhere.
+
+      autocomplete= lets a browser fill known values. For someone with a motor
+      impairment that is the difference between one tap and typing an address.
+
+      inputmode='email' raises the @ keyboard on a phone. cms:input has no
+      HTML5 email type, so this is how that is reached.
+
+      role='alert' on the error summary announces itself the moment it appears.
+      role='status' on the thank-you is polite - it waits for a pause rather
+      than interrupting.
+
+      The submit is a real button element carrying real text, not an
+      input type=submit with a value, so an icon can sit beside a label.
+
+    SEO. One heading element, level chosen by the author, h2 down to h6 or a
+    plain paragraph. Never h1 - that belongs to the page. The section is a
+    landmark element.
+
+    RESPONSIVE. The box width comes from the shared txt-box_size.htm, so this
+    section lines up with every other block on the page. No fixed pixel widths
+    anywhere; spacing is all utility classes.
+
+    THE FORM NAME IS HARDCODED AND MUST STAY THAT WAY. Couch matches a
+    submission back to the form by this name; a generated one would mean no
+    post was ever recognized. The consequence is that two tiles of THIS type
+    on one page would share a name and both react to one submission - a real
+    limit, worth solving before that layout is ever used.
+    =========================================================================
+</cms:ignore>
+<cms:embed 'pb_mods/contact/router/cnt_frm.inc' />
+
+<section id="<cms:show cnt_uid />" class="position-relative <cms:show cf_bg /> <cms:show cf_sec_pad />">
+
+    <cms:if cf_min_h_css>
+        <style><cms:show cf_min_h_css /></style>
+    </cms:if>
+
+    <cms:embed 'pb_mods/contact/inline/cnt_section_edit.txt' />
+
+    <div class="container">
+        <div class="row cnt-body justify-content-<cms:show cnt_box_halg /> align-items-center">
+            <div class="<cms:show cf_box /> text-<cms:show cnt_txt_halg />">
+
+                <cms:ignore>
+                    The wrapper is position-relative and always renders, even
+                    with no heading and no lines in it, because a blank text
+                    area is exactly when the author needs the button that adds
+                    the first heading.
+                </cms:ignore>
+                <div class="position-relative">
+                    <cms:embed 'pb_mods/contact/inline/cnt_txtbx_edit.txt' />
+
+                    <cms:if cnt_hdg_ln>
+                        <<cms:show cnt_hdg_tag /> class="<cms:show cf_hdg_cls />mb-3"><cms:show cnt_hdg_ln /></<cms:show cnt_hdg_tag />>
+                    </cms:if>
+
+                    <cms:if cnt_txt_opt ge '1' && cnt_txt1_ln>
+                        <p class="<cms:show cf_txt1_cls />mb-2"><cms:show cnt_txt1_ln /></p>
+                    </cms:if>
+                    <cms:if cnt_txt_opt ge '2' && cnt_txt2_ln>
+                        <p class="<cms:show cf_txt2_cls />mb-2"><cms:show cnt_txt2_ln /></p>
+                    </cms:if>
+                </div>
+
+                <cms:ignore>
+                    cnt_inl_hide is set to an empty string HERE rather than left
+                    unset. scope global writes to the root, which outlives a
+                    tile, so an email-only section rendered earlier on the same
+                    page would otherwise leave its hide list behind and blank
+                    out the name and message wording on this one.
+
+                    The cluster sits outside cms:form on purpose. Couch runs a
+                    form's children twice - once to register the fields and
+                    process the post, once to render - and only the second pass
+                    is emitted. Nothing here depends on that, and staying
+                    outside means nothing ever has to.
+                </cms:ignore>
+                <cms:set cnt_inl_hide = '' scope='global' />
+                <div class="position-relative">
+                    <cms:embed 'pb_mods/contact/inline/cnt_form_edit.txt' />
+
+                <cms:form name='cnt_basic_frm' method='post' class='mt-4' anchor='0'>
+
+                    <cms:if k_success>
+
+                        <cms:ignore>
+                            DELIVERY. k_email_from and k_email_to are exposed by
+                            page.php from config.php, which is the Couch-native
+                            way to do this - no address is hardcoded here and
+                            none is asked of the author.
+
+                            reply_to is the VISITOR's address, so hitting Reply
+                            in the inbox answers them directly. from stays the
+                            site's own address: putting the visitor's address
+                            in From is what gets mail rejected by SPF and DMARC.
+                        </cms:ignore>
+                        <cms:ignore>
+                            THE WHOLE FORM, IN ONE TAG. k_success is not a
+                            boolean - tags.php builds it as one "Label: value"
+                            line per field, in declaration order, the moment
+                            validation passes. It skips the submit button and
+                            the hidden CSRF token on its own.
+
+                            Which means the CAPTCHA, or a phone field, or
+                            anything else added to this form later arrives in
+                            the inbox with no edit here. Hand-listing the
+                            fields, which is what this used to do, is a list
+                            that goes stale the first time the form changes.
+
+                            The label on each cms:input is what titles each
+                            line. Those are bound to the same author-editable
+                            wording as the visible labels, so the mail reads in
+                            the site owner's own words.
+
+                            send_mail defaults to html='0', which decodes
+                            entities and strips tags over the whole body, so
+                            the newlines survive and nothing markup-ish gets
+                            through.
+                        </cms:ignore>
+                        <cms:send_mail from=k_email_from to=k_email_to reply_to=frm_email subject="<cms:show cnt_frm_subj />"><cms:show k_success /></cms:send_mail>
+
+                        <div class="alert alert-success shadow-sm" role="status">
+                            <h3 class="alert-heading h5 mb-1"><cms:show cnt_frm_ok_ttl /></h3>
+                            <p class="mb-0"><cms:show cnt_frm_ok_txt /></p>
+                        </div>
+
+                    <cms:else />
+
+                        <cms:if k_error>
+                            <div class="alert alert-danger shadow-sm" role="alert">
+                                <p class="mb-1 fw-bold">Please correct the following:</p>
+                                <ul class="mb-0 ps-3">
+                                    <cms:each k_error><li><cms:show item /></li></cms:each>
+                                </ul>
+                            </div>
+                        </cms:if>
+
+                        <div class="<cms:show cf_gap_cls />">
+                            <label class="<cms:show cf_lbl_cls />" for="<cms:show cnt_uid />_name"><cms:show cnt_frm_name_lbl /></label>
+                            <cms:input type="text" name="frm_name" label=cnt_frm_name_lbl id="<cms:show cnt_uid />_name" class="<cms:show cf_fld_cls />" required='1' autocomplete='name' placeholder="<cms:show cnt_frm_name_plc />" />
+                        </div>
+                        <div class="<cms:show cf_gap_cls />">
+                            <label class="<cms:show cf_lbl_cls />" for="<cms:show cnt_uid />_email"><cms:show cnt_frm_email_lbl /></label>
+                            <cms:input type="text" name="frm_email" label=cnt_frm_email_lbl id="<cms:show cnt_uid />_email" class="<cms:show cf_fld_cls />" validator='email' required='1' autocomplete='email' inputmode='email' placeholder="<cms:show cnt_frm_email_plc />" />
+                        </div>
+                        <div class="<cms:show cf_gap_cls />">
+                            <label class="<cms:show cf_lbl_cls />" for="<cms:show cnt_uid />_msg"><cms:show cnt_frm_msg_lbl /></label>
+                            <cms:input type="textarea" name="frm_msg" label=cnt_frm_msg_lbl id="<cms:show cnt_uid />_msg" class="<cms:show cf_fld_cls />" rows="<cms:show cnt_frm_msg_rows />" required='1' placeholder="<cms:show cnt_frm_msg_plc />" />
+                        </div>
+
+                        <cms:ignore>
+                            CAPTCHA SLOT. reCAPTCHA is already loaded in
+                            kfunctions.php and its keys are set in config.php,
+                            so this is one cms:input away when the approach is
+                            settled. Left empty on purpose rather than guessed
+                            at.
+                        </cms:ignore>
+
+                        <cms:ignore>
+                            position-relative goes on the wrapper that already
+                            carries the alignment class, so the button's own
+                            cluster travels with it when the author moves the
+                            button left, center or right.
+                        </cms:ignore>
+                        <cms:ignore>
+                            POINT-OF-COLLECTION PRIVACY LINE. A policy linked only
+                            from the footer is not where anyone reads it; the link
+                            that counts is the one beside the button, at the moment
+                            someone decides whether to hand their details over.
+                            Shared file so the wording is edited in one place -
+                            see snippets/utils/privacy_notice.htm.
+                        </cms:ignore>
+                        <cms:set pn_purpose = 'We use your name, email address and message only to reply to you. We do not sell them or use them for advertising.' />
+                        <cms:embed 'utils/privacy_notice.htm' />
+
+                        <div class="position-relative <cms:show cf_btn_wrap /> <cms:show cf_gap_cls />">
+                            <cms:embed 'pb_mods/contact/inline/cnt_btn_edit.txt' />
+
+                            <button type="submit" class="<cms:show cf_btn_cls />">
+                                <cms:show cnt_frm_btn_txt />
+                            </button>
+                        </div>
+
+                    </cms:if>
+
+                </cms:form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</section>

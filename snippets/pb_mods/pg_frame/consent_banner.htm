@@ -1,0 +1,225 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/pb_mods/pg_frame/consent_banner.htm
+
+    Embedded from tail.htm, just before the closing body tag.
+
+    IT LIVES IN THE FRAME, NOT IN A PAGEBUILDER TILE, AND THAT IS DELIBERATE.
+    PageBuilder caches a tile's rendered HTML in one entry shared by every
+    visitor (page-builder.php:265). A consent banner is per-visitor by
+    definition - cache it and one person's answer is served to the next. The
+    frame embeds this file directly on every request, so it is always resolved
+    against the cookie the current visitor actually sent.
+
+    That is also why this file may safely print per-visitor state - the checked
+    state of the three boxes below reflects what THIS visitor previously chose.
+    Nothing here is cached. Do not move this file into a tile.
+
+    IT NOW ALWAYS RENDERS WHEN THE OWNER HAS THE BANNER ON. It used to render
+    only for a visitor who had not answered, which meant there was nothing left
+    in the page to reopen. Withdrawal has to be as easy as consent - a click
+    cannot be undoable only by writing an email - so the markup is always
+    present and simply starts hidden for someone who has already answered.
+    The footer "Cookie Settings" control unhides it. See CLAUDE.md sec.18.
+
+    IT DOES NOT RENDER IN THE ADMIN PANEL. ccs_in_admin comes from
+    utils/consent.htm and is set from defined('K_ADMIN'), which is true for the
+    panel and for the iframes PageBuilder uses to preview tiles - otherwise this
+    bar appears in the middle of the footer editing screen. Hiding the prompt
+    grants nothing: the consent flags are still 0 in there, so nothing
+    non-essential loads either.
+
+    TURNING THE BANNER OFF DOES NOT TURN TRACKING ON. If the owner unticks the
+    setting, nothing renders at all, consent is never granted, and the gated
+    script slots stay empty. ccs_consent.js finds no banner and therefore
+    leaves the footer control hidden too, so there is no dead button. Off means
+    "ask nobody and load nothing", never "assume yes". That is the only safe
+    direction for a switch like this to fail in.
+
+    REFUSING IS EXACTLY AS EASY AS ACCEPTING - AND NOW ACTUALLY IS. Reject and
+    Accept share one class, .ccs-c__btn--answer, and differ in nothing but their
+    label. This paragraph made that claim for a while before it was true: the
+    markup gave Accept a solid btn-primary and Reject a faded
+    btn-outline-secondary, which is the exact dark pattern regulators fine. If
+    you ever find yourself styling one of these two differently from the other,
+    stop.
+
+    "Choose" is deliberately quieter. It is a disclosure toggle, not an answer,
+    so it is the one control here that SHOULD read as secondary.
+
+    There is no close button: dismissing a consent prompt is not an answer, and
+    treating it as one would be recording consent nobody gave.
+
+    NO BOOTSTRAP CLASSES, NO THEME VARIABLES, NO SITE FONTS. Every visual
+    decision lives in assets/css/ccs_consent.css, scoped to this id. This is the
+    only component on the site whose appearance carries legal weight, so a theme
+    colour picker or a decorative heading font must not be able to reach it. See
+    that file's header; do not reconnect it to var(--ccs-*).
+
+    NO HEADING ELEMENT. The title is a styled paragraph. An h2 here would inject
+    a heading into every page's document outline that has nothing to do with
+    that page - bad for the outline a screen reader user navigates by and bad as
+    sitewide boilerplate for a crawler. aria-labelledby may reference any
+    element, so the dialog still gets its accessible name from it.
+
+    ACCESSIBILITY. The bar is a labelled dialog with its description wired
+    through aria-describedby. Focus moves to it when it is shown so a keyboard
+    or screen reader user meets it rather than tabbing past it, and the
+    browser's own focus ring is left alone. Escape deliberately does nothing on
+    first visit - there is no silent way out, by design - but it DOES close the
+    bar when it was reopened from the footer, because there the visitor already
+    has a stored answer and cancelling changes nothing.
+
+    IT IS A REAL FORM, AND IT POSTS TO THE SERVER. The buttons are submit
+    buttons carrying ccs_cnst_do, and utils/consent.htm records the answer and
+    writes the cookies with cms:set_cookie. It used to write them from
+    JavaScript, which Safari caps at seven days regardless of the lifetime asked
+    for - so an accepted answer expired weekly instead of six-monthly. See that
+    file's header.
+
+    A CONSEQUENCE WORTH HAVING: this works with JavaScript disabled. The form
+    posts, the server answers, the page comes back correct. ccs_consent.js
+    upgrades it to a background post so the page does not visibly navigate, but
+    it is an enhancement, not a requirement.
+
+    THE POLICY VERSION IS NO LONGER SENT TO THE CLIENT AT ALL. It used to ride
+    on this element as data-ccs-consent-ver, and the script fell back to a
+    hardcoded '1' when the element was absent - which it is whenever the owner
+    unticks "Show the Cookie Consent Bar". Now the server stamps the version
+    when it records the answer, so the client never needs to know it and that
+    whole class of mismatch is gone rather than guarded against.
+
+    NO MARKUP DECISIONS LIVE IN JAVASCRIPT HERE. This file is markup and server
+    state only; assets/js/ccs_consent.js carries behaviour. The one thing it
+    still needs from the server is data-ccs-answered on the wrapper.
+    ===========================================================================
+</cms:ignore>
+
+<cms:ignore>
+    The globals fields are NOT ambiently in scope in the frame - head.htm has to
+    reach for them one at a time with get_custom_field. Opening globals once
+    here puts every ccs_gl_ field this banner needs in scope together, which is
+    both cheaper and less error-prone than a dozen separate lookups.
+
+    ccs_consent_set / _analytics / _marketing / _embed and ccs_consent_ver come
+    from utils/consent.htm and were set with scope='global', so they survive
+    into this block rather than being shadowed by it.
+</cms:ignore>
+<cms:ignore>
+    NO cms:else FALLBACKS IN THIS FILE. Every string the bar prints is a
+    required field in globals.php carrying a real default in the body of its
+    editable, so get_data() returns the default whenever the field is empty -
+    on the front end and in the panel alike (field.php:363). A second copy of
+    the wording hidden here would be a value nobody could see or edit, and the
+    two would drift.
+</cms:ignore>
+<cms:pages masterpage='globals.php' limit='1'>
+<cms:if ccs_gl_cookie_consent == '1' && ccs_in_admin != '1'>
+
+    <cms:set cnst_privacy = ccs_gl_privacy_link />
+    <cms:set cnst_cookies = ccs_gl_cookie_link />
+
+    <div id="ccs-consent"
+        role="dialog" aria-labelledby="ccs-consent-title" aria-describedby="ccs-consent-desc"
+        data-ccs-consent-banner
+        data-ccs-answered="<cms:show ccs_consent_set />"
+        <cms:if ccs_consent_set == '1'>hidden</cms:if>>
+        <form method="post" data-ccs-consent-form>
+        <div class="ccs-c__inner">
+
+            <div class="ccs-c__copy">
+                <p id="ccs-consent-title" class="ccs-c__title"><cms:show ccs_gl_consent_ttl /></p>
+                <p id="ccs-consent-desc" class="ccs-c__text">
+                    <cms:show ccs_gl_consent_txt />
+                    <cms:if cnst_privacy>
+                        <a href="<cms:show cnst_privacy />" class="ccs-c__link">Privacy Policy</a>
+                    </cms:if><cms:if cnst_privacy && cnst_cookies> &middot; </cms:if><cms:if cnst_cookies>
+                        <a href="<cms:show cnst_cookies />" class="ccs-c__link">Cookie Policy</a>
+                    </cms:if>
+                </p>
+            </div>
+
+            <cms:ignore>
+                Reject is listed FIRST and carries the identical class to Accept.
+                Order and styling both matter: a reject that is smaller, greyer
+                or one level deeper than accept is the thing being fined.
+            </cms:ignore>
+            <div class="ccs-c__actions">
+                <button type="submit" name="ccs_cnst_do" value="reject"
+                    class="ccs-c__btn ccs-c__btn--answer"><cms:show ccs_gl_consent_no /></button>
+
+                <button type="button" data-ccs-consent="prefs"
+                    aria-expanded="false" aria-controls="ccs-consent-prefs"
+                    class="ccs-c__btn ccs-c__btn--quiet"><cms:show ccs_gl_consent_pref /></button>
+
+                <button type="submit" name="ccs_cnst_do" value="accept"
+                    class="ccs-c__btn ccs-c__btn--answer"><cms:show ccs_gl_consent_yes /></button>
+            </div>
+
+            <cms:ignore>
+                Necessary is shown, checked and disabled rather than hidden.
+                People are entitled to see everything that is being set,
+                including the part they cannot decline, and hiding it invites the
+                suspicion that something else is hidden too.
+
+                THE OTHER THREE ARE PRE-CHECKED FROM THE STORED ANSWER, and only
+                from it. On a first visit all three flags are '0', so all three
+                arrive unticked - a pre-ticked consent box is not consent (CJEU,
+                Planet49). When the bar is reopened from the footer they show
+                what this visitor actually chose last time, which is the only
+                honest thing for a settings panel to do. Safe to print
+                per-visitor because this file is never cached; see the header.
+
+                hidden, not a utility class: the panel's visibility is now a
+                property of the element rather than of a stylesheet the theme
+                could change. ccs_consent.js toggles .hidden to match.
+            </cms:ignore>
+            <div class="ccs-c__panel" id="ccs-consent-prefs" hidden>
+                <div class="ccs-c__cats">
+
+                    <div class="ccs-c__cat">
+                        <input class="ccs-c__check" type="checkbox" id="ccs-cat-n" checked disabled>
+                        <label class="ccs-c__catlabel" for="ccs-cat-n">
+                            <span class="ccs-c__catname">Strictly necessary</span>
+                            Sign-in, your shopping cart, and remembering this choice. Always on.
+                        </label>
+                    </div>
+
+                    <div class="ccs-c__cat">
+                        <input class="ccs-c__check" type="checkbox" id="ccs-cat-a" name="ccs_in_a" value="1"
+                            <cms:if ccs_consent_analytics == '1'>checked</cms:if>>
+                        <label class="ccs-c__catlabel" for="ccs-cat-a">
+                            <span class="ccs-c__catname">Analytics</span>
+                            <cms:show ccs_gl_consent_a_txt />
+                        </label>
+                    </div>
+
+                    <div class="ccs-c__cat">
+                        <input class="ccs-c__check" type="checkbox" id="ccs-cat-m" name="ccs_in_m" value="1"
+                            <cms:if ccs_consent_marketing == '1'>checked</cms:if>>
+                        <label class="ccs-c__catlabel" for="ccs-cat-m">
+                            <span class="ccs-c__catname">Marketing</span>
+                            <cms:show ccs_gl_consent_m_txt />
+                        </label>
+                    </div>
+
+                    <div class="ccs-c__cat">
+                        <input class="ccs-c__check" type="checkbox" id="ccs-cat-e" name="ccs_in_e" value="1"
+                            <cms:if ccs_consent_embed == '1'>checked</cms:if>>
+                        <label class="ccs-c__catlabel" for="ccs-cat-e">
+                            <span class="ccs-c__catname">Embedded media</span>
+                            <cms:show ccs_gl_consent_e_txt />
+                        </label>
+                    </div>
+
+                </div>
+                <button type="submit" name="ccs_cnst_do" value="custom"
+                    class="ccs-c__btn ccs-c__btn--answer">Save my choices</button>
+            </div>
+
+        </div>
+        </form>
+    </div>
+
+</cms:if>
+</cms:pages>

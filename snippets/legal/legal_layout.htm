@@ -1,0 +1,52 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/legal/legal_layout.htm
+
+    The rendered page shared by every legal template. Embedded AFTER the
+    cms:template block closes - this is output, and output inside cms:template
+    is executed only for a super admin and then discarded (tags.php:1834, 1963).
+
+    SEO AND STRUCTURE. One h1, carrying the page's own title rather than the
+    site name - these pages exist to be found and read, and a policy page whose
+    h1 is the company name tells a search engine nothing. The document itself is
+    an article element so the boundary between policy text and site furniture is
+    explicit.
+
+    NO PAGE BUILDER, so nothing here is cached per tile and there is no chance
+    of one visitor being served a fragment rendered for another.
+    ===========================================================================
+</cms:ignore>
+<cms:embed 'pb_mods/pg_frame/head.htm' />
+<cms:embed 'pb_mods/pg_frame/main-cap.htm' />
+<cms:embed 'pb_mods/pg_frame/nav/nav_emb.htm' />
+
+<section class="py-6">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+
+                <h1 class="mb-2"><cms:show lgl_title /></h1>
+
+                <cms:if lgl_effective>
+                    <p class="text-body-secondary fs-9 mb-4">
+                        Effective <cms:show lgl_effective />
+                    </p>
+                </cms:if>
+
+                <cms:if lgl_intro>
+                    <div class="alert alert-light border mb-4" role="note">
+                        <cms:show lgl_intro />
+                    </div>
+                </cms:if>
+
+                <article class="lgl-body">
+                    <cms:show lgl_body />
+                </article>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<cms:embed 'pb_mods/pg_frame/footer/ftr_emb.htm' />
+<cms:embed 'pb_mods/pg_frame/tail.htm' />

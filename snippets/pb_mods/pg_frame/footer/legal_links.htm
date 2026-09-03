@@ -1,0 +1,137 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/pb_mods/pg_frame/footer/legal_links.htm
+
+    The legal link row. Embedded by all four footer themes immediately before
+    their admin "Swap Footer" overlay, so it is the last visible thing in the
+    footer - the conventional place for it, and the place people look.
+
+    ONE FILE, FOUR CALLERS. The four footer themes have different grids and
+    different colour fields, and duplicating this row into each of them would
+    mean four places to keep in step every time a legal page is added or a
+    label is reworded. It is written to be layout-agnostic - its own container
+    and row - so it drops into any of them without knowing their structure.
+
+    IT IS SAFE INSIDE A CACHED TILE, AND THAT IS NOT AN ACCIDENT. Footers
+    render through cms:show_pagebuilder in ftr_emb.htm, so their HTML is cached
+    in one entry shared by every visitor. Everything below is visitor-
+    INDEPENDENT: three links out of globals, and a button whose behaviour is
+    decided entirely in JavaScript. There is deliberately no cms:if on any
+    consent variable here - that would bake one visitor's answer into the
+    cache and serve it to everyone. See CLAUDE.md sec.18.
+
+    IT OPENS ITS OWN cms:pages RATHER THAN TRUSTING THE CALLER. The four
+    themes reach globals inconsistently - some open cms:pages around a section,
+    some use get_field with masterpage each time. Opening it here costs one
+    query and makes the file work in any of them without knowing which.
+
+    AN EMPTY FIELD RENDERS NOTHING. Not an empty href, not a dead link - the
+    item and its separator are both skipped. The three link fields carry
+    cms:link defaults in globals.php so they self-populate, but the owner can
+    blank one to drop that page from the footer.
+    ===========================================================================
+</cms:ignore>
+<cms:ignore>
+    SIZE FOLLOWS THE FOOTER. Each theme sets lgl_fs to its own text-size
+    field just before embedding this file, so the legal row scales with the
+    rest of the footer instead of sitting at a fixed size that can end up
+    larger than the text above it. Falls back to 9 when a caller sets
+    nothing, which is what every theme rendered before this was added.
+</cms:ignore>
+<cms:if lgl_fs><cms:set lgl_size=lgl_fs /><cms:else /><cms:set lgl_size='9' /></cms:if>
+
+<cms:pages masterpage='globals.php' limit='1'>
+
+    <cms:set lgl_privacy=ccs_gl_privacy_link />
+    <cms:set lgl_terms=ccs_gl_terms_link />
+    <cms:set lgl_cookies=ccs_gl_cookie_link />
+
+    <cms:if lgl_privacy || lgl_terms || lgl_cookies>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <cms:ignore>
+                        text-reset makes these inherit the footer's own colour
+                        rather than Bootstrap's link blue. The four themes each
+                        set their text colour from their own field, and those
+                        fields are not in scope in a shared file - inheriting
+                        is the only thing that is correct in all four.
+
+                        That only works if the theme puts its colour and
+                        typography on the element this row sits inside.
+                        foot_bsc.html used to hang them off an inner col-auto
+                        div instead, so this row inherited from body and came
+                        out in the page's text colour on the footer's
+                        background. They now sit on its <footer>, matching the
+                        other three.
+                    </cms:ignore>
+                    <nav class="mt-3 pt-3 border-top border-secondary border-opacity-25 fs-<cms:show lgl_size />" aria-label="Legal">
+
+                        <cms:set lgl_first='1' />
+
+                        <cms:if lgl_privacy>
+                            <a class="text-reset text-decoration-underline" href="<cms:show lgl_privacy />">Privacy
+                                Policy</a>
+                            <cms:set lgl_first='0' />
+                        </cms:if>
+
+                        <cms:if lgl_terms>
+                            <cms:if lgl_first=='0'><span class="mx-2 opacity-50" aria-hidden="true">&middot;</span>
+                            </cms:if>
+                            <a class="text-reset text-decoration-underline" href="<cms:show lgl_terms />">Terms of
+                                Service</a>
+                            <cms:set lgl_first='0' />
+                        </cms:if>
+
+                        <cms:if lgl_cookies>
+                            <cms:if lgl_first=='0'><span class="mx-2 opacity-50" aria-hidden="true">&middot;</span>
+                            </cms:if>
+                            <a class="text-reset text-decoration-underline" href="<cms:show lgl_cookies />">Cookie
+                                Policy</a>
+                            <cms:set lgl_first='0' />
+                        </cms:if>
+
+                        <cms:ignore>
+                            HIDDEN UNTIL THE SCRIPT THAT DRIVES IT EXISTS.
+
+                            This reopens the consent banner so a visitor can
+                            change or withdraw an answer. Withdrawal has to be
+                            as easy as consent - a click cannot be undoable
+                            only by writing an email - so this control is
+                            required, not decorative.
+
+                            It ships with hidden set, and ccs_consent.js
+                            (phase 3) removes the attribute. Until that file
+                            exists the button simply does not appear, rather
+                            than appearing and doing nothing. It also stays
+                            hidden for a visitor with JavaScript off, who
+                            could not open a scripted dialog anyway.
+
+                            A button, not a link - it goes nowhere.
+                        </cms:ignore>
+
+                        <span class="mx-2 opacity-50" aria-hidden="true" data-ccs-consent-sep hidden>&middot;</span>
+                        <button type="button"
+                            class="btn btn-link p-0 align-baseline text-reset text-decoration-underline fs-<cms:show lgl_size />"
+                            data-ccs-consent-open hidden>Cookie Settings</button>
+                        <span class="mx-2 opacity-50" aria-hidden="true">&middot;</span>
+                        <cms:if k_logged_in>
+
+                            <a class="text-reset text-decoration-underline"
+                                href="<cms:link masterpage='users/logout.php' />">Logout</a>
+
+                            <cms:else />
+
+                            <a class="text-reset text-decoration-underline"
+                                href="<cms:login_link redirect='1' />">Login</a>
+
+                        </cms:if>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+    </cms:if>
+
+</cms:pages>

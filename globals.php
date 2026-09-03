@@ -59,17 +59,89 @@
                 <cms:if ccs_gl_site_name_txt_lgo_opt='1'>show<cms:else />hide</cms:if>
             </cms:func>
             
-            <cms:editable type='dropdown' name='ccs_gl_site_name_txt_sz' label='Displayed Text Size' opt_values='dropdowns/heading-size.htm' dynamic='opt_values' not_active=ccs_gl_site_name_txt_lgo_chc class='col-md-3' order='3' />
-            <cms:editable type='dropdown' name='ccs_gl_site_name_txt_clr' label='Displayed Text Color' opt_values='dropdowns/solid-colors.htm' opt_selected='danger' dynamic='opt_values' not_active=ccs_gl_site_name_txt_lgo_chc class='col-md-3' order='4' />
+            <cms:ignore>
+                not_active REMOVED from these two, and it could not have been
+                made correct by rewriting the condition.
+
+                It read ccs_gl_site_name_txt_lgo_chc, which shows these only when
+                the GLOBAL Default Website Brand Display is Site Name. But every
+                navbar carries its own Brand Display Style and can choose Site
+                Name independently of this setting. The ordinary case - global
+                left on Image, one navbar switched to Site Name - hid both
+                fields, so the company name rendered with an empty size and an
+                orphan "text-" prefix, and there was no way in the panel to reach
+                them and fix it.
+
+                A better condition is not available. not_active compiles to
+                JavaScript bound to fields on the SAME template, and the field
+                that would have to drive it lives on a navbar tile in another
+                template entirely. So these are always visible now. They are the
+                site-wide fallback and any navbar may be relying on them.
+
+                A NOTE FOR ANYONE TEMPTED BY opt_selected HERE. It will not do
+                what it looks like it does. field.php:997 consults get_data()
+                first and falls back to opt_selected only to decide which option
+                to mark selected while DRAWING the select - it is admin-panel
+                only, never stored, and the front end still reads the field
+                itself, which is still empty. The panel shows a colour chosen and
+                the page renders without one. To give a field a real starting
+                value, put it in the BODY of the editable: get_data() returns
+                default_data whenever data is empty, on the front end and in the
+                panel alike.
+
+                PER-NAVBAR OVERRIDES now live on each nav tile as
+                ccs_nav_{mdd,sdd,xtr}_name_sz / _name_clr and win when set.
+
+                ccs_gl_site_name_txt_lgo_chc, declared just above, no longer has
+                a consumer. Left in place rather than deleted - it is inert, and
+                removing a func is a schema change for no gain.
+            </cms:ignore>
+            <cms:ignore>
+                heading-size_sec.htm, NOT heading-size.htm, and this is the fix
+                for the colour bug rather than a tidy-up.
+
+                heading-size.htm stores h1 through h6. Those are not size classes
+                in this theme - user.php:452 gives .h1 through .h6 a colour and a
+                font-family as well - so choosing a SIZE here silently overrode
+                the COLOUR field sitting immediately beside it. Only .text-tertiary
+                and .text-quaternary survived it, because theme.css:25774 is the
+                only place the colour utilities carry !important.
+
+                heading-size_sec.htm stores 5 through 9, consumed as fs-N, and
+                .fs-N sets font-size and nothing else. It is the same list the
+                per-navbar override already uses, so both ends of the fallback now
+                speak one convention.
+
+                A STORED h3 WILL NOT MATCH this list, so the field reads blank
+                after the change and the size wants picking once. That is the cost
+                of the fix and it is one click.
+            </cms:ignore>
+            <cms:editable type='dropdown' name='ccs_gl_site_name_txt_sz' label='Displayed Text Size' desc='Site-wide default. Each navbar can override it.' opt_values='dropdowns/heading-size_sec.htm' dynamic='opt_values' class='col-md-3' order='3' />
+            <cms:editable type='dropdown' name='ccs_gl_site_name_txt_clr' label='Displayed Text Color' desc='Site-wide default. Each navbar can override it.' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-3' order='4' />
         </cms:editable>
 
         <cms:editable type='message' name='ccs_gl_tgln_fmt_msg' order='7' ><br><hr><h2>Tagline Configuration</h2></cms:editable>
 
+        <cms:ignore>
+            COLUMN WIDTHS ON THE FIRST FOUR FIELDS: 6 + 2 + 2 + 2 = 12.
+
+            They were 7 + 3 + 3 + 3 = 16. Bootstrap wraps at 12, so the tagline
+            and its checkbox took the first line at 10 of 12, and Colour and
+            Size were pushed onto a second line that then sat two thirds empty -
+            which is the ragged gap you could see in the panel.
+
+            The four typography fields below are 3 + 3 + 3 + 3 and were always
+            correct; only this first group was over.
+
+            Any row's children must total 12 or a multiple of it. The
+            col-md-12 message in the middle is the deliberate exception: it
+            forces the line break between the two halves.
+        </cms:ignore>
         <cms:editable type='row' name='ccs_gl_site_tgl_row'  order='8' >
-            <cms:editable type='text' name='ccs_gl_tgln' label='Business Tagline' class='col-md-7' order='1' />
-            <cms:editable type='checkbox' name='ccs_gl_tgln_opt' label='Show Tagline under logo?' opt_values='Show Tagline=1' opt_selected='1' class='col-md-3' order='2' />
-            <cms:editable type='dropdown' name='ccs_gl_tgln_clr' label='Tagline Text Color' opt_values='dropdowns/solid-colors.htm' opt_selected='black' dynamic='opt_values' class='col-md-3' order='3' />
-            <cms:editable type='dropdown' name='ccs_gl_tgln_txt_sz' label='Tagline Text Size' opt_values='dropdowns/text-size_sml.htm' dynamic='opt_values' class='col-md-3' order='4' />
+            <cms:editable type='text' name='ccs_gl_tgln' label='Business Tagline' class='col-md-6' order='1' />
+            <cms:editable type='checkbox' name='ccs_gl_tgln_opt' label='Show Tagline under logo?' opt_values='Show Tagline=1'  class='col-md-2' order='2' />
+            <cms:editable type='dropdown' name='ccs_gl_tgln_clr' label='Tagline Text Color' opt_values='dropdowns/solid-colors.htm'  dynamic='opt_values' class='col-md-2' order='3' />
+            <cms:editable type='dropdown' name='ccs_gl_tgln_txt_sz' label='Tagline Text Size' opt_values='dropdowns/text-size_sml.htm' dynamic='opt_values' class='col-md-2' order='4' />
             <cms:editable type='message' name='nca_cntnt_2col_img_br' class='col-md-12'  order='5' ><hr></cms:editable>            
             <cms:editable type='dropdown' name='ccs_gl_tgln_fnt_fm' label='Tagline Font Family' opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-3' order='6' />
             <cms:editable type='dropdown' name='ccs_gl_tgln_fnt_wt' label='Tagline Font Weight' opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-3' order='7' />
@@ -78,7 +150,23 @@
         </cms:editable>
 
         <cms:editable type='message' name='ccs_gl_site_desc_msg' order='9' ><br><hr><h2>Website Metadata</h2></cms:editable>
-        <cms:editable type='textarea' name='ccs_gl_site_desc' label='Website Description' desc='SEO meta description.' class='col-md-12' order='10' />
+        <cms:ignore>
+            class REMOVED. This carried col-md-12 while its parent is
+            ccs_gl_site_biz_grp - a GROUP, not a row. It was the only col-* in
+            this file whose parent was not a row.
+
+            A Bootstrap column outside a flex row still takes the column's
+            padding and float behaviour but has no row to lay out inside, and
+            this field sits at the very boundary where the next group's header
+            begins - which is where the Master Theme Controls banner was
+            overlapping the field above it.
+
+            A group child with no class already renders full width, which is
+            what col-md-12 was asking for, so nothing is lost by dropping it.
+            The message directly above has no class either, so the two now
+            match.
+        </cms:ignore>
+        <cms:editable type='textarea' name='ccs_gl_site_desc' label='Website Description' desc='SEO meta description.' order='10' />
     </cms:editable>
 
 
@@ -120,19 +208,44 @@
     </cms:editable>
 
 
+    <cms:ignore>
+        THESE color= VALUES ARE SEED DEFAULTS, NOT LIVE THEME COLOURS.
+
+        color= on a type='color' editable is a static literal. The picker addon
+        uses it only while the field has never been saved -
+        addons/color-picker/color-picker.php line 67:
+
+            $data = strlen( $this->data ) ? $this->data : $this->color;
+
+        So it cannot follow ccs_gl_site_thm_opt, and interpolating the theme
+        colour here would not help either: the first save of this page writes a
+        value into every one of these fields, and from then on the default is
+        never consulted again. Seeding from a theme needs an explicit action
+        that WRITES the fields, not a smarter default.
+
+        WHAT THEY WERE. Bootstrap 4's stock palette, which is not this site's.
+        White and Black were both #007AFF - the primary colour, pasted into the
+        wrong two rows - so ticking Customize Colors turned white and black
+        blue. They now match the default palette in assets/css/user.php, the
+        one that renders with Customize Site Colors unchecked, so ticking the
+        box starts from what was already on screen.
+
+        KEEP IN STEP with the <cms:else /> branch of the colour chain in
+        assets/css/user.php (approx lines 55-68 and 143-155).
+    </cms:ignore>
     <cms:editable type='group' name='ccs_gl_site_site_cst_clr_grp' label='Custom Website Theme Colors' not_active=ccs_gl_site_colors_custom order='80' >
-        <cms:editable type='color' name='ccs_gl_site_primary_cust' label='Primary Color' color='#007bff' alpha='0' width='50%' height='100px' order='1' />
-        <cms:editable type='color' name='ccs_gl_site_secondary_cust' label='Secondary Color' color='#7968D9' alpha='0' width='50%' height='100px' order='2' />
+        <cms:editable type='color' name='ccs_gl_site_primary_cust' label='Primary Color' color='#007AFF' alpha='0' width='50%' height='100px' order='1' />
+        <cms:editable type='color' name='ccs_gl_site_secondary_cust' label='Secondary Color' color='#292b2c' alpha='0' width='50%' height='100px' order='2' />
         <cms:editable type='color' name='ccs_gl_site_tertiary_cust' label='Tertiary Color' color='#687BD9' alpha='0' width='50%' height='100px' order='3' />
         <cms:editable type='color' name='ccs_gl_site_quaternary_cust' label='Quaternary Color' color='#68C2D9' alpha='0' width='50%' height='100px' order='4' />
-        <cms:editable type='color' name='ccs_gl_site_success_cust' label='Success Color' color='#28a745' alpha='0' width='50%' height='100px' order='5' />
-        <cms:editable type='color' name='ccs_gl_site_info_cust' label='Info Color' color='#17a2b8' alpha='0' width='50%' height='100px' order='6' />
-        <cms:editable type='color' name='ccs_gl_site_warning_cust' label='Warning Color' color='#ffc107' alpha='0' width='50%' height='100px' order='7' />
-        <cms:editable type='color' name='ccs_gl_site_danger_cust' label='Danger Color' color='#dc3545' alpha='0' width='50%' height='100px' order='8' />
-        <cms:editable type='color' name='ccs_gl_site_light_cust' label='Light Color' color='#f5f5f5' alpha='0' width='50%' height='100px' order='9' />
-        <cms:editable type='color' name='ccs_gl_site_dark_cust' label='Dark Color' color='#17191b' alpha='0' width='50%' height='100px' order='10' />
-        <cms:editable type='color' name='ccs_gl_site_white_cust' label='White' color='#007AFF' alpha='0' width='50%' height='100px' order='11' />
-        <cms:editable type='color' name='ccs_gl_site_black_cust' label='Black' color='#007AFF' alpha='0' width='50%' height='100px' order='12' />
+        <cms:editable type='color' name='ccs_gl_site_success_cust' label='Success Color' color='#4CD964' alpha='0' width='50%' height='100px' order='5' />
+        <cms:editable type='color' name='ccs_gl_site_info_cust' label='Info Color' color='#2EB7F5' alpha='0' width='50%' height='100px' order='6' />
+        <cms:editable type='color' name='ccs_gl_site_warning_cust' label='Warning Color' color='#FF9500' alpha='0' width='50%' height='100px' order='7' />
+        <cms:editable type='color' name='ccs_gl_site_danger_cust' label='Danger Color' color='#FF3B30' alpha='0' width='50%' height='100px' order='8' />
+        <cms:editable type='color' name='ccs_gl_site_light_cust' label='Light Color' color='#fafafa' alpha='0' width='50%' height='100px' order='9' />
+        <cms:editable type='color' name='ccs_gl_site_dark_cust' label='Dark Color' color='#0c151a' alpha='0' width='50%' height='100px' order='10' />
+        <cms:editable type='color' name='ccs_gl_site_white_cust' label='White' color='#ffffff' alpha='0' width='50%' height='100px' order='11' />
+        <cms:editable type='color' name='ccs_gl_site_black_cust' label='Black' color='#000000' alpha='0' width='50%' height='100px' order='12' />
         <cms:editable type='color' name='ccs_gl_site_body_clr_cust' label='Text Color' color='#292b2c' alpha='0' width='50%' height='100px' order='13' />
         <cms:editable type='color' name='ccs_gl_site_body_bg_cust' label='Site Background' color='#ffffff' alpha='0' width='50%' height='100px' order='14' />
     </cms:editable>
@@ -140,8 +253,8 @@
     <cms:editable type='group' name='ccs_gl_site_site_cst_slct_grp' label='Text Selection Colors' order='90' >
         <cms:editable type='message' name='ccs_gl_site_site_cst_slct_msg' order='1'><h3>Choose Colors For Highlighting</h3></cms:editable>   
         <cms:editable type='row' name='ccs_gl_site_hglt_row' order='2' >
-            <cms:editable type='dropdown' name='ccs_gl_site_hglt_clr' label='Highlighted Text Color' opt_values='dropdowns/theme-colors.htm' opt_selected='light' dynamic='opt_values' class='col-md-4' order='1' />
-            <cms:editable type='dropdown' name='ccs_gl_site_hglt_bg' label='Highlight Background Color' opt_values='dropdowns/theme-colors.htm' opt_selected='dark' dynamic='opt_values' class='col-md-4' order='2' />
+            <cms:editable type='dropdown' name='ccs_gl_site_hglt_clr' label='Highlighted Text Color' opt_values='dropdowns/theme-colors.htm' dynamic='opt_values' class='col-md-4' order='1' />
+            <cms:editable type='dropdown' name='ccs_gl_site_hglt_bg' label='Highlight Background Color' opt_values='dropdowns/theme-colors.htm' dynamic='opt_values' class='col-md-4' order='2' />
         </cms:editable>
     </cms:editable>
     
@@ -166,13 +279,33 @@
 
     <cms:editable type='group' name='ccs_gl_site_nav_mnu_grp' label='Navigation Menu Settings' collapsed='1' order='110'>
         <cms:editable type='message' name='ccs_gl_site_nav_mnu_dd_msg' order='1' ><h2>Settings for Hovering and Dropdown Menus</h2></cms:editable>
-        <cms:editable type='row' name='ccs_gl_site_nav_mnu_dd_row'  order='2' >
-            <cms:editable type='dropdown' name='ccs_gl_site_nav_actv_clr' label='Menu Item Color on Active Page' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' order='1' />
-            <cms:editable type='dropdown' name='ccs_gl_site_nav_hvr_clr' label='Menu Text Color on Mouse Hover' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' order='2' />
-            <cms:editable type='dropdown' name='ccs_gl_site_nav_dd_txt_clr' label='Dropdown Menu Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' order='3' />
-            <cms:editable type='dropdown' name='ccs_gl_site_nav_dd_bg' label='Dropdown Menu Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' order='4' />
-            <cms:editable type='dropdown' name='ccs_gl_site_nav_dd_hvr_clr' label='Dropdown Menu Text Color on Mouse Hover' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' order='5' />
-            <cms:editable type='dropdown' name='ccs_gl_site_nav_dd_hvr_bg' label='Dropdown Menu Background Color on Mouse Hover' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' order='6' />
+                <cms:ignore>
+            col-md-4 ADDED to all six. They had no class at all, inside a row -
+            the only row in this file whose children carried none - so six
+            controls that were meant to sit three across had no width to lay out
+            with. Six at col-md-4 is 24, which wraps cleanly into two lines of
+            three.
+        </cms:ignore>
+<cms:editable type='row' name='ccs_gl_site_nav_mnu_dd_row'  order='2' >
+            <cms:editable type='dropdown' name='ccs_gl_site_nav_actv_clr' label='Menu Item Color on Active Page' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='1' />
+            <cms:ignore>
+                RENAMED. This is not just the menu. assets/css/user.php feeds it
+                into TWO places: the nav's own hover rule, and
+                --ccs-link-hover-color, which is the hover colour for every
+                ordinary link on the site. Called "Menu Text Color" it looked
+                like a nav-only setting, and someone changing it for the menu
+                was quietly changing links everywhere.
+
+                The footer has its own control now, below, because it needs to
+                sit on its own background.
+            </cms:ignore>
+            <cms:editable type='dropdown' name='ccs_gl_site_nav_hvr_clr' label='Link Color on Mouse Hover (menu and site-wide)'
+                desc='Applies to the navigation menu AND to ordinary links across the site. The footer is set separately.'
+                opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='2' />
+            <cms:editable type='dropdown' name='ccs_gl_site_nav_dd_txt_clr' label='Dropdown Menu Text Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='3' />
+            <cms:editable type='dropdown' name='ccs_gl_site_nav_dd_bg' label='Dropdown Menu Background Color' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='4' />
+            <cms:editable type='dropdown' name='ccs_gl_site_nav_dd_hvr_clr' label='Dropdown Menu Text Color on Mouse Hover' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='5' />
+            <cms:editable type='dropdown' name='ccs_gl_site_nav_dd_hvr_bg' label='Dropdown Menu Background Color on Mouse Hover' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='6' />
         </cms:editable>
     </cms:editable>
     
@@ -221,10 +354,273 @@
         <cms:editable type='textarea' name='ccs_gl_footer_scripts' label='Footer Scripts (Live Chat, HubSpot)' no_xss_check='1' order='3' />
     </cms:editable>
 
+    <cms:editable type='group' name='ccs_gl_site_ftr_grp' label='Footer &amp; Utility Bar Links' desc='Hover colours for links in the footer and the top utility bar' collapsed='1' order='145'>
+
+        <cms:editable type='message' name='ccs_gl_site_ftr_msg' order='1'>
+            <h2>Link Hover Colors</h2>
+            <h4>The footer and the utility bar sit on their own background colours,
+                usually darker than the page, so they need their own hover colour
+                rather than inheriting the site-wide one.</h4>
+            <h4><strong>Leave either blank</strong> to fall back to the site-wide
+                setting under Navigation Menu Settings.</h4>
+            <p>Pick something that contrasts with that bar's background. A hover
+               colour close to the background makes the words vanish under the
+               pointer, which is what these settings exist to prevent.</p>
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_site_ftr_row' order='2'>
+            <cms:editable type='dropdown' name='ccs_gl_site_ftr_lnk_hvr_clr' label='Footer Link Color on Mouse Hover'
+                desc='Applies to every link in the footer, including the copyright line.'
+                opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-6' order='1' />
+            <cms:editable type='dropdown' name='ccs_gl_site_ubr_lnk_hvr_clr' label='Utility Bar Link Color on Mouse Hover'
+                desc='The bar above the header, with the cart and account icons.'
+                opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-6' order='2' />
+        </cms:editable>
+    </cms:editable>
+
     <cms:editable type='group' name='ccs_gl_legal_grp' label='Privacy & Cookies' collapsed='1' order='150'>
-        <cms:editable type='checkbox' name='ccs_gl_cookie_consent' label='Enable Cookie Consent Banner?' opt_values='Yes=1' order='1' />
-        <cms:editable type='text' name='ccs_gl_privacy_link' label='Privacy Policy Link' order='2' />
-        <cms:editable type='text' name='ccs_gl_terms_link' label='Terms of Service Link' order='3' />
+
+        <cms:editable type='message' name='ccs_gl_legal_msg' order='1'>
+            <h2>Cookie Consent</h2>
+            <h4>Everything the consent bar says is editable here. All of it arrives
+                already filled in with working wording, so the bar is usable the
+                moment you switch it on.</h4>
+            <h4>Switching the bar OFF does not turn tracking on. With no bar there
+                is no way to consent, so the gated script slots below stay empty.
+                Off means ask nobody and load nothing.</h4>
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_legal_ctl_row' order='5'>
+            <cms:editable type='checkbox' name='ccs_gl_cookie_consent' label='Show the Cookie Consent Bar'
+                opt_values='Yes=1' class='col-md-6' order='1' />
+            <cms:ignore>
+                THE VERSION IS THE RE-ASK SWITCH, and it is the one field here
+                with a consequence beyond wording.
+
+                Consent is given to a specific policy, not to the idea of
+                cookies. utils/consent.htm stores this number in the visitor's
+                cookie and compares it on every request. Change it - to 2, or to
+                anything different - and every stored answer stops matching, so
+                everyone is asked again.
+
+                Raise it whenever the policy changes in a way someone might have
+                answered differently about: a new processor, a new category, a
+                new purpose. Leaving it alone after such a change means carrying
+                on under consent that was given to something else.
+            </cms:ignore>
+            <cms:editable type='text' name='ccs_gl_consent_ver' label='Consent Policy Version'
+                desc='Change this to ask every visitor again. See the note in the code before you do.'
+                required='1' class='col-md-6' order='2'>1</cms:editable>
+        </cms:editable>
+
+        <cms:editable type='message' name='ccs_gl_legal_wording_msg' order='10'>
+            <hr><h2>What the bar says</h2>
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_legal_txt_row' order='15'>
+            <cms:editable type='text' name='ccs_gl_consent_ttl' label='Heading'
+                required='1' class='col-md-4' order='1'>Your privacy</cms:editable>
+            <cms:editable type='textarea' name='ccs_gl_consent_txt' label='Explanation'
+                desc='Plain language. Say what you actually set and why.'
+                required='1' class='col-md-8' order='2'>We use cookies that are needed to run this site and keep your cart working. With your permission we would also like to use cookies that help us understand how the site is used and let us show embedded videos. Your cart and checkout work either way.</cms:editable>
+        </cms:editable>
+
+        <cms:ignore>
+            THE TWO ANSWER BUTTONS ARE STYLED IDENTICALLY IN THE THEME and that
+            is not a detail to undo here by wording one of them softly. Refusing
+            has to be exactly as easy as accepting - same prominence, same number
+            of clicks. A decline that is quieter or buried a level deeper is the
+            specific pattern regulators have issued fines over.
+        </cms:ignore>
+        <cms:editable type='row' name='ccs_gl_legal_btn_row' order='20'>
+            <cms:editable type='text' name='ccs_gl_consent_no' label='Decline Button'
+                required='1' class='col-md-4' order='1'>Reject all</cms:editable>
+            <cms:editable type='text' name='ccs_gl_consent_pref' label='Choose Button'
+                required='1' class='col-md-4' order='2'>Choose</cms:editable>
+            <cms:editable type='text' name='ccs_gl_consent_yes' label='Accept Button'
+                required='1' class='col-md-4' order='3'>Accept all</cms:editable>
+        </cms:editable>
+
+        <cms:editable type='message' name='ccs_gl_legal_cat_msg' order='25'>
+            <hr><h2>Category descriptions</h2>
+            <h4>Shown when a visitor opens Choose. Strictly Necessary is described
+                in the theme and is always on - sign-in, the cart, and remembering
+                this choice.</h4>
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_legal_cat_row' order='30'>
+            <cms:editable type='text' name='ccs_gl_consent_a_txt' label='Analytics'
+                required='1' class='col-md-4' order='1'>Helps us see which pages are used, in aggregate.</cms:editable>
+            <cms:editable type='text' name='ccs_gl_consent_m_txt' label='Marketing'
+                required='1' class='col-md-4' order='2'>Lets us measure advertising and show relevant offers.</cms:editable>
+            <cms:editable type='text' name='ccs_gl_consent_e_txt' label='Embedded media'
+                desc='Videos and similar content served by another company. Naming that company is what makes the choice informed - a generic description is the thing regulators object to.'
+                required='1' class='col-md-4' order='3'>Lets us play videos hosted by YouTube and Vimeo, which set their own cookies.</cms:editable>
+        </cms:editable>
+
+        <cms:editable type='message' name='ccs_gl_legal_lnk_msg' order='35'>
+            <hr><h2>Legal pages</h2>
+            <h4>The bar links to whichever of these you fill in. An empty one is
+                simply not linked, so nothing breaks while a page is still being
+                written.</h4>
+        </cms:editable>
+
+        <cms:ignore>
+            THESE THREE FILL THEMSELVES IN, and the mechanism is worth knowing
+            because it is not obvious that it works.
+
+            The body of a cms:editable is not stored as literal text. tags.php
+            line 1514 walks the node's children and calls get_HTML() on each,
+            accumulating the RESULT, and line 1559 stores that as default_data.
+            So a cms:link in the body is resolved at registration time and the
+            finished URL is what gets saved. get_data() then returns it whenever
+            the field is empty (field.php:363), on the front end and in the panel
+            alike - so the author sees a real, working link sitting in the box on
+            their first visit, and can overwrite it with anything they like.
+
+            ORDER OF REGISTRATION MATTERS, once. cms:link returns NOTHING for a
+            template that has no row in the templates table (tags.php:1029) - the
+            same trap that made the Logout button emit an empty href. So the
+            three legal templates must be visited by a super admin BEFORE this
+            file is re-registered, or these defaults bake in as empty.
+
+            If that happens there is no damage and no mystery: fill them by hand,
+            or visit the legal pages and re-register globals. Nothing downstream
+            breaks on an empty link - the consent bar simply omits the link
+            rather than printing a dead one.
+        </cms:ignore>
+        <cms:editable type='row' name='ccs_gl_legal_lnk_row' order='40'>
+            <cms:editable type='text' name='ccs_gl_privacy_link' label='Privacy Policy Link'
+                desc='Pre-filled from your Privacy Policy page. Overwrite it to point somewhere else.'
+                class='col-md-4' order='1'><cms:link masterpage='legal/privacy.php' /></cms:editable>
+            <cms:editable type='text' name='ccs_gl_cookie_link' label='Cookie Policy Link'
+                desc='Pre-filled from your Cookie Policy page.'
+                class='col-md-4' order='2'><cms:link masterpage='legal/cookies.php' /></cms:editable>
+            <cms:editable type='text' name='ccs_gl_terms_link' label='Terms of Service Link'
+                desc='Pre-filled from your Terms page.'
+                class='col-md-4' order='3'><cms:link masterpage='legal/terms.php' /></cms:editable>
+        </cms:editable>
+
+    </cms:editable>
+
+    <cms:editable type='group' name='ccs_gl_store_grp' label='Store Appearance' desc='Panels and text on the cart, checkout, product and order pages' collapsed='1' order='155'>
+
+        <cms:ignore>
+            THE MASTER SWITCH FOR THE SHOP FRONT-END.
+
+            This framework is forked per site, and most forks never sell
+            anything. Off, tail.htm does not load assets/js/ccs_shop.js at all -
+            no cart, no wishlist, nothing downloaded or parsed. On, it does.
+
+            It gates the SCRIPT only. Templates, snippets and the cart addon are
+            unaffected, so switching it off does not break an existing store's
+            data - it just stops the interactive layer being served. Turn it on
+            for any site with a cart, a wishlist, or the shop utility bar.
+        </cms:ignore>
+        <cms:editable type='checkbox' name='ccs_gl_shop_on' label='This site sells things'
+            desc='Loads the cart and wishlist JavaScript. Leave off on a brochure site so visitors never download it.'
+            opt_values='Enable the shop front-end=1' order='0' />
+
+        <cms:editable type='message' name='ccs_gl_store_msg' order='1'>
+            <h2>Store Appearance</h2>
+            <h4>Controls the panels on the cart, checkout, order summary and receipt
+                pages. One setting covers all of them, so they cannot drift apart.</h4>
+            <h4>There is deliberately no colour picker here, and no list of theme
+                colours. A store panel has to stay readable no matter which theme
+                preset or custom palette the site is running, and the only surfaces
+                that can promise that are a light one, a dark one, or none at all.
+                Everything on the panel takes its text colour from the panel itself,
+                so the two can never disagree.</h4>
+            <h4>Prices and totals are emphasised with weight, not colour, for the
+                same reason.</h4>
+        </cms:editable>
+
+        <cms:editable type='dropdown' name='ccs_gl_store_panel' label='Panel Surface'
+            desc='Background for cart, checkout and order-summary panels. Text colour comes with it.'
+            opt_values='_tok/color-surface.htm' dynamic='opt_values'
+            class='col-md-6' order='5' />
+
+        <cms:editable type='dropdown' name='ccs_gl_store_secondary' label='Secondary Text'
+            desc='Helper lines such as "We will send your receipt here". Dims the panel text rather than replacing it, so it stays readable on either surface.'
+            opt_values='Same as panel text - most readable=| Slightly dimmed=opacity-85 | Dimmed=opacity-75'
+            class='col-md-6' order='10' />
+
+    </cms:editable>
+
+    <cms:editable type='group' name='ccs_gl_ordml_grp' label='Order Emails' desc='Addresses and wording for the receipt sent to customers' collapsed='1' order='157'>
+
+        <cms:editable type='message' name='ccs_gl_ordml_msg' order='1'>
+            <h2>Order Emails</h2>
+            <h4>Every line the customer reads on their receipt is set here. Leave a
+                field empty and it falls back to the wording shown as its default, so
+                a blank field can never produce a blank receipt.</h4>
+            <h4><strong>Both addresses below must exist as real mailboxes on this
+                domain.</strong> An address on a different domain will fail
+                authentication and receipts will stop being delivered. An address with
+                no mailbox behind it damages deliverability for the whole site.</h4>
+            <h4>Bounces for undeliverable receipts arrive at the <em>Send Receipts
+                From</em> address. Forward that mailbox somewhere it will be read, or
+                a receipt that starts failing will fail silently.</h4>
+            <h4><strong>Placeholders</strong> you can use in any wording field below.
+                They are replaced when the email is sent:<br>
+                <code>{shop}</code> site name &nbsp;
+                <code>{order}</code> order reference &nbsp;
+                <code>{first_name}</code> &nbsp;
+                <code>{last_name}</code> &nbsp;
+                <code>{email}</code> customer address &nbsp;
+                <code>{contact}</code> the contact address below &nbsp;
+                <code>{total}</code> amount paid</h4>
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_ordml_addr_row' order='5' >
+            <cms:editable type='text' name='ccs_gl_ordml_from' label='Send Receipts From'
+                desc='Unmonitored sending address. Must be a real mailbox on this domain. Bounces arrive here.'
+                class='col-md-6 mb-3' order='1' >donotreply@valasports.com</cms:editable>
+            <cms:editable type='text' name='ccs_gl_ordml_contact' label='Customer Contact Address'
+                desc='Shown to customers for questions. Must be monitored by a person.'
+                class='col-md-6 mb-3' order='2' >orders@valasports.com</cms:editable>
+        </cms:editable>
+
+        <cms:editable type='message' name='ccs_gl_ordml_wording_msg' order='10'>
+            <h4>Receipt wording</h4>
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_ordml_head_row' order='15' >
+            <cms:editable type='text' name='ccs_gl_ordml_subject' label='Subject Line'
+                desc='What the customer sees in their inbox list.'
+                class='col-md-8 mb-3' order='1' >Your {shop} order {order}</cms:editable>
+            <cms:editable type='text' name='ccs_gl_ordml_greeting' label='Greeting'
+                desc='Opening line. If the name is missing the comma is removed automatically.'
+                class='col-md-4 mb-3' order='2' >Thank you, {first_name}.</cms:editable>
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_ordml_intro_row' order='20' >
+            <cms:editable type='textarea' name='ccs_gl_ordml_confirm' label='Confirmation Line'
+                desc='Confirms the order and the payment.' height='70'
+                class='col-md-6 mb-3' order='1' >We have your order and your payment has gone through.</cms:editable>
+            <cms:editable type='textarea' name='ccs_gl_ordml_reference' label='Reference Line'
+                desc='Gives the customer their order reference.' height='70'
+                class='col-md-6 mb-3' order='2' >Your reference is {order} — please quote it if you get in touch.</cms:editable>
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_ordml_close_row' order='25' >
+            <cms:editable type='textarea' name='ccs_gl_ordml_next' label='What Happens Next'
+                desc='Do not promise anything the business cannot do. There is no order tracking or shipping notification.' height='70'
+                class='col-md-6 mb-3' order='1' >We will be in touch when your order is on its way.</cms:editable>
+            <cms:editable type='textarea' name='ccs_gl_ordml_help' label='Where To Get Help'
+                desc='Must tell the customer not to reply, since the sending address is unmonitored.' height='70'
+                class='col-md-6 mb-3' order='2' >Questions about your order, or something not right? Email {contact} and quote {order}. This message is sent from an unmonitored address, so please do not reply to it.</cms:editable>
+        </cms:editable>
+
+        <cms:editable type='row' name='ccs_gl_ordml_foot_row' order='30' >
+            <cms:editable type='text' name='ccs_gl_ordml_btn' label='Receipt Button Label'
+                desc='Links to the order page.'
+                class='col-md-4 mb-3' order='1' >View your receipt</cms:editable>
+            <cms:editable type='textarea' name='ccs_gl_ordml_footer' label='Footer Note'
+                desc='Small print under the receipt. Explains why the email was sent.' height='70'
+                class='col-md-8 mb-3' order='2' >This receipt was sent to {email} because an order was placed at {shop}.</cms:editable>
+        </cms:editable>
+
     </cms:editable>
 
     <cms:editable type='group' name='ccs_gl_maintenance_grp' label='Maintenance Mode' collapsed='1' order='160'>
@@ -338,7 +734,7 @@
                     <div class="card shadow-sm h-100 border-0">
                         <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
 							<h5 class="mb-0 fw-bold">Theme & Colors</h5>
-							<cms:popup_edit 'ccs_gl_master_theme_grp|ccs_gl_site_custom_color_opt|ccs_gl_site_thm_opt|ccs_gl_site_site_cst_clr_grp|ccs_gl_site_primary_cust|ccs_gl_site_secondary_cust|ccs_gl_site_tertiary_cust|ccs_gl_site_quaternary_cust|ccs_gl_site_success_cust|ccs_gl_site_info_cust|ccs_gl_site_warning_cust|ccs_gl_site_danger_cust|ccs_gl_site_light_cust|ccs_gl_site_dark_cust|ccs_gl_site_white_cust|ccs_gl_site_black_cust|ccs_gl_site_body_clr_cust|ccs_gl_site_body_bg_cust' link_text="<button class='btn btn-sm btn-body-tertiary rounded-circle shadow-sm d-flex justify-content-center align-items-center' style='width:32px; height:32px; padding: 0;' title='Edit Theme & Colors'><i class='fas fa-palette text-primary'></i></button>" />
+							<cms:popup_edit 'ccs_gl_master_theme_grp|ccs_gl_theme_custom_msg|ccs_gl_site_custom_color_opt|ccs_gl_theme_master_msg|ccs_gl_site_thm_opt|ccs_gl_site_thm_clr_opt|ccs_gl_site_thm_typo_opt|ccs_gl_site_site_cst_clr_grp|ccs_gl_site_primary_cust|ccs_gl_site_secondary_cust|ccs_gl_site_tertiary_cust|ccs_gl_site_quaternary_cust|ccs_gl_site_success_cust|ccs_gl_site_info_cust|ccs_gl_site_warning_cust|ccs_gl_site_danger_cust|ccs_gl_site_light_cust|ccs_gl_site_dark_cust|ccs_gl_site_white_cust|ccs_gl_site_black_cust|ccs_gl_site_body_clr_cust|ccs_gl_site_body_bg_cust' link_text="<button class='btn btn-sm btn-body-tertiary rounded-circle shadow-sm d-flex justify-content-center align-items-center' style='width:32px; height:32px; padding: 0;' title='Edit Theme & Colors'><i class='fas fa-palette text-primary'></i></button>" />
 						</div>
 
                         <div class="card-body" data-bs-theme="<cms:show ccs_gl_site_thm_opt />">
@@ -552,6 +948,25 @@
                                 <cms:set dash_font_body='Roboto' />
                                 <cms:set dash_font_sans='Roboto' />
                                 <cms:set dash_font_serif='Lora' />
+                            <cms:ignore>
+                                THE else MATTERS HERE FOR THE SAME REASON IT DOES
+                                IN assets/css/user.php.
+
+                                Eight themes, four handled. scuro and notte can
+                                reach this branch with theme typography on (light
+                                and dark cannot - the checkbox is hidden for
+                                them), and without this else the three name
+                                fields render blank while the site itself falls
+                                back to the default stack. The panel would be
+                                showing nothing where the page shows Montserrat.
+
+                                These three must stay in step with the else
+                                branch of the same chain in user.php.
+                            </cms:ignore>
+                            <cms:else />
+                                <cms:set dash_font_body='Montserrat' />
+                                <cms:set dash_font_sans='Raleway' />
+                                <cms:set dash_font_serif='Playfair Display' />
                             </cms:if>
                             
                             <cms:set dash_font_mono='SFMono-Regular' />
@@ -646,7 +1061,7 @@
           <h4 class="text-body-secondary fs-6 text-uppercase fw-bold mb-3 mt-5">Zone 3: Architecture & Integrations</h4>
 <div class="row g-4">
 
-    <div class="col-lg-4">
+    <div class="col-lg-6 col-xl-3">
         <div class="card shadow-sm h-100 border-0">
             <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
                 <h5 class="mb-0 fw-bold">Site Architecture</h5>
@@ -718,7 +1133,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-6 col-xl-3">
         <div class="card shadow-sm h-100 border-0">
             <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
                 <h5 class="mb-0 fw-bold">Global Data</h5>
@@ -738,7 +1153,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-6 col-xl-3">
         <div class="card shadow-sm h-100 border-0">
             <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
                 <h5 class="mb-0 fw-bold">Integrations & Legal</h5>
@@ -756,6 +1171,26 @@
                     <div class="list-group-item px-0 d-flex justify-content-between align-items-center border-bottom-0 bg-transparent">
                         <span><i class="fas fa-shield-halved text-body-secondary me-2"></i> Cookie & Privacy</span>
                         <cms:popup_edit 'ccs_gl_legal_grp|ccs_gl_cookie_consent|ccs_gl_privacy_link|ccs_gl_terms_link' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-xl-3">
+        <div class="card shadow-sm h-100 border-0">
+            <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
+                <h5 class="mb-0 fw-bold">Store &amp; Orders</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center bg-transparent">
+                        <span><i class="fas fa-receipt text-body-secondary me-2"></i> Order Emails</span>
+                        <cms:popup_edit 'ccs_gl_ordml_grp|ccs_gl_ordml_msg|ccs_gl_ordml_addr_row|ccs_gl_ordml_from|ccs_gl_ordml_contact|ccs_gl_ordml_wording_msg|ccs_gl_ordml_head_row|ccs_gl_ordml_subject|ccs_gl_ordml_greeting|ccs_gl_ordml_intro_row|ccs_gl_ordml_confirm|ccs_gl_ordml_reference|ccs_gl_ordml_close_row|ccs_gl_ordml_next|ccs_gl_ordml_help|ccs_gl_ordml_foot_row|ccs_gl_ordml_btn|ccs_gl_ordml_footer' height='860' width='1040' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                    </div>
+                    <div class="list-group-item px-0 d-flex justify-content-between align-items-center border-bottom-0 bg-transparent">
+                        <span><i class="fas fa-store text-body-secondary me-2"></i> Store Appearance</span>
+                        <cms:popup_edit 'ccs_gl_store_grp|ccs_gl_store_msg|ccs_gl_store_panel|ccs_gl_store_secondary' height='620' width='940' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                     </div>
                 </div>
             </div>

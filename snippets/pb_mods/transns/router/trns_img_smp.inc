@@ -82,7 +82,7 @@
     Four of the six choices sit below the 14rem edit floor - unset, 6rem, 9rem
     and 12rem - so a plain string test covers it. No cms:lt, no stripping the
     unit off to compare numbers: the scale is a known short list, and matching
-    against it cannot misparse the way "12rem" -> 12 can. If the scale grows,
+    against it cannot misparse the way "12rem" collapsing to 12 can. If the scale grows,
     extend this list rather than making it clever.
 </cms:ignore>
 <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
@@ -211,12 +211,29 @@
     source of truth for WHICH source. BigPicture's attribute name differs per
     source, so it is resolved here too.
 </cms:ignore>
+<cms:ignore>
+    tis_vid_3p MARKS THE TWO SOURCES THAT LEAVE THIS SERVER.
+
+    BigPicture builds its player from this attribute in JavaScript at CLICK
+    time, which is why an audit that grepped for "iframe src=" found nothing
+    here and this path shipped ungated: ytSrc and vimeoSrc contact Google and
+    Vimeo, vidSrc is a file of ours and contacts nobody.
+
+    The theme uses this flag to decide the ATTRIBUTE NAME - data-ccs-bp for the
+    two third-party sources, so BigPicture never sees them until
+    ccs_consent.js promotes them, and plain data-bigPicture for a local upload,
+    which needs no permission and should keep working for everyone.
+</cms:ignore>
+<cms:set tis_vid_3p = '0' scope='global' />
+
 <cms:if trns_vid_opt = '1'>
     <cms:if trns_mdl_vid_src_opt = '1' && trns_mdl_ytb_id>
         <cms:set tis_has_vid = '1' scope='global' />
+        <cms:set tis_vid_3p = '1' scope='global' />
         <cms:capture into='tis_vid_attr' scope='global'>{"ytSrc":"<cms:show trns_mdl_ytb_id />"}</cms:capture>
     <cms:else_if trns_mdl_vid_src_opt = '2' && trns_mdl_vim_id />
         <cms:set tis_has_vid = '1' scope='global' />
+        <cms:set tis_vid_3p = '1' scope='global' />
         <cms:capture into='tis_vid_attr' scope='global'>{"vimeoSrc":"<cms:show trns_mdl_vim_id />"}</cms:capture>
     <cms:else_if trns_mdl_vid_src_opt = '0' && trns_mdl_vid_upl_vid_mp4 />
         <cms:set tis_has_vid = '1' scope='global' />

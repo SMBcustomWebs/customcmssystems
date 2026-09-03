@@ -194,6 +194,34 @@
             <cms:set bff="'Roboto', sans-serif" "global" />
             <cms:set fss="'Roboto', sans-serif" "global" />
             <cms:set fsf="'Lora', serif" "global" />
+
+        <cms:ignore>
+            THE else IS NOT OPTIONAL, AND ITS ABSENCE WAS A REAL BUG.
+
+            The theme dropdown offers EIGHT values - light, dark, primavera,
+            estate, autunno, inverno, scuro, notte - and this chain handled
+            four. With theme typography switched on and any of the other four
+            selected, bff, fss and fsf were never assigned at all.
+
+            That does not fail loudly. It produces
+
+                .font-sans-serif { font-family:  !important; }
+
+            an empty font-family, which is invalid, so the browser drops the
+            declaration and the element inherits. Meanwhile fmn, fcs and fdc
+            below ARE set, because they sit outside this chain - so three font
+            roles kept working and three silently stopped, decided by which
+            COLOUR theme happened to be chosen. Nothing in the panel connects
+            those two things.
+
+            light, dark, scuro and notte are colour themes and were never meant
+            to carry typography, so they fall back to the site default stack -
+            the same one the no-theme branch uses further down.
+        </cms:ignore>
+        <cms:else />
+            <cms:set bff='"Montserrat", -apple-system, sans-serif' "global" />
+            <cms:set fss='"Raleway", -apple-system, sans-serif' "global" />
+            <cms:set fsf='"Playfair Display", Georgia, serif' "global" />
         </cms:if>
         
         <cms:set fmn='"SFMono-Regular", Menlo, Monaco, Consolas, monospace' "global" />
@@ -225,6 +253,20 @@
 
     <cms:set ccs_site_nav_actv_clr="<cms:show ccs_gl_site_nav_actv_clr />"  "global" />
     <cms:set ccs_site_nav_hvr_clr="<cms:show ccs_gl_site_nav_hvr_clr />"  "global" />
+
+    <cms:ignore>
+        Footer and utility-bar link hover colours. Both fall back to the
+        site-wide hover colour when left on Default.
+    </cms:ignore>
+    <cms:set ccs_site_ftr_hvr_clr="<cms:show ccs_gl_site_ftr_lnk_hvr_clr />"  "global" />
+    <cms:if ccs_site_ftr_hvr_clr eq ''>
+        <cms:set ccs_site_ftr_hvr_clr="<cms:show ccs_gl_site_nav_hvr_clr />"  "global" />
+    </cms:if>
+
+    <cms:set ccs_site_ubr_hvr_clr="<cms:show ccs_gl_site_ubr_lnk_hvr_clr />"  "global" />
+    <cms:if ccs_site_ubr_hvr_clr eq ''>
+        <cms:set ccs_site_ubr_hvr_clr="<cms:show ccs_gl_site_nav_hvr_clr />"  "global" />
+    </cms:if>
 
     <cms:set ccs_site_slct_clr="<cms:show ccs_gl_site_hglt_clr />" "global" />
     <cms:set ccs_site_slct_bg="<cms:show ccs_gl_site_hglt_bg />" "global" />
@@ -337,6 +379,12 @@
     --ccs-navbar-active-color: var(--ccs-<cms:show ccs_site_nav_actv_clr />);
     --ccs-link-hover-color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />);
     --ccs-dropdown-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_txt_clr />);
+    /* theme.css:5169 - .dropdown-item reads THIS variable for its text colour,
+       not --ccs-dropdown-color above. --ccs-dropdown-color applies to the menu,
+       and the item's own colour declaration overrides what it inherits, so the
+       line above alone never reached the text. Both are set now: the menu for
+       anything that inherits, the link for the items themselves. */
+    --ccs-dropdown-link-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_txt_clr />);
     --ccs-dropdown-bg: var(--ccs-<cms:show ccs_site_nav_mnu_dd_bg />);
     --ccs-dropdown-link-hover-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_clr />);
     --ccs-dropdown-link-hover-bg: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_bg />);
@@ -546,7 +594,11 @@ a {
 }
 
 .navbar {
-  --ccs-navbar-active-color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />);
+  /* Was ccs_site_nav_hvr_clr - the HOVER color - which silently overrode the
+     ACTIVE color set on this same variable at :root above. Two settings, one
+     variable, and the later one won, so "Menu Item Color on Active Page" could
+     never take effect even once the active class started rendering. */
+  --ccs-navbar-active-color: var(--ccs-<cms:show ccs_site_nav_actv_clr />);
 }
 
 .navbar-nav {
@@ -560,9 +612,24 @@ a {
   color: var(--ccs-navbar-active-color);
 }
 
-.dropdown-item {
-  color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_txt_clr />) !important;
-}
+/* The .dropdown-item colour rule that used to sit here has been removed, and
+   the reason it existed at all is fixed at its source in the :root block above.
+
+   theme.css:5169 reads --ccs-dropdown-link-color for the item's text colour.
+   :root here was setting --ccs-dropdown-color, which theme.css applies to the
+   MENU, not the item - and .dropdown-item's own colour declaration overrides
+   what it would have inherited. So the global setting never reached the item,
+   and this rule was added to force it, with !important.
+
+   That !important then beat every .text-* utility, because theme.css compiles
+   its colour utilities WITHOUT !important (theme.css:11617). Result: the
+   per-navbar text colour and the per-item text-<...> class were both in the
+   HTML and both lost, on every dropdown item in every navbar.
+
+   With the correct variable set above, the global setting is the DEFAULT and a
+   text-* utility overrides it - .text-primary at theme.css:11617 comes after
+   .dropdown-item at :5163 in the same file, so it wins on order at equal
+   specificity, with no !important needed on either side. */
 .dropdown-menu {
   background-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_bg />) !important;
 }
@@ -580,6 +647,29 @@ a {
 .nav-link:hover {
   color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />) !important;
 }
+
+<cms:if ccs_site_ftr_hvr_clr ne ''>
+/* Footer links. Beats the hardcoded .link-COLOUR:hover ramp in theme.css
+   on specificity (0,2,1 vs 0,2,0), so it wins regardless of load order. */
+.ccs-footer a:hover,
+.ccs-footer a:focus,
+.ccs-footer .btn-link:hover,
+.ccs-footer .btn-link:focus {
+  color: var(--ccs-<cms:show ccs_site_ftr_hvr_clr />) !important;
+  text-decoration-color: var(--ccs-<cms:show ccs_site_ftr_hvr_clr />) !important;
+}
+</cms:if>
+
+<cms:if ccs_site_ubr_hvr_clr ne ''>
+/* Utility bar links. */
+.ccs-utlbar a:hover,
+.ccs-utlbar a:focus,
+.ccs-utlbar .btn-link:hover,
+.ccs-utlbar .btn-link:focus {
+  color: var(--ccs-<cms:show ccs_site_ubr_hvr_clr />) !important;
+  text-decoration-color: var(--ccs-<cms:show ccs_site_ubr_hvr_clr />) !important;
+}
+</cms:if>
 
 ::selection {
   background-color: var(--ccs-<cms:show ccs_site_slct_bg />) !important;

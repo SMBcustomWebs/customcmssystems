@@ -1,0 +1,33 @@
+<cms:ignore>
+    =========================================================================
+    VERTICAL TITLE CONTENT BLOCK  -  main column edit cluster
+    snippets/pb_mods/content/inline/vtl_main_edit.txt
+
+    Embedded inside the main column in theme/vtl_cntn_blk.html, which carries
+    position-relative so this pins beside the copy it edits.
+
+    end-0 rather than start-0: the title rail sits immediately to the left of
+    this column, so a cluster pushed left with translateX would land on top of
+    it. Pushing right instead puts the button in the gap before the side
+    column - the same "always move away from the neighbour" reasoning nav_swpr
+    applies when it mirrors its clusters off nav position.
+    =========================================================================
+</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 end-0 mt-1 me-2 z-3 d-flex flex-column gap-2">
+
+        <cms:ignore>
+            Tall popup: the richtext needs room for CKEditor's toolbar plus a
+            usable writing area, and the typography row opens below it.
+
+            ccs_vtl_cntn_main_ovr_opt is the controller for
+            ccs_vtl_cntn_main_typo_chc and is also the user's own "Override
+            Default Text Style" switch, so it stays visible in fields. Every
+            field here is root-level - no group to register - so the only parents
+            listed are the three rows.
+        </cms:ignore>
+        <cms:popup_edit height='860' width='1050' 'ccs_vtl_cntn_main_msg|ccs_vtl_cntn_main_row|ccs_vtl_cntn_main|ccs_vtl_cntn_main_opt_row|ccs_vtl_cntn_main_halg|ccs_vtl_cntn_main_ovr_opt|ccs_vtl_cntn_main_typo_row|ccs_vtl_cntn_main_clr|ccs_vtl_cntn_main_sz|ccs_vtl_cntn_main_wt|ccs_vtl_cntn_main_fst|ccs_vtl_cntn_main_font|ccs_vtl_cntn_main_ls'
+            link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Main Content' title='Edit Main Content'><i class='fa-solid fa-align-left'></i></button>" />
+
+    </div>
+</cms:if>

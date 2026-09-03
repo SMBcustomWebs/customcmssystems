@@ -1,0 +1,285 @@
+<cms:editable type='hidden' name='section_caching'>always</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 1. SECTION SETUP                                        -->
+<!-- ======================================================= -->
+<cms:editable type='message' name='ccs_vtl_cntn_ins_msg' order='1'>
+    <h2>Vertical Title Content Block</h2>
+    <br>
+    <hr><br>
+    <h3>Section Main Options</h3>
+    <h4>Background, spacing, and whether this section shows its vertical title</h4>
+    <hr>
+</cms:editable>
+
+<cms:editable type='row' name='ccs_vtl_cntn_sec_row' order='5'>
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_bg_clr_opt' label='Section Background Color'
+        desc='Choose "Custom Color" to open the gradient options' opt_values='dropdowns/all-colors.htm'
+        dynamic='opt_values' class='col-sm-6 col-md-3' order='2' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_pad_top' label='Section Top Spacing' desc=''
+        opt_values='dropdowns/sec-pad-top.htm' dynamic='opt_values' class='col-sm-6 col-md-3' order='4' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_pad_bot' label='Section Bottom Spacing' desc=''
+        opt_values='dropdowns/sec-pad-bot.htm' dynamic='opt_values' class='col-sm-6 col-md-3' order='6' />
+    <cms:ignore>
+        Removing the title also widens the main column from col-lg-6 to col-lg-8
+        so the row still totals 12 - see the router. Without that the rail's two
+        columns would be left as an unexplained gap.
+    </cms:ignore>
+    <cms:editable type='checkbox' name='ccs_vtl_cntn_ttl_rmv_opt' label='Remove Vertical Title'
+        desc='The main column widens to fill the space' opt_values='Remove=1' class='col-sm-6 col-md-3' order='8' />
+</cms:editable>
+
+<cms:func _into='ccs_vtl_cntn_rmttl_chc' ccs_vtl_cntn_ttl_rmv_opt=''>
+    <cms:if "<cms:is '1' in=ccs_vtl_cntn_ttl_rmv_opt />">hide
+        <cms:else />show
+    </cms:if>
+</cms:func>
+
+<cms:func _into='ccs_vtl_cntn_bg_clr_cust_chc' ccs_vtl_cntn_bg_clr_opt=''>
+    <cms:if ccs_vtl_cntn_bg_clr_opt='gradient'>show
+        <cms:else />hide
+    </cms:if>
+</cms:func>
+
+
+<!-- ======================================================= -->
+<!-- 2. VERTICAL TITLE  (hidden if title removed)            -->
+<!-- ======================================================= -->
+<cms:editable type='group' name='ccs_vtl_cntn_ttl_grp' label='Vertical Title' not_active=ccs_vtl_cntn_rmttl_chc
+    order='20'>
+
+    <cms:editable type='message' name='ccs_vtl_cntn_ttl_msg' order='2'>
+        <h2>Vertical Title</h2>
+        <h4>Runs up the left edge on large screens and sits horizontally above
+            the content on phones and tablets. Both come from the one field
+            below - keep it short, it has a column's height to fit in.</h4>
+        <hr>
+    </cms:editable>
+
+    <cms:ignore>
+        TAG and SIZE are two separate controls, deliberately.
+
+        ccs_vtl_cntn_ttl_tag sets the actual HTML element. The source markup used
+        h2 here, but heading-size.htm leads with h1 and per the house rule the
+        first option IS the default - so an untouched tile renders h1, matching
+        the decision that body content owns the page h1. Change it to h2 if this
+        block sits under another that already carries the h1.
+
+        ccs_vtl_cntn_ttl_sz only sets an fs- class, so the title can look any
+        size while the element stays correct for the document outline.
+    </cms:ignore>
+    <cms:editable type='row' name='ccs_vtl_cntn_ttl_main_row' order='5'>
+        <cms:editable type='text' name='ccs_vtl_cntn_ttl_txt' label='<h3>Vertical Title Text</h3>'
+            desc='Short - two or three words' maxlength='40' class='col-md-8 mb-3' order='2' />
+        <cms:editable type='dropdown' name='ccs_vtl_cntn_ttl_tag' label='Heading Level'
+            desc='The HTML element. Use h1 once per page.' opt_values='dropdowns/heading-size.htm' dynamic='opt_values'
+            class='col-md-4' order='4' />
+    </cms:editable>
+
+    <cms:ignore>
+        Unticked, the rotated rail keeps the source's own look - text-300 fs-3 -
+        and the horizontal version keeps the theme default, which is the
+        asymmetry the source markup had. Ticked, the chosen classes replace both.
+        See the router.
+    </cms:ignore>
+    <cms:editable type='checkbox' name='ccs_vtl_cntn_ttl_ovr_opt' label='Override Default Text Style'
+        desc='Check to reveal custom font and styling controls for the title' opt_values='Customize Title Typography=1'
+        class='col-12' order='10' />
+
+    <cms:func _into='ccs_vtl_cntn_ttl_typo_chc' ccs_vtl_cntn_ttl_ovr_opt=''>
+        <cms:if "<cms:is '1' in=ccs_vtl_cntn_ttl_ovr_opt />">show
+            <cms:else />hide
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_vtl_cntn_ttl_typo_row' label='Title Typography'
+        not_active=ccs_vtl_cntn_ttl_typo_chc order='15'>
+        <cms:editable type='dropdown' name='ccs_vtl_cntn_ttl_clr' label='Text Color'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+        <cms:editable type='dropdown' name='ccs_vtl_cntn_ttl_sz' label='Title Size'
+            desc='Visual size only - the heading level stays correct for SEO'
+            opt_values='dropdowns/heading-size_sec.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='4' />
+        <cms:editable type='dropdown' name='ccs_vtl_cntn_ttl_wt' label='Font Weight'
+            opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='6' />
+        <cms:editable type='dropdown' name='ccs_vtl_cntn_ttl_fst' label='Font Style'
+            opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='8' />
+        <cms:editable type='dropdown' name='ccs_vtl_cntn_ttl_font' label='Font Family'
+            opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='10' />
+        <cms:editable type='dropdown' name='ccs_vtl_cntn_ttl_ls' label='Letter Spacing'
+            opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='12' />
+    </cms:editable>
+
+</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 3. MAIN CONTENT  -  richtext, col-lg-6                  -->
+<!-- ======================================================= -->
+<cms:editable type='message' name='ccs_vtl_cntn_main_msg' order='24'>
+    <br>
+    <hr><br>
+    <h2>Main Content</h2>
+    <h4>The wider of the two content columns. The source's paired sub-headings
+        and paragraphs come from the editor's toolbar now.</h4>
+    <hr>
+</cms:editable>
+
+<cms:ignore>
+    THE TOOLBAR IS LOADED FROM A FILE.
+
+    custom_toolbar is a real field property (field.php:61) and
+    resolve_dynamic_params() (field.php:194-232) resolves ANY named property as
+    a path relative to snippets/ - it is not limited to opt_values. So
+    dynamic='custom_toolbar' loads dropdowns/rich_sml_toolbar.inc and parses it.
+    toolbar='custom' is required to reach that branch (field.php:717).
+
+    That file's groups include Format, FontSize, TextColor, BGColor and
+    HorizontalRule, which is what lets one field replace the source's repeated
+    h5 + p pairs. The vertical title above is a separate text field with its own
+    element dropdown, so the top of the outline stays under theme control even
+    though these two columns do not.
+</cms:ignore>
+<cms:editable type='row' name='ccs_vtl_cntn_main_row' order='26'>
+    <cms:editable type='richtext' name='ccs_vtl_cntn_main' label='Main Content'
+        desc='Headings, paragraphs and rules all come from the toolbar.' toolbar='custom'
+        custom_toolbar='dropdowns/rich_sml_toolbar.inc' dynamic='custom_toolbar' class='col-12' order='2' />
+</cms:editable>
+
+<cms:editable type='row' name='ccs_vtl_cntn_main_opt_row' order='28'>
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_main_halg' label='Main Text Alignment'
+        desc='Applies to the whole main column' opt_values='dropdowns/h-align.htm' dynamic='opt_values'
+        class='col-sm-6 col-md-4' order='2' />
+</cms:editable>
+
+<cms:ignore>
+    Sets the STARTING style for this column, not an override of it. The classes
+    land on the wrapping div and colour / size / weight / family /
+    letter-spacing are all inherited properties, so the editor's paragraphs pick
+    them up - theme.css sets none of them on a bare p, so nothing intercepts the
+    inheritance. Anything styled inside the editor is inline and still wins.
+</cms:ignore>
+<cms:editable type='checkbox' name='ccs_vtl_cntn_main_ovr_opt' label='Override Default Text Style'
+    desc='Check to set the starting font and colour for the main column' opt_values='Customize Main Typography=1'
+    class='col-12' order='30' />
+
+<cms:func _into='ccs_vtl_cntn_main_typo_chc' ccs_vtl_cntn_main_ovr_opt=''>
+    <cms:if "<cms:is '1' in=ccs_vtl_cntn_main_ovr_opt />">show
+        <cms:else />hide
+    </cms:if>
+</cms:func>
+
+<cms:editable type='row' name='ccs_vtl_cntn_main_typo_row' label='Main Typography' not_active=ccs_vtl_cntn_main_typo_chc
+    order='32'>
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_main_clr' label='Text Color'
+        opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_main_sz' label='Text Size' opt_values='dropdowns/text-size.htm'
+        dynamic='opt_values' class='col-sm-6 col-md-4' order='4' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_main_wt' label='Font Weight' opt_values='dropdowns/font-weight.htm'
+        dynamic='opt_values' class='col-sm-6 col-md-4' order='6' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_main_fst' label='Font Style' opt_values='dropdowns/font-style.htm'
+        dynamic='opt_values' class='col-sm-6 col-md-4' order='8' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_main_font' label='Font Family'
+        opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='10' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_main_ls' label='Letter Spacing' opt_values='dropdowns/ltr-spc.htm'
+        dynamic='opt_values' class='col-sm-6 col-md-4' order='12' />
+</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 4. SIDE CONTENT  -  richtext, col-lg-4                  -->
+<!-- ======================================================= -->
+<cms:editable type='message' name='ccs_vtl_cntn_side_msg' order='36'>
+    <br>
+    <hr><br>
+    <h2>Side Content</h2>
+    <h4>The narrower right-hand column - the source used it for short
+        label-and-value facts. Indented from the main column at lg and above.</h4>
+    <hr>
+</cms:editable>
+
+<cms:editable type='row' name='ccs_vtl_cntn_side_row' order='38'>
+    <cms:editable type='richtext' name='ccs_vtl_cntn_side' label='Side Content'
+        desc='Headings, paragraphs and rules all come from the toolbar.' toolbar='custom'
+        custom_toolbar='dropdowns/rich_sml_toolbar.inc' dynamic='custom_toolbar' class='col-12' order='2' />
+</cms:editable>
+
+<cms:editable type='row' name='ccs_vtl_cntn_side_opt_row' order='40'>
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_side_halg' label='Side Text Alignment'
+        desc='Applies to the whole side column' opt_values='dropdowns/h-align.htm' dynamic='opt_values'
+        class='col-sm-6 col-md-4' order='2' />
+</cms:editable>
+
+<cms:editable type='checkbox' name='ccs_vtl_cntn_side_ovr_opt' label='Override Default Text Style'
+    desc='Check to set the starting font and colour for the side column' opt_values='Customize Side Typography=1'
+    class='col-12' order='42' />
+
+<cms:func _into='ccs_vtl_cntn_side_typo_chc' ccs_vtl_cntn_side_ovr_opt=''>
+    <cms:if "<cms:is '1' in=ccs_vtl_cntn_side_ovr_opt />">show
+        <cms:else />hide
+    </cms:if>
+</cms:func>
+
+<cms:editable type='row' name='ccs_vtl_cntn_side_typo_row' label='Side Typography' not_active=ccs_vtl_cntn_side_typo_chc
+    order='44'>
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_side_clr' label='Text Color'
+        opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_side_sz' label='Text Size' opt_values='dropdowns/text-size.htm'
+        dynamic='opt_values' class='col-sm-6 col-md-4' order='4' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_side_wt' label='Font Weight' opt_values='dropdowns/font-weight.htm'
+        dynamic='opt_values' class='col-sm-6 col-md-4' order='6' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_side_fst' label='Font Style' opt_values='dropdowns/font-style.htm'
+        dynamic='opt_values' class='col-sm-6 col-md-4' order='8' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_side_font' label='Font Family'
+        opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='10' />
+    <cms:editable type='dropdown' name='ccs_vtl_cntn_side_ls' label='Letter Spacing' opt_values='dropdowns/ltr-spc.htm'
+        dynamic='opt_values' class='col-sm-6 col-md-4' order='12' />
+</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 5. ADVANCED CUSTOM BACKGROUND  (hidden sibling group)   -->
+<!-- ======================================================= -->
+<cms:editable type='group' name='ccs_vtl_cntn_bg_clr_cstm_grp' collapsed='1' label='Background Custom Color'
+    not_active=ccs_vtl_cntn_bg_clr_cust_chc order='60'>
+    <cms:editable type='message' name='ccs_vtl_cntn_bg_clr_cstm_msg' order='2'>
+        <h2>Custom Background Color</h2>
+        <h4>Configure a solid hex/rgba value or a custom gradient.</h4>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_vtl_cntn_bg_clr_cstm_grdt_opt_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_vtl_cntn_bg_clr_cstm_grdt_opt' label='Solid or Gradient Color' desc=''
+            opt_values='dropdowns/solid-gradient.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+    </cms:editable>
+
+    <cms:ignore>
+        Func at group level because both its slaves are children of this group.
+        Returns show/hide, the house tokens.
+    </cms:ignore>
+    <cms:func _into='ccs_vtl_cntn_bg_grdt_chc' ccs_vtl_cntn_bg_clr_cstm_grdt_opt=''>
+        <cms:if ccs_vtl_cntn_bg_clr_cstm_grdt_opt='0'>hide
+            <cms:else />show
+        </cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_vtl_cntn_bg_clr_cstm_row' order='10'>
+        <cms:editable type='color' name='ccs_vtl_cntn_bg_clr_cstm_one' label='Background Color'
+            desc='Solid Color or First of Gradient' color='#000000' alpha='1' width='50%' height='100px'
+            class='col-sm-6 col-md-4' order='2'>#00000000</cms:editable>
+        <cms:editable type='color' name='ccs_vtl_cntn_bg_clr_cstm_two' label='Gradient Color'
+            desc='Second Color of Gradient - Ramp' color='#000000' alpha='1' width='50%' height='100px'
+            not_active=ccs_vtl_cntn_bg_grdt_chc class='col-sm-6 col-md-4' order='4'>#00000000</cms:editable>
+    </cms:editable>
+
+    <cms:ignore>
+        separator='@' because gradient-split.htm delimits its options with @
+        rather than the default pipe.
+    </cms:ignore>
+    <cms:editable type='row' name='ccs_vtl_cntn_bg_clr_swp_row' not_active=ccs_vtl_cntn_bg_grdt_chc order='15'>
+        <cms:editable type='dropdown' name='ccs_vtl_cntn_bg_clr_cust_grad_split_opt' label='Gradient Split Style'
+            desc='Visual division of gradient' opt_values='dropdowns/gradient-split.htm' dynamic='opt_values'
+            separator='@' class='col-sm-6 col-md-4' order='6' />
+        <cms:editable type='checkbox' name='ccs_vtl_cntn_bg_clr_cstm_grad_rvrs_opt'
+            label='Reverse Background Gradient Colors' opt_values='Swap=1' class='col-sm-6 col-md-4' order='8' />
+    </cms:editable>
+</cms:editable>

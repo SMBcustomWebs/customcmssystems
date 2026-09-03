@@ -533,3 +533,54 @@
             $CTX->set( 'pp_custom_taxes', $taxes );
         }
     });
+    /*
+        cart - capture the RAW variant selection so an order can be re-ordered.
+
+        WHY THIS EXISTS
+        cart.php stores only the DISPLAY label of a chosen variant:
+
+            $arr_display_attrs[$opt_name] = $opt_values[$os]['attr'];   // Color => Black
+
+        The index the customer actually picked ($_POST['os0'] === '2') is used to
+        look up that label and then thrown away. But the add-to-cart form names its
+        controls os0, os1, ... and a <select> expects the INDEX as its value - so a
+        stored label cannot be pushed back into the form.
+
+        assets/js/ccs_js.js re-orders by scraping the product's cart form and
+        setting each "key: value" pair from item_variants into it. Without the
+        index, that silently fails for dropdown and radio options and only works
+        for free-text ones.
+
+        This listener runs inside the add-to-cart branch, where $_POST is still the
+        add form, and preserves the on{N}/os{N} pairs verbatim as 'raw_variants'.
+        Custom fields are merged into the cart item and serialised into the session,
+        so the value survives to checkout and can be snapshotted onto the order line.
+
+        SEPARATORS: '|' and ':' are the parser's delimiters, so any occurrence
+        inside a free-text option is replaced with a space. Dropdown and radio
+        values are numeric indexes and are never affected. cart.php already passes
+        text options through cleanXSS/excerpt for display, so this is consistent
+        with how such values are treated elsewhere.
+    */
+    $FUNCS->add_event_listener( 'cart_alter_custom_fields', function(&$arr_custom_fields, &$pg, &$cart){
+
+        $clean = function( $s ){
+            return trim( str_replace( array('|', ':'), ' ', (string)$s ) );
+        };
+
+        $pairs = array();
+        foreach( $_POST as $k=>$v ){
+            if( is_array($v) ) continue;
+            if( !preg_match('/^os(\d+)$/', $k, $m) ) continue;
+
+            $idx  = (int)$m[1];
+            $name = isset($_POST['on'.$idx]) && !is_array($_POST['on'.$idx]) ? $_POST['on'.$idx] : '';
+
+            $pairs[$idx] = 'on'.$idx.': '.$clean($name).' | os'.$idx.': '.$clean($v);
+        }
+
+        if( count($pairs) ){
+            ksort( $pairs );
+            $arr_custom_fields['raw_variants'] = implode( ' | ', $pairs );
+        }
+    });

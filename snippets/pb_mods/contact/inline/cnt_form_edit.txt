@@ -1,0 +1,43 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <cms:ignore>
+        FORM CLUSTER - hovers at the top-left of the form itself.
+
+        Two buttons, split the way the author thinks about the form rather than
+        the way the fields happen to be declared:
+
+            WORDING   what each box is called and the faint hint inside it
+            LOOK      label visibility and color, box size, space between boxes
+
+        The send button is NOT here. It has its own cluster sitting on the
+        button, because the button is a thing on screen that can be pointed at.
+        The thank-you screen and the mail subject are not here either - they
+        are in the section cluster, because neither is ever visible beside the
+        form.
+
+        ONE FILE SERVES BOTH TILES. The basic tile and the email-only tile
+        embed the same three schema files, so all sixty-seven fields exist on
+        both and every name below resolves on both. What differs is which of
+        them RENDER: the email-only tile has no name box and no message box, so
+        offering to reword them would be offering to edit something that is not
+        there.
+
+        cnt_inl_hide carries that difference. The theme sets it immediately
+        before embedding this file, and hide_fields on the wording popup loads
+        the fields but does not draw them. It is set to an empty string by the
+        basic tile rather than left unset, because scope global writes to the
+        root and an unset variable would carry over from whichever contact
+        section rendered before it on the same page.
+
+        WHY hide_fields AND NOT skip. skip suppresses the "Field not found"
+        error, which is the one signal that catches a typo or an unregistered
+        field. Using it here to hide two rows would also silence a genuine
+        mistake in the other ten names. hide_fields hides without lying.
+    </cms:ignore>
+    <div class="position-absolute top-0 start-0 mt-2 ms-2 z-3 d-flex flex-column gap-2">
+
+        <cms:popup_edit 'cnt_frm_grp|cnt_frm_lbl_msg|cnt_frm_name_row|cnt_frm_name_lbl|cnt_frm_name_plc|cnt_frm_email_row|cnt_frm_email_lbl|cnt_frm_email_plc|cnt_frm_msg_row|cnt_frm_msg_lbl|cnt_frm_msg_plc|cnt_frm_msg_rows' hide_fields=cnt_inl_hide link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Field Wording" title="Edit Field Wording"><i class="fa-solid fa-tag"></i></button>' />
+
+        <cms:popup_edit 'cnt_frm_grp|cnt_frm_look_msg|cnt_frm_look_row|cnt_frm_lbl_vis|cnt_frm_lbl_clr|cnt_frm_fld_sz|cnt_frm_fld_gap' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Field Appearance" title="Edit Field Appearance"><i class="fa-solid fa-palette"></i></button>' />
+
+    </div>
+</cms:if>

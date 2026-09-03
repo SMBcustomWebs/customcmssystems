@@ -25,7 +25,7 @@
     ============================================================
 </cms:ignore>
 
-<cms:if k_logged_in>
+<cms:if k_logged_in && ccs_auth_uid>
     <div class="d-flex flex-column h-100 m-0">
         <!-- id here so the JS empty-state fallback can replace only the
              item list and not wipe the footer buttons below it -->
@@ -60,7 +60,19 @@
                      not a hardcoded product.php. -->
                 <cms:pages masterpage=my_saved_masterpage id=wish_product_id limit='1'>
                     <div class="row border-bottom py-3 mx-0 wishlist-item-row" id="wishlist-item-<cms:show my_wishlist_entry_id />">
-                        <div class="col-12 px-2">
+                    <cms:if itm_img_mn>
+                        <div class="col-4 px-2">
+                            <cms:ignore>
+                                Redundant with the title link below, so it is hidden from
+                                screen readers and skipped in the tab order - one item, one
+                                announced destination.
+                            </cms:ignore>
+                            <a href="<cms:show k_page_link />" class="d-block" tabindex="-1" aria-hidden="true">
+                                <img src="<cms:show itm_img_mn />" alt="" class="img-fluid rounded border">
+                            </a>
+                        </div>
+                    </cms:if>
+                    <div class="<cms:if itm_img_mn>col-8<cms:else />col-12</cms:if> px-2">
                             <a href="<cms:show k_page_link />" class="text-decoration-none">
                                 <p class="mb-1 fw-bold"><cms:show k_page_title /></p>
                             </a>

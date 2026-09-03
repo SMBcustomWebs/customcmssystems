@@ -1,15 +1,21 @@
 <cms:set my_wishlist_count='0' scope='global' />
 <cms:if k_logged_in && ccs_auth_uid>
     <!-- Use capture to silently trap the printed number into our variable.
-         Filters on ccs_auth_uid, matching what the save writes and what the
-         two display views read. Previously this used k_user_id, which the
-         extended-users addon overwrites - see snippets/utils/auth_uid.htm. -->
+
+         Counts on ccs_auth_uid, matching what the save writes into
+         wish_user_id. This read k_user_id, which the extended-users addon
+         overwrites with a page id, so the badge counted a different id than
+         the one stored and always came back 0 on a server render. The
+         client-side increment was right; the refresh was not.
+
+         The ccs_auth_uid guard matters too: an empty id would make the
+         filter "wish_user_id==" and match every row with an empty value. -->
     <cms:capture into='my_wishlist_count' scope='global'>
         <cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show ccs_auth_uid />" count_only='1' />
     </cms:capture>
 </cms:if>
 <section
-    class="bg-<cms:show ccs_ubr_shop_bg_clr_opt /> py-0 text-<cms:show ccs_ubr_shop_txt_clr /> <cms:show ccs_ubr_shop_dspr /> <cms:if ccs_ubr_shop_stky>sticky-top top-0 start-0 z-3</cms:if>"
+    class="ccs-utlbar bg-<cms:show ccs_ubr_shop_bg_clr_opt /> py-0 text-<cms:show ccs_ubr_shop_txt_clr /> <cms:show ccs_ubr_shop_dspr /> <cms:if ccs_ubr_shop_stky>sticky-top top-0 start-0 z-3</cms:if>"
     aria-label="E-Commerce and Account Links">
 
     <cms:if ccs_gl_edt_ok>
@@ -18,8 +24,10 @@
                 link_text="<span class='bg-800 link-warning'>| [EDIT SHOP BAR] |</span>" />
             <cms:popup_edit 'ccs_ubr_shop_sc1_grp|ccs_ubr_shop_sc1_msg|ccs_ubr_shop_sc1_rpt'
                 link_text="<span class='bg-800 link-warning'>| [EDIT LEFT LINKS] |</span>" />
-            <cms:popup_edit 'ccs_ubr_shop_sc2_grp|ccs_ubr_shop_sc2_msg|ccs_ubr_shop_portal_row|ccs_ubr_shop_auth_txt|ccs_ubr_shop_auth_lnk|ccs_ubr_shop_auth_cst|ccs_ubr_shop_sys_icons|ccs_ubr_shop_icn_profile|ccs_ubr_shop_icn_wishlist|ccs_ubr_shop_icn_cart'
-                link_text="<span class='bg-800 link-warning'>| [EDIT ICONS &amp; PORTAL] |</span>" />
+            <cms:pages masterpage='globals.php' limit='1'>
+                <cms:popup_edit 'ccs_gl_site_ftr_msg|ccs_gl_site_ubr_lnk_hvr_clr'
+                    link_text="<span class='bg-800 link-warning'>| [LINK HOVER COLOR] |</span>" />
+            </cms:pages>
         </div>
     </cms:if>
 
@@ -54,35 +62,74 @@
 
             <div class="col-sm-6 text-center text-sm-end pe-lg-2">
 
-                <cms:set final_auth_tgt='' scope="global" />
-                <cms:set final_auth_icon="" scope="global" />
+                <cms:ignore>
+                    Signed out: Sign in / Join, fixed.
+                    Signed in: the same slot greets them by name instead of going
+                    blank. The user icon beside it already goes to the profile, so
+                    this stays plain text rather than a second link to the same
+                    place.
 
-                <cms:if ccs_ubr_shop_auth_lnk=='custom'>
-                    <cms:set final_auth_lnk="<cms:show ccs_ubr_shop_auth_cst />" scope="global" />
-                    <cms:set final_auth_tgt='target="_blank"' scope="global" />
-                    <cms:set
-                        final_auth_icon="<i class='fa-solid fa-arrow-up-right-from-square ms-1' style='font-size: 0.75em;' aria-hidden='true'></i>"
-                        scope="global" />
+                    Name comes from utils/user_name.htm - k_user_user_first_name
+                    does not exist, see the note in that file. A blank greeting is
+                    never rendered: an account with no name and no title shows
+                    nothing here rather than "Hi !".
+                </cms:ignore>
+                <cms:if k_logged_out>
+                    <a class="btn btn-link btn-sm px-2 link-<cms:show ccs_ubr_shop_txt_clr />"
+                        href="<cms:link 'users/login.php' />" title="Sign in or create an account">
+                        Sign in / Join
+                    </a>
                     <cms:else />
-                    <cms:set final_auth_lnk="<cms:show ccs_ubr_shop_auth_lnk />" scope="global" />
+                    <cms:embed 'utils/user_name.htm' />
+                    <cms:ignore>
+                        Display Name, not first name. This is the field the
+                        visitor typed into their own profile, so it is the name
+                        they expect to be greeted by. ccs_user_first exists for
+                        forms that need the halves apart, not for talking to
+                        someone.
+
+                        Printed from the PRE-ESCAPED copy with a plain cms:show.
+                        cms:html_encode is a block tag and only works written
+                        tight on one line, which an HTML formatter will reflow
+                        and silently break - so the escaping happens once in
+                        utils/user_name.htm and nothing whitespace-sensitive
+                        survives in this file.
+
+                        Width is capped in CSS rather than by truncating the
+                        value, so a long name ellipsises instead of stretching
+                        the bar and the full name stays in the title attribute.
+                    </cms:ignore>
+                    <cms:if ccs_user_display>
+                        <span class="btn btn-link btn-sm px-2 text-decoration-none ubr-greet text-<cms:show ccs_ubr_shop_txt_clr />" title="Signed in as <cms:show ccs_user_display_esc />">
+                            Hi <cms:show ccs_user_display_esc />!
+                        </span>
+                    </cms:if>
                 </cms:if>
 
-                <a class="btn btn-link btn-sm px-2 link-<cms:show ccs_ubr_shop_txt_clr />"
-                    href="<cms:show final_auth_lnk />" <cms:show final_auth_tgt />>
-                <cms:show ccs_ubr_shop_auth_txt />
-                <cms:show final_auth_icon />
-                </a>
+                <cms:ignore>
+                    The three system icons are fixed, not editable. Their targets are
+                    specific pages and panels in this site, so an icon field could only
+                    ever put the wrong picture on a known destination - a basket on the
+                    profile link, or a blank if someone cleared the box. The editable
+                    icon and link fields that used to drive these were removed from the
+                    embed on 2026-08-30.
 
-                <a class="btn btn-link btn-sm px-2 link-<cms:show ccs_ubr_shop_txt_clr />" href="#!">
-                    <span class="fw-bolder fs-9 <cms:show ccs_ubr_shop_icn_profile />" aria-hidden="true"></span>
-                    <span class="visually-hidden">Profile</span>
+                    title is the hover text; visually-hidden carries the same words for
+                    screen readers, since a title attribute alone is not reliably read.
+                </cms:ignore>
+
+                <a class="btn btn-link btn-sm px-2 link-<cms:show ccs_ubr_shop_txt_clr />"
+                    href="<cms:if k_logged_in><cms:link 'users/profile.php' /><cms:else /><cms:link 'users/login.php' /></cms:if>"
+                    title="See user profile">
+                    <span class="fw-bolder fs-9 fa-solid fa-user" aria-hidden="true"></span>
+                    <span class="visually-hidden">See user profile</span>
                 </a>
 
                 <!-- Wishlist Modal Trigger -->
                 <a class="btn btn-link btn-sm px-2 link-<cms:show ccs_ubr_shop_txt_clr />" href="#wishlistOffcanvas"
-                    data-bs-toggle="offcanvas" role="button" aria-controls="wishlistOffcanvas" title="Show Wishlist">
-                    <span class="fw-bolder fs-9 <cms:show ccs_ubr_shop_icn_wishlist />" aria-hidden="true"></span>
-                    <span class="visually-hidden">Wishlist</span>
+                    data-bs-toggle="offcanvas" role="button" aria-controls="wishlistOffcanvas" title="See saved items">
+                    <span class="fw-bolder fs-9 fa fa-shopping-basket" aria-hidden="true"></span>
+                    <span class="visually-hidden">See saved items</span>
                     <span id="wishlist-count-badge" class="d-inline-block ps-1">
                         <cms:show my_wishlist_count />
                     </span>
@@ -90,9 +137,9 @@
 
                 <!-- Cart Icon with Dynamic Count and Offcanvas Trigger -->
                 <a class="btn btn-link btn-sm px-2 link-<cms:show ccs_ubr_shop_txt_clr /> pe-md-0" href="#cartOffcanvas"
-                    data-bs-toggle="offcanvas" role="button" aria-controls="cartOffcanvas" title="Show Cart">
-                    <span class="fw-bolder fs-9 <cms:show ccs_ubr_shop_icn_cart />" aria-hidden="true"></span>
-                    <span class="visually-hidden">Cart</span>
+                    data-bs-toggle="offcanvas" role="button" aria-controls="cartOffcanvas" title="See cart">
+                    <span class="fw-bolder fs-9 fa fa-shopping-cart" aria-hidden="true"></span>
+                    <span class="visually-hidden">See cart</span>
                     <span class="d-inline-block ps-1 cart-qty-badge">
                         <cms:pp_count_items />
                     </span>
@@ -112,6 +159,18 @@
     </cms:if>
 
 </section>
+
+<style>
+    /* Keeps a long Display Name from pushing the icons off the bar. */
+    .ubr-greet {
+        max-width: 22ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: default
+    }
+</style>
 
 <!-- ============================================-->
 <!-- Cart Offcanvas Shell =======================-->

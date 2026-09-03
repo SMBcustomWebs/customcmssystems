@@ -1,0 +1,201 @@
+<cms:ignore>
+    ============================================================
+    CREATE A SUBMENU FOLDER FROM THE FRONT END
+    ------------------------------------------------------------
+    CONTRACT
+      in  : fc_masterpage   owning template, e.g. 'about.php' (required)
+            fc_title        the folder's display title (required)
+            fc_parent       parent folder id, '-1' for top level (default -1)
+            fc_weight       sort weight (default 0)
+
+      out : fc_result       created | duplicate | denied | invalid | error
+            fc_folder_id    new folder's id, on success
+            fc_folder_name  its generated url name, on success
+            fc_error        message, on failure
+
+    ------------------ WHY THIS IS NOT A cms TAG ----------------
+    Because there isn't one. db_persist writes PAGES; nothing in
+    Couch or any addon here exposes folder creation to a template.
+    That is the whole basis of "folders can't be made from the
+    front end" - true of the TAG LAYER, and not true of the class
+    underneath it.
+
+    The admin's own create path is one line, edit-folders.php:
+
+        $folder = new KFolder( array('id'=>null, 'name'=>'',
+                    'pid'=>'-1', 'template_id'=>$PAGE->tpl_id),
+                    $PAGE->tpl_name, new KError() );
+
+    followed by populate_fields(), store_posted_changes() on the
+    system fields, and save(). All of it is reachable from cms:php.
+    This is the same move wishlist-modal.php makes to write a page
+    a level-2 customer could not: use the class, guard it properly.
+
+    ---------------- THE SUBMENU PAGE IS AUTOMATIC --------------
+    A folder here is TWO objects: the couch_folders row, and a page
+    named 'folder-<id>' in the template's folder_masterpage
+    (bmenu/about.php and friends) carrying the submenu's hero and
+    pagebuilder.
+
+    Do NOT create that page. save() fires 'folder_saved', and
+    KExtendedFolders::save_custom_folder_fields (addons/extended/
+    extended-folders.php) builds it, names it and publishes it.
+    Creating one by hand would give the folder two.
+
+    ------------------------- $PAGE ------------------------------
+    KFolder::save() reads the $PAGE GLOBAL twice - once to lock the
+    template row, once for 'template_id' on the insert - and
+    KFolder::name_unique checks uniqueness against $PAGE->tpl_id.
+    So $PAGE must BE the owning template while save() runs, which
+    it is not when this is embedded in add-about.php.
+
+    Swapping the global is therefore not a hack, it is the
+    interface. It is swapped back in every exit path, including
+    the failure ones - leaving the wrong $PAGE behind would
+    corrupt whatever rendered next.
+
+    validate_parent needs no folder tree here: it returns early
+    when $PAGE->folder_id is null, which it is for a new folder.
+
+    ------------------------- SAFETY -----------------------------
+    Level 7 with editing on, checked BEFORE the elevation, never
+    inside it. The title is the only thing taken from the browser;
+    'name' is left blank on purpose so save() derives a clean
+    unique url from the title rather than trusting a posted one -
+    that field's validator is title_ready|KFolder::name_unique and
+    a rejected name would fail the whole save.
+    ============================================================
+</cms:ignore>
+
+<cms:set fc_result      = 'invalid' scope='global' />
+<cms:set fc_folder_id   = ''        scope='global' />
+<cms:set fc_folder_name = ''        scope='global' />
+<cms:set fc_error       = ''        scope='global' />
+
+<cms:ignore>
+    Positive test, not a negated one.
+
+    Wrapping get_session in cms:not needs the inner tag quoted, and the
+    outer cms:if attribute is quoted too - so the inner double quote
+    closes the outer one and Couch stops with
+
+        ERROR! LOGIC_OP: Invalid char "e"
+
+    Same trap as building a redirect url inline; see the note in
+    users/logout.php. Test for permission and put the refusal in the else.
+
+    And do NOT paste the broken form here as an example. cms:ignore
+    discards its body but the PARSER still reads it, so a malformed tag
+    inside a comment fails the file exactly as it would outside one -
+    which is how this note came to be rewritten.
+</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <cms:php>
+        global $FUNCS, $DB, $PAGE, $AUTH, $CTX;
+
+        $mp     = trim( (string) $CTX->get('fc_masterpage') );
+        $title  = trim( (string) $CTX->get('fc_title') );
+        $pid    = trim( (string) $CTX->get('fc_parent') );
+        $weight = trim( (string) $CTX->get('fc_weight') );
+
+        if( $pid === '' )    { $pid = '-1'; }
+        if( $weight === '' ) { $weight = '0'; }
+
+        $result = 'invalid';
+        $err    = '';
+
+        if( $mp === '' || $title === '' ){
+            $err = 'A folder needs a title.';
+        }
+        else{
+            $rs = $DB->select( K_TBL_TEMPLATES, array('id', 'dynamic_folders'),
+                               "name='" . $DB->sanitize( $mp ) . "'" );
+
+            if( !count($rs) ){
+                $result = 'error';
+                $err = 'No template called ' . $mp . '.';
+            }
+            elseif( !$rs[0]['dynamic_folders'] ){
+                // A template without dynamic_folders keeps its folders in the
+                // template file. Writing a row for one would produce a folder
+                // the admin screen refuses to show and re-registration wipes.
+                $result = 'error';
+                $err = $mp . ' does not use dynamic folders.';
+            }
+            else{
+                $tpl_id = $rs[0]['id'];
+
+                // Already there? save() derives a UNIQUE url name from the
+                // title, so a repeat submission does not collide - it is
+                // accepted silently and you get two identical submenu entries
+                // with two bmenu pages behind them. Post/redirect/get stops the
+                // refresh case; this stops the double-click, which lands before
+                // the redirect ever reaches the browser.
+                $dupe = $DB->select( K_TBL_FOLDERS, array('id'),
+                          "template_id='" . $DB->sanitize( $tpl_id ) . "'"
+                        . " AND pid='"    . $DB->sanitize( $pid )    . "'"
+                        . " AND title='"  . $DB->sanitize( $title )  . "'" );
+
+                if( count($dupe) ){
+                    $CTX->set( 'fc_result', 'duplicate', 'global' );
+                    $CTX->set( 'fc_error',  'There is already a folder called "' . $title . '" there.', 'global' );
+                    return;
+                }
+
+                $orig_page  = $PAGE;
+                $orig_level = $AUTH->user->access_level;
+
+                $PAGE = new KWebpage( $tpl_id );
+
+                if( $PAGE->error ){
+                    $PAGE = $orig_page;
+                    $result = 'error';
+                    $err = 'Could not open ' . $mp . '.';
+                }
+                else{
+                    $AUTH->user->access_level = 10;
+
+                    $root   = new KError(); // dummy, as the admin passes
+                    $folder = new KFolder(
+                                array( 'id'=>null, 'name'=>'', 'pid'=>$pid,
+                                       'template_id'=>$PAGE->tpl_id ),
+                                $PAGE->tpl_name, $root );
+
+                    $folder->populate_fields();
+
+                    // Field order is fixed by KFolder::populate_fields():
+                    // 0 title, 1 name, 2 pid, 3 weight, 4 k_desc, 5 image.
+                    $folder->fields[0]->store_posted_changes( $title );
+                    $folder->fields[1]->store_posted_changes( '' );   // let save() derive it
+                    $folder->fields[2]->store_posted_changes( $pid );
+                    $folder->fields[3]->store_posted_changes( $weight );
+
+                    $errors = $folder->save();
+
+                    // Restore before anything else can run.
+                    $AUTH->user->access_level = $orig_level;
+                    $PAGE = $orig_page;
+
+                    if( $errors ){
+                        $result = 'error';
+                        $msgs = array();
+                        foreach( $folder->fields as $f ){
+                            if( isset($f->err_msg) && $f->err_msg !== '' ){ $msgs[] = $f->err_msg; }
+                        }
+                        $err = count($msgs) ? implode( ' ', $msgs ) : 'The folder could not be saved.';
+                    }
+                    else{
+                        $result = 'created';
+                        $CTX->set( 'fc_folder_id',   $folder->id,   'global' );
+                        $CTX->set( 'fc_folder_name', $folder->name, 'global' );
+                    }
+                }
+            }
+        }
+
+        $CTX->set( 'fc_result', $result, 'global' );
+        $CTX->set( 'fc_error',  $err,    'global' );
+    </cms:php>
+<cms:else />
+    <cms:set fc_result = 'denied' scope='global' />
+</cms:if>

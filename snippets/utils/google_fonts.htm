@@ -1,5 +1,55 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/utils/google_fonts.htm
+
+    THE NAME IS NOW HISTORICAL. This file no longer contacts Google. It kept its
+    name only because head.htm and anything else embedding it would otherwise
+    need changing too, and a rename is not worth a broken embed.
+
+    WHAT CHANGED AND WHY. It used to end by emitting
+
+        preconnect to fonts.googleapis.com
+        preconnect to fonts.gstatic.com
+        a stylesheet link to fonts.googleapis.com/css2
+
+    on every page load, for every visitor, before any consent existed. Loading a
+    font that way transmits the visitor's IP address to a third party as a
+    condition of reading the page, and a German court found in 2022 that doing
+    it without consent is not permissible. Gating it behind the consent banner
+    would technically comply and would also mean the site rendered in fallback
+    fonts until someone clicked a button - visibly worse for everyone, including
+    the people who would have said yes.
+
+    Self-hosting removes the question rather than answering it. No third party,
+    no consent needed, no first-paint penalty, and one less network round trip.
+
+    THE SELECTION LOGIC BELOW IS UNTOUCHED. Which families the site wants is
+    still decided exactly as before - custom overrides, then a theme preset,
+    then the built-in default. Only the final step changed: instead of asking
+    Google for those families, it links whichever of them are present locally.
+
+    A MISSING FAMILY EMITS NOTHING AT ALL. Not a broken link, not a 404 - the
+    file_exists check means the link is never written. That family then falls
+    through to the system stack user.php already defines, so the page stays
+    readable while the fonts are still being gathered.
+
+    WHERE THE FILES GO
+        assets/fonts/webfonts/montserrat/montserrat.css
+        assets/fonts/webfonts/montserrat/*.woff2
+
+    Folder and css file both named as the family, lowercased, spaces to hyphens.
+    See assets/fonts/webfonts/README.txt, and the header of any of the
+    dropdowns/font-*.htm files, which generate their option lists by scanning
+    that same folder.
+
+    THE FOUR THEME PRESETS BYPASS THE DROPDOWNS and name families directly, so
+    they are the set worth installing first. Between them they need eleven:
+    Lato, Playfair Display, Dancing Script, Oswald, Montserrat, Cinzel,
+    Open Sans, Merriweather, Roboto, Lora, Raleway.
+    ===========================================================================
+</cms:ignore>
 <cms:pages masterpage='globals.php' limit='1'>
-    
+
     <cms:if ccs_gl_site_custom_font_opt>
         <cms:set raw_fonts="<cms:show ccs_gl_site_font_body_cust />|<cms:show ccs_gl_site_font_sans_cust />|<cms:show ccs_gl_site_font_serf_cust />|<cms:show ccs_gl_site_font_mono_cust />|<cms:show ccs_gl_site_font_crsv_cust />|<cms:show ccs_gl_site_font_decr_cust />" />
     <cms:else_if ccs_gl_site_thm_typo_opt />
@@ -11,49 +61,59 @@
             <cms:set raw_fonts="Open Sans|Merriweather|Dancing Script|Oswald" />
         <cms:else_if ccs_gl_site_thm_opt == 'inverno' />
             <cms:set raw_fonts="Roboto|Lora|Dancing Script|Oswald" />
+
+        <cms:ignore>
+            Same eight-values-four-branches gap as user.php, and it has to be
+            fixed in both or they disagree: user.php would ask for the default
+            stack while this file requested nothing, so the families the CSS
+            named would never be linked.
+
+            Dancing Script and Oswald are included because user.php sets the
+            cursive and decorative roles AFTER its theme chain, which means they
+            apply to this fallback too. Monospace is not, because every branch
+            uses a system stack for it and no file of ours is involved.
+        </cms:ignore>
+        <cms:else />
+            <cms:set raw_fonts="Montserrat|Raleway|Playfair Display|Dancing Script|Oswald" />
         </cms:if>
     <cms:else />
         <cms:set raw_fonts="Montserrat|Raleway|Playfair Display" />
     </cms:if>
 
     <cms:php>
-        // Get the string of fonts we gathered above
         $raw_fonts = '<cms:show raw_fonts />';
-        $fonts_array = explode('|', $raw_fonts);
-        
-        // Fonts we DO NOT want to ask Google for
-        $skip_fonts = ['System Default', '-', 'Arial', 'Helvetica', 'Georgia', 'Times New Roman', 'Consolas', 'Courier New', 'Brush Script MT', 'Impact', ''];
-        
-        $final_fonts = [];
-        
-        // Filter out duplicates and web-safe fonts
-        foreach ($fonts_array as $font) {
-            $font = trim($font);
-            if (!in_array($font, $skip_fonts) && !in_array($font, $final_fonts)) {
-                $final_fonts[] = $font;
+
+        /* Fonts that need no file of ours. The operating system has them, or
+           the value is a placeholder meaning "leave it to the theme". */
+        $skip_fonts = array( 'System Default', '-', 'Arial', 'Helvetica', 'Georgia',
+                             'Times New Roman', 'Consolas', 'Courier New',
+                             'Brush Script MT', 'Impact', '' );
+
+        $dir = K_SITE_DIR . 'assets/fonts/webfonts/';
+        $url = K_SITE_URL . 'assets/fonts/webfonts/';
+
+        $done = array();
+        $html = '';
+
+        foreach( explode('|', $raw_fonts) as $font ){
+            $font = trim( $font );
+
+            if( in_array($font, $skip_fonts) ){ continue; }
+            if( in_array($font, $done) ){ continue; }   /* one link per family */
+            $done[] = $font;
+
+            $slug = strtolower( str_replace(' ', '-', $font) );
+            $css  = $slug . '/' . $slug . '.css';
+
+            /* The check is the whole point. A family that has not been
+               installed yet produces no markup at all, so no request is made
+               and nothing 404s - it simply falls back to the system stack. */
+            if( file_exists($dir . $css) ){
+                $html .= '<link rel="stylesheet" href="' . $url . $css . '">' . "\n        ";
             }
         }
-        
-        $url_parts = [];
-        
-        // Format for the Google API
-        foreach ($final_fonts as $font) {
-            $formatted_font = str_replace(' ', '+', $font);
-            $url_parts[] = 'family=' . $formatted_font . ':ital,wght@0,300..800;1,300..800';
-        }
-        
-        // Combine them together into the final string
-        $font_url = implode('&', $url_parts);
-        
-        // Pass it back to CouchCMS
-        global $CTX;
-        $CTX->set('final_font_url', $font_url, 'global');
-    </cms:php>
 
-    <cms:if final_font_url ne ''>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?<cms:show final_font_url />&display=swap" rel="stylesheet">
-    </cms:if>
+        echo $html;
+    </cms:php>
 
 </cms:pages>

@@ -1,0 +1,170 @@
+<cms:ignore>
+    ================================================================
+    order_fulfil.htm - mark an order paid and deduct its stock ONCE.
+
+    This is the single fulfilment path. Stripe's webhook and PayPal's
+    IPN both embed this file and nothing else deducts stock anywhere
+    in the site. That is the whole point: one routine, one idempotency
+    guard, identical behaviour whichever gateway paid.
+
+    CALLER MUST SET, before embedding:
+      ccs_fulfil_order_id   k_page_id of the order (required)
+      ccs_fulfil_txn_id     gateway's transaction reference (optional)
+
+    THIS SETS (scope='global'):
+      ccs_fulfil_result  deducted | already | notfound | notpending
+
+    ------------------------- IDEMPOTENCY -------------------------
+    order_stock_deducted is CLAIMED FIRST, then the stock is moved.
+
+    Claiming first is deliberate. A Stripe webhook and a customer
+    landing on the thank-you page can arrive at the same moment, and
+    Couch gives us no transaction to wrap this in. Setting the flag
+    before doing the work shrinks the race to the gap between two
+    statements instead of the length of the whole deduction loop.
+
+    The cost of that choice is that a deduction which dies halfway
+    leaves the flag set and the stock short. That is the trade
+    orders.php already chose - its own field description reads
+    "Reset to No ONLY to deliberately re-run a failed deduction",
+    which only makes sense if the flag is a claim rather than a
+    receipt. Under-deducting is visible and an admin can fix it;
+    silently deducting twice destroys inventory nobody is watching.
+    ================================================================
+</cms:ignore>
+
+<cms:set ccs_fulfil_result = 'notfound' scope='global' />
+
+<cms:if ccs_fulfil_order_id>
+
+    <cms:pages masterpage='orders.php' id=ccs_fulfil_order_id limit='1'>
+
+        <cms:ignore>
+            Snapshot the order's identity before ANY nested loop opens.
+            Every cms:pages calls set_context on its own row, so by the
+            time we are inside the line-item loop k_page_id would be the
+            line item's. Same reasoning as ccs_active_page_name in
+            nav_emb.htm - the request's identity has to be captured
+            while it is still intact.
+        </cms:ignore>
+        <cms:set of_order_pid = k_page_id scope='global' />
+        <cms:set of_already   = order_stock_deducted scope='global' />
+        <cms:set of_status    = order_status scope='global' />
+
+        <cms:if of_already = '1'>
+            <cms:set ccs_fulfil_result = 'already' scope='global' />
+
+        <cms:else_if of_status ne 'pending' />
+            <cms:ignore>
+                Refunded or cancelled orders must never be re-fulfilled
+                by a late or replayed gateway notification.
+            </cms:ignore>
+            <cms:set ccs_fulfil_result = 'notpending' scope='global' />
+
+        <cms:else />
+
+            <cms:php>
+                global $CTX;
+                $CTX->set( 'of_paid_on', date('Y-m-d H:i:s'), 'global' );
+            </cms:php>
+
+            <cms:ignore>
+                CLAIM. Status, transaction reference and the deduction
+                flag all move in one write, so an order can never be
+                marked paid without also being marked claimed.
+            </cms:ignore>
+            <cms:db_persist_ex
+                _masterpage='orders.php'
+                _mode='edit'
+                _page_id=of_order_pid
+                _invalidate_cache='0'
+                order_status='paid'
+                order_stock_deducted='1'
+                order_txn_id=ccs_fulfil_txn_id
+                order_paid_on=of_paid_on
+            />
+
+            <cms:ignore>
+                DEDUCT. item_order_id is search_type='integer' and is
+                written on every line, so this positive test is safe
+                against the INNER JOIN that custom_field builds - a
+                negative test would silently drop rows.
+            </cms:ignore>
+            <cms:pages masterpage='order-items.php' custom_field="item_order_id==<cms:show of_order_pid />" limit='500'>
+
+                <cms:set of_item_pid = item_product_id scope='global' />
+                <cms:set of_item_qty = item_qty scope='global' />
+
+                <cms:if of_item_pid && of_item_qty gt '0'>
+
+                    <cms:ignore>
+                        The template is read from the item's own page id, never
+                        assumed. A hardcoded masterpage='product.php' here does
+                        not raise an error when the line is a service or any
+                        other sellable template - cms:pages simply matches
+                        nothing and the deduction is skipped in silence, which
+                        is the worst possible failure on the stock path.
+                    </cms:ignore>
+                    <cms:set itm_tpl_id = of_item_pid scope='global' />
+                    <cms:embed 'utils/item_tpl.htm' />
+                    <cms:set of_item_tpl = itm_tpl scope='global' />
+
+                    <cms:pages masterpage=of_item_tpl id=of_item_pid limit='1'>
+
+                        <cms:ignore>
+                            Direct compare, never cms:is. At runtime cms:is
+                            aliases arr_val_exists and only returns 1 when the
+                            value is genuinely an array, which is inconsistent
+                            for checkboxes. The preflight confirmed this field
+                            reads back as the plain string '1'.
+
+                            An untracked product simply falls through. That is
+                            not a failure - there is nothing to deduct.
+                        </cms:ignore>
+                        <cms:if track_inventory = '1'>
+
+                            <cms:set of_new_stock = "<cms:sub in_stock of_item_qty />" scope='global' />
+                            <cms:if of_new_stock lt '0'>
+                                <cms:set of_new_stock = '0' scope='global' />
+                            </cms:if>
+
+                            <cms:db_persist_ex
+                                _masterpage=of_item_tpl
+                                _mode='edit'
+                                _page_id=k_page_id
+                                _invalidate_cache='0'
+                                in_stock=of_new_stock
+                            />
+
+                        </cms:if>
+                    </cms:pages>
+                </cms:if>
+
+            </cms:pages>
+
+            <cms:ignore>
+                The receipt goes out LAST, after the money and the stock are
+                settled. If mail were to fail or hang, the order is already
+                correct - a missing email is an annoyance, a missing deduction
+                is an oversell.
+
+                It sits inside this branch on purpose, so it inherits the same
+                once-only guarantee: a replayed webhook returns 'already' above
+                and never reaches here, so nobody gets two receipts.
+
+                One thing to watch: this runs inside the gateway's callback, and
+                Stripe wants a quick 2xx. PHP mail() normally hands off to the
+                local MTA and returns immediately, so this is fine - but if
+                delivery attempts ever start timing out in the Stripe dashboard,
+                this is the first place to look.
+            </cms:ignore>
+            <cms:set ccs_mail_order_id = of_order_pid />
+            <cms:embed 'utils/order_email.htm' />
+
+            <cms:set ccs_fulfil_result = 'deducted' scope='global' />
+
+        </cms:if>
+
+    </cms:pages>
+
+</cms:if>

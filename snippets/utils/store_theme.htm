@@ -1,0 +1,70 @@
+<cms:ignore>
+    ================================================================
+    store_theme.htm - turns the two Store Appearance settings into
+    ready-to-use classes, so no store page names a colour itself.
+
+    EMBED IT ONCE near the top of any store page, then use:
+
+      ccs_st_panel      panel background + its paired text colour
+      ccs_st_secondary  dimming class for helper/secondary text
+
+    Both can legitimately be EMPTY, so always print them through
+    cms:show inside the class attribute rather than concatenating.
+    An empty value simply contributes nothing.
+
+    WHY THERE IS NO ACCENT COLOUR HERE
+    An earlier draft had a "Price & Total Colour" picker. It was
+    removed once assets/css/user.php was read properly: the theme's
+    colour variables are rewritten at runtime from the Site Colors
+    settings and the named presets, so the same token means a
+    different hue on different days. No fixed hue can be promised
+    readable against a panel whose colour is also moving. Totals are
+    emphasised with fw-bold instead, which never fails contrast.
+
+    WHY SECONDARY TEXT IS AN OPACITY AND NOT A COLOUR
+    theme.css defines .text-muted as
+        color: var(--ccs-secondary-color) !important
+    which in light mode is #292b2c - near black - and it wins over
+    whatever the panel set, !important and all. On a dark panel that
+    is black text on a black ground. An opacity class dims the colour
+    the panel already handed down, so it can only ever move toward
+    the ground it is sitting on, never across it.
+
+    Both offered values were checked against the theme's own body
+    colour on white: opacity-85 lands near 9:1 and opacity-75 near
+    6.5:1, both clear of the 4.5:1 AA threshold for body text.
+    opacity-50 was dropped for landing at about 3:1.
+
+    WHAT THIS FILE DOES NOT COVER
+    Bootstrap state colours used elsewhere on these pages -
+    text-danger on validation messages, text-primary on icons - are
+    theme colours, not hardcoded ones, and are left alone on purpose.
+    text-danger against a light ground measures about 3.4:1, which is
+    fine for an icon and short of AA for a sentence. Fixing that means
+    changing the theme's danger colour for the whole site, which is a
+    decision for the site, not for the store.
+    ================================================================
+</cms:ignore>
+
+<cms:pages masterpage='globals.php' limit='1'>
+    <cms:set st_panel_tok = ccs_gl_store_panel scope='global' />
+    <cms:set st_secondary = ccs_gl_store_secondary scope='global' />
+</cms:pages>
+
+<cms:ignore>
+    Both values are re-checked against the list this file knows how to
+    honour. A dropdown can be renamed or repointed at a different
+    snippet without this file being touched, and a stale value would
+    otherwise be printed straight into a class attribute.
+</cms:ignore>
+<cms:if (st_panel_tok == 'light') || (st_panel_tok == 'dark')>
+    <cms:set ccs_st_panel = "text-bg-<cms:show st_panel_tok />" scope='global' />
+<cms:else />
+    <cms:set ccs_st_panel = '' scope='global' />
+</cms:if>
+
+<cms:if (st_secondary == 'opacity-85') || (st_secondary == 'opacity-75')>
+    <cms:set ccs_st_secondary = st_secondary scope='global' />
+<cms:else />
+    <cms:set ccs_st_secondary = '' scope='global' />
+</cms:if>

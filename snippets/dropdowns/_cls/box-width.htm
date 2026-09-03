@@ -1,0 +1,28 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_cls/box-width.htm
+
+    EMITS   a complete Bootstrap column class set. Print it as-is. NEVER prefix.
+    USE AS  class="{this}"   on the column that holds the content
+
+    RESPONSIVE BY CONSTRUCTION. Each option names a width for large screens and
+    lets the column fall back to full width below that, so nothing has to be
+    remembered about breakpoints. A form squeezed to a third of the screen on a
+    phone is unusable; every option here is full width on small screens.
+
+    NO "CUSTOM" SENTINEL, unlike dropdowns/txt-box_size.htm. That file offers
+    Custom Size=custom, which only works where the consumer also builds a
+    custom-size repeatable and branches on the sentinel. Anywhere else the
+    value "custom" is printed straight into the class attribute and matches
+    nothing. This file has no escape hatch, so it cannot fail that way.
+
+    ALL VALUES VERIFIED as real Bootstrap grid classes.
+    ===========================================================================
+</cms:ignore>
+Half Width=col-lg-6
+|Full Width=col-12
+|Two Thirds=col-lg-8
+|One Third=col-lg-4
+|Three Quarters=col-lg-9
+|Narrow=col-lg-5 col-md-8
+|Wide=col-lg-10

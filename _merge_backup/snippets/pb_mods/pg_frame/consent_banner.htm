@@ -1,0 +1,198 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/pb_mods/pg_frame/consent_banner.htm
+
+    Embedded from tail.htm, just before the closing body tag.
+
+    IT LIVES IN THE FRAME, NOT IN A PAGEBUILDER TILE, AND THAT IS DELIBERATE.
+    PageBuilder caches a tile's rendered HTML in one entry shared by every
+    visitor (page-builder.php:265). A consent banner is per-visitor by
+    definition - cache it and one person's answer is served to the next. The
+    frame embeds this file directly on every request, so it is always resolved
+    against the cookie the current visitor actually sent.
+
+    IT RENDERS ONLY WHEN THERE IS A QUESTION TO ASK. Two gates: the owner has
+    switched the banner on, and this visitor has not already answered for the
+    current policy version.
+
+    TURNING THE BANNER OFF DOES NOT TURN TRACKING ON. If the owner unticks the
+    setting, consent is simply never granted, so the gated script slots stay
+    empty. Off means "ask nobody and load nothing", never "assume yes". That is
+    the only safe direction for a switch like this to fail in.
+
+    REFUSING IS EXACTLY AS EASY AS ACCEPTING. Both are one click, side by side,
+    same size, same weight, neither styled to look like the sensible one. This
+    is a legal requirement in every opt-in regime, and it is also the honest way
+    round. There is no close button: dismissing a consent prompt is not an
+    answer, and treating it as one would be recording consent nobody gave.
+
+    ACCESSIBILITY. The bar is a labelled dialog with its description wired
+    through aria-describedby. Focus moves to it once so a keyboard or screen
+    reader user meets it rather than tabbing past it, and the browser's own
+    focus ring is left alone. Escape deliberately does nothing - there is no
+    silent way out, by design.
+    ===========================================================================
+</cms:ignore>
+
+<cms:ignore>
+    The globals fields are NOT ambiently in scope in the frame - head.htm has to
+    reach for them one at a time with get_custom_field. Opening globals once
+    here puts every ccs_gl_ field this banner needs in scope together, which is
+    both cheaper and less error-prone than a dozen separate lookups.
+
+    ccs_consent_set and ccs_consent_ver come from utils/consent.htm and were set
+    with scope='global', so they survive into this block rather than being
+    shadowed by it.
+</cms:ignore>
+<cms:ignore>
+    NO cms:else FALLBACKS IN THIS FILE. Every string the bar prints is a
+    required field in globals.php carrying a real default in the body of its
+    editable, so get_data() returns the default whenever the field is empty -
+    on the front end and in the panel alike (field.php:363). A second copy of
+    the wording hidden here would be a value nobody could see or edit, and the
+    two would drift.
+</cms:ignore>
+<cms:pages masterpage='globals.php' limit='1'>
+<cms:if ccs_gl_cookie_consent == '1' && ccs_consent_set != '1'>
+
+    <cms:set cnst_privacy = ccs_gl_privacy_link />
+    <cms:set cnst_cookies = ccs_gl_cookie_link />
+
+    <div id="ccs-consent" class="position-fixed bottom-0 start-0 end-0 z-3 bg-body border-top shadow-lg p-3 p-md-4"
+        role="dialog" aria-labelledby="ccs-consent-title" aria-describedby="ccs-consent-desc">
+        <div class="container">
+            <div class="row align-items-center g-3">
+
+                <div class="col-lg-7">
+                    <h2 id="ccs-consent-title" class="h5 mb-1">
+                        <cms:show ccs_gl_consent_ttl />
+                    </h2>
+                    <p id="ccs-consent-desc" class="mb-0 fs-9">
+                        <cms:show ccs_gl_consent_txt />
+                        <cms:if cnst_privacy>
+                            <a href="<cms:show cnst_privacy />" class="text-decoration-underline">Privacy Policy</a>
+                        </cms:if><cms:if cnst_privacy && cnst_cookies> &middot; </cms:if><cms:if cnst_cookies>
+                            <a href="<cms:show cnst_cookies />" class="text-decoration-underline">Cookie Policy</a>
+                        </cms:if>
+                    </p>
+                </div>
+
+                <cms:ignore>
+                    Reject is listed FIRST and carries identical styling to
+                    Accept. A "reject" that is smaller, greyer or one level
+                    deeper than "accept" is the specific dark pattern that
+                    regulators have been fining people for.
+                </cms:ignore>
+                <div class="col-lg-5">
+                    <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-ccs-consent="reject">
+                            <cms:show ccs_gl_consent_no />
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-ccs-consent="prefs"
+                            aria-expanded="false" aria-controls="ccs-consent-prefs">
+                            <cms:show ccs_gl_consent_pref />
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm" data-ccs-consent="accept">
+                            <cms:show ccs_gl_consent_yes />
+                        </button>
+                    </div>
+                </div>
+
+                <cms:ignore>
+                    Necessary is shown, checked and disabled rather than hidden.
+                    People are entitled to see everything that is being set,
+                    including the part they cannot decline, and hiding it invites
+                    the suspicion that something else is hidden too.
+                </cms:ignore>
+                <div class="col-12 d-none" id="ccs-consent-prefs">
+                    <hr class="my-2">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ccs-cat-n" checked disabled>
+                                <label class="form-check-label fs-9" for="ccs-cat-n">
+                                    <strong>Strictly necessary</strong><br>
+                                    Sign-in, your shopping cart, and remembering this choice. Always on.
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ccs-cat-a">
+                                <label class="form-check-label fs-9" for="ccs-cat-a">
+                                    <strong>Analytics</strong><br>
+                                    <cms:show ccs_gl_consent_a_txt />
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="ccs-cat-m">
+                                <label class="form-check-label fs-9" for="ccs-cat-m">
+                                    <strong>Marketing</strong><br>
+                                    <cms:show ccs_gl_consent_m_txt />
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary btn-sm" data-ccs-consent="save">
+                                Save my choices
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            var bar = document.getElementById('ccs-consent');
+            if (!bar) { return; }
+            var VER = '<cms:show ccs_consent_ver />';
+
+            /* Six months. Long enough not to nag, short enough that consent is
+               periodically renewed rather than assumed forever. Secure is added
+               only on https so this still works on a local http build. */
+            function put(name, value) {
+                document.cookie = name + '=' + value + ';path=/;max-age=15552000;SameSite=Lax'
+                    + (location.protocol === 'https:' ? ';Secure' : '');
+            }
+
+            /* Reload rather than injecting scripts client-side. The server
+               decides what belongs in the page; this only records the answer. */
+            function save(a, m) {
+                put('ccs_cnst_v', VER);
+                put('ccs_cnst_a', a ? '1' : '0');
+                put('ccs_cnst_m', m ? '1' : '0');
+                location.reload();
+            }
+
+            bar.addEventListener('click', function (e) {
+                var btn = e.target.closest('[data-ccs-consent]');
+                if (!btn) { return; }
+                var act = btn.getAttribute('data-ccs-consent');
+
+                if (act === 'accept') { save(true, true); }
+                else if (act === 'reject') { save(false, false); }
+                else if (act === 'save') {
+                    save(document.getElementById('ccs-cat-a').checked,
+                         document.getElementById('ccs-cat-m').checked);
+                }
+                else if (act === 'prefs') {
+                    var panel = document.getElementById('ccs-consent-prefs');
+                    var open = panel.classList.toggle('d-none');
+                    btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+                }
+            });
+
+            /* Move focus in once so the prompt is met rather than tabbed past.
+               preventScroll keeps the page where the visitor left it. */
+            var first = bar.querySelector('[data-ccs-consent]');
+            if (first) { try { first.focus({ preventScroll: true }); } catch (err) { first.focus(); } }
+        })();
+    </script>
+
+</cms:if>
+</cms:pages>

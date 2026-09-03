@@ -1,0 +1,347 @@
+<cms:ignore>
+    =========================================================================
+    IMAGE + CONTENT BLOCK  -  field definitions
+    snippets/pb_mods/content/embed/img_2col_cntn_blk.htm
+
+    Consumed by:  blocks/content/cntnt_blk_1.php  ->  img_2col_cntn_blk_til
+    Rendered by:  snippets/pb_mods/content/theme/img_2col_cntn_blk.html
+    Compiled by:  snippets/pb_mods/content/router/img_2col_cntn_blk.inc
+
+    ONE section. Three rows inside it: two images, the section header, then a
+    full-width WYSIWYG. Background colour and header removal are section-level
+    because the whole tile is a single <section>.
+    =========================================================================
+</cms:ignore>
+
+<cms:ignore>
+    CACHING. This tile's output does not vary by query string - no AJAX, no
+    GET-driven filtering, no cms:form - so one cached artifact per page id is
+    correct and 'always' is safe. Contrast nav_swpr, which must use 'never'
+    because its output varies by cat_override / ajax_block and the cache key is
+    the page id alone. The nonce-bearing inline-edit case is handled by the
+    no_cache attribute already present on index.php's cms:show_pagebuilder call.
+</cms:ignore>
+<cms:editable type='hidden' name='section_caching'>always</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 1. SECTION SETUP                                        -->
+<!-- ======================================================= -->
+<cms:editable type='message' name='ccs_img_2col_cntn_ins_msg' order='1'>
+    <h2>Image &amp; Content Block</h2>
+    <br>
+    <hr><br>
+    <h3>Section Main Options</h3>
+    <h4>Background, spacing, and whether this section shows a header</h4>
+    <hr>
+</cms:editable>
+
+<cms:editable type='row' name='ccs_img_2col_cntn_sec_row' order='5'>
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_bg_clr_opt' label='Section Background Color'
+        desc='Choose "Custom Color" to open the gradient options' opt_values='dropdowns/all-colors.htm'
+        dynamic='opt_values' class='col-sm-6 col-md-3' order='2' />
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_pad_top' label='Section Top Spacing' desc=''
+        opt_values='dropdowns/sec-pad-top.htm' dynamic='opt_values' class='col-sm-6 col-md-3' order='4' />
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_pad_bot' label='Section Bottom Spacing' desc=''
+        opt_values='dropdowns/sec-pad-bot.htm' dynamic='opt_values' class='col-sm-6 col-md-3' order='6' />
+    <cms:editable type='checkbox' name='ccs_img_2col_cntn_hdr_rmv_opt' label='Remove Section Header'
+        desc='Helpful if stacking modules' opt_values='Remove=1' class='col-sm-6 col-md-3' order='8' />
+</cms:editable>
+
+<cms:ignore>
+    ROOT-LEVEL GATES. Both funcs sit at root because both their slaves do -
+    ccs_img_2col_cntn_hdr_grp and ccs_img_2col_cntn_bg_clr_cstm_grp are
+    top-level groups. Their controllers live in ccs_img_2col_cntn_sec_row at
+    order 5, which resolves ahead of orders 20 and 60 in the nested sort.
+</cms:ignore>
+<cms:func _into='ccs_img_2col_cntn_rmhdr_chc' ccs_img_2col_cntn_hdr_rmv_opt=''>
+    <cms:if "<cms:is '1' in=ccs_img_2col_cntn_hdr_rmv_opt />">hide<cms:else />show</cms:if>
+</cms:func>
+
+<cms:func _into='ccs_img_2col_cntn_bg_clr_cust_chc' ccs_img_2col_cntn_bg_clr_opt=''>
+    <cms:if ccs_img_2col_cntn_bg_clr_opt='gradient'>show<cms:else />hide</cms:if>
+</cms:func>
+
+
+<!-- ======================================================= -->
+<!-- 2. IMAGE ROW                                            -->
+<!-- ======================================================= -->
+<cms:editable type='message' name='ccs_img_2col_cntn_img_msg' order='10'>
+    <br><hr><br>
+    <h2>Image Row</h2>
+    <h4>Two images, side by side on large screens and stacked on phones and
+        tablets. Leave either one empty to show only the other at full width.</h4>
+    <hr>
+</cms:editable>
+
+<cms:editable type='row' name='ccs_img_2col_cntn_img_row' order='12'>
+    <cms:editable type='image' name='ccs_img_2col_cntn_img_1' label='Left Image'
+        desc='Displays at roughly 570px wide. Upload at 1600px for sharp retina rendering.' width='1600' height='1200'
+        enforce_max='1' show_preview='1' preview_width='75' class='col-md-3' order='2' />
+    <cms:editable type='text' name='ccs_img_2col_cntn_img_1_alt' label='Left Image Description'
+        desc='For screen readers and SEO. Describe what the image shows.' class='col-md-3' order='4' />
+    <cms:editable type='image' name='ccs_img_2col_cntn_img_2' label='Right Image'
+        desc='Displays at roughly 570px wide. Upload at 1600px for sharp retina rendering.' width='1600' height='1200'
+        enforce_max='1' show_preview='1' preview_width='75' class='col-md-3' order='6' />
+    <cms:editable type='text' name='ccs_img_2col_cntn_img_2_alt' label='Right Image Description'
+        desc='For screen readers and SEO. Describe what the image shows.' class='col-md-3' order='8' />
+</cms:editable>
+
+<cms:editable type='row' name='ccs_img_2col_cntn_img_fmt_row' order='14'>
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_img_rnd' label='Image Corners' desc='Rounds the image corners'
+        opt_values='dropdowns/radius.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 3. SECTION HEADER  (hidden if header removed)           -->
+<!-- ======================================================= -->
+<cms:editable type='group' name='ccs_img_2col_cntn_hdr_grp' label='Section Header'
+    not_active=ccs_img_2col_cntn_rmhdr_chc order='20'>
+
+    <!-- ALIGNMENT & SPACING -->
+    <cms:editable type='row' name='ccs_img_2col_cntn_hdr_box_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hdr_pd' label='Extra Space Above &amp; Below Header'
+            desc='' opt_values='dropdowns/padding.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hdr_halg' label='Align Header Text'
+            desc='Left, Center, Right' opt_values='dropdowns/h-align.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='4' />
+    </cms:editable>
+
+    <!-- MAIN HEADING: text + tag -->
+    <cms:ignore>
+        TAG and SIZE are two separate controls, deliberately.
+
+        ccs_img_2col_cntn_hdg_tag sets the actual HTML element. This block is
+        page CONTENT sitting under the hero, so it owns the page h1 - which is
+        why heading-size.htm leads with h1 and, per the house rule that the
+        first option in a dropdown file IS the default, an untouched tile
+        renders h1.
+
+        CAVEAT worth knowing: because the tag is a free choice, two of these
+        tiles on one page will emit two h1 elements unless the editor changes
+        one. That is the trade-off of exposing the tag rather than fixing it
+        the way nav_swpr does.
+
+        ccs_img_2col_cntn_hdg_sz only sets an fs- class, so the heading can look
+        any size while the element stays correct for the document outline.
+        Leaving it on Default emits no fs- class at all and the theme's own
+        size for that tag applies.
+    </cms:ignore>
+    <cms:editable type='row' name='ccs_img_2col_cntn_hdg_main_row' order='10'>
+        <cms:editable type='text' name='ccs_img_2col_cntn_hdg_txt' label='<h3>Section Heading Text</h3>' desc=''
+            maxlength='80' class='col-md-8 mb-3' order='2' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hdg_tag' label='Heading Level'
+            desc='The HTML element. Use h1 once per page.' opt_values='dropdowns/heading-size.htm'
+            dynamic='opt_values' class='col-md-4' order='4' />
+    </cms:editable>
+
+    <!-- HEADING TYPOGRAPHY OVERRIDE -->
+    <cms:editable type='checkbox' name='ccs_img_2col_cntn_hdr_ovr_opt' label='Override Default Text Style'
+        desc='Check to reveal custom font and styling controls for the heading and sub-heading'
+        opt_values='Customize Header Typography=1' class='col-12' order='15' />
+
+    <cms:func _into='ccs_img_2col_cntn_hdr_typo_chc' ccs_img_2col_cntn_hdr_ovr_opt=''>
+        <cms:if "<cms:is '1' in=ccs_img_2col_cntn_hdr_ovr_opt />">show<cms:else />hide</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_img_2col_cntn_hdg_typo_row' label='Heading Typography'
+        not_active=ccs_img_2col_cntn_hdr_typo_chc order='20'>
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hdg_clr' label='Text Color'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hdg_sz' label='Heading Size'
+            desc='Visual size only - the heading level stays correct for SEO'
+            opt_values='dropdowns/heading-size_sec.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='4' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hdg_wt' label='Font Weight'
+            opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='6' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hdg_fst' label='Font Style'
+            opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='8' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hdg_font' label='Font Family'
+            opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='10' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hdg_ls' label='Letter Spacing'
+            opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='12' />
+    </cms:editable>
+
+    <!-- SUB HEADING -->
+    <cms:editable type='row' name='ccs_img_2col_cntn_hdg_sub_row' order='25'>
+        <cms:editable type='text' name='ccs_img_2col_cntn_sub_txt' label='<h3>Sub-Heading Text</h3>' desc='optional'
+            maxlength='150' class='col-12 mb-3' order='2' />
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_img_2col_cntn_sub_typo_row' label='Sub-Heading Typography'
+        not_active=ccs_img_2col_cntn_hdr_typo_chc order='30'>
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_sub_clr' label='Sub Text Color'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_sub_sz' label='Sub Text Size'
+            opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='4' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_sub_wt' label='Sub Font Weight'
+            opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='6' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_sub_fst' label='Sub Font Style'
+            opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='8' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_sub_font' label='Sub Font Family'
+            opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='10' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_sub_ls' label='Sub Letter Spacing'
+            opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='12' />
+    </cms:editable>
+
+    <!-- DIVIDING LINE -->
+    <cms:editable type='message' name='ccs_img_2col_cntn_hr_msg' order='35'>
+        <br><hr><br>
+        <h2>Header Dividing Line From Content</h2>
+        <p>Visual separator</p>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_img_2col_cntn_hr_len_row' order='40'>
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hdg_hr' label='Length'
+            desc='Leave on the first option for no line' opt_values='dropdowns/hr-size.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='2' />
+    </cms:editable>
+
+    <cms:ignore>
+        No line means nothing to style, so Thickness / Color / Space Between are
+        hidden. hr-size.htm's first option emits an EMPTY value, so the test is
+        a plain truthiness check - not a comparison against 'none'.
+        Controller above the func, func above the slave, func at the same
+        nesting level as its slave.
+    </cms:ignore>
+    <cms:func _into='ccs_img_2col_cntn_hr_chc' ccs_img_2col_cntn_hdg_hr=''>
+        <cms:if ccs_img_2col_cntn_hdg_hr>show<cms:else />hide</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_img_2col_cntn_hr_row' not_active=ccs_img_2col_cntn_hr_chc order='42'>
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hr_wt' label='Thickness'
+            opt_values='dropdowns/hr-thickness.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hr_clr' label='Color'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='4' />
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_hr_pd' label='Space Between'
+            opt_values='dropdowns/padding.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='6' />
+    </cms:editable>
+
+</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 4. BODY CONTENT  -  full-width WYSIWYG                  -->
+<!-- ======================================================= -->
+<cms:editable type='message' name='ccs_img_2col_cntn_body_msg' order='45'>
+    <br><hr><br>
+    <h2>Body Content</h2>
+    <h4>The full-width content area below the header. Style it however you like
+        using the editor's own toolbar.</h4>
+    <hr>
+</cms:editable>
+
+<cms:ignore>
+    THE TOOLBAR IS LOADED FROM A FILE.
+
+    custom_toolbar is a real field property (field.php:61) and
+    resolve_dynamic_params() (field.php:194-232) is generic - it resolves ANY
+    named property as a path relative to snippets/, not just opt_values. So
+    dynamic='custom_toolbar' loads dropdowns/rich_sml_toolbar.inc and parses it,
+    exactly the way dynamic='opt_values' loads a dropdown file. toolbar='custom'
+    is required to reach that branch (field.php:717).
+
+    That file's groups include Format, FontSize, TextColor and BGColor, so the
+    editor CAN insert its own headings and inline styling here. For this block
+    that is intended - the body row is the user's styling surface. The document
+    outline stays under theme control because the section heading above is a
+    separate text field whose element comes from ccs_img_2col_cntn_hdg_tag.
+</cms:ignore>
+<cms:editable type='row' name='ccs_img_2col_cntn_body_row' order='50'>
+    <cms:editable type='richtext' name='ccs_img_2col_cntn_body' label='Body Content'
+        desc='Full width. Use the toolbar to format.' toolbar='custom'
+        custom_toolbar='dropdowns/rich_sml_toolbar.inc' dynamic='custom_toolbar' class='col-12' order='2' />
+</cms:editable>
+
+<cms:editable type='row' name='ccs_img_2col_cntn_body_opt_row' order='52'>
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_body_halg' label='Body Text Alignment'
+        desc='Applies to the whole content area' opt_values='dropdowns/h-align.htm' dynamic='opt_values'
+        class='col-sm-6 col-md-4' order='2' />
+</cms:editable>
+
+<cms:ignore>
+    These set DEFAULTS for the body area, not overrides of it.
+
+    The classes land on the wrapping div, and font-size / weight / family /
+    letter-spacing / line-height / colour are all inherited CSS properties, so
+    the editor's own paragraphs pick them up. theme.css sets neither colour nor
+    font-size on a bare p, so nothing intercepts the inheritance.
+
+    Anything the user styles inside the editor is inline and therefore still
+    wins - which is the right precedence for a block whose body is meant to be
+    author-controlled.
+</cms:ignore>
+<cms:editable type='checkbox' name='ccs_img_2col_cntn_body_ovr_opt' label='Override Default Text Style'
+    desc='Check to set the starting font and colour for the body area'
+    opt_values='Customize Body Typography=1' class='col-12' order='55' />
+
+<cms:func _into='ccs_img_2col_cntn_body_typo_chc' ccs_img_2col_cntn_body_ovr_opt=''>
+    <cms:if "<cms:is '1' in=ccs_img_2col_cntn_body_ovr_opt />">show<cms:else />hide</cms:if>
+</cms:func>
+
+<cms:editable type='row' name='ccs_img_2col_cntn_body_typo_row' label='Body Typography'
+    not_active=ccs_img_2col_cntn_body_typo_chc order='58'>
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_body_clr' label='Text Color'
+        opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='2' />
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_body_sz' label='Text Size'
+        opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='4' />
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_body_wt' label='Font Weight'
+        opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='6' />
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_body_fst' label='Font Style'
+        opt_values='dropdowns/font-style.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='8' />
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_body_font' label='Font Family'
+        opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='10' />
+    <cms:editable type='dropdown' name='ccs_img_2col_cntn_body_ls' label='Letter Spacing'
+        opt_values='dropdowns/ltr-spc.htm' dynamic='opt_values' class='col-sm-6 col-md-4' order='12' />
+</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 5. ADVANCED CUSTOM BACKGROUND  (hidden sibling group)   -->
+<!-- ======================================================= -->
+<cms:editable type='group' name='ccs_img_2col_cntn_bg_clr_cstm_grp' collapsed='1' label='Background Custom Color'
+    not_active=ccs_img_2col_cntn_bg_clr_cust_chc order='60'>
+    <cms:editable type='message' name='ccs_img_2col_cntn_bg_clr_cstm_msg' order='2'>
+        <h2>Custom Background Color</h2>
+        <h4>Configure a solid hex/rgba value or a custom gradient.</h4>
+    </cms:editable>
+
+    <cms:editable type='row' name='ccs_img_2col_cntn_bg_clr_cstm_grdt_opt_row' order='5'>
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_bg_clr_cstm_grdt_opt' label='Solid or Gradient Color'
+            desc='' opt_values='dropdowns/solid-gradient.htm' dynamic='opt_values' class='col-sm-6 col-md-4'
+            order='2' />
+    </cms:editable>
+
+    <cms:ignore>
+        Both gradient slaves live in ccs_img_2col_cntn_bg_clr_cstm_row and
+        ccs_img_2col_cntn_bg_clr_swp_row, which are children of THIS group - so
+        the func sits here at group level too, matching their nesting.
+        Returns show/hide, the house tokens. (nav_swpr's equivalent func still
+        returns 1/0; it was copied from hero before the convention settled.)
+    </cms:ignore>
+    <cms:func _into='ccs_img_2col_cntn_bg_grdt_chc' ccs_img_2col_cntn_bg_clr_cstm_grdt_opt=''>
+        <cms:if ccs_img_2col_cntn_bg_clr_cstm_grdt_opt='0'>hide<cms:else />show</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='ccs_img_2col_cntn_bg_clr_cstm_row' order='10'>
+        <cms:editable type='color' name='ccs_img_2col_cntn_bg_clr_cstm_one' label='Background Color'
+            desc='Solid Color or First of Gradient' color='#000000' alpha='1' width='50%' height='100px'
+            class='col-sm-6 col-md-4' order='2'>#00000000</cms:editable>
+        <cms:editable type='color' name='ccs_img_2col_cntn_bg_clr_cstm_two' label='Gradient Color'
+            desc='Second Color of Gradient - Ramp' color='#000000' alpha='1' width='50%' height='100px'
+            not_active=ccs_img_2col_cntn_bg_grdt_chc class='col-sm-6 col-md-4' order='4'>#00000000</cms:editable>
+    </cms:editable>
+
+    <cms:ignore>
+        separator='@' because gradient-split.htm delimits its options with @
+        rather than the default pipe.
+    </cms:ignore>
+    <cms:editable type='row' name='ccs_img_2col_cntn_bg_clr_swp_row' not_active=ccs_img_2col_cntn_bg_grdt_chc
+        order='15'>
+        <cms:editable type='dropdown' name='ccs_img_2col_cntn_bg_clr_cust_grad_split_opt' label='Gradient Split Style'
+            desc='Visual division of gradient' opt_values='dropdowns/gradient-split.htm' dynamic='opt_values'
+            separator='@' class='col-sm-6 col-md-4' order='6' />
+        <cms:editable type='checkbox' name='ccs_img_2col_cntn_bg_clr_cstm_grad_rvrs_opt'
+            label='Reverse Background Gradient Colors' opt_values='Swap=1' class='col-sm-6 col-md-4' order='8' />
+    </cms:editable>
+</cms:editable>

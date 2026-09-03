@@ -1,0 +1,65 @@
+<cms:ignore>
+    =========================================================================
+    IMAGE CONTENT BLOCK  -  section-level edit cluster
+    snippets/pb_mods/content/inline/imgc_section_edit.txt
+
+    Embedded as a direct child of the section element in theme/img_cntn_blk.html, which
+    already carries position-relative. Pinned to the SECTION rather than to
+    .container: the container is centred with a max-width, so start-0 there
+    sits well inside the section on a wide screen.
+
+    One flex ROW holds two clusters, so the header button lines up with the
+    section stack structurally rather than by a hand-tuned margin.
+
+    Prefixed imgc_ because content/inline/ is shared by three tiles and
+    section_edit.txt is already taken by img_2col.
+    =========================================================================
+</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 start-0 mt-3 ms-2 z-3 d-flex flex-row align-items-start gap-4">
+
+        <cms:ignore>Section-wide settings, stacked vertically.</cms:ignore>
+        <div class="d-flex flex-column gap-2">
+
+            <cms:ignore>
+                BACKGROUND.
+                ccs_img_cntn_bg_clr_opt is both a field the user sets and the
+                controller behind ccs_img_cntn_bg_clr_cust_chc, so it belongs in
+                fields, not hide_fields - the user needs it to reach "Custom
+                Color" at all.
+
+                ccs_img_cntn_bg_clr_cstm_grp MUST be listed in fields because its
+                children appear here. hide_fields does not register as a parent
+                (inline_ex.php:114 checks only the fields array), so omitting it
+                would flatten every colour field into _custom_fields_, sort them
+                by their own order, and break the gradient conditional.
+            </cms:ignore>
+            <cms:popup_edit height='720' width='940' 'ccs_img_cntn_ins_msg|ccs_img_cntn_sec_row|ccs_img_cntn_bg_clr_opt|ccs_img_cntn_bg_clr_cstm_grp|ccs_img_cntn_bg_clr_cstm_msg|ccs_img_cntn_bg_clr_cstm_grdt_opt_row|ccs_img_cntn_bg_clr_cstm_grdt_opt|ccs_img_cntn_bg_clr_cstm_row|ccs_img_cntn_bg_clr_cstm_one|ccs_img_cntn_bg_clr_cstm_two|ccs_img_cntn_bg_clr_swp_row|ccs_img_cntn_bg_clr_cust_grad_split_opt|ccs_img_cntn_bg_clr_cstm_grad_rvrs_opt'
+                link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Section Background' title='Edit Section Background'><i class='fa-solid fa-fill-drip'></i></button>" />
+
+            <cms:ignore>SPACING. Same parent row, two of its other children.</cms:ignore>
+            <cms:popup_edit 'ccs_img_cntn_ins_msg|ccs_img_cntn_sec_row|ccs_img_cntn_pad_top|ccs_img_cntn_pad_bot'
+                link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Section Spacing' title='Edit Section Top and Bottom Spacing'><i class='fa-solid fa-arrows-up-down'></i></button>" />
+
+        </div>
+
+        <cms:ignore>
+            HEADER.
+            Lives in this cluster rather than beside the header row because that
+            row does not exist when the header is removed - a button anchored to
+            it would disappear along with the thing it exists to bring back.
+            Dimmed instead of hidden, the same treatment nav_swpr and hero use
+            for an off target.
+
+            ccs_img_cntn_hdr_rmv_opt is the controller for the group's gate AND
+            the user's own on/off switch, so it is in fields. When the header is
+            off the popup shows just that checkbox - which is exactly what a user
+            clicking a dimmed button needs.
+        </cms:ignore>
+        <div class="d-flex flex-row gap-2">
+            <cms:popup_edit height='760' width='940' 'ccs_img_cntn_ins_msg|ccs_img_cntn_sec_row|ccs_img_cntn_hdr_rmv_opt|ccs_img_cntn_hdr_grp|ccs_img_cntn_hdr_box_row|ccs_img_cntn_hdr_pd|ccs_img_cntn_hdr_halg|ccs_img_cntn_hdg_main_row|ccs_img_cntn_hdg_txt|ccs_img_cntn_hdg_tag|ccs_img_cntn_hdr_ovr_opt|ccs_img_cntn_hdg_typo_row|ccs_img_cntn_hdg_clr|ccs_img_cntn_hdg_sz|ccs_img_cntn_hdg_wt|ccs_img_cntn_hdg_fst|ccs_img_cntn_hdg_font|ccs_img_cntn_hdg_ls|ccs_img_cntn_hdg_sub_row|ccs_img_cntn_sub_txt|ccs_img_cntn_sub_typo_row|ccs_img_cntn_sub_clr|ccs_img_cntn_sub_sz|ccs_img_cntn_sub_wt|ccs_img_cntn_sub_fst|ccs_img_cntn_sub_font|ccs_img_cntn_sub_ls|ccs_img_cntn_hr_msg|ccs_img_cntn_hr_len_row|ccs_img_cntn_hdg_hr|ccs_img_cntn_hr_row|ccs_img_cntn_hr_wt|ccs_img_cntn_hr_clr|ccs_img_cntn_hr_pd'
+                link_text="<button class='btn btn-sm <cms:if ccs_img_cntn_hdr_rmv_opt='1'>btn-outline-secondary bg-white opacity-50<cms:else />btn-light shadow-sm</cms:if> rounded-circle' type='button' aria-label='Edit Section Header' title='Edit Section Header'><i class='fa-solid fa-heading'></i></button>" />
+        </div>
+
+    </div>
+</cms:if>

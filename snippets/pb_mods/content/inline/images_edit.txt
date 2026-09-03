@@ -1,0 +1,29 @@
+<cms:ignore>
+    =========================================================================
+    IMAGE + CONTENT BLOCK  -  image row edit cluster
+    snippets/pb_mods/content/inline/images_edit.txt
+
+    Embedded inside the image row's own wrapper in
+    theme/img_2col_cntn_blk.html. That wrapper carries position-relative so
+    this pins to the row, putting the button beside the images it edits rather
+    than up in the section stack.
+
+    Pushed clear of the row with translateX so it never covers the left image.
+    Same idiom as hero/inline/txtbx_edit.txt and list_1/inline/header_edit.txt.
+    =========================================================================
+</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 start-0 mt-1 z-3 d-flex flex-column gap-2"
+         style="transform: translateX(-120%); z-index: 10;">
+
+        <cms:ignore>
+            No conditionals in this group at all - no funcs, no not_active - so
+            there is nothing to put in hide_fields. Both rows are listed purely
+            as the parents of the fields being shown, which keeps their own
+            order governing the layout inside the popup.
+        </cms:ignore>
+        <cms:popup_edit height='620' width='940' 'ccs_img_2col_cntn_img_msg|ccs_img_2col_cntn_img_row|ccs_img_2col_cntn_img_1|ccs_img_2col_cntn_img_1_alt|ccs_img_2col_cntn_img_2|ccs_img_2col_cntn_img_2_alt|ccs_img_2col_cntn_img_fmt_row|ccs_img_2col_cntn_img_rnd'
+            link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Images' title='Edit Images and Descriptions'><i class='fa-regular fa-images'></i></button>" />
+
+    </div>
+</cms:if>

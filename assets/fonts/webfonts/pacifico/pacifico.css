@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Pacifico Font Declarations
+   ========================================================================== */
+
+/* Regular 400 Normal */
+@font-face {
+    font-family: 'Pacifico';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('./pacifico-latin-400-normal.woff2') format('woff2');
+}

@@ -1,0 +1,80 @@
+<cms:ignore>
+    ============================================================
+    CLAIM A GUEST ORDER
+    ------------------------------------------------------------
+    Ties an order that was placed without signing in to the
+    account of whoever is signed in NOW, so it shows up in
+    my-orders.php from then on.
+
+    CALLER MUST SET, before embedding:
+      ocl_order_id   k_page_id of the order (required)
+      ocl_owner      that order's current order_user_id (may be '')
+
+    THIS SETS (scope='global'):
+      ocl_result   claimed | already | notyours | nothing
+
+    ------------------------ WHY IT IS SAFE ----------------------
+    Three conditions, all required:
+
+      1. The caller reached order-complete.php?t=<token>, and that
+         token is the random page_name db_persist generated for the
+         order - not its id. Possession of it is the same proof
+         that lets someone read the receipt at all. If that is
+         enough to see the order, it is enough to file it.
+      2. The order's order_user_id must be EMPTY. An order already
+         belonging to somebody is never reassigned, so this can
+         move an order from nobody to someone and never from one
+         person to another.
+      3. The claimer must be signed in with a real ccs_auth_uid.
+
+    ------------------- WHY IT ELEVATES ------------------------
+    orders.php carries access_level='7'. A customer is level 2, so
+    db_persist would refuse. The script raises its own level for
+    exactly one write and lowers it immediately, the same pattern
+    and the same reasoning as wishlist-modal.php - which is also
+    why the ownership test above happens BEFORE the elevation and
+    not inside it.
+    ============================================================
+</cms:ignore>
+
+<cms:embed 'utils/auth_uid.htm' />
+
+<cms:set ocl_result = 'nothing' scope='global' />
+
+<cms:if k_logged_in && ccs_auth_uid && ocl_order_id>
+
+    <cms:if ocl_owner ne ''>
+        <cms:if ocl_owner eq ccs_auth_uid>
+            <cms:set ocl_result = 'already' scope='global' />
+        <cms:else />
+            <cms:set ocl_result = 'notyours' scope='global' />
+        </cms:if>
+    <cms:else />
+
+        <cms:php>
+            global $AUTH, $CTX;
+            $CTX->set( 'ocl_old_level', $AUTH->user->access_level, 'global' );
+            $AUTH->user->access_level = 10;
+        </cms:php>
+
+        <cms:db_persist_ex
+            _masterpage='orders.php'
+            _mode='edit'
+            _page_id=ocl_order_id
+            _invalidate_cache='0'
+            order_user_id=ccs_auth_uid
+        />
+
+        <cms:php>
+            global $AUTH, $CTX;
+            $AUTH->user->access_level = $CTX->get('ocl_old_level');
+        </cms:php>
+
+        <cms:if k_error>
+            <cms:set ocl_result = 'nothing' scope='global' />
+        <cms:else />
+            <cms:set ocl_result = 'claimed' scope='global' />
+        </cms:if>
+
+    </cms:if>
+</cms:if>

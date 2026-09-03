@@ -1,5 +1,5 @@
 <?php require_once( 'ccs_dash/cms.php' ); ?>
-<cms:template title='Wishlist' parent="_donottouch_" clonable='1' hidden='1'>
+<cms:template title='Wishlist' parent="_donottouch_" clonable='1' hidden='1' access_level='7'>
     <cms:globals>
 		<cms:editable type="checkbox" name="visible" opt_value="hide section" />
 	</cms:globals>
@@ -30,6 +30,11 @@
          from the visible <option> text at save time. Display this to
          users; never parse it. -->
     <cms:editable name='wish_variants_display' label='Selected Variants (readable)' type='textarea' />
+
+     <cms:config_list_view exclude='default-page' searchable='1' >
+     
+     </cms:config_list_view>
+
 
 </cms:template>
 

@@ -1,0 +1,68 @@
+<cms:ignore>
+    =========================================================================
+    CONTACT BLOCK  -  SECTION OPTIONS
+    snippets/pb_mods/contact/embed/common/cnt_opts.htm
+
+    Shared by every contact tile. Height, spacing, background and the width
+    and placement of the box the form sits in.
+
+    HEIGHT IS TWO CONTROLS. Minimum Height is a floor on the content; Section
+    Padding adds space above and below it. They go on DIFFERENT elements - the
+    floor inside, the padding outside - because border-box sizing would
+    otherwise make the padding eat into the floor rather than add to it.
+    =========================================================================
+</cms:ignore>
+<cms:editable type='group' name='cnt_gen_grp' label='Section Options' order='3'>
+
+    <cms:editable type='row' name='cnt_gen_row' order='5'>
+        <cms:editable type='dropdown' name='cnt_min_h' label='Minimum Height'
+            desc='A floor for the section. Padding below adds on top of this.'
+            opt_values='dropdowns/_val/min-height.htm' dynamic='opt_values'
+            class='col-md-3 col-sm-6' order='2' />
+        <cms:editable type='dropdown' name='cnt_py_ht' label='Section Padding'
+            desc='Space above and below the content'
+            opt_values='dropdowns/_tok/space.htm' dynamic='opt_values'
+            class='col-md-3 col-sm-6' order='4' />
+        <cms:ignore>
+            _tok/color-bg_solid.htm, NOT _tok/color-bg.htm. That file leads its
+            palette with a "Custom Color or Gradient=custom" escape which only
+            works where the block ALSO declares the pair of color pickers and
+            the gradient angle its router reads when it sees that word. This
+            block declares none of them - the form is the focus, and a gradient
+            behind form fields is a readability problem rather than a feature -
+            so the option would be a choice that saves cleanly and then changes
+            nothing on the page.
+        </cms:ignore>
+        <cms:editable type='dropdown' name='cnt_bg_clr' label='Section Background Color'
+            opt_values='dropdowns/_tok/color-bg_solid.htm' dynamic='opt_values'
+            class='col-md-3 col-sm-6' order='6' />
+    </cms:editable>
+
+    <cms:ignore>
+        The box the form lives in. txt-box_size.htm is the shared file every
+        other block uses for this, so a contact section lines up with a
+        transition banner above it without anyone measuring.
+    </cms:ignore>
+    <cms:editable type='row' name='cnt_box_row' order='10'>
+        <cms:ignore>
+            _cls/box-width.htm rather than the shared txt-box_size.htm. That
+            file carries a "Custom Size=custom" escape which only works where
+            the consumer also builds the custom-size repeatable and branches on
+            the sentinel - the transition banner does, this block does not.
+            Left pointed there, choosing Custom would print the word "custom"
+            into the class attribute and match nothing.
+        </cms:ignore>
+        <cms:editable type='dropdown' name='cnt_box_sz' label='Form Box Width'
+            opt_values='dropdowns/_cls/box-width.htm' dynamic='opt_values'
+            class='col-md-3 col-sm-6' order='2'>col-lg-6</cms:editable>
+        <cms:editable type='dropdown' name='cnt_box_halg' label='Box Placement'
+            desc='Where the box sits across the section'
+            opt_values='dropdowns/_tok/align-h.htm' dynamic='opt_values'
+            class='col-md-3 col-sm-6' order='4'>center</cms:editable>
+        <cms:editable type='dropdown' name='cnt_txt_halg' label='Text Alignment'
+            desc='How the words line up inside the box'
+            opt_values='dropdowns/_tok/align-h.htm' dynamic='opt_values'
+            class='col-md-3 col-sm-6' order='6'>start</cms:editable>
+    </cms:editable>
+
+</cms:editable>

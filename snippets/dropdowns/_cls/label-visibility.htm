@@ -1,0 +1,27 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_cls/label-visibility.htm
+
+    EMITS   a complete class, or nothing.
+    USE AS  the second class on a form label, after form-label.
+
+    FOR     any form field's label, in any block. Hiding a label is a layout
+            choice a designer makes often; deleting one is an accessibility
+            failure they can never undo. This dropdown is what keeps those two
+            things apart.
+
+    WHY visually-hidden AND NOT d-none. Bootstrap's .visually-hidden clips the
+    element to a one pixel box and moves it out of view, but leaves it in the
+    accessibility tree - a screen reader still announces the field's name, and
+    the for and id pairing still works. .d-none sets display:none, which
+    removes it from that tree entirely and leaves the field announced as
+    nothing but "edit text". A sighted user loses a caption; a blind user loses
+    the whole meaning of the box.
+
+    THERE IS DELIBERATELY NO "no label" OPTION. The label element is always
+    emitted by the theme. This field decides whether it is seen, never whether
+    it exists.
+    ===========================================================================
+</cms:ignore>
+Show Above Each Box=
+|Hide Visually - still read aloud=visually-hidden

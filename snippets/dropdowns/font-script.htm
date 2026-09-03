@@ -1,1 +1,72 @@
-Base=- | Brush Script MT=Brush Script MT | Caveat=Caveat | Dancing Script=Dancing Script | Great Vibes=Great Vibes | Pacifico=Pacifico
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/font-script.htm
+
+    THIS LIST IS GENERATED FROM THE FILESYSTEM, NOT TYPED OUT.
+
+    field.php runs a dynamic opt_values snippet through the Couch parser and
+    uses its OUTPUT as the option list - the line reading
+    "$parser = new KParser( $html );". So this file can decide at render time
+    what to offer, and it offers exactly what the server can actually serve.
+
+    WHY, AND IT IS A LEGAL REASON RATHER THAN A TIDINESS ONE. The old list named
+    families that were fetched from fonts.googleapis.com on every page load,
+    which hands every visitor's IP address to a third party before they have
+    been asked anything. Self-hosting removes that. But self-hosting only works
+    for fonts that are actually present, so offering a family nobody downloaded
+    would be offering a choice that silently does nothing.
+
+    Listing what exists solves both at once: full customisation, bounded by the
+    server, with no way to pick something broken and no third party involved.
+
+    HOW TO ADD A FAMILY
+      1. Fetch it from any self-hosting source - google-webfonts-helper and
+         Fontsource both hand you a css file plus woff2 files.
+      2. Drop the folder into assets/fonts/webfonts/ named as the family in
+         lowercase with hyphens. Playfair Display becomes playfair-display.
+      3. Make sure the css file inside carries the same name, so
+         playfair-display/playfair-display.css.
+      4. Add the family name to the $hosted array below, spelled exactly as
+         the folder is - "Playfair Display" for playfair-display.
+
+    THAT FOURTH STEP IS NOT OPTIONAL, AND THIS FILE USED TO CLAIM IT WAS.
+    $hosted is an allowlist as well as a lookup. Nothing on disk records
+    whether a family is a serif or a script, so each dropdown has to be told
+    which families belong to it - a pure scan of the folder could not sort
+    them into the five roles. A family that is not named in any $hosted array
+    is therefore invisible in every dropdown no matter how correctly its
+    folder and css are built, and it fails silently, which is the worst way
+    for it to fail.
+
+    Remove the folder and it stops being offered. A family that was already
+    selected and has since been removed keeps its stored value but no longer
+    matches an option, so it falls through to the system stack in user.php -
+    the page stays readable, which is the right way for this to fail.
+
+    THE WEB-SAFE FONTS ARE ALWAYS LISTED. They ship with the operating system,
+    need no download and reach no third party, so they are never conditional.
+    ===========================================================================
+</cms:ignore>
+<cms:php>
+    /* Installed on every machine. No download, no request, always offered. */
+    $safe = array('Brush Script MT');
+
+    /* Offered only when the family is present in assets/fonts/webfonts/. */
+    $hosted = array('Caveat', 'Dancing Script', 'Great Vibes', 'Pacifico');
+
+    $dir = K_SITE_DIR . 'assets/fonts/webfonts/';
+    $out = array( 'Base=-' );
+
+    foreach( $safe as $f ){
+        $out[] = $f . '=' . $f;
+    }
+
+    foreach( $hosted as $f ){
+        $slug = strtolower( str_replace(' ', '-', $f) );
+        if( file_exists($dir . $slug . '/' . $slug . '.css') ){
+            $out[] = $f . '=' . $f;
+        }
+    }
+
+    echo implode( ' | ', $out );
+</cms:php>

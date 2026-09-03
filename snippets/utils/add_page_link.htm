@@ -1,0 +1,72 @@
+<cms:ignore>
+    ============================================================
+    "+ Add <Template>" - DECIDE WHETHER TO OFFER IT
+    ------------------------------------------------------------
+    CONTRACT
+      in  : apl_template   a template file name, normally
+                           k_template_name from the nav's loop
+      out : apl_file       the add page to link to, e.g.
+                           'add-product.php' - or '' when the link
+                           must NOT be shown
+
+    USE
+        <cms:set apl_template = ccs_nav_loop_template />
+        <cms:embed 'utils/add_page_link.htm' />
+        <cms:if apl_file>
+            <a href="<cms:show k_site_link /><cms:show apl_file />">...</a>
+        </cms:if>
+
+    Each nav theme keeps its own markup - a dropdown item in one, a
+    grid cell in another - so this decides and the caller draws.
+    The gate lives here so it cannot drift between themes, which is
+    exactly what happened before: one theme checked the edit
+    session and another checked only the access level, so an admin
+    browsing normally saw editing controls in one nav and not the
+    other.
+
+    WHY THE FILE CHECK
+    The link is built by gluing 'add-' onto the template's own file
+    name - there is no registry, the convention IS the wiring. That
+    is what makes it template-agnostic: add shirts.php and the menu
+    offers "+ Add Shirts" with nothing to configure.
+
+    It also means the menu will happily offer a page that was never
+    written. A new sellable template with no add-shirts.php yet
+    gives an editor a dead item that 404s, with no error and no
+    clue which half is missing. Each template needs its own add
+    page because each has its own editables - so the honest
+    behaviour is to offer the link only once that page exists, and
+    stay quiet until then.
+
+    K_SITE_DIR is the filesystem root with a trailing slash, the
+    same base tags.php uses to resolve snippets. '..' is rejected
+    outright: apl_template is trusted today (it comes from the
+    template loop, not the browser) but this snippet has no way to
+    know that about its next caller.
+    ============================================================
+</cms:ignore>
+
+<cms:set apl_file = '' scope='global' />
+
+<cms:ignore>
+    Parenthesised exactly as every caller wrote it. Mixing a comparison and
+    && unbracketed leans on operator precedence, and this gate decides whether
+    an editing control is shown - not a place to find out the hard way.
+</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <cms:php>
+        global $CTX;
+
+        $tpl  = trim( (string) $CTX->get('apl_template') );
+        $file = '';
+
+        if( $tpl !== '' && strpos($tpl, '..') === false ){
+            $candidate = 'add-' . $tpl;
+            if( is_file( K_SITE_DIR . $candidate ) ){
+                $file = $candidate;
+            }
+        }
+
+        $CTX->set( 'apl_file', $file, 'global' );
+    </cms:php>
+</cms:if>

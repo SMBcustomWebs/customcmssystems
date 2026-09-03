@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Anton Font Declarations
+   ========================================================================== */
+
+/* Regular 400 Normal */
+@font-face {
+    font-family: 'Anton';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('./anton-latin-400-normal.woff2') format('woff2');
+}

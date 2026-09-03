@@ -8,6 +8,7 @@
 <cms:set my_redirect_link = k_page_link />
 <cms:embed 'pb_mods/pg_frame/main-cap.htm' />   
 <cms:embed 'pb_mods/pg_frame/nav/nav_emb.htm' />
+<cms:embed 'utils/store_theme.htm' />
 
 <!-- ============================================-->
 <!-- <section> begin ============================-->
@@ -44,8 +45,14 @@
 
             <!-- 3. Second Pass: Compare the grouped tallies against the database -->
             <cms:pp_cart_items>
-                <!-- Reach back to the DB using the verified 'id' -->
-                <cms:pages masterpage='product.php' id="<cms:show id />" limit='1'>
+                <!-- Reach back to the DB using the verified 'id'. The template
+                     is resolved from that id, not assumed - a hardcoded
+                     product.php lets any other sellable template slip past the
+                     oversell guard without matching anything.
+                     See snippets/utils/item_tpl.htm -->
+                <cms:set itm_tpl_id = id scope='global' />
+                <cms:embed 'utils/item_tpl.htm' />
+                <cms:pages masterpage=itm_tpl id="<cms:show id />" limit='1'>
                     <cms:if track_inventory && in_stock gt '0'>
                         
                         <!-- Retrieve the grouped math from the PHP array -->
@@ -93,14 +100,16 @@
                                             
                                             <!-- Dynamic Variants Loop -->
                                             <cms:pp_selected_options startcount='1'>
-                                                <div class="row text-muted">
+                                                <div class="row <cms:show ccs_st_secondary />">
                                                     <div class="col-3"> <span class="me-3 fw-bold"><cms:show option_name /> : </span></div>
                                                     <div class="col"><cms:show option_value /></div>
                                                 </div>
                                             </cms:pp_selected_options>
                                             
                                             <!-- Reach back to the database using verified 'id' -->
-                                            <cms:pages masterpage='product.php' id="<cms:show id />" limit='1'>
+                                            <cms:set itm_tpl_id = id scope='global' />
+                                            <cms:embed 'utils/item_tpl.htm' />
+                                            <cms:pages masterpage=itm_tpl id="<cms:show id />" limit='1'>
                                                 <cms:set cart_track_inv=track_inventory scope='parent' />
                                                 <cms:set cart_in_stock=in_stock scope='parent' />
                                             </cms:pages>
@@ -114,12 +123,12 @@
                                                     
                                                     <!-- Optional UX: Show max available under the box -->
                                                     <cms:if cart_track_inv && cart_in_stock gt '0'>
-                                                        <small class="mt-1 d-block text-warning"><cms:show cart_in_stock /> max available</small>
+                                                        <small class="mt-1 d-block text-warning-emphasis"><cms:show cart_in_stock /> max available</small>
                                                     </cms:if>
                                                 </div>
                                                 
                                                 <div class="col">
-                                                    <p class="mb-0 text-muted">US $<cms:number_format price /><span> / base price</span></p>
+                                                    <p class="mb-0 <cms:show ccs_st_secondary />">US $<cms:number_format price /><span> / base price</span></p>
                                                 </div>
                                             </div>
                                             
@@ -141,7 +150,7 @@
                     <!-- CART TOTALS & CHECKOUT COLUMN -->
                     <div class="col">
                         <div class="row">
-                            <div class="col-12 border align-self-start p-3 bg-light">
+                            <div class="col-12 border align-self-start p-3 <cms:show ccs_st_panel />">
                                 <p class="my-3 fw-bold">You have <cms:pp_count_items /> item(s) in cart</p>
                                 <hr />
                                 
@@ -176,10 +185,10 @@
                                     </div>
                                     
                                     <div class="col-7">
-                                        <p class="mb-0 fw-bold text-success">Total: </p>
+                                        <p class="mb-0 fw-bold fs-8">Total: </p>
                                     </div>
                                     <div class="col-5 text-end">
-                                        <p class="mb-0 fw-bold text-success">$<cms:number_format "<cms:pp_total />" /></p>
+                                        <p class="mb-0 fw-bold fs-8">$<cms:number_format "<cms:pp_total />" /></p>
                                     </div>
                                 </div>
                             </div>
@@ -206,7 +215,7 @@
                             <!-- Return to Shopping Button.
                                  Was 'products.php', which does not exist in this
                                  install - the products template is 'product.php'. -->
-                            <a href="<cms:link 'product.php' />" class="btn btn-outline-secondary w-100">
+                            <a href="<cms:link 'product.php' />" class="btn btn-secondary w-100">
                                 <i class="fas fa-arrow-left me-2"></i> Return to Shopping
                             </a>
                         </div>
@@ -218,7 +227,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="alert alert-secondary py-5 text-center">
-                        <h4 class="mb-3"><i class="fas fa-shopping-cart fa-2x mb-3 text-muted"></i><br>Your cart is currently empty!</h4>
+                        <h4 class="mb-3"><i class="fas fa-shopping-cart fa-2x mb-3 <cms:show ccs_st_secondary />"></i><br>Your cart is currently empty!</h4>
                         <a href="<cms:show k_site_link />" class="btn btn-primary">Return to Shop</a>
                     </div>
                 </div>

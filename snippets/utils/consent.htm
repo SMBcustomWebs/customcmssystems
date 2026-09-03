@@ -1,0 +1,255 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/utils/consent.htm
+
+    COOKIE CONSENT, RESOLVED SERVER-SIDE.
+
+    Embed this ONCE, early in head.htm, before anything that might want to load
+    a third party. It reads the visitor's stored choice and exposes three
+    globals that the rest of the frame gates on:
+
+        ccs_consent_set        1 once the visitor has answered at all
+        ccs_consent_analytics  1 if they allowed the analytics category
+        ccs_consent_marketing  1 if they allowed the marketing category
+        ccs_consent_embed      1 if they allowed embedded media (video)
+
+    WHY SERVER-SIDE AND NOT JAVASCRIPT. Under an opt-in regime the requirement
+    is not that a tracker stays quiet until it is told - it is that the tracker
+    is not there at all. If the tag sits in the page and JavaScript decides
+    afterwards whether to activate it, the browser has usually already made the
+    request. Reading the cookie in PHP and simply not printing the tag means
+    there is nothing to fire. cms:gpc supports method='cookie' (tags.php:6578),
+    so this needs no custom code.
+
+    THREE COOKIES, NOT ONE ENCODED VALUE.
+
+        ccs_cnst_v   the policy version the visitor agreed to
+        ccs_cnst_a   analytics        1 or 0
+        ccs_cnst_m   marketing        1 or 0
+        ccs_cnst_e   embedded media   1 or 0
+
+    WHY EMBEDDED MEDIA IS ITS OWN CATEGORY AND NOT PART OF MARKETING. A visitor
+    who clicks "load this video" is telling you they want to watch a video. If
+    that same click switched on advertising and remarketing tags, it would be
+    collecting more than they offered, and the click-to-load button could not be
+    honestly labelled. Separating it lets the button grant exactly what it says
+    and nothing else. It also means someone can decline ads and still watch the
+    content, which is the outcome most people actually want.
+
+    One packed value would need parsing, and Couch's string handling would make
+    that fragile for no gain. Three flags are read with three plain comparisons
+    and cannot be misparsed. They are a few bytes each.
+
+    THE VERSION COOKIE IS THE POINT OF THE VERSION FIELD. Consent is given to a
+    specific policy. When the policy changes materially - a new processor, a new
+    category - the owner raises Consent Policy Version in Global Site Settings,
+    every stored answer stops matching, and everyone is asked again. Without
+    that, a policy change silently inherits consent nobody gave to it.
+
+    THESE THREE COOKIES DO NOT THEMSELVES NEED CONSENT. A cookie whose only
+    purpose is to record a privacy choice is strictly necessary under every
+    regime that asks for consent in the first place - the alternative would be
+    asking on every page load forever.
+
+    NOT SET MEANS DENIED. Every default below is 0, and they are set BEFORE the
+    cookie is examined. A visitor who has never answered, a visitor mid-answer,
+    and a visitor whose stored answer is for an older policy version all resolve
+    identically: nothing non-essential loads. Silence is never consent.
+    ===========================================================================
+</cms:ignore>
+
+<cms:ignore>
+    ADMIN CONTEXT, so the bar can stay out of the panel.
+
+    page-builder.php renders every tile preview in an iframe pointing at an
+    ADMIN url (its :457), and K_ADMIN is defined for those requests just as it
+    is for the panel itself. So a consent bar embedded by the frame turns up in
+    the middle of the PageBuilder editing screen while someone is building a
+    footer - which is where this came from.
+
+    defined('K_ADMIN') is the codebase's own idiom for this, not an invention:
+    page-builder.php guards two of its own hooks with exactly that test and the
+    comment "nop within admin panel".
+
+    THIS ONLY HIDES THE PROMPT, NEVER GRANTS ANYTHING. The four flags above are
+    still 0 unless a real cookie says otherwise, so nothing non-essential loads
+    in the panel either. Suppressing the question is not answering it.
+
+    FRONT-END EDITING IS NOT COVERED, DELIBERATELY. An admin browsing the live
+    site with inline editing on is looking at the real front end and should see
+    what a visitor sees. Toggle editing off, or answer once, if it is in the way.
+</cms:ignore>
+<cms:ignore>
+    CAPTURED, NOT INLINED INTO THE cms:set VALUE. A paired cms:php inside a
+    quoted attribute is a heavier ask of the parser than the self-closing tags
+    that pattern is normally used with, and this file has no margin for a parse
+    error - it runs on line 2 of every page. cms:capture round a cms:php is the
+    form the nav themes already prove works here.
+</cms:ignore>
+<cms:capture into='ccs_admin_probe'><cms:php>echo defined('K_ADMIN') ? '1' : '0';</cms:php></cms:capture>
+<cms:set ccs_in_admin = ccs_admin_probe scope='global' />
+
+<cms:set ccs_consent_set       = '0' scope='global' />
+<cms:set ccs_consent_analytics = '0' scope='global' />
+<cms:set ccs_consent_marketing = '0' scope='global' />
+<cms:set ccs_consent_embed     = '0' scope='global' />
+
+<cms:ignore>
+    The version the site is currently asking about. Falls back to 1 so the
+    banner still works before the field has ever been filled in.
+</cms:ignore>
+<cms:set ccs_consent_ver = "<cms:get_custom_field 'ccs_gl_consent_ver' masterpage='globals.php' />" scope='global' />
+<cms:if ccs_consent_ver == ''>
+    <cms:set ccs_consent_ver = '1' scope='global' />
+</cms:if>
+
+<cms:ignore>
+    ===========================================================================
+    THE ANSWER IS RECORDED HERE, ON THE SERVER, BEFORE THE COOKIES ARE READ.
+
+    WHY IT MOVED OUT OF JAVASCRIPT. The bar used to write these four cookies
+    with document.cookie. That works everywhere, but Safari's Intelligent
+    Tracking Prevention caps SCRIPT-WRITTEN cookies at seven days no matter what
+    lifetime is requested - so a visitor who accepted was asked again a week
+    later, roughly twenty-six times a year instead of twice. Cookies written by
+    the server in a Set-Cookie header are not capped that way. Same names, same
+    values; the only thing that changed is who writes them.
+
+    Put plainly: while the write was client-side, how long consent lasted was
+    decided by the visitor's browser rather than by this site.
+
+    THIS CAN RUN THIS LATE BECAUSE COUCH BUFFERS OUTPUT. cms.php calls
+    ob_start() before anything else, so headers are not flushed until the buffer
+    is - setcookie() is still legal here even though the doctype has been
+    emitted. Without that buffer this would have to move ahead of all output.
+
+    cms:set_cookie IS A REAL TAG even though nothing calls register_tag for it:
+    parser.php dispatches any public method on $TAGS whose name does not begin
+    with an underscore. It takes expire as a DURATION IN SECONDS, not a
+    timestamp - tags.php does $expire = time() + $expire. 15552000 = 180 days.
+
+    IT SETS httpOnly, AND THAT IS FINE. These cookies are now unreadable from
+    JavaScript. Nothing needs to read them there: ccs_consent.js takes its state
+    from window.ccsConsent, which tail.htm renders from these same values. It
+    also means the consent record cannot be forged client-side.
+
+    WHAT ARRIVES. A single posted field, ccs_cnst_do:
+        accept   allow everything
+        reject   allow nothing
+        custom   take the three checkboxes as posted
+        embed    per-video "remember this" - grant embedded media, leave the
+                 other two exactly as they already are, because the visitor
+                 asked to watch a video and did not ask for anything else
+    Anything else is ignored and the cookie path below runs as usual.
+
+    NOT SET STILL MEANS DENIED. want_* all start at 0, so a malformed or
+    partial post grants nothing rather than everything.
+    ===========================================================================
+</cms:ignore>
+<cms:set cnst_do = "<cms:gpc 'ccs_cnst_do' method='post' />" />
+
+<cms:if cnst_do == 'accept' || cnst_do == 'reject' || cnst_do == 'custom' || cnst_do == 'embed'>
+
+    <cms:set want_a = '0' />
+    <cms:set want_m = '0' />
+    <cms:set want_e = '0' />
+
+    <cms:if cnst_do == 'accept'>
+        <cms:set want_a = '1' />
+        <cms:set want_m = '1' />
+        <cms:set want_e = '1' />
+
+    <cms:else_if cnst_do == 'custom' />
+        <cms:ignore>
+            An unticked checkbox posts nothing at all, so an empty read is a
+            genuine "no" rather than a missing value. That is why each one is
+            tested for '1' instead of for emptiness.
+        </cms:ignore>
+        <cms:set in_a = "<cms:gpc 'ccs_in_a' method='post' />" />
+        <cms:if in_a == '1'><cms:set want_a = '1' /></cms:if>
+        <cms:set in_m = "<cms:gpc 'ccs_in_m' method='post' />" />
+        <cms:if in_m == '1'><cms:set want_m = '1' /></cms:if>
+        <cms:set in_e = "<cms:gpc 'ccs_in_e' method='post' />" />
+        <cms:if in_e == '1'><cms:set want_e = '1' /></cms:if>
+
+    <cms:else_if cnst_do == 'embed' />
+        <cms:set old_a = "<cms:gpc 'ccs_cnst_a' method='cookie' />" />
+        <cms:if old_a == '1'><cms:set want_a = '1' /></cms:if>
+        <cms:set old_m = "<cms:gpc 'ccs_cnst_m' method='cookie' />" />
+        <cms:if old_m == '1'><cms:set want_m = '1' /></cms:if>
+        <cms:set want_e = '1' />
+    </cms:if>
+
+    <cms:set_cookie name='ccs_cnst_v' value=ccs_consent_ver expire='15552000' />
+    <cms:set_cookie name='ccs_cnst_a' value=want_a           expire='15552000' />
+    <cms:set_cookie name='ccs_cnst_m' value=want_m           expire='15552000' />
+    <cms:set_cookie name='ccs_cnst_e' value=want_e           expire='15552000' />
+
+    <cms:ignore>
+        The globals are set from what was just posted, not re-read from the
+        cookie. A cookie written during this request is not visible in $_COOKIE
+        until the next one, so re-reading here would render the page against the
+        visitor's PREVIOUS answer and look like the click did nothing.
+    </cms:ignore>
+    <cms:set ccs_consent_set       = '1'    scope='global' />
+    <cms:set ccs_consent_analytics = want_a scope='global' />
+    <cms:set ccs_consent_marketing = want_m scope='global' />
+    <cms:set ccs_consent_embed     = want_e scope='global' />
+
+<cms:else />
+
+<cms:set ccs_cnst_answered = "<cms:gpc 'ccs_cnst_v' method='cookie' />" />
+
+<cms:ignore>
+    The != '' test is load-bearing and not defensive noise. If the version field
+    were ever blank, an absent cookie would also read as blank, the two would
+    compare equal, and every visitor would be treated as having consented to
+    everything. Requiring a non-empty stored value closes that.
+</cms:ignore>
+<cms:ignore>
+    == AND NOT =, AND THE DIFFERENCE ONLY BITES IN A COMPOUND CONDITION.
+
+    Couch tolerates a single = as equality in a simple test - globals.php:235
+    has used one for years. Inside a condition joined by && it does not: the
+    parser is in its LOGIC_OP state and rejects the character outright with
+    ERROR! LOGIC_OP: Invalid char "=". Use == whenever && or || is present.
+</cms:ignore>
+<cms:if ccs_cnst_answered != '' && ccs_cnst_answered == ccs_consent_ver>
+
+    <cms:set ccs_consent_set = '1' scope='global' />
+
+    <cms:ignore>
+        READ INTO A VARIABLE FIRST, THEN COMPARE.
+
+        These two were written as
+
+            cms:if "cms:gpc ... /" = '1'
+
+        with the tag call quoted inline as the left-hand side, and that is the
+        second way to hit the same parser state as the && case above. A quoted
+        expression on the left leaves the parser in LOGIC_OP, where a single =
+        is rejected outright.
+
+        Splitting the read from the test avoids the question entirely, matches
+        how ccs_cnst_answered is handled a few lines up, and reads better than
+        either form of the one-liner. The == is belt and braces once the left
+        side is a plain variable.
+    </cms:ignore>
+    <cms:set cnst_a = "<cms:gpc 'ccs_cnst_a' method='cookie' />" />
+    <cms:if cnst_a == '1'>
+        <cms:set ccs_consent_analytics = '1' scope='global' />
+    </cms:if>
+
+    <cms:set cnst_m = "<cms:gpc 'ccs_cnst_m' method='cookie' />" />
+    <cms:if cnst_m == '1'>
+        <cms:set ccs_consent_marketing = '1' scope='global' />
+    </cms:if>
+
+    <cms:set cnst_e = "<cms:gpc 'ccs_cnst_e' method='cookie' />" />
+    <cms:if cnst_e == '1'>
+        <cms:set ccs_consent_embed = '1' scope='global' />
+    </cms:if>
+
+    </cms:if>
+
+</cms:if>

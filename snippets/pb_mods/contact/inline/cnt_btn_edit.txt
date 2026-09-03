@@ -1,0 +1,29 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <cms:ignore>
+        SEND BUTTON CLUSTER - sits on the button.
+
+        One window, holding everything about the button: its words, color, fill
+        style, shape, size, width, and where it sits across the form. Split by
+        concern means the control lives on the thing it controls, and the
+        button is the one part of the form that is a single pointable object.
+
+        ANCHORED TO THE BUTTON'S OWN WRAPPER, which already carries the
+        alignment class - so the cluster follows the button when the author
+        moves it left, center or right rather than staying behind in a corner.
+
+        THIS CLUSTER IS INSIDE THE cms:else BRANCH, which means it is gone from
+        the moment a message is sent until the page is loaded again. That is
+        correct and not a gap: the button itself is gone too, and a control
+        floating where its subject used to be is worse than no control. Reload
+        and it is back.
+
+        NO DIMMED STATE. Every other toggle button in this block dims when its
+        content is empty. This one never can be - the button text is a required
+        field carrying a starting value, so there is always a button to edit.
+    </cms:ignore>
+    <div class="position-absolute top-0 start-0 mt-1 ms-1 z-3">
+
+        <cms:popup_edit 'cnt_frm_grp|cnt_frm_btn_msg|cnt_frm_btn_row|cnt_frm_btn_txt|cnt_frm_btn_clr|cnt_frm_btn_fill|cnt_frm_btn_st|cnt_frm_btn_sz|cnt_frm_btn_w|cnt_frm_btn_halg' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Send Button" title="Edit Send Button"><i class="fa-solid fa-paper-plane"></i></button>' />
+
+    </div>
+</cms:if>

@@ -1,0 +1,28 @@
+<cms:ignore>
+    =========================================================================
+    IMAGE + CONTENT BLOCK  -  body content edit cluster
+    snippets/pb_mods/content/inline/body_edit.txt
+
+    Embedded inside the body row's wrapper in theme/img_2col_cntn_blk.html,
+    which carries position-relative so this pins beside the WYSIWYG area.
+
+    Taller popup than the others: the richtext field needs room for CKEditor's
+    toolbar plus a usable writing area, and the typography row opens below it.
+    =========================================================================
+</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 start-0 mt-1 z-3 d-flex flex-column gap-2"
+         style="transform: translateX(-120%); z-index: 10;">
+
+        <cms:ignore>
+            ccs_img_2col_cntn_body_ovr_opt is the controller for
+            ccs_img_2col_cntn_body_typo_chc and is also the user's own
+            "Override Default Text Style" switch, so it stays visible in fields.
+            Every field here is root-level - no group to register - so the only
+            parents listed are the three rows.
+        </cms:ignore>
+        <cms:popup_edit height='860' width='1050' 'ccs_img_2col_cntn_body_msg|ccs_img_2col_cntn_body_row|ccs_img_2col_cntn_body|ccs_img_2col_cntn_body_opt_row|ccs_img_2col_cntn_body_halg|ccs_img_2col_cntn_body_ovr_opt|ccs_img_2col_cntn_body_typo_row|ccs_img_2col_cntn_body_clr|ccs_img_2col_cntn_body_sz|ccs_img_2col_cntn_body_wt|ccs_img_2col_cntn_body_fst|ccs_img_2col_cntn_body_font|ccs_img_2col_cntn_body_ls'
+            link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Body Content' title='Edit Body Content'><i class='fa-solid fa-align-left'></i></button>" />
+
+    </div>
+</cms:if>

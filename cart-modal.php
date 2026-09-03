@@ -17,6 +17,7 @@
     </cms:if>
 </cms:if>
 <cms:no_cache />
+<cms:embed 'utils/store_theme.htm' />
 
 <cms:if "<cms:pp_count_items />" >
 
@@ -42,8 +43,11 @@
 
     <!-- 3. Second Pass: Compare the grouped tallies against the database -->
     <cms:pp_cart_items>
-        <!-- Reach back to the DB using the verified 'id' -->
-        <cms:pages masterpage='product.php' id="<cms:show id />" limit='1'>
+        <!-- Reach back to the DB using the verified 'id'. Template resolved
+             from that id, never assumed - see snippets/utils/item_tpl.htm -->
+        <cms:set itm_tpl_id = id scope='global' />
+        <cms:embed 'utils/item_tpl.htm' />
+        <cms:pages masterpage=itm_tpl id="<cms:show id />" limit='1'>
             <cms:if track_inventory && in_stock gt '0'>
                 
                 <!-- Retrieve the grouped math from the PHP array -->
@@ -86,11 +90,13 @@
                         </a>
                         
                         <cms:pp_selected_options startcount='1'>
-                            <div class="mb-0 text-muted"><cms:show option_name />: <cms:show option_value /></div>
+                            <div class="mb-0 <cms:show ccs_st_secondary />"><cms:show option_name />: <cms:show option_value /></div>
                         </cms:pp_selected_options>
                         
                         <!-- Reach back to the database using verified 'id' -->
-                        <cms:pages masterpage='product.php' id="<cms:show id />" limit='1'>
+                        <cms:set itm_tpl_id = id scope='global' />
+                        <cms:embed 'utils/item_tpl.htm' />
+                        <cms:pages masterpage=itm_tpl id="<cms:show id />" limit='1'>
                             <cms:set cart_track_inv=track_inventory scope='parent' />
                             <cms:set cart_in_stock=in_stock scope='parent' />
                         </cms:pages>
@@ -100,12 +106,12 @@
                                 <!-- Inject the max attribute -->
                                 <input type="number" class="form-control form-control-sm px-1 py-0" name="qty[<cms:show line_id />]" value="<cms:show quantity />" min="1" step="1" <cms:if cart_track_inv && cart_in_stock gt '0'>max="<cms:show cart_in_stock />"</cms:if>>
                             </div>
-                            <div class="text-success fw-bold">US $<cms:number_format line_total /></div>
+                            <div class="fw-bold">US $<cms:number_format line_total /></div>
                         </div>
 
                         <!-- Optional UX: Show max available under the box -->
                         <cms:if cart_track_inv && cart_in_stock gt '0'>
-                            <small class="mt-1 d-block text-warning"><cms:show cart_in_stock /> max available</small>
+                            <small class="mt-1 d-block text-warning-emphasis"><cms:show cart_in_stock /> max available</small>
                         </cms:if>
                         
                         <div class="mt-1 text-end">
@@ -120,14 +126,14 @@
         </div>
         
         <!-- Sticky Bottom Totals & Actions -->
-        <div class="p-3 border-top mt-auto bg-light">
+        <div class="p-3 border-top mt-auto <cms:show ccs_st_panel />">
             <div class="d-flex justify-content-between mb-3">
                 <span class="fw-bold">Subtotal:</span>
-                <span class="text-success fw-bold">$<cms:number_format "<cms:pp_sub_total />" /></span>
+                <span class="fw-bold">$<cms:number_format "<cms:pp_sub_total />" /></span>
             </div>
             
-            <button type="submit" class="btn btn-outline-secondary btn-sm w-100 mb-2 cart-update">Update Quantities</button>
-            <a href="<cms:link 'cart.php' />" class="btn btn-secondary btn-sm w-100 mb-2">View Full Cart</a>
+            <button type="submit" class="btn btn-secondary btn-sm w-100 mb-2 cart-update">Update Quantities</button>
+            <a href="<cms:link 'cart.php' />" class="btn btn-primary btn-sm w-100 mb-2">View Full Cart</a>
             
             <cms:if cart_has_error>
                 <!-- Show the combined error message and hide the checkout button -->
@@ -150,7 +156,7 @@
 <cms:else />
     <!-- Empty State -->
     <div class="p-4 mt-5 text-center">
-        <i class="fas fa-shopping-cart fa-3x mb-3 text-muted"></i>
+        <i class="fas fa-shopping-cart fa-3x mb-3 <cms:show ccs_st_secondary />"></i>
         <h5>Your cart is empty.</h5>
         <button type="button" class="btn btn-primary mt-3" data-bs-dismiss="offcanvas">Continue Shopping</button>
     </div>

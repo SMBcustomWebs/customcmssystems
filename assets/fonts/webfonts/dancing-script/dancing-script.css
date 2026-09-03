@@ -1,0 +1,54 @@
+/* ==========================================================================
+   Dancing Script Font Declarations
+   ========================================================================== */
+
+/* Regular 400 */
+@font-face {
+  font-family: 'Dancing Script';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./dancing-script-latin-400-normal.woff2') format('woff2'),
+       url('./dancing-script-latin-400-normal.woff') format('woff');
+}
+
+/* Medium 500 */
+@font-face {
+  font-family: 'Dancing Script';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./dancing-script-latin-500-normal.woff2') format('woff2'),
+       url('./dancing-script-latin-500-normal.woff') format('woff');
+}
+
+/* Semi-Bold 600 */
+@font-face {
+  font-family: 'Dancing Script';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./dancing-script-latin-600-normal.woff2') format('woff2'),
+       url('./dancing-script-latin-600-normal.woff') format('woff');
+}
+
+/* Bold 700 */
+@font-face {
+  font-family: 'Dancing Script';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./dancing-script-latin-700-normal.woff2') format('woff2'),
+       url('./dancing-script-latin-700-normal.woff') format('woff');
+}
+
+/* Variable Font (Weights 400-700) */
+/*
+@font-face {
+  font-family: 'Dancing Script Variable';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('./dancing-script-latin-wght-normal.woff2') format('woff2-variations');
+}
+*/

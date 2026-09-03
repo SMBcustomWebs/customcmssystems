@@ -1,0 +1,65 @@
+<cms:ignore>
+    ============================================================
+    NEW CATEGORY - the POST handler.
+    ------------------------------------------------------------
+    CONTRACT
+      in  : fh_masterpage   owning template, e.g. 'about.php'
+            fh_page         this add page, e.g. 'add-about.php'
+      out : fc_result       '' when nothing was submitted, else
+                            created | duplicate | denied | invalid | error
+            fc_error        message when it failed
+            fc_made         the title just created, on the GET
+                            that follows a successful create
+
+    WHERE TO EMBED
+    At the very top of an add-*.php page, BEFORE any markup - it
+    redirects on success, and output already sent makes that a
+    header warning rather than a redirect.
+
+    ---------------- POST / REDIRECT / GET ----------------------
+    Not optional. Without it the browser keeps the POST in its
+    history and a refresh re-submits, creating a SECOND folder -
+    and because KFolder::save() derives a UNIQUE url name from the
+    title, the duplicate never collides. It is accepted in
+    silence, leaving two identical submenu entries with two bmenu
+    pages behind them.
+
+    The confirmation therefore has to survive a redirect, which is
+    what the flash is for - the same pattern users/register.php
+    uses after creating an account. get_flash consumes it, so a
+    second refresh shows a clean form.
+
+    Only SUCCESS redirects. An error has nothing to re-submit by
+    accident and its message has to stay on screen beside the form
+    that produced it - folder_dialog.htm re-opens itself when
+    fc_result is set for exactly that reason.
+
+    The destination keeps ?pid= when present, so adding a category
+    midway through editing an item does not throw the editor away.
+    ============================================================
+</cms:ignore>
+
+<cms:set fc_result = '' scope='global' />
+<cms:set fc_made   = '' scope='global' />
+
+<cms:ignore>
+    Assign, then compare. A quoted tag used directly as an operand is a
+    complete expression to Couch's parser, which accepts only && or || after
+    it - a comparison there fails the file with LOGIC_OP: Invalid char.
+</cms:ignore>
+<cms:set fh_submit = "<cms:gpc 'fc_submit' method='post' />" />
+
+<cms:if fh_submit eq '1'>
+    <cms:set fc_masterpage = fh_masterpage />
+    <cms:set fc_title      = "<cms:gpc 'fc_title' method='post' />" />
+    <cms:set fc_parent     = "<cms:gpc 'fc_parent' method='post' />" />
+    <cms:embed 'utils/folder_create.htm' />
+
+    <cms:if fc_result eq 'created'>
+        <cms:set_flash name='fc_made' value=fc_title />
+        <cms:capture into='fh_dest'><cms:link masterpage=fh_page /><cms:if edit_id>?pid=<cms:show edit_id /></cms:if></cms:capture>
+        <cms:redirect url=fh_dest />
+    </cms:if>
+</cms:if>
+
+<cms:set fc_made = "<cms:get_flash 'fc_made' />" scope='global' />

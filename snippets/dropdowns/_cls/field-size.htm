@@ -1,0 +1,26 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_cls/field-size.htm
+
+    EMITS   a complete class, or nothing.
+    USE AS  the second class on an input, select or textarea, after
+            form-control or form-select.
+
+    FOR     the height and text size of a form field. Bootstrap ships exactly
+            these three steps and no more, so the list is complete rather than
+            trimmed.
+
+    THE FIRST OPTION EMITS NOTHING, which is the theme's own field size. That
+    is a real choice, not an absence - most forms should stay on it so they
+    match every other input on the site.
+
+    A NOTE ON THE SMALL OPTION. form-control-sm drops the text to 0.875rem.
+    That is still above the 16px threshold on most desktop themes but can fall
+    under it on a phone, and iOS zooms the whole page when a focused input's
+    text is below 16px. Worth knowing before choosing Small for a form that
+    matters on mobile.
+    ===========================================================================
+</cms:ignore>
+Theme Default=
+|Small=form-control-sm
+|Large=form-control-lg

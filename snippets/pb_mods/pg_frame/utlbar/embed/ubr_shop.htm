@@ -59,26 +59,41 @@
     </cms:repeatable>
 </cms:editable>
 
-<cms:editable type="group" name="ccs_ubr_shop_sc2_grp" label="Right Column :: Customer Portal & E-Commerce Handles" order="30">
-    
-    <cms:editable type='message' name='ccs_ubr_shop_sc2_msg' order='1'>
-        <h3>Portal Links & Icons</h3>
-        <br><hr>
-    </cms:editable>
+<cms:ignore>
+    ================================================================
+    REMOVED 2026-08-30 - the whole right-hand group, ccs_ubr_shop_sc2_grp
+    ("Right Column :: Customer Portal & E-Commerce Handles"), shown in the
+    admin as "Portal Links & Icons".
 
-    <cms:editable type='row' name='ccs_ubr_shop_portal_row' order='2'>
-        <cms:editable type='text' name='ccs_ubr_shop_auth_txt' label='Authentication Portal Link Text' default='Sign in / Join' class='col-md-4' order='1' />
-        
-        <cms:editable type='dropdown' name='ccs_ubr_shop_auth_lnk' label='Authentication Target' opt_values='dropdowns/links.htm' dynamic='opt_values' class='col-md-4' order='2' />
-        
-        <cms:func _into='ccs_ubr_shop_auth_is_custom' ccs_ubr_shop_auth_lnk=''><cms:if ccs_ubr_shop_auth_lnk='custom'>0<cms:else />1</cms:if></cms:func>
-        
-        <cms:editable type='text' name='ccs_ubr_shop_auth_cst' label='Custom Portal URL' desc='Input the entire URL (e.g., https://mysite.com/)' not_active=ccs_ubr_shop_auth_is_custom class='col-md-4' order='3' />
-    </cms:editable>
-    
-    <cms:editable type='row' name='ccs_ubr_shop_sys_icons' label='System Interaction Icon Rules' order='3'>
-        <cms:editable type='text' name='ccs_ubr_shop_icn_profile' label='Profile/Account Icon Class' default='icon-Talk-Man' class='col-md-4' order='1'/>
-        <cms:editable type='text' name='ccs_ubr_shop_icn_wishlist' label='Wishlist Icon Class' default='icon-Heart' class='col-md-4' order='2'/>
-        <cms:editable type='text' name='ccs_ubr_shop_icn_cart' label='Shopping Cart Icon Class' default='icon-Add-Cart' class='col-md-4' order='3'/>
-    </cms:editable>
-</cms:editable>
+    It held nine fields:
+
+      ccs_ubr_shop_sc2_msg       section header
+      ccs_ubr_shop_portal_row    row
+        ccs_ubr_shop_auth_txt    text of the "Sign in / Join" LINK
+        ccs_ubr_shop_auth_lnk    which page that link went to
+        ccs_ubr_shop_auth_cst    a full URL, when the dropdown said "custom"
+      ccs_ubr_shop_sys_icons     row
+        ccs_ubr_shop_icn_profile CSS class for the user icon
+        ccs_ubr_shop_icn_wishlist  CSS class for the wishlist icon
+        ccs_ubr_shop_icn_cart    CSS class for the cart icon
+
+    Worth being clear, because it confused us once: the three auth fields
+    never controlled the icons. They drove a separate TEXT link sitting to
+    the left of them. The icons' destinations were always hardcoded - the
+    wishlist and cart open offcanvas panels, and the user icon was href="#!",
+    a dead link, now pointed at the profile.
+
+    All nine are fixed in the theme now. Everything on the right of this bar
+    goes to a specific page or panel in this site, so none of it was ever a
+    real choice - the fields could only put a wrong icon or a wrong URL on a
+    known link, or blank one out. The "Sign in / Join" link is redundant with
+    the user icon, which already goes to the profile when signed in and to
+    login when signed out, so it shows only to signed-out visitors.
+
+    What this gives up: pointing the account link at an external system, such
+    as a separate members site. Restore ccs_ubr_shop_auth_lnk and _cst if that
+    day comes.
+
+    Stored values are orphaned on re-registration. Nothing reads them.
+    ================================================================
+</cms:ignore>

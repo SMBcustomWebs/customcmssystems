@@ -1,16 +1,20 @@
-<footer class="position-relative py-<cms:show ccs_ftr_bsc_pad_y /> bg-<cms:show ccs_ftr_bsc_bg_clr_opt />">
+<footer class="ccs-footer position-relative py-<cms:show ccs_ftr_bsc_pad_y /> bg-<cms:show ccs_ftr_bsc_bg_clr_opt /> text-<cms:show ccs_ftr_bsc_text /> font-<cms:show ccs_ftr_bsc_font /> fs-<cms:show ccs_ftr_bsc_fs /> fst-<cms:show ccs_ftr_bsc_fst /> fw-<cms:show ccs_ftr_bsc_fwt /> ls-<cms:show ccs_ftr_bsc_ls />">
 
     <cms:if ccs_gl_edt_ok>
-        <div class="position-absolute top-50 start-0 translate-middle-y ms-3 z-3">
+        <div class="d-flex gap-1 position-absolute top-50 start-0 translate-middle-y ms-3 z-3">
             <cms:popup_edit 'ccs_ftr_bsc_gen_stng_grp|ccs_ftr_bsc_gen_stng_msg|ccs_ftr_bsc_gen_set_row|ccs_ftr_bsc_pad_y|ccs_ftr_bsc_bg_clr_opt|ccs_ftr_bsc_typ_msg|ccs_ftr_bsc_txt_fmt_row|ccs_ftr_bsc_text|ccs_ftr_bsc_fs|ccs_ftr_bsc_font|ccs_ftr_bsc_fwt|ccs_ftr_bsc_fst|ccs_ftr_bsc_ls'
                 link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit footer settings"><i class="fas fa-cog text-warning" style="font-size: 12px;"></i></span>' />
+            <cms:pages masterpage='globals.php' limit='1'>
+                <cms:popup_edit 'ccs_gl_site_ftr_msg|ccs_gl_site_ftr_lnk_hvr_clr'
+                    link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit footer link hover color'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+            </cms:pages>
         </div>
     </cms:if>
 
     <div class="container">
         <div class="row align-items-center justify-content-between">
             <div
-                class="col-auto position-relative link-<cms:show ccs_ftr_bsc_text /> font-<cms:show ccs_ftr_bsc_font /> fs-<cms:show ccs_ftr_bsc_fs /> fst-<cms:show ccs_ftr_bsc_fst /> fw-<cms:show ccs_ftr_bsc_fwt /> ls-<cms:show ccs_ftr_bsc_ls />">
+                class="col-auto position-relative text-<cms:show ccs_ftr_bsc_text /> font-<cms:show ccs_ftr_bsc_font /> fs-<cms:show ccs_ftr_bsc_fs /> fst-<cms:show ccs_ftr_bsc_fst /> fw-<cms:show ccs_ftr_bsc_fwt /> ls-<cms:show ccs_ftr_bsc_ls />">
                 <cms:if ccs_gl_edt_ok>
                     <div class="position-absolute top-50 start-0 translate-middle-y z-3"
                         style="margin-left: -35px; pointer-events: none; width: max-content;">
@@ -55,7 +59,8 @@
                         </cms:if>
                         &copy;
                         <cms:date format='Y' />
-                        <cms:show ccs_gl_site_name />
+                        <cms:show ccs_gl_site_name /> | Website Built by <a class="link-<cms:show ccs_ftr_bsc_text />"
+                            href="https://www.smbcustomwebs.com/" target="_blank">SMBCustomWebs.com</a>
                     </cms:if>
                 </cms:pages>
             </div>
@@ -109,9 +114,13 @@
                     </cms:show_repeatable>
 
                 </cms:pages>
+
             </div>
         </div>
     </div>
+    <cms:set lgl_fs=ccs_ftr_bsc_fs />
+    <cms:embed 'pb_mods/pg_frame/footer/legal_links.htm' />
+
     <cms:if ccs_gl_edt_ok>
         <div class="position-absolute top-50 end-0 translate-middle-y me-3" style="z-index: 1060; line-height: 1;">
             <cms:pages masterpage='globals.php' limit='1'>

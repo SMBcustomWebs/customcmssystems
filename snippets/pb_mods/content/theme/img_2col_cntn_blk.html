@@ -1,0 +1,136 @@
+<cms:ignore>
+    =========================================================================
+    IMAGE + CONTENT BLOCK  -  front-end render
+    snippets/pb_mods/content/theme/img_2col_cntn_blk.html
+
+    Resolved by the tile's _pb_template='content/theme/img_2col_cntn_blk'
+    in blocks/content/cntnt_blk_1.php.
+
+    ONE <section>, so the background colour covers the whole block. Three rows
+    inside it: images, header, body.
+
+    Every content gate is OR'd against i2c_edit_on so an empty tile still shows
+    its edit affordances - see the router.
+    =========================================================================
+</cms:ignore>
+
+<!-- ======================================================= -->
+<!-- COMPILE ROUTER VARIABLES                                -->
+<!-- ======================================================= -->
+<cms:embed 'pb_mods/content/router/img_2col_cntn_blk.inc' />
+
+<cms:if i2c_has_content = '1' || i2c_edit_on = '1'>
+
+<!-- ============================================-->
+<!-- <section> begin ============================-->
+<section class="position-relative <cms:show i2c_sec_spacing /> <cms:show i2c_sec_bg />"<cms:if i2c_sec_inline_bg != ''> style="<cms:show i2c_sec_inline_bg />"</cms:if>>
+
+    <cms:ignore>
+        FRONT-END EDIT - section-wide controls plus the header button, pinned to
+        the section's own top-left. Must sit here rather than inside .container:
+        the container is centred with a max-width, so start-0 there is not the
+        section edge.
+    </cms:ignore>
+    <cms:embed 'pb_mods/content/inline/section_edit.txt' />
+
+    <div class="container">
+
+        <cms:ignore>
+            ROW 1 - IMAGE PAIR.
+            Was two separate col-lg-6 images in their own <section>; folded into
+            this section as its own row so one background colour governs the
+            whole block.
+
+            Responsiveness: the source markup had a bare <img> with no class, so
+            a 1600px upload would overflow its column. img-fluid + w-100 makes it
+            scale to the column instead. i2c_img_col resolves to col-12 col-lg-6
+            when both are filled and plain col-12 when only one is, so a single
+            image spans the row rather than leaving a hole beside it.
+
+            position-relative on the row so its edit cluster can pin to it.
+        </cms:ignore>
+        <cms:if i2c_img_count gt '0' || i2c_edit_on = '1'>
+            <div class="row position-relative">
+
+                <cms:embed 'pb_mods/content/inline/images_edit.txt' />
+
+                <cms:if ccs_img_2col_cntn_img_1>
+                    <div class="<cms:show i2c_img_col /> mb-4">
+                        <img src="<cms:show ccs_img_2col_cntn_img_1 />"
+                             alt="<cms:show ccs_img_2col_cntn_img_1_alt />"
+                             class="img-fluid w-100 <cms:show i2c_img_rnd />" loading="lazy" />
+                    </div>
+                </cms:if>
+
+                <cms:if ccs_img_2col_cntn_img_2>
+                    <div class="<cms:show i2c_img_col /> mb-4">
+                        <img src="<cms:show ccs_img_2col_cntn_img_2 />"
+                             alt="<cms:show ccs_img_2col_cntn_img_2_alt />"
+                             class="img-fluid w-100 <cms:show i2c_img_rnd />" loading="lazy" />
+                    </div>
+                </cms:if>
+
+            </div>
+        </cms:if>
+
+
+        <cms:ignore>
+            ROW 2 - SECTION HEADER.
+            The heading element itself comes from i2c_hdg_open / i2c_hdg_close,
+            built in the router from the Heading Level dropdown, so the tag is
+            the editor's choice while its visual size is a separate fs- class.
+
+            No edit cluster here: the header button lives in section_edit.txt
+            instead, because this whole row disappears when the header is
+            removed and a button anchored to it would vanish with the thing it
+            exists to bring back.
+        </cms:ignore>
+        <cms:if i2c_show_header = '1'>
+            <div class="row justify-content-center">
+                <div class="col-12 <cms:show i2c_hdr_wrapper_class />">
+
+                    <cms:if ccs_img_2col_cntn_hdg_txt>
+                        <cms:show i2c_hdg_open /><cms:show ccs_img_2col_cntn_hdg_txt /><cms:show i2c_hdg_close />
+                    </cms:if>
+
+                    <cms:if ccs_img_2col_cntn_sub_txt>
+                        <p class="<cms:show i2c_sub_classes />">
+                            <cms:show ccs_img_2col_cntn_sub_txt />
+                        </p>
+                    </cms:if>
+
+                    <cms:if ccs_img_2col_cntn_hdg_hr>
+                        <hr class="<cms:show i2c_hr_classes />" />
+                    </cms:if>
+
+                </div>
+            </div>
+        </cms:if>
+
+
+        <cms:ignore>
+            ROW 3 - BODY CONTENT, FULL WIDTH.
+            Replaces the four col-xl-6 text cards with a single WYSIWYG spanning
+            col-12. The typography classes sit on this wrapper and the editor's
+            own <p> elements inherit them; anything styled inside the editor is
+            inline and still wins.
+        </cms:ignore>
+        <cms:if ccs_img_2col_cntn_body || i2c_edit_on = '1'>
+            <div class="row position-relative">
+
+                <cms:embed 'pb_mods/content/inline/body_edit.txt' />
+
+                <div class="col-12 <cms:show i2c_body_align /> <cms:show i2c_body_classes />">
+                    <cms:show ccs_img_2col_cntn_body />
+                </div>
+            </div>
+        </cms:if>
+
+    </div>
+    <!-- end of .container-->
+
+</section>
+<!-- <section> close ============================-->
+<!-- ============================================-->
+
+</cms:if>

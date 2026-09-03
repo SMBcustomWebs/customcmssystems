@@ -1,0 +1,128 @@
+<cms:ignore>
+    =========================================================================
+    IMAGE CONTENT BLOCK  -  front-end render
+    snippets/pb_mods/content/theme/img_cntn_blk.html
+
+    Resolved by the tile's _pb_template='content/theme/img_cntn_blk'
+    in blocks/content/cntnt_blk_1.php.
+
+    ONE section element, three rows: section header (col-xl-8), full-width image,
+    lower richtext (full width). All three widths are exactly as the source
+    HTML coded them, including the mt-5 / mt-8 / mt-5 mt-md-0 spacing.
+
+    Every content gate is OR'd against imgc_edit_on so an empty tile still
+    shows its edit affordances - see the router.
+    =========================================================================
+</cms:ignore>
+
+<!-- ======================================================= -->
+<!-- COMPILE ROUTER VARIABLES                                -->
+<!-- ======================================================= -->
+<cms:embed 'pb_mods/content/router/img_cntn_blk.inc' />
+
+<cms:if imgc_has_content = '1' || imgc_edit_on = '1'>
+
+<!-- ============================================-->
+<!-- <section> begin ============================-->
+<section class="position-relative <cms:show imgc_sec_spacing /> <cms:show imgc_sec_bg />"<cms:if imgc_sec_inline_bg != ''> style="<cms:show imgc_sec_inline_bg />"</cms:if>>
+
+    <cms:ignore>
+        FRONT-END EDIT - background, spacing and the header button, pinned to the
+        section's own top-left. Must sit here rather than inside .container: the
+        container is centred with a max-width, so start-0 there is not the
+        section edge.
+    </cms:ignore>
+    <cms:embed 'pb_mods/content/inline/imgc_section_edit.txt' />
+
+    <div class="container">
+
+        <cms:ignore>
+            ROW 1 - SECTION HEADER.
+            col-xl-8 as coded, so the heading and lead keep a readable measure
+            instead of running the full container width.
+
+            The heading element comes from imgc_hdg_open / imgc_hdg_close, built
+            in the router from the Heading Level dropdown, so the tag is the
+            editor's choice while its visual size is a separate fs- class. The
+            source markup's h1 is the default.
+
+            No edit cluster here: the header button lives in
+            imgc_section_edit.txt instead, because this whole row disappears when
+            the header is removed and a button anchored to it would vanish with
+            the thing it exists to bring back.
+        </cms:ignore>
+        <cms:if imgc_show_header = '1'>
+            <div class="row">
+                <div class="col-xl-8 <cms:show imgc_hdr_wrapper_class />">
+
+                    <cms:if ccs_img_cntn_hdg_txt>
+                        <cms:show imgc_hdg_open /><cms:show ccs_img_cntn_hdg_txt /><cms:show imgc_hdg_close />
+                    </cms:if>
+
+                    <cms:if ccs_img_cntn_sub_txt>
+                        <p class="<cms:show imgc_sub_classes />">
+                            <cms:show ccs_img_cntn_sub_txt />
+                        </p>
+                    </cms:if>
+
+                    <cms:if ccs_img_cntn_hdg_hr>
+                        <hr class="<cms:show imgc_hr_classes />" />
+                    </cms:if>
+
+                </div>
+            </div>
+        </cms:if>
+
+
+        <cms:ignore>
+            ROW 2 - FEATURE IMAGE.
+            Full width, exactly the col the source used. Responsiveness is the
+            one addition: the source had a bare img tag with no class, so a 2400px
+            upload would burst the container. img-fluid + w-100 makes it scale to
+            the column instead.
+
+            position-relative on the row so its edit cluster can pin to it.
+        </cms:ignore>
+        <cms:if ccs_img_cntn_img || imgc_edit_on = '1'>
+            <div class="row mt-5 position-relative">
+
+                <cms:embed 'pb_mods/content/inline/imgc_image_edit.txt' />
+
+                <cms:if ccs_img_cntn_img>
+                    <div class="col">
+                        <img src="<cms:show ccs_img_cntn_img />"
+                             alt="<cms:show ccs_img_cntn_img_alt />"
+                             class="img-fluid w-100 <cms:show imgc_img_rnd />" loading="lazy" />
+                    </div>
+                </cms:if>
+
+            </div>
+        </cms:if>
+
+
+        <cms:ignore>
+            ROW 3 - LOWER CONTENT.
+            Full width with the source's mt-8 and the column's mt-5 mt-md-0
+            preserved. The source markup's h4, hr and two paragraphs all come
+            from inside the richtext now - the toolbar carries both Format and
+            HorizontalRule.
+        </cms:ignore>
+        <cms:if ccs_img_cntn_btm || imgc_edit_on = '1'>
+            <div class="row mt-8 position-relative">
+
+                <cms:embed 'pb_mods/content/inline/imgc_btm_edit.txt' />
+
+                <div class="col mt-5 mt-md-0 <cms:show imgc_btm_align /> <cms:show imgc_btm_classes />">
+                    <cms:show ccs_img_cntn_btm />
+                </div>
+            </div>
+        </cms:if>
+
+    </div>
+    <!-- end of .container-->
+
+</section>
+<!-- <section> close ============================-->
+<!-- ============================================-->
+
+</cms:if>

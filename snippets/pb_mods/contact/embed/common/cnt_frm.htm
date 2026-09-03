@@ -1,0 +1,125 @@
+<cms:ignore>
+    =========================================================================
+    CONTACT BLOCK  -  THE FORM ITSELF
+    snippets/pb_mods/contact/embed/common/cnt_frm.htm
+
+    Field wording, field appearance, the submit button, and the messages the
+    visitor sees afterwards.
+
+    EVERY FIELD GETS A LABEL, not just a placeholder. This is not a
+    preference. A placeholder disappears the moment someone types, so anyone
+    who is interrupted loses the only clue about what the box was for; it is
+    invisible to most screen readers as a name; and its grey-on-white default
+    fails contrast in nearly every theme. Labels can be visually hidden if the
+    design wants a clean look - the field below controls that - but the label
+    ELEMENT is always emitted.
+
+    WORDING IS EDITABLE because this block is not a restaurant. The source HTML
+    hardcoded "Write your massage..." (sic) - which is both a typo and an
+    assumption about the business.
+
+    SPAM PROTECTION is deliberately not built yet. The section marked
+    CAPTCHA SLOT in the theme is where it goes; reCAPTCHA is already loaded in
+    kfunctions.php and its keys are set in config.php, so it is a small change
+    when the approach is settled.
+    =========================================================================
+</cms:ignore>
+<cms:editable type='group' name='cnt_frm_grp' label='Form Fields and Wording' collapsed='1' order='20'>
+
+    <cms:editable type='message' name='cnt_frm_lbl_msg' class='col-md-12' order='2'>
+        <hr><h2>What each box is called</h2>
+        <h4>The label is what a screen reader announces and what appears above
+            the box. The placeholder is the faint hint inside it.</h4>
+        <h4>Every box marked with a red star already has working wording in it.
+            You do not have to type anything to put this form on a page. Change
+            any of it you like &ndash; you just cannot leave one of them empty,
+            because an unlabeled field is unusable to anyone on a screen reader
+            and a button with no words is unusable to everyone.</h4>
+        <h4>The faint hints are genuinely optional and start out blank.</h4>
+    </cms:editable>
+
+    <cms:editable type='row' name='cnt_frm_name_row' order='5'>
+        <cms:editable type='text' name='cnt_frm_name_lbl' label='Name Field Label'
+            desc='Comes pre-filled. Change the wording if you like, but it cannot be left empty.'
+            required='1' class='col-md-6' order='2'>Your Name</cms:editable>
+        <cms:editable type='text' name='cnt_frm_name_plc' label='Name Field Hint'
+            desc='Optional. Shown faintly inside the empty box.' class='col-md-6' order='4' />
+    </cms:editable>
+
+    <cms:editable type='row' name='cnt_frm_email_row' order='10'>
+        <cms:editable type='text' name='cnt_frm_email_lbl' label='Email Field Label'
+            desc='Comes pre-filled. Change the wording if you like, but it cannot be left empty.'
+            required='1' class='col-md-6' order='2'>Email Address</cms:editable>
+        <cms:editable type='text' name='cnt_frm_email_plc' label='Email Field Hint'
+            class='col-md-6' order='4' />
+    </cms:editable>
+
+    <cms:editable type='row' name='cnt_frm_msg_row' order='15'>
+        <cms:editable type='text' name='cnt_frm_msg_lbl' label='Message Field Label'
+            desc='Comes pre-filled. Change the wording if you like, but it cannot be left empty.'
+            required='1' class='col-md-6' order='2'>Your Message</cms:editable>
+        <cms:editable type='text' name='cnt_frm_msg_plc' label='Message Field Hint'
+            class='col-md-6' order='4' />
+        <cms:editable type='dropdown' name='cnt_frm_msg_rows' label='Message Box Height'
+            opt_values='dropdowns/_val/textarea-rows.htm' dynamic='opt_values'
+            class='col-md-4' order='6'>6</cms:editable>
+    </cms:editable>
+
+    <cms:editable type='message' name='cnt_frm_look_msg' class='col-md-12' order='20'>
+        <hr><h2>How the boxes look</h2>
+    </cms:editable>
+
+    <cms:editable type='row' name='cnt_frm_look_row' order='25'>
+        <cms:editable type='dropdown' name='cnt_frm_lbl_vis' label='Show Labels'
+            desc='Hidden still reads aloud to screen readers - it only hides them visually'
+            opt_values='dropdowns/_cls/label-visibility.htm' dynamic='opt_values'
+            class='col-md-4' order='2' />
+        <cms:editable type='dropdown' name='cnt_frm_lbl_clr' label='Label Color'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='4' />
+        <cms:editable type='dropdown' name='cnt_frm_fld_sz' label='Box Size'
+            opt_values='dropdowns/_cls/field-size.htm' dynamic='opt_values'
+            class='col-md-4' order='6' />
+        <cms:editable type='dropdown' name='cnt_frm_fld_gap' label='Space Between Boxes'
+            opt_values='dropdowns/_tok/space-gap.htm' dynamic='opt_values' class='col-md-4' order='8'>3</cms:editable>
+    </cms:editable>
+
+    <cms:editable type='message' name='cnt_frm_btn_msg' class='col-md-12' order='30'>
+        <hr><h2>The send button</h2>
+    </cms:editable>
+
+    <cms:editable type='row' name='cnt_frm_btn_row' order='35'>
+        <cms:editable type='text' name='cnt_frm_btn_txt' label='Button Text'
+            desc='Comes pre-filled. A button with no words on it is unusable, so this cannot be left empty.'
+            required='1' maxlength='40' class='col-md-6' order='2'>Send Message</cms:editable>
+        <cms:editable type='dropdown' name='cnt_frm_btn_clr' label='Button Color'
+            opt_values='dropdowns/_tok/color-btn.htm' dynamic='opt_values' class='col-md-3' order='4'>primary</cms:editable>
+        <cms:editable type='dropdown' name='cnt_frm_btn_fill' label='Fill Style'
+            opt_values='dropdowns/_tok/btn-fill.htm' dynamic='opt_values' class='col-md-3' order='6'>btn</cms:editable>
+        <cms:editable type='dropdown' name='cnt_frm_btn_st' label='Button Shape'
+            opt_values='dropdowns/_cls/btn-shape.htm' dynamic='opt_values' class='col-md-3' order='8' />
+        <cms:editable type='dropdown' name='cnt_frm_btn_sz' label='Button Size'
+            opt_values='dropdowns/_cls/btn-size.htm' dynamic='opt_values' class='col-md-3' order='10' />
+        <cms:editable type='dropdown' name='cnt_frm_btn_w' label='Button Width'
+            opt_values='dropdowns/_cls/btn-width.htm' dynamic='opt_values' class='col-md-3' order='12' />
+        <cms:editable type='dropdown' name='cnt_frm_btn_halg' label='Button Placement'
+            opt_values='dropdowns/_tok/align-h.htm' dynamic='opt_values' class='col-md-3' order='14' />
+    </cms:editable>
+
+    <cms:editable type='message' name='cnt_frm_after_msg' class='col-md-12' order='40'>
+        <hr><h2>What the visitor sees after sending</h2>
+        <h4>Shown in place of the form once the message goes through.</h4>
+    </cms:editable>
+
+    <cms:editable type='row' name='cnt_frm_after_row' order='45'>
+        <cms:editable type='text' name='cnt_frm_ok_ttl' label='Thank You Heading'
+            desc='Comes pre-filled. Shown where the form was, once the message goes through.'
+            required='1' class='col-md-6' order='2'>Thank You</cms:editable>
+        <cms:editable type='text' name='cnt_frm_ok_txt' label='Thank You Message'
+            desc='Comes pre-filled. The line under the heading.'
+            required='1' class='col-md-6' order='4'>Your message has been sent. We will get back to you shortly.</cms:editable>
+        <cms:editable type='text' name='cnt_frm_subj' label='Email Subject Line'
+            desc='What YOU see in your inbox when a message arrives. Comes pre-filled and cannot be left empty, or the mail arrives with a blank subject and lands in spam.'
+            required='1' class='col-md-12' order='6'>Website Contact Form</cms:editable>
+    </cms:editable>
+
+</cms:editable>

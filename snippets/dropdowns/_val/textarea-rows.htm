@@ -1,0 +1,27 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/_val/textarea-rows.htm
+
+    EMITS   a raw number.
+    USE AS  the rows attribute of a textarea. It is a count, not a class, so it
+            lives in _val.
+
+    FOR     how tall a message box starts out. rows is a STARTING height only -
+            the box still scrolls, and on any modern theme it still resizes by
+            dragging, so this can never cut anyone's text off.
+
+    WHY NOT A CSS HEIGHT. rows is measured in lines of the field's own text, so
+    it stays correct when the font size changes or the visitor zooms. A fixed
+    pixel height does not, and clips the first line at large text settings.
+
+    NO EMPTY FIRST OPTION. rows has to resolve to a number: leave it blank and
+    the attribute is invalid, drop the attribute and the browser falls back to
+    its own default of 2, which is too short to be usable for a message. So the
+    consumer needs no guard, and the field should carry its starting value in
+    the body of the editable rather than being defaulted in a router.
+    ===========================================================================
+</cms:ignore>
+Short - 4 lines=4
+|Medium - 6 lines=6
+|Tall - 8 lines=8
+|Very Tall - 12 lines=12

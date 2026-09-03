@@ -5,6 +5,18 @@
         <cms:if _font> font-<cms:show _font /></cms:if>
         <cms:if _fwt> fw-<cms:show _fwt /></cms:if>
         <cms:if _fst> fst-<cms:show _fst /></cms:if>
-        <cms:if _ls> ls-<cms:show _ls /></cms:if>
+        <cms:ignore>
+            != '' rather than a plain truthiness test, and only on this one.
+
+            ltr-spc.htm offers "0=0", and PHP reads the string "0" as false, so
+            a plain cms:if swallowed it - an author who deliberately chose zero
+            letter spacing got no class at all and kept whatever the theme
+            inherited. The other five parameters above are safe: none of their
+            dropdowns has an option whose VALUE is 0. text-size, font-family,
+            font-weight and font-style all emit words or non-zero numbers, and
+            their "Default" option emits an empty string, which this correctly
+            treats as "leave it alone".
+        </cms:ignore>
+        <cms:if _ls != ''> ls-<cms:show _ls /></cms:if>
     </cms:func>
 </cms:if>

@@ -11,7 +11,7 @@
     <div class="container position-relative">
         <cms:if ccs_gl_edt_ok>
             <cms:capture into='local_brnd_popup'>
-                <cms:popup_edit 'ccs_nav_mdd_brnd_grp|ccs_nav_mdd_brnd_msg|ccs_nav_mdd_brnd_row|ccs_nav_mdd_brand_type|ccs_nav_mdd_logo_theme'
+                <cms:popup_edit 'ccs_nav_mdd_brnd_grp|ccs_nav_mdd_brnd_msg|ccs_nav_mdd_brnd_row|ccs_nav_mdd_brand_type|ccs_nav_mdd_logo_theme|ccs_nav_mdd_name_row|ccs_nav_mdd_name_sz|ccs_nav_mdd_name_clr'
                     link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px; pointer-events: auto;' title='Edit Logo Settings'><i class='fas fa-image text-warning' style='font-size: 12px;'></i></span>" />
             </cms:capture>
         </cms:if>
@@ -28,13 +28,89 @@
                     </cms:if>
                 </cms:if>
 
+                <cms:ignore>
+                    COMPANY NAME APPEARANCE, resolved once and reused everywhere
+                    the name is printed - the heading below AND the no-logo
+                    fallback further down, which used to hardcode fs-4 fw-bold
+                    and no colour at all.
+
+                    PER-NAVBAR FIRST, GLOBAL AS THE FALLBACK. A dark navbar and
+                    a light one need different name colours, so the choice has
+                    to live on the tile; the global stays as the site-wide
+                    default for any navbar that has not overridden it.
+
+                    TWO DIFFERENT EMIT CONVENTIONS, which is why this is
+                    assembled rather than printed inline. The per-navbar size
+                    comes from heading-size_sec.htm and emits a bare number for
+                    fs-N. The global one comes from heading-size.htm and emits a
+                    complete class already - h1 through h6 - so it is printed as
+                    it stands.
+
+                    THE 'p' GUARD. heading-size.htm's last option stores p, and
+                    there is no .p class in Bootstrap or in theme.css, so it was
+                    emitting a dead token. Treated here as "no size class",
+                    which is what the option's label - Default Text Size -
+                    actually promises.
+
+                    != '' rather than plain truthiness on the size tests: these
+                    lists have no zero today, but the guard costs nothing and
+                    this is the shape the rest of the site uses.
+
+                    Every prefix sits hard against its value with no line break
+                    between them. A newline inside fs- or text- would split one
+                    class into two useless tokens.
+                </cms:ignore>
+                <cms:capture into='final_name_cls'>
+                    <cms:if ccs_nav_mdd_name_sz !=''>fs-
+                        <cms:show ccs_nav_mdd_name_sz />
+                        <cms:else_if ccs_gl_site_name_txt_sz !='' />fs-
+                        <cms:show ccs_gl_site_name_txt_sz />
+                    </cms:if>
+                    <cms:if ccs_nav_mdd_name_clr>text-
+                        <cms:show ccs_nav_mdd_name_clr />
+                        <cms:else_if ccs_gl_site_name_txt_clr />text-
+                        <cms:show ccs_gl_site_name_txt_clr />
+                    </cms:if>
+                </cms:capture>
+
+                <cms:ignore>
+                    NOT A HEADING. This used to be an h1 wrapping an anchor, and
+                    it was wrong twice over.
+
+                    SEO. It put an h1 inside the nav on EVERY page, so every URL
+                    on the site spent its strongest on-page signal on the company
+                    name. Either it competed with the page's own h1 or the page's
+                    real subject never got one - and either way nothing
+                    distinguished one page from another. An h1 belongs to the
+                    content of the page it is on. If the site name deserves to be
+                    a heading anywhere it is the home page only, which is a
+                    page-level decision, not something a navbar can make for
+                    every page at once.
+
+                    ACCESSIBILITY. Navigating by heading landed on the site name
+                    first, on every page, inside a navigation landmark, instead
+                    of on the page's topic.
+
+                    THE COLLISION. It also carried .h1 through .h6 as a supposed
+                    SIZE class. In this theme those are not size classes -
+                    user.php:452 gives them colour and font-family too - so
+                    "Displayed Text Size" silently overrode "Displayed Text
+                    Colour" sitting next to it in the same panel. That is the bug
+                    where every theme colour except tertiary and quaternary
+                    refused to show: those two are the only .text-* utilities
+                    carrying !important, so they were the only ones that could
+                    win. The size fields now emit fs-N, which sets font-size and
+                    nothing else.
+
+                    One anchor replaces three elements. .navbar-brand is
+                    Bootstrap's own pattern for this and its colour rule sits at
+                    theme.css:5599, well before the .text-* utilities, so it
+                    yields to the author's colour choice.
+                </cms:ignore>
                 <cms:if final_brand_type=='name'>
-                    <h1 class="mb-0 <cms:show ccs_gl_site_name_txt_sz /> text-<cms:show ccs_gl_site_name_txt_clr />">
-                        <a href="<cms:show k_site_link />"
-                            class="<cms:show ccs_gl_site_name_txt_sz /> text-<cms:show ccs_gl_site_name_txt_clr />">
-                            <cms:show ccs_gl_site_name />
-                        </a>
-                    </h1>
+                    <a class="navbar-brand mb-0 <cms:show final_name_cls />" href="<cms:show k_site_link />">
+                        <cms:show ccs_gl_site_name />
+                    </a>
                     <cms:else />
                     <cms:if final_brand_type=='hoz'>
                         <cms:if ccs_nav_mdd_logo_theme=='lgt'>
@@ -50,13 +126,22 @@
                         </cms:if>
                     </cms:if>
 
-                    <a class="navbar navbar-brand" href="<cms:show k_site_link />"
+                    <a class="navbar-brand" href="<cms:show k_site_link />"
                         aria-label="<cms:show ccs_gl_site_name /> Home">
                         <cms:if "<cms:not_empty final_logo_src />">
                             <img src="<cms:show final_logo_src />" alt="<cms:show ccs_gl_site_name /> logo"
                                 class="w-100" style="max-width: 264px; height: auto; max-height: 80px;" />
                             <cms:else />
-                            <span class="fs-4 fw-bold">
+                            <cms:ignore>
+                                Reached when a logo style is chosen but no image
+                                has been uploaded. It used to hardcode fs-4
+                                fw-bold and emit no colour class at all, so this
+                                was a third way for the company name to appear
+                                on screen ignoring every setting that governs
+                                it. Now it honours the same resolved classes as
+                                the heading above.
+                            </cms:ignore>
+                            <span class="fw-bold <cms:show final_name_cls />">
                                 <cms:show ccs_gl_site_name />
                             </span>
                         </cms:if>
@@ -93,7 +178,8 @@
 
         <div class="row collapse navbar-collapse <cms:show ccs_nav_typography />" id="navbarStandard">
 
-            <ul class="navbar-nav navbar-nav-top justify-content-end flex-1 me-lg-n2 position-relative"
+            <!-- Added align-items-end to parent UL to force bottom baseline alignment -->
+            <ul class="navbar-nav navbar-nav-top align-items-end justify-content-end flex-1 me-lg-n2 position-relative"
                 data-top-nav-dropdowns="data-top-nav-dropdowns">
                 <cms:if ccs_gl_edt_ok>
                     <div class="position-absolute top-0 start-0 ms-3 z-3 d-flex gap-5"
@@ -116,7 +202,7 @@
                     <cms:else />
                     <li class="nav-item">
                         <a class="nav-link <cms:show ccs_nav_typography />"
-                            href="<cms:login_link />">Login</a>
+                            href="<cms:login_link redirect='1' />">Login</a>
                     </li>
                 </cms:if>
                 <cms:if (k_user_access_level ge '7' ) && ("<cms:get_session 'inline_edit_on' />") >
@@ -131,28 +217,83 @@
                         <cms:set ccs_mdd_loop_template=k_template_name />
                         <cms:set ccs_mdd_loop_title=k_template_title />
 
-                        <li class="nav-item dropdown d-inline-flex align-items-center">
-                            <a class="nav-link pe-1 <cms:show ccs_nav_typography /> <cms:if k_template_name == ccs_active_page_master>active</cms:if>"
+                        <cms:ignore>
+                            Does this template need a dropdown caret?
+
+                            Two independent reasons, either is sufficient:
+                              1. it has real content - at least one page or one folder
+                              2. an admin with inline editing ON, because every clonable
+                                 template needs a front-end "add a page" affordance even
+                                 while it is still empty
+
+                            The previous version set has_dropdown INSIDE cms:pages and
+                            cms:folders. Both are scope-creating tags (parser.php:64), so
+                            a bare cms:set there writes into that loop's OWN scope and is
+                            thrown away when the loop pops. The flag never survived, so
+                            the content test silently never worked - only the admin
+                            override was putting carets on screen, and it fired for every
+                            clonable template regardless of content.
+
+                            count_only is a cms:pages parameter only (tags.php:2062).
+                            cms:folders (tags.php:3417) has no such option, so folders use
+                            a capture instead. capture defaults to scope='global'
+                            (tags.php:366), which would carry the previous template's
+                            answer into the next iteration, so it is pinned to 'parent'
+                            against the reset directly below.
+                        </cms:ignore>
+                        <cms:set has_dropdown='0' />
+                        <cms:set ccs_dd_pages='0' />
+                        <cms:set ccs_dd_folders='' />
+
+                        <cms:if k_template_is_clonable>
+
+                            <cms:set ccs_dd_pages="<cms:pages masterpage=ccs_mdd_loop_template count_only='1' />" />
+                            <cms:capture into='ccs_dd_folders' trim='1' scope='parent'><cms:folders masterpage=ccs_mdd_loop_template limit='1'>1</cms:folders></cms:capture>
+
+                            <cms:if (ccs_dd_pages gt '0') || ccs_dd_folders>
+                                <cms:set has_dropdown='1' />
+                            </cms:if>
+
+                            <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+                                <cms:set has_dropdown='1' />
+                            </cms:if>
+
+                        </cms:if>
+
+                        <!-- Changed to align-items-end to match the new bottom alignment requirement -->
+                        <li class="nav-item <cms:if has_dropdown>dropdown</cms:if> d-inline-flex align-items-end">
+                            <a class="nav-link <cms:if has_dropdown>pe-0</cms:if> <cms:show ccs_nav_typography /> <cms:if k_template_name == ccs_active_page_master>active</cms:if>"
                                 href="<cms:show k_template_link />" <cms:if
                                 k_template_name==ccs_active_page_master>aria-current="page"
                     </cms:if>>
                     <cms:show k_template_title />
                     </a>
 
-                    <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 <cms:show ccs_nav_typography /> <cms:if k_template_name == ccs_active_page_master>active</cms:if>"
-                        href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                        aria-haspopup="true" aria-expanded="false">
-                        <span class="fas fa-chevron-down dropdown-toggle-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Toggle Submenu</span>
-                    </a>
+                    <!-- Only output the dropdown arrow and submenu if has_dropdown is true -->
+                    <cms:if has_dropdown>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 <cms:show ccs_nav_typography /> <cms:if k_template_name == ccs_active_page_master>active</cms:if>"
+                            href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                            aria-haspopup="true" aria-expanded="false">
+                            <span class="fas fa-chevron-down dropdown-toggle-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Toggle Submenu</span>
+                        </a>
 
-                    <cms:pages masterpage='globals.php' limit='1'>
-                        <ul class="dropdown-menu navbar-dropdown-caret bg-<cms:show ccs_gl_site_nav_dd_bg />">
-                            <!-- ADMIN ADD-NEW DYNAMIC LINK -->
-                            <cms:if k_user_access_level ge '7'>
+                        <cms:pages masterpage='globals.php' limit='1'>
+                            <ul class="dropdown-menu navbar-dropdown-caret bg-<cms:show ccs_gl_site_nav_dd_bg />">
+                                <cms:ignore>
+                                    ADMIN "+ Add" LINK. The gate and the
+                                    does-the-page-exist test both live in
+                                    utils/add_page_link.htm so they cannot drift
+                                    between nav themes. Empty apl_file means
+                                    either not an editing admin, or no
+                                    add-<template>.php has been written yet.
+                                </cms:ignore>
+                                <cms:set apl_template = ccs_mdd_loop_template />
+                                <cms:embed 'utils/add_page_link.htm' />
+                                <cms:if apl_file>
                                 <li>
                                     <a class="dropdown-item fw-bold text-success <cms:show ccs_nav_typography />"
-                                        href="<cms:show k_site_link />add-<cms:show ccs_mdd_loop_template />">
+                                        href="<cms:show k_site_link /><cms:show apl_file />">
                                         <div class="dropdown-item-wrapper ps-2">
                                             + Add
                                             <cms:show ccs_mdd_loop_title />
@@ -162,44 +303,43 @@
                                 <li>
                                     <hr class="dropdown-divider" style="opacity: 0.15;">
                                 </li>
-                            </cms:if>
-                            <cms:if k_template_has_dynamic_folders>
+                    </cms:if>
+                    <cms:if k_template_has_dynamic_folders>
 
-                                <cms:folders hierarchical='1' masterpage=ccs_mdd_loop_template depth='1'>
-                                    <cms:set ccs_mdd_parent_folder=k_folder_name />
+                        <cms:folders hierarchical='1' masterpage=ccs_mdd_loop_template depth='1'>
+                            <cms:set ccs_mdd_parent_folder=k_folder_name />
 
-                                    <li class="dropdown submenu">
-                                        <a class="dropdown-item dropdown-toggle fw-bold text-uppercase pt-2 pb-1 text-<cms:show ccs_gl_site_nav_dd_txt_clr /> <cms:show ccs_nav_typography />"
-                                            href="<cms:show k_folder_link />">
-                                            <div
-                                                class="dropdown-item-wrapper justify-content-between d-flex align-items-center">
-                                                <span>
-                                                    <cms:show k_folder_title />
-                                                </span>
-                                                <span
-                                                    class="fas fa-chevron-right dropdown-indicator-icon d-none d-lg-block"
-                                                    aria-hidden="true"></span>
-                                                <span class="fas fa-chevron-down dropdown-indicator-icon d-lg-none"
-                                                    aria-hidden="true"></span>
-                                            </div>
-                                        </a>
+                            <li class="dropdown submenu">
+                                <a class="dropdown-item dropdown-toggle fw-bold text-uppercase pt-2 pb-1 text-<cms:show ccs_gl_site_nav_dd_txt_clr /> <cms:show ccs_nav_typography />"
+                                    href="<cms:show k_folder_link />">
+                                    <div
+                                        class="dropdown-item-wrapper justify-content-between d-flex align-items-center">
+                                        <span>
+                                            <cms:show k_folder_title />
+                                        </span>
+                                        <span class="fas fa-chevron-right dropdown-indicator-icon d-none d-lg-block"
+                                            aria-hidden="true"></span>
+                                        <span class="fas fa-chevron-down dropdown-indicator-icon d-lg-none"
+                                            aria-hidden="true"></span>
+                                    </div>
+                                </a>
 
-                                        <ul class="dropdown-menu bg-<cms:show ccs_gl_site_nav_dd_bg />">
+                                <ul class="dropdown-menu bg-<cms:show ccs_gl_site_nav_dd_bg />">
 
-                                            <cms:set ccs_mdd_has_top_pages='0' />
-                                            <cms:pages masterpage=ccs_mdd_loop_template folder=ccs_mdd_parent_folder
-                                                include_subfolders='0'>
-                                                <cms:set ccs_mdd_has_top_pages='1' />
-                                                <li>
-                                                    <a class="dropdown-item text-<cms:show ccs_gl_site_nav_dd_txt_clr /> <cms:show ccs_nav_typography /> <cms:if k_page_name == k_current_page_name>active</cms:if>"
-                                                        href="<cms:show k_page_link />" <cms:if
-                                                        k_page_name==k_current_page_name>aria-current="page"
-                            </cms:if>>
-                            <div class="dropdown-item-wrapper ps-2">
-                                <cms:show k_page_title />
-                            </div>
-                            </a>
-                            </li>
+                                    <cms:set ccs_mdd_has_top_pages='0' />
+                                    <cms:pages masterpage=ccs_mdd_loop_template folder=ccs_mdd_parent_folder
+                                        include_subfolders='0'>
+                                        <cms:set ccs_mdd_has_top_pages='1' />
+                                        <li>
+                                            <a class="dropdown-item text-<cms:show ccs_gl_site_nav_dd_txt_clr /> <cms:show ccs_nav_typography /> <cms:if k_page_name == k_current_page_name>active</cms:if>"
+                                                href="<cms:show k_page_link />" <cms:if
+                                                k_page_name==k_current_page_name>aria-current="page"
+                    </cms:if>>
+                    <div class="dropdown-item-wrapper ps-2">
+                        <cms:show k_page_title />
+                    </div>
+                    </a>
+                    </li>
                     </cms:pages>
 
                     <cms:folders hierarchical='1' masterpage=ccs_mdd_loop_template childof=ccs_mdd_parent_folder
@@ -271,6 +411,7 @@
             </cms:if>
             </ul>
             </cms:pages>
+            </cms:if>
             </li>
             </cms:if>
             </cms:templates>

@@ -1,10 +1,27 @@
+<cms:ignore>
+    THE NEWSLETTER CONSENT WORDING, DEFINED ONCE.
+
+    This exact string is both SHOWN next to the sign-up box and STORED on the
+    subscriber record as subscriber_consent_txt. One variable, two uses, so the
+    sentence a person agreed to and the sentence on file cannot drift apart -
+    which is the only thing that makes the record proof rather than a claim.
+
+    Reword it here and both change together. Do not inline the text at either
+    use site.
+</cms:ignore>
+<cms:set nws_purpose = 'We use your email address only to send this newsletter. You can unsubscribe at any time using the link in any message.' />
+
 <section
-    class="position-relative py-<cms:show ccs_ftr_frm_pad_y /> bg-<cms:show ccs_ftr_frm_bg_clr /> fs-<cms:show ccs_ftr_frm_txt_sz /> fst-<cms:show ccs_ftr_frm_txt_fnt_st /> fw-<cms:show ccs_ftr_frm_txt_fnt_wt /> ls-<cms:show ccs_ftr_frm_txt_ltr_spc /> font-<cms:show ccs_ftr_frm_txt_font /> text-<cms:show ccs_ftr_frm_txt_clr />">
+    class="ccs-footer position-relative py-<cms:show ccs_ftr_frm_pad_y /> bg-<cms:show ccs_ftr_frm_bg_clr /> fs-<cms:show ccs_ftr_frm_txt_sz /> fst-<cms:show ccs_ftr_frm_txt_fnt_st /> fw-<cms:show ccs_ftr_frm_txt_fnt_wt /> ls-<cms:show ccs_ftr_frm_txt_ltr_spc /> font-<cms:show ccs_ftr_frm_txt_font /> text-<cms:show ccs_ftr_frm_txt_clr />">
 
     <cms:if ccs_gl_edt_ok>
-        <div class="position-absolute top-0 start-0 mt-3 ms-3 z-3">
+        <div class="d-flex gap-1 position-absolute top-0 start-0 mt-3 ms-3 z-3">
             <cms:popup_edit 'ccs_ftr_frm_gen_grp|ccs_ftr_frm_gen_msg|ccs_ftr_frm_clr_row|ccs_ftr_frm_pad_y|ccs_ftr_frm_bg_clr|ccs_ftr_frm_txt_clr|ccs_ftr_frm_typ_msg|ccs_ftr_frm_fmt_row|ccs_ftr_frm_txt_sz|ccs_ftr_frm_txt_fnt_wt|ccs_ftr_frm_txt_ltr_spc|ccs_ftr_frm_txt_fnt_st|ccs_ftr_frm_txt_font'
                 link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit footer settings"><i class="fas fa-cog text-warning" style="font-size: 12px;"></i></span>' />
+            <cms:pages masterpage='globals.php' limit='1'>
+                <cms:popup_edit 'ccs_gl_site_ftr_msg|ccs_gl_site_ftr_lnk_hvr_clr'
+                    link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit footer link hover color'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+            </cms:pages>
         </div>
     </cms:if>
 
@@ -36,8 +53,37 @@
                         <cms:if is_duplicate>
                             <cms:set success_msg="1" scope="global" />
                             <cms:else />
+                            <cms:ignore>
+                                Stores WHEN, WHERE and WHAT-THEY-WERE-TOLD alongside
+                                the address. An address on its own cannot answer a
+                                complaint; these three can. subscriber_consent_txt is
+                                nws_purpose - the same string displayed beside the
+                                box, so the record matches what was actually shown.
+                            </cms:ignore>
+                            <cms:ignore>
+                                THE UNSUBSCRIBE TOKEN, GENERATED HERE.
+
+                                random_bytes is cryptographically secure; 16
+                                bytes is 32 hex characters, far beyond guessing.
+                                It has to exist BEFORE the row is written, which
+                                is why it is captured on the line above rather
+                                than filled in afterwards.
+
+                                Not the email address: an address in a URL ends
+                                up in referrer headers, server logs and browser
+                                history, and would let anyone unsubscribe anyone
+                                else by guessing. See unsubscribe.php.
+                            </cms:ignore>
+                            <cms:capture into='nws_token'><cms:php>echo bin2hex( random_bytes(16) );</cms:php></cms:capture>
+
                             <cms:db_persist _masterpage='subscribers.php' _mode='create' _auto_title='1'
-                                k_page_title=frm_email subscriber_email=frm_email />
+                                k_page_title=frm_email
+                                subscriber_email=frm_email
+                                subscriber_token=nws_token
+                                subscriber_status='subscribed'
+                                subscriber_consent_ts="<cms:date format='Y-m-d H:i:s' />"
+                                subscriber_consent_src='Footer newsletter sign-up'
+                                subscriber_consent_txt=nws_purpose />
 
                             <cms:if k_error>
                                 <div class="text-danger fs-9 mt-2">
@@ -52,6 +98,9 @@
                                     <cms:get_field 'ccs_gl_site_name' masterpage='globals.php' /> newsletter.
 
                                     You are now on the list for our latest updates and promotions.
+
+                                    To stop receiving these emails, use this link at any time:
+                                    <cms:link 'unsubscribe.php' />?t=<cms:show nws_token />
                                 </cms:send_mail>
 
                                 <cms:set success_msg="1" scope="global" />
@@ -72,6 +121,9 @@
                                 <cms:show ccs_ftr_frm_nws_btn />
                             </button>
                         </div>
+
+                        <cms:set pn_purpose = nws_purpose />
+                        <cms:embed 'utils/privacy_notice.htm' />
 
                         <cms:if k_error_email>
                             <div class="text-danger fs-10 mt-1">
@@ -232,6 +284,9 @@
 
         </div>
     </div>
+    <cms:set lgl_fs=ccs_ftr_frm_txt_sz />
+    <cms:embed 'pb_mods/pg_frame/footer/legal_links.htm' />
+
     <cms:if ccs_gl_edt_ok>
         <div class="position-absolute top-50 end-0 translate-middle-y me-3" style="z-index: 1060; line-height: 1;">
             <cms:pages masterpage='globals.php' limit='1'>

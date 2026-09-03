@@ -1,0 +1,12 @@
+/* ==========================================================================
+   Great Vibes Font Declarations
+   ========================================================================== */
+
+/* Regular 400 Normal */
+@font-face {
+    font-family: 'Great Vibes';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('./great-vibes-latin-400-normal.woff2') format('woff2');
+}

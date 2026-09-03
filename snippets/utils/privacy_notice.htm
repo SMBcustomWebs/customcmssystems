@@ -1,0 +1,64 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/utils/privacy_notice.htm
+
+    The line that sits next to a submit control telling someone what happens to
+    what they are about to type, with a link to the Privacy Policy.
+
+    WHY IT EXISTS AT ALL. A privacy policy linked only from the footer is not
+    where anyone reads it. The link that matters is the one at the point of
+    collection - beside the button, at the moment the person is deciding
+    whether to hand something over. That is also the specific thing regulators
+    look for, and until now this site had it nowhere: not on the contact forms,
+    not on registration, not on the newsletter sign-up.
+
+    ONE FILE, FIVE CALLERS, FOR THE SAME REASON AS legal_links.htm. The wording
+    of a privacy line is exactly the kind of thing that gets improved in one
+    place and forgotten in four others.
+
+    HOW TO USE IT
+        cms:set pn_purpose='We use your email only to send the newsletter.'
+        cms:embed 'utils/privacy_notice.htm'
+
+    pn_purpose is optional. Omit it and a generic sentence is used. Set it and
+    say something true and specific about THIS form - a purpose statement that
+    could describe any form on any site is not really a purpose statement.
+
+    IT CLEARS pn_purpose ON THE WAY OUT. Several blocks can render on one page,
+    and a value left set by the first would silently caption the second - the
+    same bleed described in CLAUDE.md sec.4b. Consuming it here means a caller
+    that forgets to set it gets the generic line rather than the previous
+    block's line.
+
+    SAFE INSIDE A CACHED PAGEBUILDER TILE. The contact block is a tile, so its
+    HTML is cached in one entry shared by every visitor. Everything here is
+    visitor-INDEPENDENT: a globals field and static text. Do not add a cms:if on
+    a consent variable or on k_logged_in.
+
+    A MISSING PRIVACY PAGE DEGRADES, IT DOES NOT BREAK. If ccs_gl_privacy_link
+    is empty the sentence still prints and the link is simply left off, rather
+    than emitting a dead href. The field carries a cms:link default in
+    globals.php, so it self-populates once the template is registered.
+    ===========================================================================
+</cms:ignore>
+
+<cms:if pn_purpose>
+    <cms:set pn_txt = pn_purpose />
+<cms:else />
+    <cms:set pn_txt = 'We use the details you provide here only to respond to you.' />
+</cms:if>
+
+<cms:set pn_link = "<cms:get_custom_field 'ccs_gl_privacy_link' masterpage='globals.php' />" />
+
+<p class="fs-9 text-body-secondary mt-2 mb-0">
+    <cms:show pn_txt />
+    <cms:if pn_link>
+        See our <a href="<cms:show pn_link />" class="text-decoration-underline">Privacy Policy</a>.
+    </cms:if>
+</p>
+
+<cms:ignore>
+    Consumed. See the header - this prevents one block's purpose line from
+    captioning the next block on the same page.
+</cms:ignore>
+<cms:set pn_purpose = '' />

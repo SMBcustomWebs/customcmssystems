@@ -62,7 +62,7 @@
 						</div>
 
 						<h4 class="mb-3">Security</h4>
-						<div class="row mb-4 bg-light p-3 border rounded">
+						<div class="row mb-4 p-3 border rounded">
 							<div class="col-md-6 mb-3 mb-md-0">
 								<label class="form-label">New Password</label>
 								<cms:input type='bound' name='extended_user_password' class='form-control' />
@@ -71,6 +71,18 @@
 							<div class="col-md-6">
 								<label class="form-label">Repeat Password</label>
 								<cms:input type='bound' name='extended_user_password_repeat' class='form-control' />
+							</div>
+						</div>
+
+						<h4 class="mb-3 mt-4">Your Name</h4>
+						<div class="row mb-4">
+							<div class="col-md-6 mb-3">
+								<label class="form-label">First Name</label>
+								<cms:input type='bound' name='user_first_name' class='form-control' />
+							</div>
+							<div class="col-md-6 mb-3">
+								<label class="form-label">Last Name</label>
+								<cms:input type='bound' name='user_last_name' class='form-control' />
 							</div>
 						</div>
 
@@ -98,7 +110,7 @@
 						<div class="row mb-4">
 							<div class="col-12 mb-3">
 								<label class="form-label">Street Address</label>
-								<cms:input type='bound' name='billing_street' class='form-control' />
+								<cms:input type='bound' name='billing_address' class='form-control' />
 							</div>
 							<div class="col-md-4 mb-3">
 								<label class="form-label">City</label>
@@ -125,11 +137,52 @@
 
 					</cms:form>
 
+					<cms:ignore>
+						Order history lives on its own page rather than inside this form.
+						Keeping it outside means a half-filled profile form can never be
+						lost by navigating to it, and my-orders.php stays the single
+						renderer of a customer's orders.
+					</cms:ignore>
+					<div class="card border shadow-sm mt-4">
+						<div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
+							<div>
+								<h5 class="fw-bold mb-1">Order history</h5>
+								<p class="mb-0 small text-body-secondary">
+									Everything you have ordered while signed in, with a receipt for each.
+								</p>
+							</div>
+							<a href="<cms:link 'my-orders.php' />" class="btn btn-primary">
+								<i class="fas fa-receipt me-1" aria-hidden="true"></i> View orders
+							</a>
+						</div>
+					</div>
+
+					<div class="card border shadow-sm mt-3">
+						<div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
+							<div>
+								<h5 class="fw-bold mb-1">Saved items</h5>
+								<p class="mb-0 small text-body-secondary">
+									Products you have saved for later.
+								</p>
+							</div>
+							<a href="<cms:link 'saved-items.php' />" class="btn btn-outline-primary">
+								<i class="fas fa-heart me-1" aria-hidden="true"></i> View saved items
+							</a>
+						</div>
+					</div>
+
 				</div>
 			</div>
 
 		</div>
 	</section>
+
+	<cms:ignore>
+		Show/hide toggle on every password field on this page. Pure JS over
+		the rendered inputs, so nothing above needs changing and a field
+		added later is covered automatically.
+	</cms:ignore>
+	<cms:embed 'utils/password_reveal.htm' />
 
 	<cms:embed 'pb_mods/pg_frame/footer/ftr_emb.htm' />
 	<cms:embed 'pb_mods/pg_frame/tail.htm' />

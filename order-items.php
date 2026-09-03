@@ -92,6 +92,23 @@
         desc='Name of the tax class applied to this line.'
         search_type='text' width='160' order='45' />
 
+    <!-- RESTOCKING
+         How many of this line have been put back on the shelf. Written by
+         _tools/restock.php, never by the checkout.
+
+         A COUNT rather than a yes/no, because a customer can return 1 of 3.
+         It is also what makes restocking idempotent: the tool only ever offers
+         (item_qty - item_restocked_qty), so a reloaded page or a double click
+         cannot inflate inventory.
+
+         A refund does NOT set this. Money going back and goods coming back are
+         separate events, and only one of them is something a gateway can tell
+         us about. -->
+    <cms:editable type='text' name='item_restocked_qty' label='Qty Returned To Stock'
+        desc='Set by the restock tool. 0 means nothing has been put back.'
+        search_type='integer' validator='non_negative_integer'
+        width='120' order='96' />
+
     <cms:editable type='text' name='item_tax_rate' label='Tax Rate %'
         search_type='decimal' validator='non_negative_decimal' width='90' order='50' />
 
@@ -105,6 +122,7 @@
         <cms:field 'item_title' header='Product' />
         <cms:field 'item_qty' header='Qty' />
         <cms:field 'item_line_total' header='Line Total' />
+        <cms:field 'item_restocked_qty' header='Restocked' />
         <cms:field 'k_actions' />
         <cms:field 'k_selector_checkbox' />
     </cms:config_list_view>

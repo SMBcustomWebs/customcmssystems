@@ -1,9 +1,13 @@
-<section class="bg-<cms:show ccs_ubr_dir_bg_clr_opt /> py-<cms:show ccs_ubr_dir_py /> <cms:show ccs_ubr_dir_dspr />"
+<section class="ccs-utlbar bg-<cms:show ccs_ubr_dir_bg_clr_opt /> py-<cms:show ccs_ubr_dir_py /> <cms:show ccs_ubr_dir_dspr />"
     id="directory-search" aria-label="Directory Search">
     <cms:if ccs_gl_edt_ok>
         <div class="position-absolute top-0 start-0 mt-2 ms-3 z-3 d-flex gap-1">
             <cms:popup_edit 'ccs_ubr_dir_gen_grp|ccs_ubr_dir_init_msg|ccs_ubr_dir_mode_row|ccs_ubr_dir_mode|ccs_ubr_dir_2fld_opt|ccs_ubr_dir_gen_row|ccs_ubr_dir_bg_clr_opt|ccs_ubr_dir_py|ccs_ubr_dir_dspr'
                 link_text='<span class="badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center" style="width: 26px; height: 26px;" title="Edit Bar Settings"><i class="fas fa-cog text-warning" style="font-size: 12px;"></i></span>' />
+            <cms:pages masterpage='globals.php' limit='1'>
+                <cms:popup_edit 'ccs_gl_site_ftr_msg|ccs_gl_site_ubr_lnk_hvr_clr'
+                    link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Edit utility bar link hover color'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+            </cms:pages>
 
         </div>
     </cms:if>

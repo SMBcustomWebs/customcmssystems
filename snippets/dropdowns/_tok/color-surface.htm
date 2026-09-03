@@ -1,0 +1,34 @@
+<cms:ignore>
+    ================================================================
+    color-surface.htm - panel choices for the store pages.
+
+    WHY THIS LIST IS SO SHORT
+
+    Bootstrap's paired classes look like the obvious answer: .text-bg-primary
+    sets a background AND a foreground picked for contrast against it. But in
+    THIS theme the pairing is only half dynamic. From assets/css/theme.css:
+
+        .text-bg-light { color:#555555 !important;
+                         background-color:RGBA(var(--ccs-light-rgb),...) }
+
+    The foreground is a literal baked in at build time. The background reads a
+    CSS variable - and assets/css/user.php rewrites those variables at runtime
+    from the Site Colors settings and the named theme presets (primavera,
+    estate, autunno, inverno, scuro, notte). So the background moves and the
+    text colour does not.
+
+    For most tokens that breaks the guarantee. Under the "notte" preset the
+    primary colour is #66FCF1, a pale cyan; .text-bg-primary would still paint
+    #ffffff text on it - about 1.25:1, effectively invisible.
+
+    Two tokens survive every preset, because their NAMES constrain them:
+    light stays light and dark stays dark in all of them. Those are the only
+    two offered here, plus "no panel", which cannot be wrong because it paints
+    nothing and simply inherits the page.
+
+    If coloured panels are ever wanted, the fix is not to add tokens here -
+    it is to have user.php emit its own .text-bg-* rules so the foreground
+    tracks the background. That is a theme change, not a store change.
+    ================================================================
+</cms:ignore>
+Light panel=light|Dark panel=dark|No panel - inherit the page=

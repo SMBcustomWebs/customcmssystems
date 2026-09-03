@@ -6,6 +6,8 @@
 <!-- they get added once the layout is signed off.               -->
 <!-- ============================================================ -->
 
+<cms:embed 'utils/store_theme.htm' />
+
 <cms:set target_product_id="<cms:gpc 'p' method='get' />" />
 
 <cms:pages masterpage='product.php' id=target_product_id limit='1'>
@@ -25,39 +27,18 @@
 	</cms:if>
 
 
-	<!-- ======================================================== -->
-	<!-- WISHLIST BACKEND LISTENER                                 -->
-	<!-- Outside the purchase gate so an out-of-stock item can     -->
-	<!-- still be saved for later.                                 -->
-	<!-- ======================================================== -->
-	<cms:set my_wishlist_action="<cms:gpc 'wishlist_action' method='post' />" />
-	<cms:if my_wishlist_action='save_item' && k_logged_in && ccs_auth_uid >
-		<cms:set my_prod_id="<cms:gpc 'product_id' method='post' />" />
-		<cms:set my_vars="<cms:gpc 'variants' method='post' />" />
-		<cms:set my_vars_display="<cms:gpc 'variants_display' method='post' />" />
+	<cms:ignore>
+		SAVE TO WISHLIST - handler and button both live in snippets now.
+		They were copied into this file and into service.html, which is how
+		the service copy drifted and stopped sending variants_display. A
+		single view should not have to carry wishlist code at all: which
+		template an item comes from is the item's business, not the
+		wishlist's.
 
-		<!-- wish_masterpage comes from k_template_name, which is correct here
-		     because this listener runs inside the cms:pages loop above. No need
-		     to trust the browser for it.
-		     wish_user_id comes from ccs_auth_uid, NOT k_user_id - see
-		     snippets/utils/auth_uid.htm for why that distinction matters. -->
-		<cms:db_persist
-			_masterpage='wishlist.php'
-			_mode='create'
-			k_page_title="Wishlist-<cms:show ccs_auth_uid />-<cms:show my_prod_id />"
-			wish_user_id=ccs_auth_uid
-			wish_masterpage=k_template_name
-			wish_product_id=my_prod_id
-			wish_variants=my_vars
-			wish_variants_display=my_vars_display
-		/>
-
-		<cms:if k_error>
-			<cms:abort>ERROR: <cms:show k_error /></cms:abort>
-		<cms:else />
-			<cms:abort>WISHLIST_SUCCESS</cms:abort>
-		</cms:if>
-	</cms:if>
+		The listener must sit inside this cms:pages loop and before any
+		markup - it answers with cms:abort.
+	</cms:ignore>
+	<cms:embed 'utils/wishlist_listener.htm' />
 
 
 	<!-- ======================================================== -->
@@ -135,6 +116,11 @@
 			font-weight: 600; /* theme.css uses var(--ccs-font-weight-semi-bold) here,
 			                     but that variable is never defined - .fw-semi-bold = 600 */
 			line-height: 1.5;
+			/* Matches theme.css .form-control exactly, hex and all. It looks like a
+			   hardcode and it is - but --ccs-quaternary-bg below is only ever defined
+			   as #fff (theme.css has no dark value for it), so this box is white on
+			   every preset. A theme variable here would follow the preset to near-white
+			   text in a white box. Revisit when the theme gains a dark surface value. */
 			color: #464a4c;
 			-webkit-appearance: none;
 			-moz-appearance: none;
@@ -277,19 +263,7 @@
 	<!-- markup exists in exactly one place.                        -->
 	<!-- ======================================================== -->
 	<cms:capture into='p2_wishlist_btn'>
-		<cms:if k_logged_in>
-			<button type="button" id="save-wishlist-btn"
-				class="btn btn-outline-primary fw-bold flex-fill"
-				style="--ccs-btn-padding-x: 1rem;">
-				<i class="far fa-heart me-1" aria-hidden="true"></i>Save for Later<span class="visually-hidden"> - <cms:show k_page_title /></span>
-			</button>
-		<cms:else />
-			<a href="<cms:login_link />"
-				class="btn btn-outline-secondary fw-bold flex-fill d-flex align-items-center justify-content-center"
-				style="--ccs-btn-padding-x: 1rem;">
-				<i class="far fa-heart me-1" aria-hidden="true"></i>Log in to Save for Later
-			</a>
-		</cms:if>
+		<cms:embed 'utils/wishlist_button.htm' />
 	</cms:capture>
 
 
@@ -311,7 +285,7 @@
 								<span class="badge text-bg-warning">Feature Item</span>
 							</cms:if>
 							<cms:if value>
-								<span class="badge text-bg-info text-white">Great Value</span>
+								<span class="badge text-bg-info">Great Value</span>
 							</cms:if>
 							<cms:if p2_can_edit>
 								<cms:popup_edit 'group_visibility|feature|value|noshow'
@@ -464,7 +438,7 @@
 					<cms:if (pp_requires_shipping == '0') || p2_can_edit>
 						<div class="d-flex align-items-center flex-wrap gap-2 mb-2">
 							<cms:if pp_requires_shipping == '0'>
-								<span class="text-success fw-semi-bold">
+								<span class="badge text-bg-success fw-semi-bold">
 									<i class="fas fa-download me-1" aria-hidden="true"></i>Digital / No Shipping
 								</span>
 							</cms:if>
@@ -483,7 +457,7 @@
 						<div class="d-flex align-items-center flex-wrap gap-2 mb-3">
 							<cms:if allow_purchase>
 								<cms:if track_inventory>
-									<span class="text-success fw-semi-bold">
+									<span class="badge text-bg-success fw-semi-bold">
 										<i class="fas fa-check-circle me-1" aria-hidden="true"></i><cms:show in_stock /> in stock
 									</span>
 								</cms:if>
@@ -584,7 +558,7 @@
 					<cms:else />
 
 						<div class="alert alert-secondary px-4 py-3 border border-300 mb-3">
-							<h3 class="fs-9 mb-0 text-muted">
+							<h3 class="fs-9 mb-0 <cms:show ccs_st_secondary />">
 								<i class="fas fa-box-open me-2" aria-hidden="true"></i>Temporarily Out of Stock
 							</h3>
 						</div>
@@ -605,130 +579,6 @@
 					</cms:if>
 
 
-					<cms:if k_logged_in>
-
-						<!-- role="status" already implies aria-live="polite"; -->
-						<!-- declaring both can double-announce.                -->
-						<div id="wishlist_feedback" class="mt-2 fs-10 fw-bold" role="status"></div>
-
-						<script>
-						document.addEventListener('DOMContentLoaded', function() {
-							var btn = document.getElementById('save-wishlist-btn');
-							if(!btn) { return; }
-
-							btn.addEventListener('click', function(e) {
-								e.preventDefault();
-
-								var cartForm = document.getElementById('add-to-cart-form');
-								var feedback = document.getElementById('wishlist_feedback');
-								var variantString = '';
-
-								// The cart form is absent when the item is out of stock.
-								// Wishlisting still proceeds, just with no variants.
-								//
-								// FORMAT IS LOAD-BEARING: assets/js/ccs_js.js:261-269 splits
-								// this string on '|' then ':' and injects each pair back into
-								// the cart FormData as a field name/value. The keys must stay
-								// the raw control names (os0, on0, pp_id) and the values the
-								// raw option indices - readable text would break Move to Cart.
-								var displayParts = [];
-
-								if(cartForm) {
-									var formData = new FormData(cartForm);
-									formData.forEach(function(value, key) {
-										var k = key.toLowerCase();
-										if(k !== 'qty' && k !== 'quantity' && key !== 'submit') {
-											variantString += key + ': ' + value + ' | ';
-										}
-									});
-									if(variantString.endsWith(' | ')) {
-										variantString = variantString.slice(0, -3);
-									}
-
-									// Readable copy for humans, built from what the user can
-									// actually see. os<N> is the chosen option, on<N> is that
-									// option's name, so pair them up and use the <option> text
-									// rather than its index. Stored separately - the raw string
-									// above must stay machine-parseable.
-									var ctrls = cartForm.querySelectorAll('select[name^="os"], input[type="text"][name^="os"]');
-									Array.prototype.forEach.call(ctrls, function (ctrl) {
-										var idx = ctrl.name.substring(2);
-										var nameInput = cartForm.querySelector('input[name="on' + idx + '"]');
-										var label = nameInput ? nameInput.value : ('Option ' + idx);
-										var shown = (ctrl.tagName === 'SELECT' && ctrl.selectedIndex > -1)
-													? ctrl.options[ctrl.selectedIndex].text.trim()
-													: ctrl.value;
-										if (shown) { displayParts.push(label + ': ' + shown); }
-									});
-								}
-
-								var sendData = new FormData();
-								sendData.append('wishlist_action', 'save_item');
-								sendData.append('product_id', '<cms:show k_page_id />');
-								sendData.append('variants', variantString);
-								sendData.append('variants_display', displayParts.join(', '));
-
-								btn.disabled = true;
-								btn.setAttribute('aria-busy', 'true');
-								btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1" aria-hidden="true"></i>Saving...';
-
-								fetch(window.location.href, {
-									method: 'POST',
-									body: sendData,
-									headers: { 'X-Requested-With': 'XMLHttpRequest' }
-								})
-								.then(function(response) { return response.text(); })
-								.then(function(data) {
-									btn.removeAttribute('aria-busy');
-									if(data.indexOf('WISHLIST_SUCCESS') !== -1) {
-										// class list must match the markup above, or the
-										// button resizes out of the action column on success
-										btn.className = 'btn btn-outline-secondary fw-bold flex-fill';
-										btn.innerHTML = '<i class="fas fa-check me-1" aria-hidden="true"></i>Saved to Wishlist';
-										feedback.className = 'mt-2 fs-10 fw-bold text-success';
-										feedback.textContent = 'Added to your wishlist with the options you selected.';
-
-										// Move the badge NOW, then reconcile. Waiting on the
-										// server round trip made the save feel broken; remove
-										// and move-to-cart always felt right because they do
-										// this same local arithmetic first.
-										if(typeof window.bumpWishlistCount === 'function') {
-											window.bumpWishlistCount(1);
-										} else {
-											var badge = document.getElementById('wishlist-count-badge');
-											if(badge) {
-												badge.textContent = (parseInt(badge.textContent, 10) || 0) + 1;
-											}
-										}
-
-										// Re-render the panel so the new item is in the list.
-										// LIST ONLY (false): the count query can still report
-										// the pre-save value for a beat, and letting it write
-										// the badge here made the number flash up then snap
-										// back. The bump above is authoritative; the server
-										// reconciles next time the panel is opened.
-										if(typeof window.refreshWishlistModal === 'function') {
-											window.refreshWishlistModal(false);
-										}
-									} else {
-										btn.disabled = false;
-										btn.innerHTML = '<i class="far fa-heart me-1" aria-hidden="true"></i>Save for Later';
-										feedback.className = 'mt-2 fs-10 fw-bold text-danger';
-										feedback.textContent = 'Sorry, that could not be saved to your wishlist. Please try again.';
-									}
-								})
-								.catch(function(error) {
-									btn.disabled = false;
-									btn.removeAttribute('aria-busy');
-									btn.innerHTML = '<i class="far fa-heart me-1" aria-hidden="true"></i>Save for Later';
-									feedback.className = 'mt-2 fs-10 fw-bold text-danger';
-									feedback.textContent = 'Sorry, that could not be saved to your wishlist. Please try again.';
-								});
-							});
-						});
-						</script>
-
-					</cms:if>
 
 				</div>
 

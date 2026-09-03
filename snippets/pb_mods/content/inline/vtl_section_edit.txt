@@ -1,0 +1,64 @@
+<cms:ignore>
+    =========================================================================
+    VERTICAL TITLE CONTENT BLOCK  -  section-level edit cluster
+    snippets/pb_mods/content/inline/vtl_section_edit.txt
+
+    Embedded as a direct child of <section> in theme/vtl_cntn_blk.html, which
+    already carries position-relative. Pinned to the SECTION rather than to
+    .container: the container is centred with a max-width, so start-0 there
+    sits well inside the section on a wide screen.
+
+    One flex ROW holds two clusters, so the title button lines up with the
+    section stack structurally rather than by a hand-tuned margin.
+
+    Prefixed vtl_ because content/inline/ is shared by three tiles.
+    =========================================================================
+</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 start-0 mt-3 ms-2 z-3 d-flex flex-row align-items-start gap-4">
+
+        <cms:ignore>Section-wide settings, stacked vertically.</cms:ignore>
+        <div class="d-flex flex-column gap-2">
+
+            <cms:ignore>
+                BACKGROUND.
+                ccs_vtl_cntn_bg_clr_opt is both a field the user sets and the
+                controller behind ccs_vtl_cntn_bg_clr_cust_chc, so it belongs in
+                fields, not hide_fields - the user needs it to reach "Custom
+                Color" at all.
+
+                ccs_vtl_cntn_bg_clr_cstm_grp MUST be listed in fields because its
+                children appear here. hide_fields does not register as a parent
+                (inline_ex.php:114 checks only the fields array), so omitting it
+                would flatten every colour field into _custom_fields_, sort them
+                by their own order, and break the gradient conditional.
+            </cms:ignore>
+            <cms:popup_edit height='720' width='940' 'ccs_vtl_cntn_ins_msg|ccs_vtl_cntn_sec_row|ccs_vtl_cntn_bg_clr_opt|ccs_vtl_cntn_bg_clr_cstm_grp|ccs_vtl_cntn_bg_clr_cstm_msg|ccs_vtl_cntn_bg_clr_cstm_grdt_opt_row|ccs_vtl_cntn_bg_clr_cstm_grdt_opt|ccs_vtl_cntn_bg_clr_cstm_row|ccs_vtl_cntn_bg_clr_cstm_one|ccs_vtl_cntn_bg_clr_cstm_two|ccs_vtl_cntn_bg_clr_swp_row|ccs_vtl_cntn_bg_clr_cust_grad_split_opt|ccs_vtl_cntn_bg_clr_cstm_grad_rvrs_opt'
+                link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Section Background' title='Edit Section Background'><i class='fa-solid fa-fill-drip'></i></button>" />
+
+            <cms:ignore>SPACING. Same parent row, two of its other children.</cms:ignore>
+            <cms:popup_edit 'ccs_vtl_cntn_ins_msg|ccs_vtl_cntn_sec_row|ccs_vtl_cntn_pad_top|ccs_vtl_cntn_pad_bot'
+                link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Section Spacing' title='Edit Section Top and Bottom Spacing'><i class='fa-solid fa-arrows-up-down'></i></button>" />
+
+        </div>
+
+        <cms:ignore>
+            VERTICAL TITLE.
+            Lives in this cluster rather than beside the rail because the rail is
+            display:none below lg - an admin editing on a laptop-width window
+            would find no button at all - and because it disappears entirely when
+            the title is removed. Dimmed instead of hidden, the same treatment
+            nav_swpr and hero use for an off target.
+
+            ccs_vtl_cntn_ttl_rmv_opt is the controller for the group's gate AND
+            the user's own on/off switch, so it is in fields. When the title is
+            off the popup shows just that checkbox - which is exactly what a user
+            clicking a dimmed button needs.
+        </cms:ignore>
+        <div class="d-flex flex-row gap-2">
+            <cms:popup_edit height='700' width='940' 'ccs_vtl_cntn_ins_msg|ccs_vtl_cntn_sec_row|ccs_vtl_cntn_ttl_rmv_opt|ccs_vtl_cntn_ttl_grp|ccs_vtl_cntn_ttl_msg|ccs_vtl_cntn_ttl_main_row|ccs_vtl_cntn_ttl_txt|ccs_vtl_cntn_ttl_tag|ccs_vtl_cntn_ttl_ovr_opt|ccs_vtl_cntn_ttl_typo_row|ccs_vtl_cntn_ttl_clr|ccs_vtl_cntn_ttl_sz|ccs_vtl_cntn_ttl_wt|ccs_vtl_cntn_ttl_fst|ccs_vtl_cntn_ttl_font|ccs_vtl_cntn_ttl_ls'
+                link_text="<button class='btn btn-sm <cms:if ccs_vtl_cntn_ttl_rmv_opt='1'>btn-outline-secondary bg-white opacity-50<cms:else />btn-light shadow-sm</cms:if> rounded-circle' type='button' aria-label='Edit Vertical Title' title='Edit Vertical Title'><i class='fa-solid fa-text-height'></i></button>" />
+        </div>
+
+    </div>
+</cms:if>

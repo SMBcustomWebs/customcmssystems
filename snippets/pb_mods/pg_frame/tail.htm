@@ -1,6 +1,36 @@
 				</div>
 			</div>
 		</main>
+		<cms:ignore>
+			CONSENT, HANDED TO THE CLIENT. FIRST SCRIPT ON THE PAGE, DELIBERATELY.
+
+			utils/consent.htm already resolved the visitor's cookies server-side in
+			head.htm. This publishes that answer as a plain object so client-side
+			code does not re-read or re-parse a consent cookie - one reader, in PHP.
+
+			It has to sit ABOVE theme.js. bgPlayerInit defers its work to
+			DOMContentLoaded but reads window.ccsConsent when it runs, and its guard
+			treats an absent flag as "not yet wired" rather than "denied". Move this
+			below theme.js and background video silently stops honouring consent.
+
+			THIS IS NOT THE GATE FOR ANYTHING THAT EXECUTES. Script slots are printed
+			or withheld in PHP; a tag that is absent cannot fire. This object only
+			governs iframes shipped without a src, which are inert until one is set.
+
+			NO POLICY VERSION HERE, DELIBERATELY. It was published for a while, to
+			fix a client-side fallback that guessed '1' when the banner was absent.
+			The answer is now recorded by the server, which stamps the version itself
+			at that moment - so the client neither knows nor needs it, and the whole
+			mismatch is gone rather than guarded. Do not add it back.
+		</cms:ignore>
+		<script>
+			window.ccsConsent = {
+				set:       <cms:if ccs_consent_set == '1'>true<cms:else />false</cms:if>,
+				analytics: <cms:if ccs_consent_analytics == '1'>true<cms:else />false</cms:if>,
+				marketing: <cms:if ccs_consent_marketing == '1'>true<cms:else />false</cms:if>,
+				embed:     <cms:if ccs_consent_embed == '1'>true<cms:else />false</cms:if>
+			};
+		</script>
 		<script src="<cms:show k_site_link />vendors/popper/popper.min.js"></script>
 		<script src="<cms:show k_site_link />vendors/bootstrap/bootstrap.min.js"></script>
 		<script src="<cms:show k_site_link />vendors/is/is.min.js"></script>
@@ -14,25 +44,89 @@
 		<script src="<cms:show k_site_link />vendors/fontawesome/all.min.js"></script>
 		<script src="<cms:show k_site_link />vendors/lodash/lodash.min.js"></script>
 		<script src="<cms:show k_site_link />assets/js/theme.js"></script>
-		<script>
-            window.cartModalUrl = "<cms:link 'cart-modal.php' />";
-			window.wishlistModalUrl = "<cms:link 'wishlist-modal.php' />";
-        </script>
-		<!-- v20: cart-modal fetches GET -> POST (must match the corrected
-		     POST-only guard); wishlist listeners moved off the offcanvas onto
-		     document so the saved-items page works; refreshWishlistModal()
-		     added so the panel re-renders instead of going stale; and both
-		     count badges now re-query on write instead of holding a
-		     reference captured once at DOMContentLoaded.
-		     v21: both save paths bump the badge locally before the refresh,
-		     matching what remove/move already did, and service saves touch
-		     the badge and panel at all for the first time.
-		     v22: after a mutation the refresh updates the LIST ONLY. The count
-		     query can lag the change by a beat, and letting it write the badge
-		     made the number flash to the right value then snap back. Local
-		     arithmetic owns the badge for actions; the server reconciles on
-		     panel open and page load. -->
-		<script src="<cms:show k_site_link />assets/js/ccs_js.js?v=22"></script>
+		<cms:ignore>
+			=====================================================================
+			TWO SCRIPTS, TWO JOBS.
+
+			ccs_js.js    theme runtime - hero swiper, video looping. Always.
+			ccs_shop.js  cart + wishlist. ONLY when this site sells things.
+
+			The gate is the globals checkbox ccs_gl_shop_on ("This site sells
+			things", under Store Appearance). A brochure fork of this framework
+			downloads and parses no commerce code at all.
+
+			EACH FILE CARRIES ITS OWN ?v=. That query string is the only
+			cache-buster either has, so an edited script keeps being served from
+			the browser cache until its number moves - which is indistinguishable
+			from the fix not working. Bump the one you changed, not both.
+			=====================================================================
+		</cms:ignore>
+
+		<cms:ignore>
+			THEME. ccs_js.js version history:
+			v1: split out of the combined file - commerce moved to ccs_shop.js.
+		</cms:ignore>
+		<script src="<cms:show k_site_link />assets/js/ccs_js.js?v=1"></script>
+
+		<cms:pages masterpage='globals.php' limit='1'>
+			<cms:if ccs_gl_shop_on='1'>
+
+				<cms:ignore>
+					The URLs must be defined BEFORE ccs_shop.js runs - it reads
+					them at call time, but a missing global is a silent no-op
+					rather than an error, which is worse.
+				</cms:ignore>
+				<script>
+					window.cartModalUrl     = "<cms:link 'cart-modal.php' />";
+					window.wishlistModalUrl = "<cms:link 'wishlist-modal.php' />";
+				</script>
+
+				<cms:ignore>
+					COMMERCE. ccs_shop.js version history:
+
+					v16: cart-modal fetches changed GET -> POST. Must not serve the
+					     cached v15 file against the corrected POST-only guard.
+					v17: wishlist Remove / Move to Cart delegated from document so
+					     they work on saved-items.php as well as in the panel, and
+					     window.refreshWishlistModal defined at last.
+					v18: the wishlist panel now re-renders on show.bs.offcanvas, the
+					     way the cart always has. window.bumpWishlistCount defined.
+					v19: badge writes re-query instead of using a NodeList captured
+					     at DOMContentLoaded; the wishlist empty-state writes into
+					     #wishlist-scroll-area so it stops wiping the panel footer.
+					v20: file split out of ccs_js.js. Numbering continues rather
+					     than restarting, so a browser holding v19 of the old
+					     combined file cannot be served a lower number here.
+				</cms:ignore>
+				<script src="<cms:show k_site_link />assets/js/ccs_shop.js?v=20"></script>
+
+			</cms:if>
+		</cms:pages>
 		<script src="<cms:show k_site_link />vendors/typed.js/typed.umd.js"></script>
+		<cms:ignore>
+			defer, because the consent bar it wires up is embedded further down this
+			file. defer also guarantees it runs before DOMContentLoaded, and so
+			before theme.js's bgPlayerInit, which reads the same flag.
+		</cms:ignore>
+		<script defer src="<cms:show k_site_link />assets/js/ccs_consent.js?v=1"></script>
+		<cms:ignore>
+			FOOTER SCRIPT SLOT, GATED ON MARKETING CONSENT.
+
+			Same reasoning as the head slot: ccs_gl_footer_scripts was declared
+			in globals.php and rendered nowhere. Gated on marketing rather than
+			analytics because this is where pixels and remarketing tags land,
+			and those are the stricter category.
+		</cms:ignore>
+		<cms:if ccs_consent_marketing == '1'>
+			<cms:get_custom_field 'ccs_gl_footer_scripts' masterpage='globals.php' />
+		</cms:if>
+
+		<cms:ignore>
+			The consent prompt goes LAST in the body, and it is embedded here in
+			the frame rather than built as a PageBuilder tile on purpose - a
+			tile's HTML is cached in one entry shared by every visitor, and a
+			consent prompt is per-visitor by definition.
+		</cms:ignore>
+		<cms:embed 'pb_mods/pg_frame/consent_banner.htm' />
 	</body>
 </html>

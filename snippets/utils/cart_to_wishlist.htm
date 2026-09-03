@@ -1,0 +1,233 @@
+<cms:ignore>
+    ============================================================
+    CART  ->  WISHLIST
+    ------------------------------------------------------------
+    Saves every line currently in the cart onto the signed-in
+    user's wishlist. Used by users/logout.php so a full cart is
+    not simply thrown away at sign-out.
+
+    CONTRACT
+      in   : none - reads the live cart and ccs_auth_uid
+      out  : c2w_saved    number of lines written
+             c2w_dupe     number already on the wishlist
+             c2w_skipped  number that could not be rebuilt
+
+    TEMPLATE-AGNOSTIC BY CONSTRUCTION
+    Nothing here names product.php or service.php. A cart line
+    records a page id; utils/item_tpl.htm reads the template that
+    page belongs to straight out of the database. So anything
+    sellable can be saved - services, shirts, shoes, whatever is
+    added next - with no list here to keep in step.
+
+    The requirement is only what Couch already imposes on a
+    sellable template: a pp_price field, and pp_options when it
+    has variants (cart.php:267 and :310 - pp_options is optional,
+    pp_price is not).
+
+    VARIANTS
+    Primary source is raw_variants, the custom field the
+    cart_alter_custom_fields listener in cart_ex.php:566 attaches
+    to every line at add-to-cart time. It holds the on{N}/os{N}
+    pairs exactly as the customer submitted them, which is the
+    only form a <select> can be repopulated from. Same field, same
+    reason, as order_create.htm:230.
+
+    The fallback below covers lines that were already sitting in a
+    session before that listener was deployed. The cart keeps only
+    the readable label (cart.php:343 - $arr_display_attrs[$name] =
+    $opt_values[$os]['attr']), so the index is recovered by
+    re-parsing the item's own pp_options through
+    KCart::_parse_options() and matching on that same label. It is
+    the identical parse that produced the label, so the mapping is
+    exact rather than guessed.
+
+    FORMAT IS LOAD-BEARING
+        pp_id: <id> | on0: <name> | os0: <index> | on1: ... | os1: ...
+    assets/js/ccs_js.js:261-269 splits this on '|' then ':' and
+    injects each pair straight back into the cart FormData, so the
+    keys must stay the raw control names. Same string the item
+    page writes at save time - see snippets/single/product.html.
+    Never reformat it.
+
+    A line whose options no longer match the item (an option was
+    renamed or a value removed since it went in the cart) is
+    counted in c2w_skipped and left alone. Writing a wishlist row
+    whose variants cannot be replayed would produce a Move to Cart
+    button that fails later, in front of the customer.
+    ============================================================
+</cms:ignore>
+
+<cms:embed 'utils/auth_uid.htm' />
+
+<cms:set c2w_saved   = '0' scope='global' />
+<cms:set c2w_dupe    = '0' scope='global' />
+<cms:set c2w_skipped = '0' scope='global' />
+
+<cms:if k_logged_in && ccs_auth_uid>
+    <cms:pp_cart_items>
+
+        <cms:ignore>
+            Everything needed off the cart line is lifted into globals first,
+            before any nested tag replaces the context.
+
+            pp_selected_options is called self-closing with an explicit
+            separator - '|' can never appear inside an option value because
+            _parse_options() already uses it as its own delimiter in the
+            pp_options syntax, so the split below cannot be fooled by data.
+        </cms:ignore>
+        <cms:set c2w_pid     = id scope='global' />
+        <cms:set c2w_rawvars = raw_variants scope='global' />
+        <cms:set c2w_pairs   = "<cms:pp_selected_options separator='|' />" scope='global' />
+        <cms:set c2w_display = "<cms:pp_selected_options />" scope='global' />
+
+        <cms:set itm_tpl_id = c2w_pid scope='global' />
+        <cms:embed 'utils/item_tpl.htm' />
+        <cms:set c2w_tpl = itm_tpl scope='global' />
+
+        <cms:php>
+            global $CTX, $CART, $DB;
+
+            $pid     = (int)$CTX->get( 'c2w_pid' );
+            $tpl     = trim( (string)$CTX->get( 'c2w_tpl' ) );
+            $rawvars = trim( (string)$CTX->get( 'c2w_rawvars' ) );
+            $pairs   = (string)$CTX->get( 'c2w_pairs' );
+
+            $raw = '';
+
+            if( $tpl !== '' ){
+
+                if( $rawvars !== '' ){
+                    /* The indices the customer actually submitted. Nothing to
+                       reconstruct - prepend the id the cart form carries in its
+                       own hidden input (cart.php:846) and the string is done. */
+                    $raw = 'pp_id: ' . $pid . ' | ' . $rawvars;
+                }
+                else{
+                    $ok  = 1;
+                    $ppo = '';
+
+                    /* Reopen the item the way KCart::add_item() does, so the
+                       options text read here is the same text the cart
+                       validated against when this line was created. */
+                    $rs = $DB->select( K_TBL_PAGES, array('id', 'template_id'),
+                                       "id='" . $DB->sanitize( $pid ) . "' LIMIT 1" );
+                    if( count($rs) ){
+                        $pg = new KWebpage( $rs[0]['template_id'], $rs[0]['id'] );
+                        if( !$pg->error ){
+                            for( $x=0; $x<count($pg->fields); $x++ ){
+                                if( $pg->fields[$x]->system || $pg->fields[$x]->deleted ) continue;
+                                if( $pg->fields[$x]->name == 'pp_options' ){
+                                    $ppo = trim( $pg->fields[$x]->get_data() );
+                                    break;
+                                }
+                            }
+                        }
+                        else{ $ok = 0; }
+                    }
+                    else{ $ok = 0; }
+
+                    if( $ok ){
+                        /* readable selections off the cart line, name => value */
+                        $sel = array();
+                        foreach( explode('|', $pairs) as $p ){
+                            $p = trim( $p );
+                            if( $p === '' ) continue;
+                            $at = strpos( $p, ':' );      /* first colon - names are the constrained half */
+                            if( $at === false ) continue;
+                            $sel[ trim(substr($p, 0, $at)) ] = trim( substr($p, $at+1) );
+                        }
+
+                        $parts = array( 'pp_id: ' . $pid );
+
+                        /* No pp_options field, or an empty one, is a legitimate
+                           item with no variants: _parse_options returns an empty
+                           array and the string is just the id, which is all the
+                           cart form needs. */
+                        $arr_opts = $CART->_parse_options( $ppo );
+                        if( is_array($arr_opts) ){
+                            for( $y=0; $y<count($arr_opts); $y++ ){
+                                $name = $arr_opts[$y]['name'];
+                                $vals = $arr_opts[$y]['values'];
+
+                                /* An option the cart line never carried: it was
+                                   added to the item after this line went in.
+                                   Leaving it out lets the cart form supply its
+                                   own default. */
+                                if( !array_key_exists($name, $sel) ) continue;
+                                $chosen = $sel[$name];
+
+                                if( count($vals)==1 && $vals[0]['attr']=='*TEXT*' ){
+                                    $os = $chosen;                  /* textbox - value is the text */
+                                }
+                                else{
+                                    $os = null;
+                                    for( $z=0; $z<count($vals); $z++ ){
+                                        if( (string)$vals[$z]['attr'] === (string)$chosen ){ $os = (string)$z; break; }
+                                    }
+                                    if( $os === null ){ $ok = 0; break; }   /* value no longer offered */
+                                }
+
+                                $parts[] = 'on' . $y . ': ' . $name;
+                                $parts[] = 'os' . $y . ': ' . $os;
+                            }
+                        }
+
+                        if( $ok ){ $raw = implode( ' | ', $parts ); }
+                    }
+                }
+            }
+
+            $CTX->set( 'c2w_raw', $raw, 'global' );
+        </cms:php>
+
+        <cms:if c2w_raw eq '' || c2w_tpl eq ''>
+            <cms:set c2w_skipped = "<cms:add c2w_skipped '1' />" scope='global' />
+        <cms:else />
+
+            <cms:ignore>
+                Same user, same item, same variants is already saved. Filtering
+                on the two indexed fields and comparing the raw string in the
+                loop keeps the match exact without needing a searchable index
+                on a textarea.
+            </cms:ignore>
+            <cms:set c2w_exists = '' scope='global' />
+            <cms:pages masterpage='wishlist.php' custom_field="wish_user_id==<cms:show ccs_auth_uid /> | wish_product_id==<cms:show c2w_pid />" limit='50'>
+                <cms:if wish_variants eq c2w_raw>
+                    <cms:set c2w_exists = '1' scope='global' />
+                </cms:if>
+            </cms:pages>
+
+            <cms:if c2w_exists>
+                <cms:set c2w_dupe = "<cms:add c2w_dupe '1' />" scope='global' />
+            <cms:else />
+                <cms:ignore>
+                    db_persist_ex, not db_persist. db_persist is registered with
+                    supports_scope=1 (data-bound-form.php:766) and so opens a
+                    context of its own - k_error and k_success are set inside it
+                    and are gone by the time the next tag runs, which makes a
+                    silent failure look like a save. db_persist_ex is the same
+                    call with no context (data-bound-form.php:325), so the result
+                    is readable here and a row that did not get written is
+                    counted as skipped rather than reported as saved.
+                </cms:ignore>
+                <cms:db_persist_ex
+                    _masterpage='wishlist.php'
+                    _mode='create'
+                    k_page_title="Wishlist-<cms:show ccs_auth_uid />-<cms:show c2w_pid />"
+                    wish_user_id=ccs_auth_uid
+                    wish_masterpage=c2w_tpl
+                    wish_product_id=c2w_pid
+                    wish_variants=c2w_raw
+                    wish_variants_display=c2w_display
+                />
+                <cms:if k_error>
+                    <cms:set c2w_skipped = "<cms:add c2w_skipped '1' />" scope='global' />
+                <cms:else />
+                    <cms:set c2w_saved = "<cms:add c2w_saved '1' />" scope='global' />
+                </cms:if>
+            </cms:if>
+
+        </cms:if>
+
+    </cms:pp_cart_items>
+</cms:if>

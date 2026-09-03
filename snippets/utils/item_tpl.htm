@@ -1,0 +1,47 @@
+<cms:ignore>
+    ============================================================
+    PAGE ID  ->  TEMPLATE NAME
+    ------------------------------------------------------------
+    CONTRACT
+      in  : itm_tpl_id   a Couch page id
+      out : itm_tpl      that page's template file name, e.g.
+                         'product.php'. Empty if the id is not a
+                         real page.
+
+    WHY THIS EXISTS
+    The shop chain repeatedly needs to reopen the item behind a
+    cart line or an order line, and every one of those lookups
+    used to be written as masterpage='product.php'. That is a
+    guess, and it is wrong the moment anything else is sold -
+    services already, and any shirts.php or shoes.php added
+    later. A hardcoded lookup does not error: cms:pages simply
+    matches nothing, so the SKU snapshot comes back blank and,
+    worse, the stock deduction is skipped in silence.
+
+    Couch already knows the answer. couch_pages.template_id
+    points at couch_templates.name, which is the file name. Same
+    join used by functions.php:1842, and the same two steps
+    KCart::add_item() takes (cart.php:258-266) to load an item it
+    has only an id for.
+
+    Read it, never assume it. One embed replaces every guess.
+    ============================================================
+</cms:ignore>
+
+<cms:php>
+    global $CTX, $DB;
+
+    $pid = (int)$CTX->get( 'itm_tpl_id' );
+    $tpl = '';
+
+    if( $pid > 0 ){
+        $rs = $DB->select(
+                K_TBL_PAGES . ' p INNER JOIN ' . K_TBL_TEMPLATES . ' t ON p.template_id = t.id',
+                array( 't.name as tname' ),
+                "p.id='" . $DB->sanitize( $pid ) . "' LIMIT 1"
+              );
+        if( count($rs) ){ $tpl = $rs[0]['tname']; }
+    }
+
+    $CTX->set( 'itm_tpl', $tpl, 'global' );
+</cms:php>

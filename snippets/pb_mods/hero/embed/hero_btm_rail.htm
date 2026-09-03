@@ -24,8 +24,16 @@
 			class='col-md-4'
 			order='812'
 		/>
-        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_shd' label='Background Shade' 
-            opt_values='dropdowns/shades_gray.htm'
+        <cms:ignore>
+            The solid colour list, not the grey shades.
+
+            The swiper's own rail has always used dropdowns/solid-colors.htm;
+            this one was left on shades_gray.htm, so the same control offered
+            greys on a single hero and full colour on a slide. Two rails, one
+            job, two different palettes.
+        </cms:ignore>
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_shd' label='Background Color'
+            opt_values='dropdowns/solid-colors.htm'
             dynamic='opt_values'
             class='col-md-4'
             order='813'  
@@ -43,8 +51,26 @@
             class='col-md-4'
             order='816'  
         />
-        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_txt_sz' label='Text Size' 
-            opt_values='Default= | Small=8 | X-Small=9'
+        <cms:ignore>
+            The full site-wide size list, not a hardcoded pair.
+
+            This used to offer 'Small=8 | X-Small=9' only, so the biggest the
+            rail could go was fs-8 - and the two labels were misleading as
+            well, because the fs scale runs BACKWARDS: fs-1 is the largest and
+            fs-10 the smallest, with fs-9 the body default. "Small=8" was
+            actually a step UP from the body text, which is why the largest
+            option still looked small.
+
+            dropdowns/text-size.htm is the same list every other text control
+            on the site uses, so the rail now reaches fs-1 and the labels mean
+            what they say.
+
+            A very large size in a thin rail will overflow it - set the Height
+            of Rail to match rather than expecting the rail to grow.
+        </cms:ignore>
+        <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_txt_sz' label='Text Size'
+            desc='The rail does not grow with the text - raise Height of Rail to match.'
+            opt_values='dropdowns/text-size.htm'
             dynamic='opt_values'
             class='col-md-4'
             order='819'  

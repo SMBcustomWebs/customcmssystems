@@ -1,0 +1,163 @@
+<cms:ignore>
+    ============================================================
+    NEW CATEGORY - the dialog, its styles and its script.
+    ------------------------------------------------------------
+    CONTRACT
+      in  : fd_masterpage   owning template, e.g. 'about.php'
+            fd_label        what these categories sit under in the
+                            navigation, e.g. 'About' (optional)
+      reads fc_result / fc_error / fc_title from utils/folder_handler.htm
+
+    WHERE TO EMBED
+    Once per page, OUTSIDE the databound form - a form inside a
+    form is invalid markup and would submit both. Anywhere after
+    it is fine; the dialog is positioned by CSS, not by where it
+    sits in the document.
+
+    The TRIGGER goes wherever it makes sense in the layout,
+    usually beside the folder dropdown:
+
+        <button type="button" class="fc-newcat" data-fc-open>
+            <span class="fc-newcat-plus" aria-hidden="true">+</span>
+            <span class="fc-newcat-txt">New category</span>
+        </button>
+
+    type="button" matters - inside a form, a bare <button> submits it.
+
+    ------------------- WHY NOT A BOOTSTRAP MODAL ---------------
+    The add-*.php pages load Bootstrap 5.3 CSS from the CDN but
+    Couch's admin Bootstrap 3.3.4 JS. data-bs-toggle is BS5 markup
+    that BS3's JS ignores completely, so a BS5 modal would simply
+    never open, with no error. Fifteen lines of plain JS beats
+    adding a second framework to a page already carrying jQuery,
+    CKEditor and magnific-popup.
+
+    ------------------------- STYLING ---------------------------
+    These pages are ADMIN CHROME. They never load the site theme,
+    so there is no site CSS to match - the house style here is
+    .form-zone and .zone-header, defined in each add page.
+
+    The trigger deliberately avoids .btn / .btn-link. Couch's
+    main.css loads after Bootstrap, redefines .btn (with an
+    !important border-color) and ships no .btn-link, so those two
+    classes together render the browser's default grey box wearing
+    Bootstrap's underline. A dedicated class is the only thing
+    that behaves predictably here.
+
+    Font Awesome is NOT loaded on these pages - the fas classes
+    already in them render nothing - so the trigger uses a literal
+    '+' rather than an icon that would be an empty gap.
+    ============================================================
+</cms:ignore>
+
+<div class="fc-backdrop" id="fc-dialog" hidden<cms:if fc_result> data-fc-autoopen="1"</cms:if>>
+    <div class="form-zone fc-dialog-card" role="dialog" aria-modal="true" aria-labelledby="fc-dialog-title">
+
+        <div class="zone-header">
+            <h4 id="fc-dialog-title">New Category</h4>
+            <p>Categories are the submenu headings<cms:if fd_label> under <strong><cms:show fd_label /></strong></cms:if>
+               in the site navigation. The submenu page behind one is generated automatically.</p>
+        </div>
+
+        <cms:if fc_result eq 'denied'>
+            <div class="fc-note fc-warn p-3 mb-3">
+                Creating a category needs an admin with editing switched on.
+            </div>
+        <cms:else_if fc_result />
+            <div class="fc-note fc-warn p-3 mb-3"><cms:show fc_error /></div>
+        </cms:if>
+
+        <form method="post">
+            <input type="hidden" name="fc_submit" value="1">
+
+            <div class="mb-3">
+                <label class="form-label fw-bold" for="fc_title">Category name</label>
+                <input type="text" class="form-control" id="fc_title" name="fc_title"
+                       maxlength="255" required placeholder="e.g. Leadership"
+                       value="<cms:if fc_result && fc_result ne 'denied'><cms:show fc_title /></cms:if>">
+            </div>
+
+            <cms:ignore>
+                Folders nest, so offer the existing ones as parents. -1 is the
+                root, which is what KFolder expects for a top-level folder.
+            </cms:ignore>
+            <div class="mb-4">
+                <label class="form-label fw-bold" for="fc_parent">Inside</label>
+                <select class="form-select" id="fc_parent" name="fc_parent">
+                    <option value="-1">Top level</option>
+                    <cms:folders masterpage=fd_masterpage hierarchical='0'>
+                        <option value="<cms:show k_folder_id />"><cms:show k_folder_title /></option>
+                    </cms:folders>
+                </select>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Create category</button>
+                <button type="button" class="btn btn-outline-secondary" data-fc-close>Cancel</button>
+            </div>
+        </form>
+
+        <p class="mb-0 mt-3 text-muted" style="font-size:13px">
+            Deleting a category is still an admin job &mdash; it takes its submenu
+            page and re-homes any pages inside it.
+        </p>
+    </div>
+</div>
+
+<style>
+ .fc-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1080;
+              display:flex;align-items:flex-start;justify-content:center;
+              padding:6vh 1rem;overflow:auto}
+ .fc-backdrop[hidden]{display:none}
+ .fc-dialog-card{width:100%;max-width:520px;margin:0}
+
+ /* Fixed pairs - a message about whether a write succeeded has to stay
+    readable regardless of what the surrounding CSS does. */
+ .fc-note{border:1px solid;border-radius:4px}
+ .fc-warn{background:#f6efe1;border-color:#7a4f0c;color:#5c3b09}
+ .fc-made{background:#e4f0ea;border:1px solid #1c6045;color:#144934;
+          border-radius:4px;font-size:13px}
+
+ /* The trigger. A class beats the bare button{} rule in main.css, and
+    resetting background and border is what stops the browser painting its
+    own grey box. margin-left is the gap from the select on the same line;
+    margin-top only shows once they wrap on a narrow screen. */
+ .fc-newcat{display:inline-flex;align-items:center;gap:.4rem;
+            margin-left:1.25rem;margin-top:.5rem;padding:0;
+            vertical-align:middle;
+            background:none;border:0;box-shadow:none;
+            color:#2c7be5;font-size:13px;font-weight:600;
+            line-height:1.2;text-decoration:none;cursor:pointer}
+ .fc-newcat-txt{text-decoration:underline;text-underline-offset:2px}
+ .fc-newcat-plus{font-size:15px;font-weight:700;line-height:1}
+ .fc-newcat:hover,.fc-newcat:focus{color:#1a5fb4;background:none}
+ .fc-newcat:focus-visible{outline:2px solid #2c7be5;outline-offset:3px;border-radius:2px}
+</style>
+
+<script>
+(function () {
+    var dlg = document.getElementById('fc-dialog');
+    if (!dlg) { return; }
+
+    function open()  { dlg.hidden = false;
+                       var f = document.getElementById('fc_title');
+                       if (f) { f.focus(); } }
+    function close() { dlg.hidden = true; }
+
+    document.addEventListener('click', function (e) {
+        if (e.target.closest('[data-fc-open]'))  { e.preventDefault(); open();  return; }
+        if (e.target.closest('[data-fc-close]')) { e.preventDefault(); close(); return; }
+        // Backdrop only - a click inside the card must not close it.
+        if (e.target === dlg) { close(); }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !dlg.hidden) { close(); }
+    });
+
+    // An error came back with the page, so the dialog has to be open for
+    // anyone to read it. Success redirects instead and reports beside the
+    // dropdown.
+    if (dlg.getAttribute('data-fc-autoopen') === '1') { open(); }
+})();
+</script>

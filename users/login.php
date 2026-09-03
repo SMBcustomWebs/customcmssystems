@@ -6,90 +6,19 @@
 
 <!-- 2. Listen for the Logout action -->
 <cms:if action='logout' >
-    <cms:ignore>
-        process_logout normally redirects on its own: its default is
-        redirect='2', meaning "use the querystring param named redirect",
-        which users/logout.php supplies. The line below is only reached if
-        that redirect does not happen.
-
-        It used to point at "<site root>/login.php", which does not exist -
-        this install's login template is users/login.php. That sent anyone
-        who did reach it to a dead URL. Site root is the safe fallback.
-    </cms:ignore>
     <cms:process_logout />
-    <cms:redirect url="<cms:show k_site_link />" />
+    <!-- You MUST redirect immediately so it doesn't hit the block below -->
+    <cms:redirect "<cms:show k_site_link />login.php" /> 
 </cms:if>
 
-<!-- 3. If already logged in, honour where they were headed, then fall back -->
+<!-- 3. If already logged in, route them based on access level -->
 <cms:if k_logged_in >
-    <cms:ignore>
-        alter_login_link (extended-users.php:734-742) already appends
-        redirect=REQUEST_URI when it builds a login link for an anonymous
-        visitor, so arriving here with ?redirect= set is the normal case -
-        it is how "return me to the page I was on" works. Honour it before
-        falling back to a role-based destination.
-    </cms:ignore>
-    <cms:ignore>
-        The redirect target MUST be validated. alter_login_link sets it to
-        REQUEST_URI, and this page embeds the nav, which renders a login
-        link - so a link generated while sitting on the login page carries
-        redirect=<the login page itself>. Following that unconditionally
-        produced an infinite redirect loop and locked the admin out.
-
-        Two rules, same shape as users/logout.php:
-          - same-origin only, so a caller-supplied URL cannot bounce
-            someone off-site
-          - never an auth page, or we loop straight back here
-        Anything rejected falls through to the role-based destination.
-    </cms:ignore>
-    <cms:php>
-        global $CTX;
-
-        $site = K_SITE_URL;
-        $want = isset($_GET['redirect']) ? trim($_GET['redirect']) : '';
-        $safe = '';
-
-        if( strlen($want) ){
-            $abs = $want;
-
-            /* REQUEST_URI is root-relative, so rebuild it against the origin
-               rather than against K_SITE_URL, which would double the subdir. */
-            if( strpos($want, '/') === 0 ){
-                $parts = parse_url( $site );
-                $origin = $parts['scheme'] . '://' . $parts['host'];
-                if( isset($parts['port']) ){ $origin .= ':' . $parts['port']; }
-                $abs = $origin . $want;
-            }
-
-            if( strpos($abs, $site) === 0 ){
-                $tail = strtolower( substr($abs, strlen($site)) );
-
-                $blocked = array(
-                    'users/login.php',
-                    'users/logout.php',
-                    'users/register.php',
-                    'users/lost-password.php'
-                );
-
-                $ok = true;
-                foreach( $blocked as $b ){
-                    if( strpos($tail, $b) === 0 ){ $ok = false; break; }
-                }
-                if( $ok ){ $safe = $abs; }
-            }
-        }
-
-        $CTX->set( 'ccs_login_dest', $safe, 'global' );
-    </cms:php>
-
-    <cms:if ccs_login_dest>
-        <cms:redirect url=ccs_login_dest />
-    <cms:else_if k_user_access_level ge '7' />
+    <cms:if k_user_access_level ge '7' >
         <!-- Admins go to the dashboard -->
-        <cms:redirect url="<cms:show k_admin_link />" />
+        <cms:redirect "<cms:show k_admin_link />" />
     <cms:else />
-        <!-- Regular users go to the site root -->
-        <cms:redirect url="<cms:show k_site_link />" />
+        <!-- Regular users go to their profile -->
+        <cms:redirect "<cms:show k_site_link />" />
     </cms:if>
 </cms:if>
 
@@ -104,7 +33,7 @@
                 
                 <h2 class="text-center mb-4">Log In</h2>
                 
-                <div class="p-4 bg-light border rounded">
+                <div class="p-4 border rounded">
                     
                     <!-- 3. The Login Form -->
                     <cms:form method="post" anchor='0'>
@@ -158,6 +87,14 @@
         </div>
     </div>
 </section>
+
+<cms:ignore>
+    Show/hide toggle on the password field. Strictly this is a screen where
+    a password is TYPED rather than set, but the failure it prevents is the
+    same one - a mistyped password nobody can see - and the snippet costs a
+    line.
+</cms:ignore>
+<cms:embed 'utils/password_reveal.htm' />
 
 <cms:embed 'pb_mods/pg_frame/footer/ftr_emb.htm' />
 <cms:embed 'pb_mods/pg_frame/tail.htm' />

@@ -1,0 +1,330 @@
+/* ===========================================================================
+   assets/css/ccs_consent.css
+
+   THE CONSENT BAR OWNS ITS OWN APPEARANCE. It uses no Bootstrap utility class,
+   no theme custom property, and none of the site's font choices. Every colour
+   and size below is literal.
+
+   WHY IT IS ISOLATED RATHER THAN THEMED. This bar is the only part of the site
+   whose appearance has legal weight: a refusal that is harder to see than an
+   acceptance is the specific dark pattern regulators fine, and a notice nobody
+   can read is not notice. Wiring it to the theme means a site owner picking a
+   pale accent, a decorative display face, or a smaller base size can silently
+   break compliance from a settings screen, with nothing to warn them. So the
+   theme cannot reach it.
+
+   THAT ISOLATION IS THE POINT - DO NOT "TIDY" IT. Replacing these values with
+   var(--ccs-*) would reconnect exactly what was deliberately cut.
+
+   LOADED LAST in head.htm, after theme.css and user.php, and scoped by #id so
+   its specificity is (1,1,0). !important appears only on the properties that
+   would break contrast or legibility if something overrode them - colour,
+   background, font-family, font-size - not on layout.
+
+   CONTRAST, MEASURED NOT ESTIMATED. Every pair is WCAG AAA (>=7:1); the
+   requirement for body text is 4.5:1 and for UI boundaries 3:1.
+
+       dark   body text   #f4f4f5 on #0b0b0c   17.90:1
+       dark   muted text  #d4d4d8 on #0b0b0c   13.31:1
+       dark   answer btn  #0b0b0c on #f4f4f5   17.90:1
+       dark   quiet brdr  #a1a1aa on #0b0b0c    7.68:1
+       light  body text   #18181b on #ffffff   17.72:1
+       light  muted text  #3f3f46 on #ffffff   10.44:1
+       light  answer btn  #ffffff on #18181b   17.72:1
+       light  quiet brdr  #52525b on #ffffff    7.73:1
+
+   THE TWO ANSWER BUTTONS ARE THE SAME BUTTON. Reject and Accept share
+   .ccs-c__btn--answer and differ in nothing but their label. This file was
+   written because they did not: the markup gave Accept a solid primary style
+   and Reject a faded outline, while the template's own header claimed they were
+   identical. "Choose" is quieter on purpose - it is a disclosure toggle, not an
+   answer, so it is the one control that SHOULD read as secondary.
+
+   FONTS ARE A SYSTEM STACK. Legal text should never render in a display or
+   script face because someone picked one for headings.
+   =========================================================================== */
+
+#ccs-consent {
+    --ccs-c-bg:      #0b0b0c;
+    --ccs-c-fg:      #f4f4f5;
+    --ccs-c-muted:   #d4d4d8;
+    --ccs-c-edge:    #3f3f46;
+    --ccs-c-quiet:   #a1a1aa;
+    --ccs-c-ring:    #ffffff;
+
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2147483000;          /* above site chrome, below nothing that matters */
+    background: var(--ccs-c-bg) !important;
+    color: var(--ccs-c-fg) !important;
+    border-top: 1px solid var(--ccs-c-edge);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, .45);
+    padding: 1.25rem 1rem;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 0.9375rem !important;   /* 15px floor - disclosure text is not fine print */
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* The site runs data-bs-theme; these are our own neutrals for each mode, not
+   the theme's. A light site gets a light bar, but never a themed one. */
+[data-bs-theme="light"] #ccs-consent {
+    --ccs-c-bg:      #ffffff;
+    --ccs-c-fg:      #18181b;
+    --ccs-c-muted:   #3f3f46;
+    --ccs-c-edge:    #d4d4d8;
+    --ccs-c-quiet:   #52525b;
+    --ccs-c-ring:    #000000;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, .18);
+}
+
+#ccs-consent *,
+#ccs-consent *::before,
+#ccs-consent *::after { box-sizing: border-box; }
+
+#ccs-consent .ccs-c__inner {
+    max-width: 76rem;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+    align-items: center;
+}
+
+#ccs-consent .ccs-c__copy { flex: 1 1 26rem; min-width: 0; }
+
+/* A styled paragraph, NOT a heading. See the template header - an <h2> here
+   would put a heading into every page's outline that has nothing to do with
+   that page. aria-labelledby still points at it, which is all the accessible
+   name needs. */
+#ccs-consent .ccs-c__title {
+    margin: 0 0 .35rem;
+    font-size: 1.125rem !important;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--ccs-c-fg) !important;
+}
+
+#ccs-consent .ccs-c__text {
+    margin: 0;
+    color: var(--ccs-c-muted) !important;
+    font-size: 0.9375rem !important;
+}
+
+#ccs-consent .ccs-c__link {
+    color: var(--ccs-c-fg) !important;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+#ccs-consent .ccs-c__link:hover { text-decoration-thickness: 2px; }
+
+#ccs-consent .ccs-c__actions {
+    flex: 0 1 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-left: auto;
+}
+
+#ccs-consent .ccs-c__btn {
+    font: inherit;
+    font-size: 0.9375rem !important;
+    font-weight: 600;
+    line-height: 1.2;
+    min-height: 2.75rem;          /* 44px - comfortably over the 24px minimum */
+    padding: .625rem 1.125rem;
+    border-radius: .375rem;
+    border: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    appearance: none;
+}
+
+/* REJECT AND ACCEPT ARE THIS SAME RULE. Nothing distinguishes them but text. */
+#ccs-consent .ccs-c__btn--answer {
+    background: var(--ccs-c-fg) !important;
+    color: var(--ccs-c-bg) !important;
+    border-color: var(--ccs-c-fg);
+}
+#ccs-consent .ccs-c__btn--answer:hover { opacity: .88; }
+
+#ccs-consent .ccs-c__btn--quiet {
+    background: transparent !important;
+    color: var(--ccs-c-fg) !important;
+    border-color: var(--ccs-c-quiet);
+}
+#ccs-consent .ccs-c__btn--quiet:hover { border-color: var(--ccs-c-fg); }
+
+/* An explicit ring. The browser default is frequently invisible on a dark
+   surface, and this is the one component where a keyboard user must never be
+   guessing where they are. */
+#ccs-consent .ccs-c__btn:focus-visible,
+#ccs-consent .ccs-c__check:focus-visible,
+#ccs-consent .ccs-c__link:focus-visible {
+    outline: 3px solid var(--ccs-c-ring);
+    outline-offset: 2px;
+}
+
+#ccs-consent .ccs-c__panel {
+    flex: 1 1 100%;
+    margin-top: .25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--ccs-c-edge);
+}
+#ccs-consent .ccs-c__panel[hidden] { display: none; }
+
+#ccs-consent .ccs-c__cats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+#ccs-consent .ccs-c__cat { display: flex; gap: .625rem; align-items: flex-start; }
+
+/* Applied by ccs_consent.js when a blocked play button sends someone here, to
+   point at the one control that governs what they clicked. It exists because a
+   programmatic focus following a mouse click does not satisfy :focus-visible,
+   so the ring above never appears - see that file.
+
+   IT PULSES AND GOES, RATHER THAN SITTING THERE. A persistent box around one
+   cell in a row of four reads as a STATE - "this one is different, maybe
+   disabled" - which is the opposite of the message. Three half-second pulses
+   say "look here" and then leave the panel looking normal.
+
+   Outlines do not affect layout, so nothing reflows while it animates. */
+@keyframes ccs-c-pulse {
+    0%, 100% { outline-color: transparent; }
+    50%      { outline-color: var(--ccs-c-ring); }
+}
+
+#ccs-consent .ccs-c__cat--target {
+    outline: 2px solid transparent;
+    outline-offset: 4px;
+    border-radius: .25rem;
+    animation: ccs-c-pulse .5s ease-in-out 3;
+}
+
+#ccs-consent .ccs-c__check {
+    flex: 0 0 auto;
+    width: 1.5rem;                /* 24px - meets the target-size minimum */
+    height: 1.5rem;
+    margin: 0;
+    accent-color: var(--ccs-c-fg);
+    cursor: pointer;
+}
+#ccs-consent .ccs-c__check:disabled { cursor: default; opacity: .55; }
+
+#ccs-consent .ccs-c__catlabel {
+    font-size: 0.875rem !important;
+    color: var(--ccs-c-muted) !important;
+    cursor: pointer;
+}
+#ccs-consent .ccs-c__check:disabled + .ccs-c__catlabel { cursor: default; }
+#ccs-consent .ccs-c__catname {
+    display: block;
+    font-weight: 700;
+    color: var(--ccs-c-fg) !important;
+    margin-bottom: .125rem;
+}
+
+@media (max-width: 40em) {
+    #ccs-consent { padding: 1rem .875rem; }
+    #ccs-consent .ccs-c__actions { margin-left: 0; width: 100%; }
+    #ccs-consent .ccs-c__btn { flex: 1 1 auto; }   /* still equal to each other */
+}
+
+/* Someone who has asked their OS for more contrast gets pure black and white
+   and a heavier boundary. */
+@media (prefers-contrast: more) {
+    #ccs-consent { --ccs-c-bg: #000000; --ccs-c-fg: #ffffff; --ccs-c-muted: #ffffff; --ccs-c-quiet: #ffffff; }
+    [data-bs-theme="light"] #ccs-consent { --ccs-c-bg: #ffffff; --ccs-c-fg: #000000; --ccs-c-muted: #000000; --ccs-c-quiet: #000000; }
+    #ccs-consent .ccs-c__btn { border-width: 3px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #ccs-consent, #ccs-consent * { transition: none !important; animation: none !important; }
+
+    /* Without this the rule above would kill the pulse and leave the outline
+       transparent - no motion AND no feedback. Someone who asked for less
+       motion still needs to be shown where to look, so it simply holds steady
+       for the same period and is then removed by the script. */
+    #ccs-consent .ccs-c__cat--target { outline-color: var(--ccs-c-ring); }
+}
+
+
+/* ---------------------------------------------------------------------------
+   THE BLOCKED-VIDEO PLACEHOLDER
+
+   Built by assets/js/ccs_consent.js in place of a third-party iframe the
+   visitor has not agreed to. Isolated for the same reason as the bar above: it
+   names a company and asks a question with legal weight, so it must be legible
+   wherever it lands - and it lands inside heroes, over photographs, at
+   arbitrary sizes.
+
+   Always dark-on-light-text regardless of theme. It replaces a video, so a dark
+   plate reads as intentional, and it cannot be washed out by whatever image sits
+   behind it.
+   --------------------------------------------------------------------------- */
+
+.ccs-consent-blocked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .625rem;
+    width: 100%;
+    height: 100%;
+    min-height: 10rem;
+    padding: 1.25rem;
+    text-align: center;
+    background: #0b0b0c !important;
+    color: #f4f4f5 !important;
+    border: 1px solid #3f3f46;
+    border-radius: .375rem;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+    font-size: 0.875rem !important;
+    line-height: 1.5;
+}
+
+.ccs-consent-blocked .ccs-c__blocked-text {
+    margin: 0;
+    max-width: 34rem;
+    color: #d4d4d8 !important;
+}
+
+.ccs-consent-blocked .ccs-c__btn {
+    font: inherit;
+    font-size: 0.9375rem !important;
+    font-weight: 600;
+    min-height: 2.75rem;
+    padding: .625rem 1.125rem;
+    border-radius: .375rem;
+    border: 2px solid #f4f4f5;
+    background: #f4f4f5 !important;
+    color: #0b0b0c !important;
+    cursor: pointer;
+}
+.ccs-consent-blocked .ccs-c__btn:disabled { opacity: .6; cursor: default; }
+.ccs-consent-blocked .ccs-c__btn:focus-visible {
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+}
+
+.ccs-consent-blocked .ccs-c__remember {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: 0.8125rem !important;
+    color: #d4d4d8 !important;
+    cursor: pointer;
+}
+.ccs-consent-blocked .ccs-c__remember input {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0;
+    accent-color: #f4f4f5;
+    cursor: pointer;
+}

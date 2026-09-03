@@ -1,0 +1,26 @@
+<cms:ignore>
+    =========================================================================
+    VERTICAL TITLE CONTENT BLOCK  -  side column edit cluster
+    snippets/pb_mods/content/inline/vtl_side_edit.txt
+
+    Embedded inside the side column in theme/vtl_cntn_blk.html, which carries
+    position-relative so this pins beside the copy it edits.
+
+    end-0 keeps it clear of the main column to its left and inside the
+    container's right edge, so it never collides with the main column's own
+    cluster.
+    =========================================================================
+</cms:ignore>
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <div class="position-absolute top-0 end-0 mt-1 me-2 z-3 d-flex flex-column gap-2">
+
+        <cms:ignore>
+            ccs_vtl_cntn_side_ovr_opt is the controller for
+            ccs_vtl_cntn_side_typo_chc and is also the user's own "Override
+            Default Text Style" switch, so it stays visible in fields.
+        </cms:ignore>
+        <cms:popup_edit height='860' width='1050' 'ccs_vtl_cntn_side_msg|ccs_vtl_cntn_side_row|ccs_vtl_cntn_side|ccs_vtl_cntn_side_opt_row|ccs_vtl_cntn_side_halg|ccs_vtl_cntn_side_ovr_opt|ccs_vtl_cntn_side_typo_row|ccs_vtl_cntn_side_clr|ccs_vtl_cntn_side_sz|ccs_vtl_cntn_side_wt|ccs_vtl_cntn_side_fst|ccs_vtl_cntn_side_font|ccs_vtl_cntn_side_ls'
+            link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Side Content' title='Edit Side Content'><i class='fa-solid fa-list'></i></button>" />
+
+    </div>
+</cms:if>

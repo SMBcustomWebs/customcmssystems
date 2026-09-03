@@ -1,0 +1,33 @@
+<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
+    <cms:ignore>
+        TEXT CLUSTER - hovers at the top-left of the words above the form.
+
+        Two buttons: the heading, and the supporting lines under it. Same
+        anchor and the same two icons as the transition banner's text cluster,
+        so the same picture means the same thing on both blocks.
+
+        THE WRAPPER ALWAYS RENDERS, even when there is no heading and no lines
+        at all. That is the point - an empty text area is exactly when an
+        author needs the button, because adding the first heading is the thing
+        they are trying to do. A wrapper that appeared only once text existed
+        would be unreachable from a blank start.
+
+        BOTH BUTTONS DIM RATHER THAN DISAPPEAR when their content is empty:
+        heading follows cnt_hdg_ln, lines follow cnt_txt_opt. Dimming says
+        "nothing here yet, and here is where you add it". Hiding says nothing
+        at all.
+    </cms:ignore>
+    <div class="position-absolute top-0 start-0 mt-2 ms-2 z-3 d-flex flex-column gap-2">
+
+        <cms:popup_edit 'cnt_txt_grp|cnt_hdg_row|cnt_hdg_ln|cnt_hdg_tag|cnt_hdg_clr|cnt_hdg_sz|cnt_hdg_font|cnt_hdg_fnt_wt|cnt_hdg_ltr_spc' link_text="<button class='btn btn-sm <cms:if cnt_hdg_ln>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Heading' title='Edit Heading'><i class='fa-solid fa-heading'></i></button>" />
+
+        <cms:ignore>
+            ONE window for both lines, opening with the count that controls how
+            many exist - so "add a second line" is reachable from the same
+            place you edit the first. Same reasoning as the banner's four-line
+            window.
+        </cms:ignore>
+        <cms:popup_edit 'cnt_txt_grp|cnt_txt_opt|cnt_txt1_row|cnt_txt1_msg|cnt_txt1_ln|cnt_txt1_clr|cnt_txt1_sz|cnt_txt1_font|cnt_txt1_fnt_wt|cnt_txt1_ltr_spc|cnt_txt2_row|cnt_txt2_msg|cnt_txt2_ln|cnt_txt2_clr|cnt_txt2_sz|cnt_txt2_font|cnt_txt2_fnt_wt|cnt_txt2_ltr_spc' link_text="<button class='btn btn-sm <cms:if cnt_txt_opt>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Text Lines' title='Edit Text Lines'><i class='fa-solid fa-align-left'></i></button>" />
+
+    </div>
+</cms:if>

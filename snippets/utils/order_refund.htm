@@ -1,0 +1,163 @@
+<cms:ignore>
+    ================================================================
+    order_refund.htm - record that money went back to the customer.
+
+    The mirror of order_fulfil.htm. Stripe's webhook and PayPal's IPN
+    both embed this file, so a refund is recorded identically whichever
+    gateway processed it.
+
+    CALLER MUST SET, before embedding:
+      ccs_refund_order_id   k_page_id of the order (required)
+      ccs_refund_total      the amount, absolute and positive (required).
+                            What it MEANS depends on ccs_refund_mode.
+      ccs_refund_mode       'total'     - ccs_refund_total is the CUMULATIVE
+                                          amount refunded so far (Stripe).
+                                          The default.
+                            'increment' - ccs_refund_total is just THIS
+                                          refund (PayPal).
+      ccs_refund_txn        the gateway's id for THIS refund. Required in
+                            'increment' mode, ignored in 'total' mode.
+
+    THIS SETS (scope='global'):
+      ccs_refund_result  refunded | partial | already | notfound | notpaid
+
+    ---------------------- STOCK IS NOT TOUCHED ----------------------
+    Deliberate, and the single most important thing about this file.
+
+    A refund tells us money moved. It does NOT tell us whether goods
+    came back, or in what condition. A returned jersey might be
+    resellable, might be stained, might never arrive. Putting the unit
+    back automatically would silently inflate inventory and lead to
+    selling something that is not on the shelf - the exact failure the
+    deduction logic exists to prevent, just in the other direction.
+
+    So the order's status is updated and the amount is recorded, and
+    Inventory Count is left for a human to adjust once the item is
+    physically in front of them.
+
+    ------------------- TWO GATEWAYS, TWO SHAPES -------------------
+    Stripe's charge.refunded carries amount_refunded ALREADY CUMULATIVE.
+    Storing that figure rather than adding to it is naturally
+    idempotent: writing "42.00 refunded" twice leaves 42.00, not 84.00.
+    That is 'total' mode, and it needs no transaction id.
+
+    PayPal sends one IPN per refund carrying only THAT refund's amount.
+    Those have to be added up, and the moment you add, a replayed IPN
+    double-counts. That is 'increment' mode, made safe by
+    order_refund_txns: the refund's own txn_id is recorded when it is
+    applied, and an id already in the list is ignored.
+
+    Treating both as cumulative was wrong and the cost was real. On a
+    $100 order, a $30 refund followed by a $70 refund reported 70 -
+    larger than 30, so it REPLACED it. The record then read "$70
+    refunded, partially refunded", permanently, on an order that had
+    been refunded in full.
+
+    An 'increment' call with no ccs_refund_txn is REFUSED, not applied.
+    Without an id there is no way to tell a new refund from a replay,
+    and silently counting the same money twice is worse than recording
+    nothing and letting a person look.
+    ================================================================
+</cms:ignore>
+
+<cms:set ccs_refund_result = 'notfound' scope='global' />
+
+<cms:if ccs_refund_order_id>
+
+    <cms:pages masterpage='orders.php' id=ccs_refund_order_id limit='1'>
+
+        <cms:ignore>
+            Snapshot before any nested loop opens - set_context would
+            otherwise reassign k_page_id to whatever is being iterated.
+        </cms:ignore>
+        <cms:set orf_pid       = k_page_id             scope='global' />
+        <cms:set orf_status    = order_status          scope='global' />
+        <cms:set orf_total     = order_total           scope='global' />
+        <cms:set orf_already   = order_refunded_amount scope='global' />
+        <cms:set orf_txns      = order_refund_txns     scope='global' />
+
+        <cms:php>
+            global $CTX;
+
+            $paid_total = (float) $CTX->get('orf_total');
+            $already    = (float) $CTX->get('orf_already');
+            $now        = abs( (float) $CTX->get('ccs_refund_total') );
+            $status     = trim( (string) $CTX->get('orf_status') );
+
+            // Only a paid or already-partly-refunded order can be refunded.
+            // A pending or failed order never took money, so a refund
+            // notification against one is a signal something is wrong -
+            // record nothing and let a human look.
+            $refundable = in_array( $status, array('paid','refunded_part','refunded'), true );
+            $CTX->set( 'orf_refundable', $refundable ? '1' : '', 'global' );
+
+            $mode = trim( (string) $CTX->get('ccs_refund_mode') );
+            if( $mode !== 'increment' ){ $mode = 'total'; }
+
+            $txn      = trim( (string) $CTX->get('ccs_refund_txn') );
+            $str_txns = trim( (string) $CTX->get('orf_txns') );
+            $arr_txns = ( $str_txns === '' ) ? array() : preg_split( '/\s+/', $str_txns, -1, PREG_SPLIT_NO_EMPTY );
+
+            $is_new = 0;
+
+            if( $mode === 'increment' ){
+                // No id means no way to tell a new refund from a replay.
+                // Refuse rather than risk counting the same money twice.
+                if( $txn !== '' && !in_array($txn, $arr_txns, true) && $now > 0.001 ){
+                    $new_total  = $already + $now;
+                    $arr_txns[] = $txn;
+                    $is_new     = 1;
+                }
+                else{
+                    $new_total = $already;
+                }
+            }
+            else{
+                // Cumulative. Anything not larger than what is held is a replay.
+                if( $now > $already + 0.001 ){
+                    $new_total = $now;
+                    $is_new    = 1;
+                }
+                else{
+                    $new_total = $already;
+                }
+            }
+
+            $CTX->set( 'orf_is_new', $is_new ? '1' : '', 'global' );
+            $CTX->set( 'orf_txns_new', implode( ' ', $arr_txns ), 'global' );
+
+            // Full vs partial, to the cent, against the total we will store.
+            $full = ( $paid_total > 0 && $new_total >= ($paid_total - 0.01) );
+            $CTX->set( 'orf_new_status', $full ? 'refunded' : 'refunded_part', 'global' );
+            $CTX->set( 'orf_amount', number_format($new_total, 2, '.', ''), 'global' );
+            $CTX->set( 'orf_on', date('Y-m-d H:i:s'), 'global' );
+        </cms:php>
+
+        <cms:if "<cms:not orf_refundable />">
+            <cms:set ccs_refund_result = 'notpaid' scope='global' />
+
+        <cms:else_if "<cms:not orf_is_new />" />
+            <cms:set ccs_refund_result = 'already' scope='global' />
+
+        <cms:else />
+            <cms:db_persist_ex
+                _masterpage='orders.php'
+                _mode='edit'
+                _page_id=orf_pid
+                _invalidate_cache='0'
+                order_status=orf_new_status
+                order_refunded_amount=orf_amount
+                order_refunded_on=orf_on
+                order_refund_txns=orf_txns_new
+            />
+
+            <cms:if orf_new_status == 'refunded'>
+                <cms:set ccs_refund_result = 'refunded' scope='global' />
+            <cms:else />
+                <cms:set ccs_refund_result = 'partial' scope='global' />
+            </cms:if>
+        </cms:if>
+
+    </cms:pages>
+
+</cms:if>
