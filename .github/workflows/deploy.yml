@@ -3,33 +3,37 @@ name: Deploy to Staging
 # MANUAL ONLY. Never fires on a push or a merge.
 # Actions tab -> "Deploy to Staging" -> Run workflow -> pick a branch.
 #
-# WHY THIS IS SPLIT INTO SIXTEEN STEPS
-# HostGator runs Pure-FTPd. SamKirkland/FTP-Deploy-Action opens a NEW passive
-# data connection for every single file and has NO retry: one dropped socket
-# fails the whole step with
+# WHY lftp AND NOT SamKirkland/FTP-Deploy-Action
+# That action has no retry. Its 14 inputs (verified against action.yml at the
+# v4.3.3 tag) contain no retry, concurrency or throttle control, so a single
+# dropped socket fails the whole step and nothing it had already sent is
+# recorded. Against HostGator's Pure-FTPd that meant four runs dying at four
+# different files with
 #   "Server sent FIN packet unexpectedly, closing connection"
-# and nothing from that step is recorded. v4.3.3 has 14 inputs (verified
-# against action.yml at the v4.3.3 tag) and not one of them is a retry,
-# concurrency or throttle control. Splitting is the only lever the action gives.
+# Splitting the tree into sixteen chunks only made each loss smaller; it never
+# made the transfer survive a drop. lftp reconnects and carries on, which is
+# the actual thing that was missing.
 #
-# How many files the server will take before cutting the session is not fixed.
-# Early runs pushed 334 files in one session fine. A later run died 26 files in,
-# at the same byte, in about five seconds - so the ceiling drops as the account
-# burns through FTP connections and recovers with time. That is why the chunks
-# below are small: not because any one of them is near a hard limit, but because
-# each step that finishes WRITES ITS STATE FILE TO THE SERVER and is skipped on
-# every later run. Small chunks mean a run that dies partway still banks real
-# progress, so repeated runs converge instead of restarting from zero.
+# HOW THE PAYLOAD IS BUILT
+# Every exclusion happens HERE, in git, before lftp is involved - not in lftp
+# glob patterns whose nested-path matching is easy to get subtly wrong. The
+# manifest is built from `git ls-files`, so anything gitignored (config.php,
+# ccs_dash/uploads, assets/images|logos|videos|media, the 1.1 GB and 63 MB
+# files) cannot appear by construction. _deploy/ then holds EXACTLY what goes
+# on the server and lftp mirrors it with no --exclude at all.
 #
-# If a step fails: just run the workflow again. Everything green before it is
-# already banked and will skip in seconds.
+# Expected payload: 1,784 files. The step prints the count and fails if it is
+# zero. If that number moves a lot without you adding files, look at the
+# manifest filter below before trusting the run.
 #
-# NEVER add dangerous-clean-slate to any step. It deletes everything in
-# server-dir, including excluded files. ccs_dash/uploads is 1.1 GB and exists
-# in no repository.
+# NEVER add --delete to the mirror command. It would remove everything on the
+# server that is not in _deploy/, and ccs_dash/uploads (1.1 GB) exists in no
+# repository.
 #
-# Counts below are tracked files after that step's excludes, verified with
-# git ls-files on 2026-10-17. They are labels only - nothing reads them.
+# ssl:verify-certificate is off to match what was already happening: the
+# action's `security` input defaults to "loose", which is documented as
+# "allow connection even when the domain is not certificate". Worth tightening
+# once the deploy is green and the FTP password has been rotated.
 
 on:
   workflow_dispatch:
@@ -37,348 +41,52 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: 01 ccs_dash/includes/ckeditor  (261 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./ccs_dash/includes/ckeditor/
-          server-dir: ./ccs_dash/includes/ckeditor/
-          state-name: .ftp-state-ckeditor.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
-      - name: 02 ccs_dash/includes/kcfinder  (238 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./ccs_dash/includes/kcfinder/
-          server-dir: ./ccs_dash/includes/kcfinder/
-          state-name: .ftp-state-kcfinder.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
+      - name: Build deploy payload
+        run: |
+          set -euo pipefail
+          git ls-files \
+            | grep -v -E '^(\.github|\.vscode|_tools|_merge_backup|module-display)/' \
+            | grep -v -E '^ccs_dash/includes/ckeditor_old/' \
+            | grep -v -E '^assets/fontawesome/(svgs|sprites|scss|less|metadata|js)/' \
+            | grep -v -E '^snippets/pb_mods/DNU_header/' \
+            | grep -v -E '\.md$' \
+            | grep -v -E '\.map$' \
+            | grep -v -E '^[^/]*\.txt$' \
+            > manifest.txt
+          COUNT=$(wc -l < manifest.txt)
+          echo "payload files: $COUNT"
+          test "$COUNT" -gt 0
+          mkdir -p _deploy
+          tar -cf - -T manifest.txt | tar -xf - -C _deploy
+          echo "materialised: $(find _deploy -type f | wc -l)"
+          echo "zero-byte files (must be 0): $(find _deploy -type f -empty | wc -l)"
+          test "$(find _deploy -type f -empty | wc -l)" -eq 0
 
-      - name: 03 ccs_dash/includes  (rest, 158 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./ccs_dash/includes/
-          server-dir: ./ccs_dash/includes/
-          state-name: .ftp-state-includes.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            ckeditor/**
-            kcfinder/**
-            # ckeditor_old is unreferenced - field.php and the inline addon both
-            # load includes/ckeditor/. 261 files, never deployed.
-            ckeditor_old/**
-            **/*.md
-
-      - name: 04 ccs_dash  (rest, 272 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./ccs_dash/
-          server-dir: ./ccs_dash/
-          state-name: .ftp-state-ccs_dash.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            includes/**
-            # config.php is gitignored and placed on each server by hand -
-            # it holds that environment's database and gateway keys.
-            **/*.md
-
-      - name: 05 assets  (334 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./assets/
-          server-dir: ./assets/
-          state-name: .ftp-state-assets.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            # Font Awesome ships as CSS + webfonts here. Nothing in the codebase
-            # references svgs/ sprites/ scss/ less/ metadata/ js/ - verified.
-            fontawesome/svgs/**
-            fontawesome/sprites/**
-            fontawesome/scss/**
-            fontawesome/less/**
-            fontawesome/metadata/**
-            fontawesome/js/**
-            **/*.map
-            **/*.md
-
-      # ---------------------------------------------------------------------
-      # snippets/pb_mods, one block folder at a time.
-      #
-      # Every file under a block folder is live code. theme/*.html are the tile
-      # templates themselves - blocks/banner/transitions.php names them with
-      # _pb_template='transns/theme/trns_img_smp' and so on, so they render.
-      # The *.txt files under inline/ are inline-edit clusters, also live.
-      # Nothing here is documentation. There is no *.txt or *.html exclude in
-      # any of these steps, on purpose.
-      # ---------------------------------------------------------------------
-
-      - name: 06 pb_mods/transns  (59 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./snippets/pb_mods/transns/
-          server-dir: ./snippets/pb_mods/transns/
-          state-name: .ftp-state-pb-transns.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
-
-      - name: 07 pb_mods/pg_frame  (41 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./snippets/pb_mods/pg_frame/
-          server-dir: ./snippets/pb_mods/pg_frame/
-          state-name: .ftp-state-pb-pg_frame.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
-
-      - name: 08 pb_mods/hero  (30 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./snippets/pb_mods/hero/
-          server-dir: ./snippets/pb_mods/hero/
-          state-name: .ftp-state-pb-hero.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
-
-      - name: 09 pb_mods/hero_swpr  (19 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./snippets/pb_mods/hero_swpr/
-          server-dir: ./snippets/pb_mods/hero_swpr/
-          state-name: .ftp-state-pb-hero_swpr.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
-
-      - name: 10 pb_mods/bs_mods  (24 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./snippets/pb_mods/bs_mods/
-          server-dir: ./snippets/pb_mods/bs_mods/
-          state-name: .ftp-state-pb-bs_mods.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
-
-      - name: 11 pb_mods/content  (22 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./snippets/pb_mods/content/
-          server-dir: ./snippets/pb_mods/content/
-          state-name: .ftp-state-pb-content.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
-
-      - name: 12 pb_mods/contact  (17 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./snippets/pb_mods/contact/
-          server-dir: ./snippets/pb_mods/contact/
-          state-name: .ftp-state-pb-contact.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
-
-      - name: 13 pb_mods  (12 smaller blocks, 47 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./snippets/pb_mods/
-          server-dir: ./snippets/pb_mods/
-          state-name: .ftp-state-pb-rest.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            # handled by steps 06-12 above
-            transns/**
-            pg_frame/**
-            hero/**
-            hero_swpr/**
-            bs_mods/**
-            content/**
-            contact/**
-            # DNU = do not use. Pre-rename header blocks, superseded by pg_frame.
-            DNU_header/**
-            **/*.md
-
-      - name: 14 snippets/dropdowns  (117 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./snippets/dropdowns/
-          server-dir: ./snippets/dropdowns/
-          state-name: .ftp-state-dropdowns.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
-
-      - name: 15 snippets  (rest, 45 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./snippets/
-          server-dir: ./snippets/
-          state-name: .ftp-state-snippets.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            pb_mods/**
-            dropdowns/**
-            **/*.md
-
-      - name: 16 root, blocks, vendors, users, legal, bmenu  (100 files)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME_STAGING }}
-          password: ${{ secrets.FTP_PASSWORD_STAGING }}
-          protocol: ftps
-          local-dir: ./
-          server-dir: ./
-          state-name: .ftp-state-root.json
-          dry-run: false
-          log-level: standard
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            # everything the steps above already handled
-            ccs_dash/**
-            assets/**
-            snippets/**
-            # in GitHub, not on the site
-            .github/**
-            .vscode/**
-            _tools/**
-            _merge_backup/**
-            module-display/**
-            **/*.md
-            # the only tracked .txt at this level is "Copilote Rules.txt".
-            # Verified: no nested .txt files are in this step's payload.
-            *.txt
-            **/*.map
+      - name: Upload to staging
+        env:
+          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD_STAGING }}
+        run: |
+          lftp --env-password \
+               -u "${{ secrets.FTP_USERNAME_STAGING }}" \
+               "ftp://${{ secrets.FTP_SERVER }}" \
+               -e "
+                 set ftp:ssl-force true;
+                 set ftp:ssl-protect-data true;
+                 set ssl:verify-certificate no;
+                 set net:timeout 20;
+                 set net:max-retries 15;
+                 set net:persist-retries 10;
+                 set net:reconnect-interval-base 5;
+                 set xfer:clobber on;
+                 set cmd:fail-exit yes;
+                 mirror -R --verbose=1 --parallel=1 _deploy/ ./ ;
+                 bye
+               "
