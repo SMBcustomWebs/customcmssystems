@@ -135,7 +135,28 @@ jobs:
             **/*.map
             **/*.md
 
-      - name: Deploy snippets  (421 files)
+      - name: Deploy snippets/pb_mods  (259 files)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME_STAGING }}
+          password: ${{ secrets.FTP_PASSWORD_STAGING }}
+          protocol: ftps
+          local-dir: ./snippets/pb_mods/
+          server-dir: ./snippets/pb_mods/
+          state-name: .ftp-state-pb_mods.json
+          dry-run: false
+          log-level: standard
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            # NOTE: no *.txt exclude. The .txt files under the block folders
+            # are inline-edit clusters - live code, not documentation.
+            DNU_header/**
+            **/*.md
+
+      - name: Deploy snippets  (rest, 162 files)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.3
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -151,9 +172,7 @@ jobs:
             **/.git*
             **/.git*/**
             **/node_modules/**
-            # NOTE: no *.txt exclude here. The .txt files under pb_mods are
-            # inline-edit clusters and dropdown sources - they are live code.
-            pb_mods/DNU_header/**
+            pb_mods/**
             **/*.md
 
       - name: Deploy root, blocks, vendors, users, legal, bmenu  (144 files)
