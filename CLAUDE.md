@@ -3261,3 +3261,115 @@ instead, and that costs the whole domain's reputation.
 
 `subscribers.php` needs to have been visited in admin once to register. The user
 confirms it has been.
+
+
+# ADDED 2026-10-17 — deployment to staging over GitHub Actions
+
+## 62. The deploy workflow — what goes to the server, and what never does
+
+`.github/workflows/deploy.yml`. **Manual only** — `workflow_dispatch`, nothing
+fires on a push or a merge. Actions tab → "Deploy to Staging" → Run workflow.
+
+A `workflow_dispatch` workflow only appears in the Actions UI if the file exists
+on the DEFAULT branch. Editing it on a feature branch and wondering where the
+button went is the first mistake everyone makes with this.
+
+### Three buckets, and where each one is decided
+
+Every file in the project is in exactly one of three states, and the three are
+decided in three different places. Mixing them up is how credentials reach a web
+server.
+
+1. **Not in GitHub at all** — decided by `.gitignore`. `ccs_dash/config.php`,
+   `ccs_dash/uploads/` (1.1 GB), `ccs_dash/cache/`, the 63 MB `.sql` dump,
+   `.vscode/`, and `assets/images|logos|videos|media/`. Media lives on the front
+   end and is uploaded through the CMS, never through the repo.
+2. **In GitHub, not on the site** — decided by the manifest filter in the
+   workflow's "Build deploy payload" step. `.github/`, `.vscode/`, `_tools/`,
+   `_merge_backup/`, `module-display/`, `ccs_dash/includes/ckeditor_old/`, the
+   Font Awesome source trees, `snippets/pb_mods/DNU_header/`, every `*.md`,
+   every `*.map`, and root-level `*.txt`.
+3. **Both** — everything else. 1,784 files as of this writing.
+
+The manifest is built from `git ls-files`, not from a directory walk. Anything
+gitignored therefore cannot reach the server by construction, even if someone
+later adds a wrong pattern to the filter. That ordering is deliberate — keep it.
+
+### Why lftp and not SamKirkland/FTP-Deploy-Action
+
+The action was used first and could not finish a deploy. Four runs died at four
+different files with
+
+    Error: Server sent FIN packet unexpectedly, closing connection.
+
+HostGator's Pure-FTPd drops sessions, and **the action has no retry** — verified
+against `action.yml` at the `v4.3.3` tag: 14 inputs, none of them a retry,
+concurrency or throttle control. One dropped socket fails the step and discards
+everything it had already sent.
+
+The tree was split into sixteen per-folder steps to limit the damage. That was
+the wrong fix. It made each loss smaller but never made a transfer survive a
+drop, which was the actual problem. `lftp` reconnects and continues:
+
+    set net:max-retries 15;
+    set net:persist-retries 10;
+    set net:reconnect-interval-base 5;
+
+**Do not put the exclusions into lftp glob patterns.** They live in the git
+manifest step, and `_deploy/` is mirrored with no `--exclude` at all, so there
+is no nested-path glob semantics to get subtly wrong.
+
+### No empty files, ever
+
+**A zero-byte file kills the whole transfer.** HostGator's FTP drops the session
+on a zero-byte upload. Three failed deploys were caused by this before it was
+spotted; each died on the first empty file its step reached.
+
+33 empty `embed/*.htm` stubs caused it. They could not simply be skipped —
+`tags.php:573`:
+
+    $html = @file_get_contents( $filepath );
+    if( $html===FALSE ){ return 'Error embedding file: ' . ... }
+    if( $html ){ ...parse... }
+
+A MISSING target prints `Error embedding file:` onto the page. An EMPTY one
+returns `''`, which is falsy, so it renders nothing. Empty stubs are correct
+Couch — they are placeholders for tiles whose field cluster is not built yet,
+and `blocks/` does `cms:embed` them. They have to exist. They just cannot be
+transferred.
+
+Each now carries a `cms:ignore` block naming its tile, label, template and the
+`blocks/` line that embeds it. The parser strips it, so page output is
+unchanged.
+
+The build step hard-fails if the payload contains any zero-byte file, so this
+cannot silently return. **If a deploy fails on that check, fill the file — do
+not delete it and do not exclude it.**
+
+### Never add `--delete` to the mirror
+
+It would remove everything on the server not present in `_deploy/`, and
+`ccs_dash/uploads/` is 1.1 GB that exists in no repository. The same reason the
+old action's `dangerous-clean-slate` was never enabled.
+
+### config.php is placed by hand, once per environment
+
+Gitignored, so a fresh deploy lands on CouchCMS's setup screen:
+
+    "config.php" not found. Perhaps you forgot to rename the
+    "config.example.php" file to "config.php" after editing it?
+
+That message means the deploy worked. Put `config.php` in that environment's
+`ccs_dash/` with its OWN database — staging must not point at production — and
+its own `K_SITE_URL`, e.g. `https://staging.customcmssystems.com/`.
+
+### Still open
+
+`ssl:verify-certificate` is off in the mirror command. This is parity, not a
+regression: the action's `security` input defaults to `loose`, documented as
+"allow connection even when the domain is not certificate", so the certificate
+was never being verified. Worth turning on once the deploy is green to see
+whether HostGator's cert passes.
+
+No production workflow exists yet. When one is written it needs its own FTP
+account, its own secrets, and its own `config.php` — it must not share staging's.
