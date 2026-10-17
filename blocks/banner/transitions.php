@@ -38,7 +38,7 @@
         <cms:tile name='trns_txt_imgs_tl' label='Transition - 50-50 split - Text and Image Collage' _pb_template='transns/theme/trns_txt_imgs' _pb_height='300'>
             <cms:embed 'pb_mods/transns/embed/trns_txt_imgs.htm' />
         </cms:tile>
-        <cms:tile name='trns_txt_imgs_tl' label='Transition - 3 Columns, mid column 2 rows, multi link buttons' _pb_template='transns/theme/trns_3col_mid_2rw_mlt_lnk' _pb_height='300'>
+        <cms:tile name='trns_3col_mid_2rw_mlt_lnk_tl' label='Transition - 3 Columns, mid column 2 rows, multi link buttons' _pb_template='transns/theme/trns_3col_mid_2rw_mlt_lnk' _pb_height='300'>
             <cms:embed 'pb_mods/transns/embed/trns_3col_mid_2rw_mlt_lnk.htm' />
         </cms:tile>
         <cms:tile name='trns_5050_ckbd_img_mnu_tl' label='Transition - 50-50 Checkerboard Menu with Image' _pb_template='transns/theme/trns_5050_ckbd_img_mnu' _pb_height='300'>

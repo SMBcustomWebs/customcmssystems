@@ -3,43 +3,45 @@ name: Deploy to Staging
 # FIRES ON EVERY MERGE INTO main, and can also be run by hand from the
 # Actions tab -> "Deploy to Staging" -> Run workflow.
 #
-# Work on a branch, open a PR, merge it. The merge is a push to main, which is
+# Work on a branch, merge it into main. The merge is a push to main, which is
 # what triggers this. main is therefore ALWAYS what is on staging - if the two
 # ever disagree, main is right and the server is stale, never the other way.
 #
-# Nothing deploys from a feature branch. Pushing to your branch runs nothing.
+# INCREMENTAL: ONLY CHANGED FILES ARE SENT
+# The server holds a file called .deploy-state containing the commit SHA of the
+# last successful deploy. Each run reads it and asks GIT what changed since
+# then. Git compares file CONTENT, so nothing depends on timestamps.
 #
-# WHY lftp AND NOT SamKirkland/FTP-Deploy-Action
-# That action has no retry. Its 14 inputs (verified against action.yml at the
-# v4.3.3 tag) contain no retry, concurrency or throttle control, so a single
-# dropped socket fails the whole step and nothing it had already sent is
-# recorded. Against HostGator's Pure-FTPd that meant four runs dying at four
-# different files with
-#   "Server sent FIN packet unexpectedly, closing connection"
-# Splitting the tree into sixteen chunks only made each loss smaller; it never
-# made the transfer survive a drop. lftp reconnects and carries on, which is
-# the actual thing that was missing.
+# Timestamps were the obvious approach and they are a trap here. actions/checkout
+# stamps every file with the checkout time, so everything always looks new. The
+# fix for that is to restore mtimes from commit dates - but then, if the server
+# does not honour SITE UTIME, the remote keeps its upload time and a file whose
+# commit is OLDER than the last deploy is silently skipped. Merge a branch on
+# Friday that you committed on Monday, after a Wednesday deploy, and the change
+# never ships, with no error anywhere. Asking git is exact and has no such hole.
 #
-# HOW THE PAYLOAD IS BUILT
-# Every exclusion happens HERE, in git, before lftp is involved - not in lftp
-# glob patterns whose nested-path matching is easy to get subtly wrong. The
-# manifest is built from `git ls-files`, so anything gitignored (config.php,
-# ccs_dash/uploads, assets/images|logos|videos|media, the 1.1 GB and 63 MB
-# files) cannot appear by construction. _deploy/ then holds EXACTLY what goes
-# on the server and lftp mirrors it with no --exclude at all.
+# IT FALLS BACK TO A FULL DEPLOY, SAFELY, WHEN:
+#   - .deploy-state is missing (first run, or you deleted it to force a resync)
+#   - the SHA in it is not in this repo's history (force-push, rewritten history)
+#   - this workflow file itself changed, since the exclude rules below may have
+#     changed with it and git would not report the newly-included files as edits
 #
-# Expected payload: 1,784 files. The step prints the count and fails if it is
-# zero. If that number moves a lot without you adding files, look at the
-# manifest filter below before trusting the run.
+# TO FORCE A FULL RESYNC: delete .deploy-state from public_html/staging in
+# cPanel File Manager and run the workflow. That is the repair for any suspicion
+# that the server has drifted.
 #
-# NEVER add --delete to the mirror command. It would remove everything on the
-# server that is not in _deploy/, and ccs_dash/uploads (1.1 GB) exists in no
-# repository.
+# DELETIONS ARE NOT PROPAGATED. A file deleted from the repo stays on the
+# server. The mirror carries no --delete and must not: ccs_dash/uploads is
+# 1.1 GB and exists in no repository. Remove a retired file by hand in cPanel.
 #
-# ssl:verify-certificate is off to match what was already happening: the
-# action's `security` input defaults to "loose", which is documented as
-# "allow connection even when the domain is not certificate". Worth tightening
-# once the deploy is green and the FTP password has been rotated.
+# WHAT GOES TO THE SERVER
+# Every exclusion is decided HERE, in git, before lftp is involved - not in lftp
+# glob patterns whose nested-path matching is easy to get subtly wrong. The list
+# comes from `git ls-files`, so anything gitignored (config.php, ccs_dash/uploads,
+# assets media) cannot appear by construction. _deploy/ holds EXACTLY what is
+# being sent and is mirrored with no --exclude at all.
+#
+# A FULL payload is 1,784 files as of 2026-10-17.
 
 on:
   push:
@@ -50,7 +52,6 @@ on:
     # so a commit mixing a doc and a template still deploys.
     paths-ignore:
       - '**.md'
-      - '.github/**'
       - '.vscode/**'
       - '_tools/**'
       - '_merge_backup/**'
@@ -69,51 +70,121 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    env:
+      FTP_HOST: ${{ secrets.FTP_SERVER }}
+      FTP_USER: ${{ secrets.FTP_USERNAME_STAGING }}
+      LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD_STAGING }}
+      # every exclusion, as ONE regex so no intermediate grep can fail the pipe
+      EXCL: '^(\.github|\.vscode|_tools|_merge_backup|module-display)/|^ccs_dash/includes/ckeditor_old/|^assets/fontawesome/(svgs|sprites|scss|less|metadata|js)/|^snippets/pb_mods/DNU_header/|\.md$|\.map$|^[^/]*\.txt$'
+      LFTP_SETTINGS: >-
+        set ftp:ssl-force true;
+        set ftp:ssl-protect-data true;
+        set ssl:verify-certificate no;
+        set net:timeout 20;
+        set net:max-retries 15;
+        set net:persist-retries 10;
+        set net:reconnect-interval-base 5;
+        set xfer:clobber on;
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          # git diff needs the previously deployed commit to be present.
+          # A shallow clone would not have it and every run would be a full one.
+          fetch-depth: 0
 
       - name: Install lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
-      - name: Build deploy payload
+      - name: Read last deployed commit from the server
+        run: |
+          # A missing .deploy-state is normal on a first run, so this step must
+          # not fail the job: cmd:fail-exit is off here and the shell swallows
+          # a non-zero exit.
+          lftp --env-password -u "$FTP_USER" "ftp://$FTP_HOST" -e "
+            $LFTP_SETTINGS
+            set cmd:fail-exit no;
+            get .deploy-state -o last_deployed.txt;
+            bye
+          " || true
+          if [ -s last_deployed.txt ]; then
+            LAST=$(tr -dc '[:alnum:]' < last_deployed.txt)
+            echo "server reports last deploy: $LAST"
+          else
+            LAST=""
+            echo "no .deploy-state on the server - this will be a full deploy"
+          fi
+          echo "LAST=$LAST" >> "$GITHUB_ENV"
+
+      - name: Decide what to send
         run: |
           set -euo pipefail
-          git ls-files \
-            | grep -v -E '^(\.github|\.vscode|_tools|_merge_backup|module-display)/' \
-            | grep -v -E '^ccs_dash/includes/ckeditor_old/' \
-            | grep -v -E '^assets/fontawesome/(svgs|sprites|scss|less|metadata|js)/' \
-            | grep -v -E '^snippets/pb_mods/DNU_header/' \
-            | grep -v -E '\.md$' \
-            | grep -v -E '\.map$' \
-            | grep -v -E '^[^/]*\.txt$' \
-            > manifest.txt
-          COUNT=$(wc -l < manifest.txt)
-          echo "payload files: $COUNT"
-          test "$COUNT" -gt 0
-          mkdir -p _deploy
-          tar -cf - -T manifest.txt | tar -xf - -C _deploy
-          echo "materialised: $(find _deploy -type f | wc -l)"
-          echo "zero-byte files (must be 0): $(find _deploy -type f -empty | wc -l)"
-          test "$(find _deploy -type f -empty | wc -l)" -eq 0
+          MODE=full
+          if [ -n "${LAST:-}" ] && git cat-file -e "${LAST}^{commit}" 2>/dev/null; then
+            if git diff --name-only "$LAST" HEAD | grep -q '^\.github/workflows/deploy\.yml$'; then
+              echo "deploy.yml changed since $LAST - forcing a full resync"
+            else
+              MODE=incremental
+            fi
+          elif [ -n "${LAST:-}" ]; then
+            echo "commit $LAST is not in this history - forcing a full resync"
+          fi
 
-      - name: Upload to staging
-        env:
-          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD_STAGING }}
+          if [ "$MODE" = full ]; then
+            git ls-files | grep -v -E "$EXCL" > send.txt || true
+          else
+            # ACMRT = added/copied/modified/renamed/typechanged. Deletions are
+            # excluded deliberately: the file is gone from the tree, so trying
+            # to stage it would fail, and the mirror does not delete anyway.
+            git diff --name-only --diff-filter=ACMRT "$LAST" HEAD | grep -v -E "$EXCL" > send.txt || true
+            git diff --name-only --diff-filter=D "$LAST" HEAD | grep -v -E "$EXCL" > gone.txt || true
+            if [ -s gone.txt ]; then
+              echo "::warning::deleted from the repo but LEFT ON THE SERVER - remove by hand in cPanel:"
+              sed 's/^/  /' gone.txt
+            fi
+          fi
+
+          COUNT=$(wc -l < send.txt)
+          echo "mode=$MODE  files to send=$COUNT"
+          # head reads the file directly. Piping sed INTO head makes head exit
+          # early, sed die of SIGPIPE, and pipefail kill the whole step.
+          head -40 send.txt | sed 's/^/  /'
+          [ "$COUNT" -gt 40 ] && echo "  ... and $((COUNT-40)) more" || true
+          echo "MODE=$MODE"   >> "$GITHUB_ENV"
+          echo "COUNT=$COUNT" >> "$GITHUB_ENV"
+
+      - name: Build payload
+        if: env.COUNT != '0'
         run: |
-          lftp --env-password \
-               -u "${{ secrets.FTP_USERNAME_STAGING }}" \
-               "ftp://${{ secrets.FTP_SERVER }}" \
-               -e "
-                 set ftp:ssl-force true;
-                 set ftp:ssl-protect-data true;
-                 set ssl:verify-certificate no;
-                 set net:timeout 20;
-                 set net:max-retries 15;
-                 set net:persist-retries 10;
-                 set net:reconnect-interval-base 5;
-                 set xfer:clobber on;
-                 set cmd:fail-exit yes;
-                 mirror -R --verbose=1 --parallel=1 _deploy/ ./ ;
-                 bye
-               "
+          set -euo pipefail
+          mkdir -p _deploy
+          tar -cf - -T send.txt | tar -xf - -C _deploy
+          echo "materialised: $(find _deploy -type f | wc -l)"
+          # A zero-byte file drops the FTP session on this host. The stubs under
+          # snippets/pb_mods carry a cms:ignore note so they are never empty; if
+          # this ever trips, FILL the file - do not delete or exclude it.
+          EMPTY=$(find _deploy -type f -empty | wc -l)
+          echo "zero-byte files (must be 0): $EMPTY"
+          test "$EMPTY" -eq 0
+
+      - name: Upload, then record the commit
+        if: env.COUNT != '0'
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD > deploy-state.txt
+          # --transfer-all: _deploy/ already contains exactly what must go up,
+          # so send it regardless of what timestamps either side reports.
+          # cmd:fail-exit yes: if the mirror fails, lftp exits WITHOUT running
+          # the put below, so .deploy-state is never advanced past a failure.
+          lftp --env-password -u "$FTP_USER" "ftp://$FTP_HOST" -e "
+            $LFTP_SETTINGS
+            set cmd:fail-exit yes;
+            mirror -R --transfer-all --verbose=1 --parallel=1 _deploy/ ./ ;
+            put deploy-state.txt -o .deploy-state;
+            bye
+          "
+          echo "deployed $COUNT file(s) at $(cat deploy-state.txt)"
+
+      - name: Nothing to do
+        if: env.COUNT == '0'
+        run: echo "No deployable file changed since $LAST - server is already current."
