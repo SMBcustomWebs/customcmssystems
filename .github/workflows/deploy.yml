@@ -1,9 +1,9 @@
-name: Deploy to HostGator
+name: Deploy to Staging
 
+# MANUAL ONLY. This workflow never fires on a push or a merge.
+# To run it: GitHub -> Actions tab -> "Deploy to Staging" -> Run workflow -> pick a branch.
 on:
-  push:
-    branches:
-      - main # Triggers only when you push to the main branch
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -11,16 +11,50 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2 # Required for the FTP action to determine changed files
+        # No fetch-depth needed. The FTP action does NOT use git history to work out
+        # what changed - it keeps a manifest called .ftp-deploy-sync-state.json on the
+        # server and diffs against that.
 
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.3
         with:
           server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          # HostGator often uses standard FTP (port 21). 
-          # If your HostGator account enforces SFTP, uncomment the next two lines and verify your port (often 2222 for HostGator):
-          # protocol: sftp
-          # port: 2222
+          username: ${{ secrets.FTP_USERNAME_STAGING }}
+          password: ${{ secrets.FTP_PASSWORD_STAGING }}
+
+          # ftp | ftps | ftps-legacy. There is no 'sftp' option - this action is
+          # FTP-based, not SSH. ftps encrypts the session on the same port 21.
+          protocol: ftps
+
+          # The staging FTP account is jailed to /home1/jznrjgte/public_html/staging,
+          # so it lands there on login and './' IS the staging web root.
+          # That jail is the safety net: this credential cannot write above itself.
+          server-dir: ./
+
+          # FIRST RUN SAFETY. Prints every file it would add, change or delete and
+          # uploads nothing. Read the log, confirm it looks right, then set to false.
+          dry-run: true
+          log-level: verbose
+
+          # NEVER add dangerous-clean-slate. It deletes everything in server-dir,
+          # including files protected below.
+
+          # IN GITHUB, NOT ON THE SITE.
+          # This list REPLACES the action's defaults, so the first three lines
+          # restate them - without those, .git would be uploaded.
+          # NOTE: '*.txt' is root-level only on purpose. The 27 .txt files under
+          # snippets/ are inline-edit clusters and dropdown sources - they are live
+          # code and must ship. '**/*.txt' would break front-end editing.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .github/**
+            .vscode/**
+            _tools/**
+            _merge_backup/**
+            module-display/**
+            snippets/pb_mods/DNU_header/**
+            **/*.md
+            *.txt
+            **/*.map
