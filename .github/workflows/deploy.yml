@@ -1,7 +1,23 @@
 name: Deploy to Staging
 
-# MANUAL ONLY. This workflow never fires on a push or a merge.
-# To run it: GitHub -> Actions tab -> "Deploy to Staging" -> Run workflow -> pick a branch.
+# MANUAL ONLY. Never fires on a push or a merge.
+# Actions tab -> "Deploy to Staging" -> Run workflow -> pick a branch.
+#
+# WHY THIS IS SPLIT INTO SEVEN STEPS
+# HostGator runs Pure-FTPd with anti-flood limits. This action opens a NEW
+# passive data connection for every single file, so a 2,000-file deploy means
+# 2,000 connections and the server cuts the session with
+# "Server sent FIN packet unexpectedly" partway through. Two full-tree attempts
+# died that way, at 6m11s and again deeper in.
+#
+# Each step below is a separate FTP session with its own state file, so the
+# per-session count resets between them. If a step fails, the steps before it
+# have already saved their state - re-running resumes instead of starting over.
+#
+# NEVER add dangerous-clean-slate to any step. It deletes everything in
+# server-dir, including excluded files. ccs_dash/uploads is 1.1 GB and exists
+# in no repository.
+
 on:
   workflow_dispatch:
 
@@ -11,64 +27,161 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        # No fetch-depth needed. The FTP action does NOT use git history to work out
-        # what changed - it keeps a manifest called .ftp-deploy-sync-state.json on the
-        # server and diffs against that.
 
-      - name: FTP Deploy
+      - name: Deploy ccs_dash/includes/ckeditor  (261 files)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.3
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME_STAGING }}
           password: ${{ secrets.FTP_PASSWORD_STAGING }}
-
-          # ftp | ftps | ftps-legacy. There is no 'sftp' option - this action is
-          # FTP-based, not SSH. ftps encrypts the session on the same port 21.
           protocol: ftps
-
-          # The staging FTP account is jailed to /home1/jznrjgte/public_html/staging,
-          # so it lands there on login and './' IS the staging web root.
-          # That jail is the safety net: this credential cannot write above itself.
-          server-dir: ./
-
-          # FIRST RUN SAFETY. Prints every file it would add, change or delete and
-          # uploads nothing. Read the log, confirm it looks right, then set to false.
+          local-dir: ./ccs_dash/includes/ckeditor/
+          server-dir: ./ccs_dash/includes/ckeditor/
+          state-name: .ftp-state-ckeditor.json
           dry-run: false
-          log-level: verbose
-
-          # NEVER add dangerous-clean-slate. It deletes everything in server-dir,
-          # including files protected below.
-
-          # IN GITHUB, NOT ON THE SITE.
-          # This list REPLACES the action's defaults, so the first three lines
-          # restate them - without those, .git would be uploaded.
-          # NOTE: '*.txt' is root-level only on purpose. The 27 .txt files under
-          # snippets/ are inline-edit clusters and dropdown sources - they are live
-          # code and must ship. '**/*.txt' would break front-end editing.
+          log-level: standard
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
+            **/*.md
+
+      - name: Deploy ccs_dash/includes/kcfinder  (238 files)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME_STAGING }}
+          password: ${{ secrets.FTP_PASSWORD_STAGING }}
+          protocol: ftps
+          local-dir: ./ccs_dash/includes/kcfinder/
+          server-dir: ./ccs_dash/includes/kcfinder/
+          state-name: .ftp-state-kcfinder.json
+          dry-run: false
+          log-level: standard
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/*.md
+
+      - name: Deploy ccs_dash/includes  (rest, 157 files)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME_STAGING }}
+          password: ${{ secrets.FTP_PASSWORD_STAGING }}
+          protocol: ftps
+          local-dir: ./ccs_dash/includes/
+          server-dir: ./ccs_dash/includes/
+          state-name: .ftp-state-includes.json
+          dry-run: false
+          log-level: standard
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            ckeditor/**
+            kcfinder/**
+            # ckeditor_old is unreferenced - field.php and the inline addon both
+            # load includes/ckeditor/. 261 files, never deployed.
+            ckeditor_old/**
+            **/*.md
+
+      - name: Deploy ccs_dash  (rest, 272 files)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME_STAGING }}
+          password: ${{ secrets.FTP_PASSWORD_STAGING }}
+          protocol: ftps
+          local-dir: ./ccs_dash/
+          server-dir: ./ccs_dash/
+          state-name: .ftp-state-ccs_dash.json
+          dry-run: false
+          log-level: standard
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            includes/**
+            # config.php is gitignored and placed on each server by hand -
+            # it holds that environment's database and gateway keys.
+            **/*.md
+
+      - name: Deploy assets  (334 files)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME_STAGING }}
+          password: ${{ secrets.FTP_PASSWORD_STAGING }}
+          protocol: ftps
+          local-dir: ./assets/
+          server-dir: ./assets/
+          state-name: .ftp-state-assets.json
+          dry-run: false
+          log-level: standard
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            # Font Awesome ships as CSS + webfonts here. Nothing in the codebase
+            # references svgs/ sprites/ scss/ less/ metadata/ js/ - verified.
+            fontawesome/svgs/**
+            fontawesome/sprites/**
+            fontawesome/scss/**
+            fontawesome/less/**
+            fontawesome/metadata/**
+            fontawesome/js/**
+            **/*.map
+            **/*.md
+
+      - name: Deploy snippets  (421 files)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME_STAGING }}
+          password: ${{ secrets.FTP_PASSWORD_STAGING }}
+          protocol: ftps
+          local-dir: ./snippets/
+          server-dir: ./snippets/
+          state-name: .ftp-state-snippets.json
+          dry-run: false
+          log-level: standard
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            # NOTE: no *.txt exclude here. The .txt files under pb_mods are
+            # inline-edit clusters and dropdown sources - they are live code.
+            pb_mods/DNU_header/**
+            **/*.md
+
+      - name: Deploy root, blocks, vendors, users, legal, bmenu  (144 files)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME_STAGING }}
+          password: ${{ secrets.FTP_PASSWORD_STAGING }}
+          protocol: ftps
+          local-dir: ./
+          server-dir: ./
+          state-name: .ftp-state-root.json
+          dry-run: false
+          log-level: standard
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            # everything the steps above already handled
+            ccs_dash/**
+            assets/**
+            snippets/**
+            # in GitHub, not on the site
             .github/**
             .vscode/**
             _tools/**
             _merge_backup/**
             module-display/**
-            snippets/pb_mods/DNU_header/**
             **/*.md
             *.txt
             **/*.map
-
-            # Font Awesome source assets. The site loads FA through
-            # assets/fontawesome/css/*.css + webfonts/ only - verified: zero
-            # references to any folder below, anywhere in the codebase.
-            # svgs/ alone is 2,060 files, about half the whole deployment,
-            # and the first full deploy died on a dropped FTP connection at
-            # 6m11s. These stay in GitHub. If FA is ever switched to the SVG
-            # or JS build, delete the matching line.
-            assets/fontawesome/svgs/**
-            assets/fontawesome/sprites/**
-            assets/fontawesome/scss/**
-            assets/fontawesome/less/**
-            assets/fontawesome/metadata/**
-            assets/fontawesome/js/**
