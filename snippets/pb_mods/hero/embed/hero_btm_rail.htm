@@ -6,50 +6,64 @@
     </cms:if>
 </cms:func>
 
+<cms:ignore>
+    ORDER NUMBERS: 1 for the message, 10 and 20 for the two rows, then 1..n
+    inside each row.
+
+    They used to be 809, 810 and 809 - the message and the SECOND row shared
+    809, and Couch has no tie-break for two siblings on the same order. The
+    panel drew them in whatever order it happened to resolve, which is why the
+    rows came out jumbled. The children were numbered 811-827 in one flat run
+    across both rows, which read as if they were siblings of each other when
+    they are not.
+
+    Child order only has to be unique WITHIN its own row. Keep them small and
+    local so a collision like that cannot hide again.
+</cms:ignore>
 <cms:editable type='group' name='ccs_hro_bot_rail_grp' label="Bottom Rail Options" not_active=ccs_hro_bot_rail_chc order='210'>
-    <cms:editable type='message' name='ccs_hro_bot_rail_msg' order='809'>
+    <cms:editable type='message' name='ccs_hro_bot_rail_msg' order='1'>
         <hr><br>
         <h2>The Bottom Rail Rests on the Bottom of the Hero Section</h2>
         <h4>To Remove, uncheck the option above</h4>
         <p></p>
     </cms:editable>
-    <cms:editable type='row' name='ccs_hro_bot_rail_row' order='810'>
+    <cms:editable type='row' name='ccs_hro_bot_rail_row' order='10'>
         <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_sz' label='Full or Half Width' desc='horizontal size of rail at bottom'
             opt_values='Full=12 |Half=6'
             class='col-md-4'
-            order='811'
+            order='1'
         />
         <cms:editable type='dropdown' name='ccs_hro_bot_rail_thk' label='Height of Rail' desc='thickness'
 			opt_values='Normal=3|Thin=2|Thick=4|Only Text Background=0'
 			class='col-md-4'
-			order='812'
+			order='2'
 		/>
         <cms:ignore>
-            The solid colour list, not the grey shades.
+            The solid color list, not the gray shades.
 
             The swiper's own rail has always used dropdowns/solid-colors.htm;
             this one was left on shades_gray.htm, so the same control offered
-            greys on a single hero and full colour on a slide. Two rails, one
+            grays on a single hero and full color on a slide. Two rails, one
             job, two different palettes.
         </cms:ignore>
         <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_shd' label='Background Color'
             opt_values='dropdowns/solid-colors.htm'
             dynamic='opt_values'
             class='col-md-4'
-            order='813'  
+            order='3'  
         />
     </cms:editable>
-    <cms:editable type='row' name='ccs_hro_bot_rail_txt_row' order='809'>
+    <cms:editable type='row' name='ccs_hro_bot_rail_txt_row' order='20'>
         <cms:editable type='text' name='ccs_hro_bot_rail_ln_txt_ln' label='Text' desc='line of text'
             maxlength='130'
             class='col-md-4'
-            order='814' 
+            order='1' 
         />
         <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_txt_clr' label='Text Color' 
             opt_values='dropdowns/solid-colors.htm'
             dynamic='opt_values'
             class='col-md-4'
-            order='816'  
+            order='2'  
         />
         <cms:ignore>
             The full site-wide size list, not a hardcoded pair.
@@ -73,25 +87,25 @@
             opt_values='dropdowns/text-size.htm'
             dynamic='opt_values'
             class='col-md-4'
-            order='819'  
+            order='3'  
         />
         <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_fnt_wt' label='Font Weight' 
             opt_values='dropdowns/font-weight.htm'
             dynamic='opt_values'
             class='col-md-4'
-            order='822'  
+            order='4'  
         />
         <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_fnt_st' label='Font Style' 
             opt_values='dropdowns/font-style.htm'
             dynamic='opt_values'
             class='col-md-4'
-            order='825'  
+            order='5'  
         />
         <cms:editable type='dropdown' name='ccs_hro_bot_rail_ln_font' label='Font Family' 
             opt_values='dropdowns/font-family.htm'
             dynamic='opt_values'
             class='col-md-4'
-            order='827'  
+            order='6'  
         />
     </cms:editable>
 </cms:editable>

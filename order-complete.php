@@ -230,10 +230,10 @@
                     </cms:ignore>
                     <cms:if ocp_claimed>
                         <div class="ocl-note ocl-ok p-4 mt-4">
-                            <h4 class="fw-bold mb-2" style="font-size:16px">
+                            <h4 class="fw-bold mb-2 fs-9">
                                 <i class="fas fa-check-circle me-2" aria-hidden="true"></i>Saved to your account
                             </h4>
-                            <p class="mb-3" style="font-size:14px">
+                            <p class="mb-3">
                                 Order <strong><cms:show ocp_number /></strong> is now in your order history,
                                 with its receipt, for as long as you have an account.
                             </p>
@@ -244,10 +244,10 @@
 
                     <cms:else_if ocp_owner eq '' />
                         <div class="ocl-note ocl-offer p-4 mt-4">
-                            <h4 class="fw-bold mb-2" style="font-size:16px">Keep this order</h4>
+                            <h4 class="fw-bold mb-2 fs-9">Keep this order</h4>
 
                             <cms:if k_logged_in && ccs_auth_uid>
-                                <p class="mb-3" style="font-size:14px">
+                                <p class="mb-3">
                                     You checked out without signing in, so this order is not attached to
                                     your account yet. Save it and it joins your order history, receipt
                                     and all.
@@ -260,7 +260,7 @@
                                 </form>
 
                             <cms:else />
-                                <p class="mb-3" style="font-size:14px">
+                                <p class="mb-3">
                                     You checked out as a guest, so this order lives only in the receipt
                                     emailed to <strong><cms:show ocp_email /></strong>. With an account
                                     it is kept in your order history, and your details are filled in
@@ -280,7 +280,7 @@
                                         I already have one
                                     </a>
                                 </div>
-                                <p class="mb-0 mt-3" style="font-size:13px">
+                                <p class="mb-0 mt-3 fs-10">
                                     Come back to this page once you are signed in &mdash; the link is in your
                                     receipt email &mdash; and press Save. Nothing is lost in the meantime.
                                 </p>
@@ -293,7 +293,7 @@
                             Without this the success panel would simply vanish on
                             refresh, which reads as the save having come undone.
                         </cms:ignore>
-                        <p class="mt-4 mb-0 <cms:show ccs_st_secondary />" style="font-size:14px">
+                        <p class="mt-4 mb-0 <cms:show ccs_st_secondary />">
                             <i class="fas fa-check me-1" aria-hidden="true"></i>
                             This order is saved to your account &mdash;
                             <a href="<cms:link 'my-orders.php' />">see all your orders</a>.
@@ -301,7 +301,7 @@
 
                     <cms:else_if ocl_result eq 'notyours' />
                         <div class="ocl-note ocl-warn p-4 mt-4">
-                            <p class="mb-0" style="font-size:14px">
+                            <p class="mb-0">
                                 This order is already saved to a different account, so it has been left
                                 alone. If that is not right, quote order
                                 <strong><cms:show ocp_number /></strong> and we will sort it out.

@@ -1,50 +1,41 @@
 <cms:ignore>
     =========================================================================
-    CONTACT BLOCK  -  SINGLE EMAIL LINE
+    CONTACT BLOCK  -  EMAIL-ONLY FORM
     snippets/pb_mods/contact/theme/cnt_email_frm.html
 
-    One email box and a send button, with an optional heading and up
-    to two lines above it. For a newsletter sign-up or a "we will get back
-    to you" strip.
+    One box. An email address and a send button, with an optional heading and
+    up to two lines above. For a mailing-list sign-up or a "we will get back
+    to you" strip where asking for a name and a message is more than the
+    moment deserves.
 
-    ACCESSIBILITY, and every one of these is a real failure mode rather than a
-    box-tick:
+    THE SAME SCHEMA AS THE BASIC TILE, DELIBERATELY. Both tiles embed the same
+    three files, so the name and message wording fields exist here too. They
+    are simply not rendered - and because every edit button in this block
+    hangs off the element it edits, not rendering a field is all it takes to
+    keep its controls off the page. There is no hide list to maintain.
 
-      LABEL ELEMENTS ALWAYS EXIST, paired to their input by for= and id=. The
-      author can hide them visually; visually-hidden keeps them in the
-      accessibility tree where display:none would not. A placeholder is not a
-      label - it vanishes on first keystroke, most screen readers ignore it as
-      a name, and its grey default fails contrast almost everywhere.
+    That replaces cnt_inl_hide, which used to be set here to a pipe-separated
+    list of seven field names and passed to hide_fields on a shared wording
+    popup. The list was a second place that had to be updated every time the
+    schema changed, and it silently went stale.
 
-      autocomplete= lets a browser fill known values. For someone with a motor
-      impairment that is the difference between one tap and typing an address.
+    ACCESSIBILITY, SEO, INLINE EDITING and the hardcoded form name all work
+    exactly as described at the top of cnt_basic_frm.html. Read that file for
+    the reasoning; it is not repeated here because two copies of a rationale
+    is how the two copies start disagreeing.
 
-      inputmode='email' raises the @ keyboard on a phone. cms:input has no
-      HTML5 email type, so this is how that is reached.
-
-      role='alert' on the error summary announces itself the moment it appears.
-      role='status' on the thank-you is polite - it waits for a pause rather
-      than interrupting.
-
-      The submit is a real button element carrying real text, not an
-      input type=submit with a value, so an icon can sit beside a label.
-
-    SEO. One heading element, level chosen by the author, h2 down to h6 or a
-    plain paragraph. Never h1 - that belongs to the page. The section is a
-    landmark element.
-
-    RESPONSIVE. The box width comes from the shared txt-box_size.htm, so this
-    section lines up with every other block on the page. No fixed pixel widths
-    anywhere; spacing is all utility classes.
-
-    THE FORM NAME IS HARDCODED AND MUST STAY THAT WAY. Couch matches a
-    submission back to the form by this name; a generated one would mean no
-    post was ever recognized. The consequence is that two tiles of THIS type
-    on one page would share a name and both react to one submission - a real
-    limit, worth solving before that layout is ever used.
+    THE FORM NAME IS HARDCODED AND MUST STAY THAT WAY. It differs from the
+    basic tile's name, which is what lets one of each sit on a single page
+    without both reacting to one submission.
     =========================================================================
 </cms:ignore>
 <cms:embed 'pb_mods/contact/router/cnt_frm.inc' />
+<cms:ignore>
+    A SECOND ROUTER, FOR THIS TILE ONLY. cnt_frm.inc serves both tiles and knows
+    nothing about the mailing list; cnt_sub.inc reads the two fields that exist
+    only here. The reasoning is at the top of that file.
+</cms:ignore>
+<cms:embed 'pb_mods/contact/router/cnt_sub.inc' />
 
 <section id="<cms:show cnt_uid />" class="position-relative <cms:show cf_bg /> <cms:show cf_sec_pad />">
 
@@ -52,55 +43,73 @@
         <style><cms:show cf_min_h_css /></style>
     </cms:if>
 
+    <cms:ignore>
+        THE SECTION CLUSTER SITS HERE, A DIRECT CHILD OF THE SECTION, so it
+        pins to the section's own top-left corner the way every other slide on
+        the site does. The section already carries position-relative.
+
+        It used to be embedded down inside the column, which anchored it to the
+        form box - and a form box is where BOX-level controls belong, so the
+        section's controls read as the form's and landed on top of the form's
+        own cluster.
+    </cms:ignore>
     <cms:embed 'pb_mods/contact/inline/cnt_section_edit.txt' />
 
     <div class="container">
-        <div class="row cnt-body justify-content-<cms:show cnt_box_halg /> align-items-center">
-            <div class="<cms:show cf_box /> text-<cms:show cnt_txt_halg />">
+        <div class="row cnt-body justify-content-<cms:show cf_box_halg /> align-items-center">
 
-                <cms:ignore>
-                    The wrapper is position-relative and always renders, even
-                    with no heading and no lines in it, because a blank text
-                    area is exactly when the author needs the button that adds
-                    the first heading.
-                </cms:ignore>
-                <div class="position-relative">
-                    <cms:embed 'pb_mods/contact/inline/cnt_txtbx_edit.txt' />
+            <div class="<cms:show cf_box /> text-<cms:show cf_txt_halg /> position-relative">
 
-                    <cms:if cnt_hdg_ln>
-                        <<cms:show cnt_hdg_tag /> class="<cms:show cf_hdg_cls />mb-3"><cms:show cnt_hdg_ln /></<cms:show cnt_hdg_tag />>
-                    </cms:if>
+                <cms:embed 'pb_mods/contact/theme/cnt_header.html' />
 
-                    <cms:if cnt_txt_opt ge '1' && cnt_txt1_ln>
-                        <p class="<cms:show cf_txt1_cls />mb-2"><cms:show cnt_txt1_ln /></p>
-                    </cms:if>
-                    <cms:if cnt_txt_opt ge '2' && cnt_txt2_ln>
-                        <p class="<cms:show cf_txt2_cls />mb-2"><cms:show cnt_txt2_ln /></p>
-                    </cms:if>
-                </div>
-
-                <cms:ignore>
-                    THE ONE LINE THAT DIFFERS FROM THE BASIC TILE. This tile
-                    renders only the email box, but it embeds the same schema
-                    files, so the name and message wording fields exist here
-                    too and would otherwise appear in the wording popup -
-                    offering to reword boxes that are not on the page.
-
-                    hide_fields loads them and does not draw them. The rows go
-                    in the list as well as their fields, or an empty row header
-                    is left behind with nothing under it.
-
-                    Set with scope global on BOTH tiles, never left unset: the
-                    root outlives a tile, so a stale value would carry into
-                    whichever contact section renders next on the same page.
-                </cms:ignore>
-                <cms:set cnt_inl_hide = 'cnt_frm_name_row|cnt_frm_name_lbl|cnt_frm_name_plc|cnt_frm_msg_row|cnt_frm_msg_lbl|cnt_frm_msg_plc|cnt_frm_msg_rows' scope='global' />
                 <div class="position-relative">
                     <cms:embed 'pb_mods/contact/inline/cnt_form_edit.txt' />
 
+                <cms:ignore>
+                    =====================================================================
+                    THE HONEYPOT, READ BEFORE ANYTHING ACTS ON THE SUBMISSION.
+
+                    cnt_hp_co is a real input positioned off-screen. A person never sees
+                    it and never fills it. A commodity form bot walks the DOM, fills every
+                    input it finds, and posts - so a non-empty value here is not a
+                    suspicious signal, it is a bot by definition.
+
+                    NAMED LIKE SOMETHING WORTH FILLING. "company" is what the crawlers
+                    look for; a field called hp_trap_1 gets skipped by anything written in
+                    the last decade.
+
+                    NOT A cms:input. It has to stay invisible to cms:form so it never
+                    validates, never repopulates and never turns up in k_error. cms:gpc is
+                    how a raw input's value is recovered.
+
+                    WHAT HAPPENS WHEN IT IS FILLED is nothing: the ordinary thank-you
+                    renders, no mail is sent and no row is written. Showing an error would
+                    tell whoever wrote the bot which field gave it away, and they adjust.
+                    =====================================================================
+                </cms:ignore>
+                <cms:gpc var='cnt_hp_co' method='post' into='cnt_hp' scope='global' />
+
+                <cms:ignore>
+                    PROOF THAT THIS FORM IS THE ONE THAT WAS SUBMITTED.
+
+                    k_success IS NOT PRIVATE TO A FORM. tags.php:5646 sets it with
+                    $CTX->set() and no scope, so it lands in whichever frame is innermost
+                    at the time. A form that was NOT submitted has no k_success of its
+                    own, so the read walks outward and can find one left at page scope by
+                    something else entirely - cms:process_activation does exactly that in
+                    users/register.php.
+
+                    The footer sign-up box had this bug and wrote blank-email subscriber
+                    rows every time somebody opened an account activation link. Same
+                    shape here, so the same guard: cnt_sent is a hidden input that exists
+                    only inside this form, so it is in POST only when this form was
+                    posted. Fixed 2026-09-20.
+                </cms:ignore>
+                <cms:gpc var='cnt_frm_sent' method='post' into='cnt_sent' scope='global' />
+
                 <cms:form name='cnt_email_frm' method='post' class='mt-4' anchor='0'>
 
-                    <cms:if k_success>
+                    <cms:if cnt_sent && k_success>
 
                         <cms:ignore>
                             DELIVERY. k_email_from and k_email_to are exposed by
@@ -112,35 +121,236 @@
                             in the inbox answers them directly. from stays the
                             site's own address: putting the visitor's address
                             in From is what gets mail rejected by SPF and DMARC.
+
+                            cf_subj, not cnt_frm_subj. The router substitutes
+                            a working subject line if the field is empty, and
+                            an empty Subject header is a strong spam signal.
                         </cms:ignore>
                         <cms:ignore>
-                            THE WHOLE FORM, IN ONE TAG. k_success is not a
-                            boolean - tags.php builds it as one "Label: value"
-                            line per field, in declaration order, the moment
-                            validation passes. It skips the submit button and
-                            the hidden CSRF token on its own.
+                            THE HONEYPOT GATE WRAPS EVERY EFFECT AND NOTHING ELSE.
 
-                            Which means the CAPTCHA, or a phone field, or
-                            anything else added to this form later arrives in
-                            the inbox with no edit here. Hand-listing the
-                            fields, which is what this used to do, is a list
-                            that goes stale the first time the form changes.
+                            A filled trap falls through to the thank-you below without
+                            sending, without writing and without complaining. The bot is
+                            told it succeeded, which is the whole point - a form that
+                            answers "you are a robot" is a form somebody tunes against.
 
-                            The label on each cms:input is what titles each
-                            line. Those are bound to the same author-editable
-                            wording as the visible labels, so the mail reads in
-                            the site owner's own words.
-
-                            send_mail defaults to html='0', which decodes
-                            entities and strips tags over the whole body, so
-                            the newlines survive and nothing markup-ish gets
-                            through.
+                            Deliberately NOT wrapped around the alert itself; see the note
+                            there.
                         </cms:ignore>
-                        <cms:send_mail from=k_email_from to=k_email_to reply_to=frm_email subject="<cms:show cnt_frm_subj />"><cms:show k_success /></cms:send_mail>
+                        <cms:if cnt_hp><cms:else />
 
+                        <cms:ignore>
+                            A SENTENCE, THEN THE FIELD DUMP. On its own this mail is one
+                            line reading "Email Address: someone@example.com", which says
+                            nothing about what happened or which form it came from. The
+                            line above it does, and k_success below it still carries any
+                            field added to this tile later without an edit here.
+
+                            THE BODY STARTS AT COLUMN 0 AND HAS TO STAY THERE.
+                            cms:send_mail sends its children verbatim.
+                        </cms:ignore>
+                        <cms:send_mail from=k_email_from to=k_email_to reply_to=frm_email subject="<cms:show cf_subj />"><cms:show frm_email /> asked to join the mailing list.
+
+They have been sent a validation link and will not receive anything until they
+validate their subscription by clicking it. The record is under Subscribers.
+
+<cms:show k_success /></cms:send_mail>
+
+                        <cms:ignore>
+                            ============================================
+                            THE ONLY DATABASE WRITE IN THE CONTACT BLOCK.
+
+                            UNCONDITIONAL, because collecting addresses is what
+                            this tile is. There is no author switch and no
+                            visitor tickbox; choosing this tile over
+                            cnt_basic_frm_tl is the decision, and cs_notice
+                            above the button is what tells the visitor before
+                            they send. A condition here would mean the tile
+                            sometimes collects and sometimes does not, with
+                            nothing on the page to say which.
+
+                            AFTER cms:send_mail, NOT BEFORE. Answering the
+                            person is this form's job; the list is a side
+                            effect. If the write fails, the message has already
+                            gone and the visitor is not shown a failure for
+                            something that was not their request.
+
+                            THE SENTENCE STORED IS cs_notice - the same variable
+                            printed above the button. One field, both uses, so
+                            the wording on file cannot drift from the wording
+                            they were shown. That record is the only evidence of
+                            what they were told.
+
+                            THE TOKEN EXISTS BEFORE THE ROW DOES. It is the ?t=
+                            value in every unsubscribe link, so a row written
+                            without one is a subscriber who cannot leave. Not
+                            the email address, for the reasons in unsubscribe.php.
+
+                            A DUPLICATE IS NOT AN ERROR AND IS NOT ANNOUNCED.
+                            Someone already on the list who writes in again gets
+                            their message sent and the same thank-you. Nothing
+                            is written twice.
+
+                            NOTHING IS SAID ABOUT ANY OF THIS IN THE THANK-YOU.
+                            It was stated once, above the button, before they
+                            acted. Repeating it afterwards is the overstatement
+                            that makes a plain notice read as an apology.
+                            ============================================
+                        </cms:ignore>
+                        <cms:ignore>
+                            THE EXISTING ROW, IF THERE IS ONE, AND ITS STATE.
+
+                            Three things can be true of this address and each needs a
+                            different answer, so the status and the token are both carried
+                            out of the lookup rather than a bare found/not-found flag.
+
+                            An 'unsubscribed' row is never matched here: its address was
+                            blanked when they left. That is correct - somebody who
+                            unsubscribed and later signs up again is a new decision, and
+                            they get a new row with a new token and today's date on it.
+                        </cms:ignore>
+                        <cms:set cnt_sub_found = '' scope='global' />
+                        <cms:set cnt_sub_state = '' scope='global' />
+                        <cms:set cnt_sub_token = '' scope='global' />
+                        <cms:pages masterpage='subscribers.php' custom_field="subscriber_email==<cms:show frm_email />" limit='1'>
+                            <cms:set cnt_sub_found = '1' scope='global' />
+                            <cms:set cnt_sub_state = subscriber_status scope='global' />
+                            <cms:set cnt_sub_token = subscriber_token scope='global' />
+                        </cms:pages>
+
+                                                <cms:ignore>
+                            A SEPARATE found FLAG, BECAUSE A STATUS CAN BE BLANK.
+
+                            This used to test `state eq ''` to mean "no row exists".
+                            Row 137 - written by the footer box in August - has an EMPTY
+                            subscriber_status, so the lookup FOUND it, set state to '',
+                            and the code concluded there was no row and wrote a duplicate.
+                            Diagnostic 2026-09-20: two rows for one address, both real.
+
+                            Found-ness and state are different questions. Ask them
+                            separately or a blank field answers the wrong one.
+                        </cms:ignore>
+                        <cms:if cnt_sub_found eq ''>
+                            <cms:capture into='cnt_sub_token'><cms:php>echo bin2hex( random_bytes(16) );</cms:php></cms:capture>
+
+                            <cms:db_persist _masterpage='subscribers.php' _mode='create' _auto_title='1'
+                                k_page_title=frm_email
+                                subscriber_email=frm_email
+                                subscriber_token=cnt_sub_token
+                                subscriber_status='pending'
+                                subscriber_consent_ts="<cms:date format='Y-m-d H:i:s' />"
+                                subscriber_consent_src=cs_src
+                                subscriber_consent_txt=cs_notice />
+
+                            <cms:ignore>
+                                A FAILED WRITE MUST NOT PRODUCE A CONFIRMATION MAIL. The
+                                token is cleared so the send below is skipped - a link
+                                pointing at a row that was never created is worse than no
+                                mail at all, because the person clicks it and is told their
+                                link did not work.
+                            </cms:ignore>
+                            <cms:if k_error>
+                                <cms:set cnt_sub_token = '' scope='global' />
+                            </cms:if>
+                        </cms:if>
+
+                        <cms:ignore>
+                            ================================================
+                            THE CONFIRMATION MAIL - THIS IS THE BOT CHECK.
+
+                            Nothing on this form asks the visitor to prove they
+                            are a person. Instead the address has to prove
+                            itself: the row is written 'pending' and one mail
+                            goes to the address. Opening the link in it is what
+                            promotes the row (confirm-subscription.php).
+
+                            A bot does not read the mailbox. A typo does not
+                            reach a real one. Both rows stay pending forever,
+                            and no send loop touches a pending row.
+
+                            This is why there is no captcha here. A captcha
+                            guesses whether the visitor is a person BEFORE
+                            letting the address through, costs every real person
+                            a puzzle, and puts Google's script on whatever page
+                            this tile happens to sit on. This waits for proof
+                            instead and costs one click.
+
+                            SENT WHEN THE ROW IS NEW OR STILL PENDING. Pending
+                            means the last mail went unread or unnoticed, and
+                            re-sending it is the useful thing to do - it reuses
+                            the SAME token, so an older link still works. An
+                            address already 'subscribed' gets nothing: they are
+                            on the list and a second mail is just noise.
+
+                            from IS K_EMAIL_FROM, the address this domain's SPF
+                            record authorizes. reply_to is K_EMAIL_TO so an
+                            answer reaches a person rather than bouncing off a
+                            no-reply.
+
+                            THE BODY STARTS AT COLUMN 0 AND HAS TO STAY THERE.
+                            cms:send_mail sends its children verbatim; leading
+                            tabs end up in the message.
+                            ================================================
+                        </cms:ignore>
+                        <cms:set cnt_conf_sent = '' scope='global' />
+                        <cms:if cnt_sub_token && cnt_sub_state ne 'subscribed'>
+
+                            <cms:set cnt_site = "<cms:get_field 'ccs_gl_site_name' masterpage='globals.php' />" />
+
+                            <cms:set cnt_conf_link = "<cms:link 'confirm-subscription.php' />?t=<cms:show cnt_sub_token />" />
+
+                            <cms:set cnt_conf_sent = '1' scope='global' />
+
+                            <cms:send_mail from=k_email_from to=frm_email reply_to=k_email_to subject="Confirm your <cms:show cnt_site /> mailing list subscription" debug='0'>
+Please confirm your email address.
+
+This address was used to join the <cms:show cnt_site /> mailing list at
+<cms:show k_site_link />.
+
+Open this link and you are on the list:
+
+<cms:show cnt_conf_link />
+
+If that was not you, do nothing. The address will not be added and you will not
+hear from us again.
+
+Thanks,
+<cms:show cnt_site />
+</cms:send_mail>
+
+                        </cms:if>
+
+                        </cms:if>
+
+                        <cms:ignore>
+                            THE THANK-YOU RENDERS FOR EVERYONE, INCLUDING A BOT that
+                            tripped the honeypot. That is why the gate closes above this
+                            line rather than below it: the page has to look identical
+                            whether anything happened or not.
+                        </cms:ignore>
                         <div class="alert alert-success shadow-sm" role="status">
-                            <h3 class="alert-heading h5 mb-1"><cms:show cnt_frm_ok_ttl /></h3>
-                            <p class="mb-0"><cms:show cnt_frm_ok_txt /></p>
+                            <h3 class="alert-heading h5 mb-1"><cms:show cf_ok_ttl /></h3>
+                            <p class="mb-0"><cms:show cf_ok_txt /></p>
+                            <cms:ignore>
+                                NOT AN AUTHOR FIELD, AND NOT A REPEAT OF THE NOTICE.
+
+                                The notice above the button said what sending the form
+                                does. This says what the person has to do NEXT, and
+                                without it the confirmation mail sits unopened and they
+                                never join - the mechanism would fail silently and look
+                                like it worked.
+
+                                Fixed wording because it describes the mechanism rather
+                                than the offer. An author who reworded it into something
+                                vague would break the only instruction on the page.
+
+                                Shown only when a mail actually went out. Someone already
+                                subscribed, or whose row failed to write, is not sent
+                                looking for a message that is not coming.
+                            </cms:ignore>
+                            <cms:if cnt_conf_sent>
+                                <p class="mb-0 mt-2 fw-semibold">Check your email &ndash; open the link we just sent you to confirm your address.</p>
+                            </cms:if>
                         </div>
 
                     <cms:else />
@@ -154,42 +364,171 @@
                             </div>
                         </cms:if>
 
-                        <div class="<cms:show cf_gap_cls />">
+                        <div class="<cms:show cf_gap_cls /> position-relative <cms:if cf_edit>pe-5</cms:if>">
+                            <cms:if cf_edit>
+                                <div class="position-absolute top-50 end-0 translate-middle-y z-3">
+                                    <cms:embed 'pb_mods/contact/inline/cnt_email_edit.txt' />
+                                </div>
+                            </cms:if>
                             <label class="<cms:show cf_lbl_cls />" for="<cms:show cnt_uid />_email"><cms:show cnt_frm_email_lbl /></label>
-                            <cms:input type="text" name="frm_email" label=cnt_frm_email_lbl id="<cms:show cnt_uid />_email" class="<cms:show cf_fld_cls />" validator='email' required='1' autocomplete='email' inputmode='email' placeholder="<cms:show cnt_frm_email_plc />" />
+                        <cms:ignore>
+                            FIELD NAMES ARE BARE. COUCH ADDS THE frm_ PREFIX.
+
+                            tags.php:5636 publishes every submitted field as
+                            frm_ + the field's name. So name="email" is what makes
+                            <cms:show frm_email /> work.
+
+                            These were name="frm_email" until 2026-09-19, which made
+                            Couch publish frm_frm_email. Every read of frm_email then
+                            resolved to nothing, silently: the mail still sent because
+                            k_success dumps all fields independently, so only reply_to
+                            was empty and nobody noticed for weeks. On the email-only
+                            tile the same emptiness reached db_persist and wrote a
+                            subscriber row with a blank address.
+
+                            The footer newsletter box never had this - it has always
+                            used name="email". Match that convention.
+                        </cms:ignore>
+                            <cms:input type="text" name="email" label=cnt_frm_email_lbl id="<cms:show cnt_uid />_email" class="<cms:show cf_fld_cls />" validator='email' required='1' autocomplete='email' inputmode='email' placeholder="<cms:show cnt_frm_email_plc />" />
                         </div>
 
                         <cms:ignore>
-                            CAPTCHA SLOT. reCAPTCHA is already loaded in
-                            kfunctions.php and its keys are set in config.php,
-                            so this is one cms:input away when the approach is
-                            settled. Left empty on purpose rather than guessed
-                            at.
+                            THE HONEYPOT INPUT.
+
+                            OFF-SCREEN, NOT display:none AND NOT hidden. Bots have skipped
+                            display:none and type=hidden inputs for years; a field that is
+                            in the layout, focusable in principle and merely positioned
+                            outside the viewport still reads as real to them.
+
+                            INVISIBLE TO ASSISTIVE TECH TOO. aria-hidden keeps a screen
+                            reader from announcing it and tabindex=-1 keeps it out of the
+                            tab order, so nobody using the page any way at all can fill it
+                            by accident. It has a label because a bot checks for one.
+
+                            autocomplete=off so a browser never helpfully fills it in and
+                            locks a real person out of the form.
+
+                            The inline style is deliberate. This element must be invisible
+                            even if assets/css/user.php is stale or has not been uploaded
+                            - a visible honeypot is a field real people fill.
+                        </cms:ignore>
+                        <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+                            <label for="<cms:show cnt_uid />_co">Company</label>
+                            <input type="text" name="cnt_hp_co" id="<cms:show cnt_uid />_co" tabindex="-1" autocomplete="off" value="">
+                        </div>
+
+                        <cms:ignore>
+                            THE SUBMIT MARKER. Read at the top of this file as cnt_sent.
+                            Its only job is to be present in POST when this form is the
+                            one that was sent, because k_success alone cannot tell.
+                        </cms:ignore>
+                        <input type="hidden" name="cnt_frm_sent" value="1">
+                        <cms:ignore>
+                            THERE WAS A PER-IP THROTTLE HERE AND IT HAD TO COME OUT.
+
+                            addons/data-bound-form/throttle.php refuses a submission when
+                            the same IP created ANY page recently - throttle.php:80 has no
+                            template filter, so it counts every row in K_TBL_PAGES.
+
+                            That is not a near-miss, it is the common case. Saving a tile
+                            in the admin inserts a page row stamped with the author's IP
+                            (edit-page-builder.php:196), so the first test submission after
+                            an edit was always refused. On the live site a customer who
+                            places an order - also a page row - and then uses a sign-up
+                            inside the window gets refused the same way.
+
+                            It also leaked its own field name into the error list, because
+                            tags.php:5599 labels each error with the field's label or, when
+                            there is none, its name: "cnt_throttle: ...".
+
+                            WHAT STILL GUARDS THIS FORM. The honeypot above stops commodity
+                            bots, and the confirmation mail means nothing reaches the list
+                            without somebody opening a mailbox. The only thing the throttle
+                            added was a cap on how fast this site could be made to SEND
+                            confirmations. If that ever matters, the control belongs on the
+                            thing being protected - a count of subscriber rows created in
+                            the last few minutes, which no order or tile save can inflate -
+                            not on a shared page-creation counter.
                         </cms:ignore>
 
                         <cms:ignore>
-                            position-relative goes on the wrapper that already
-                            carries the alignment class, so the button's own
-                            cluster travels with it when the author moves the
-                            button left, center or right.
+                            NO CAPTCHA HERE, AND THAT IS NOW A DECISION RATHER
+                            THAN AN OMISSION.
+
+                            reCAPTCHA is loaded in kfunctions.php and its keys
+                            are in config.php, so it is still one cms:input
+                            away. Three reasons it is not used on this tile:
+
+                            1. IT WOULD NOT ADD ANYTHING THE CONFIRMATION MAIL
+                               DOES NOT. Nothing reaches the list without somebody
+                               opening a mailbox, so a captcha would stop a
+                               submission that is already harmless by the time it
+                               lands.
+
+                            2. IT COSTS EVERY REAL PERSON A CLICK. Not a puzzle -
+                               v2 checkbox goes green on one click for most
+                               people, and only shows the picture grid when
+                               Google's score is uncertain. But on a form whose
+                               whole appeal is that it asks for ONE thing, one
+                               extra control is still a real proportional cost.
+                               cnt_basic_frm.html makes the opposite call for
+                               exactly this reason: three fields already, so the
+                               same click barely registers.
+
+                            3. IT PUTS GOOGLE ON SOMEBODY ELSE'S PAGE. This is a
+                               PageBuilder tile - it can sit on any page of the
+                               site. Adding the widget would load a third-party
+                               script wherever an author drops it, on a site
+                               built to avoid exactly that, and the notice would
+                               have to disclose Google as users/register.php
+                               does.
+
+                            register.php is the opposite case and keeps its
+                            reCAPTCHA: it is one known page, the form is long
+                            enough that a checkbox is noise beside it, and an
+                            account is worth more to an attacker than a list row.
                         </cms:ignore>
+
                         <cms:ignore>
-                            POINT-OF-COLLECTION PRIVACY LINE. A policy linked only
-                            from the footer is not where anyone reads it; the link
-                            that counts is the one beside the button, at the moment
-                            someone decides whether to hand their details over.
-                            Shared file so the wording is edited in one place -
-                            see snippets/utils/privacy_notice.htm.
+                            POINT-OF-COLLECTION NOTICE, AND ON THIS TILE IT IS
+                            THE MAILING-LIST NOTICE.
+
+                            It used to say the address was used only to reply.
+                            That describes the other tile. Here the address is
+                            kept, so the line says so - in the same slot, in the
+                            same small type as every other point-of-collection
+                            line on the site, with the Privacy Policy link
+                            privacy_notice.htm already appends.
+
+                            ABOVE THE BUTTON, NOT UNDER IT. The person meets the
+                            sentence on the way to the thing it describes.
+
+                            Said once, here. The same variable reaches the
+                            record in the success branch above; the thank-you
+                            does not repeat it.
                         </cms:ignore>
-                        <cms:set pn_purpose = 'We use your email address only to reply to you. We do not sell it or use it for advertising.' />
-                        <cms:embed 'utils/privacy_notice.htm' />
+                        <div class="position-relative <cms:if cf_edit>pe-5</cms:if>">
+                            <cms:if cf_edit>
+                                <div class="position-absolute top-50 end-0 translate-middle-y z-3">
+                                    <cms:embed 'pb_mods/contact/inline/cnt_sub_edit.txt' />
+                                </div>
+                            </cms:if>
+                            <cms:set pn_purpose = cs_notice />
+                            <cms:embed 'utils/privacy_notice.htm' />
+                        </div>
 
-                        <div class="position-relative <cms:show cf_btn_wrap /> <cms:show cf_gap_cls />">
-                            <cms:embed 'pb_mods/contact/inline/cnt_btn_edit.txt' />
-
-                            <button type="submit" class="<cms:show cf_btn_cls />">
-                                <cms:show cnt_frm_btn_txt />
-                            </button>
+                        <div class="<cms:show cf_btn_wrap /> <cms:show cf_gap_cls />">
+                            <div class="position-relative <cms:show cf_btn_box /> <cms:if cf_edit>pe-5</cms:if>">
+                                <cms:if cf_edit>
+                                    <div class="position-absolute top-50 end-0 translate-middle-y z-3">
+                                        <cms:embed 'pb_mods/contact/inline/cnt_btn_edit.txt' />
+                                    </div>
+                                </cms:if>
+                                <button type="submit" class="<cms:show cf_btn_cls />">
+                                    <cms:if cf_btn_icon><span class="btn-brand"><i class="<cms:show cf_btn_icon />"></i></span></cms:if>
+                                    <cms:show cf_btn_txt />
+                                </button>
+                            </div>
                         </div>
 
                     </cms:if>

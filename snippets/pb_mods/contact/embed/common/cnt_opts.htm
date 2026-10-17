@@ -1,68 +1,215 @@
 <cms:ignore>
     =========================================================================
-    CONTACT BLOCK  -  SECTION OPTIONS
+    CONTACT BLOCK  -  SECTION SETUP
     snippets/pb_mods/contact/embed/common/cnt_opts.htm
 
-    Shared by every contact tile. Height, spacing, background and the width
-    and placement of the box the form sits in.
+    Consumed by:  blocks/contact/contacts.php  ->  both tiles
+    Rendered by:  snippets/pb_mods/contact/theme/cnt_basic_frm.html
+                  snippets/pb_mods/contact/theme/cnt_email_frm.html
+    Compiled by:  snippets/pb_mods/contact/router/cnt_frm.inc
 
-    HEIGHT IS TWO CONTROLS. Minimum Height is a floor on the content; Section
-    Padding adds space above and below it. They go on DIFFERENT elements - the
-    floor inside, the padding outside - because border-box sizing would
-    otherwise make the padding eat into the floor rather than add to it.
+    ROOT LEVEL, NOT A GROUP - and that is the point of this rewrite.
+
+    These fields used to sit inside a collapsed group called Section Options,
+    so the first thing an editor met was a closed accordion. Every other block
+    in the site puts its section setup at root: img_cntn_blk, img_2col and
+    vtl_cntn all open with a message banner and one row of section controls,
+    visible before anything is clicked. This file now matches them.
+
+    Removing the group is safe for saved data. Couch keys a value to the FIELD
+    NAME, not to its parent - group membership is presentation only - so every
+    tile already out there keeps its background, padding and box width. What it
+    does change is popup_edit field lists: anything that named cnt_gen_grp has
+    to stop naming it, because the group no longer exists.
+
+    THE CHECKBOXES COME FIRST, BEFORE THE MEASUREMENTS.
+
+    They decide what this section IS - whether it has a header, whether the
+    fields, the button and the after-send wording are being customized. The
+    dropdowns below only decide how the band around it looks. Shape before
+    finish, and it means the four switches that open every other group on the
+    page are the first thing in view rather than buried under six dropdowns.
+
+    EVERY ROW FILLS TO TWELVE.
+
+      cnt_opt_row   four checkboxes at col-md-3     = 12, one clean row
+      cnt_sec_row   six dropdowns at col-md-4       = 24, two clean rows of 3
+
+    The old file had two rows of three col-md-3 controls, 9 apiece, each
+    leaving a quarter-width hole on the right.
     =========================================================================
 </cms:ignore>
-<cms:editable type='group' name='cnt_gen_grp' label='Section Options' order='3'>
 
-    <cms:editable type='row' name='cnt_gen_row' order='5'>
-        <cms:editable type='dropdown' name='cnt_min_h' label='Minimum Height'
-            desc='A floor for the section. Padding below adds on top of this.'
-            opt_values='dropdowns/_val/min-height.htm' dynamic='opt_values'
-            class='col-md-3 col-sm-6' order='2' />
-        <cms:editable type='dropdown' name='cnt_py_ht' label='Section Padding'
-            desc='Space above and below the content'
-            opt_values='dropdowns/_tok/space.htm' dynamic='opt_values'
-            class='col-md-3 col-sm-6' order='4' />
-        <cms:ignore>
-            _tok/color-bg_solid.htm, NOT _tok/color-bg.htm. That file leads its
-            palette with a "Custom Color or Gradient=custom" escape which only
-            works where the block ALSO declares the pair of color pickers and
-            the gradient angle its router reads when it sees that word. This
-            block declares none of them - the form is the focus, and a gradient
-            behind form fields is a readability problem rather than a feature -
-            so the option would be a choice that saves cleanly and then changes
-            nothing on the page.
-        </cms:ignore>
-        <cms:editable type='dropdown' name='cnt_bg_clr' label='Section Background Color'
-            opt_values='dropdowns/_tok/color-bg_solid.htm' dynamic='opt_values'
-            class='col-md-3 col-sm-6' order='6' />
-    </cms:editable>
+<cms:ignore>
+    CACHING - skip_post, AND THIS FILE IS WHERE IT HAS TO BE DECLARED.
 
-    <cms:ignore>
-        The box the form lives in. txt-box_size.htm is the shared file every
-        other block uses for this, so a contact section lines up with a
-        transition banner above it without anyone measuring.
-    </cms:ignore>
-    <cms:editable type='row' name='cnt_box_row' order='10'>
-        <cms:ignore>
-            _cls/box-width.htm rather than the shared txt-box_size.htm. That
-            file carries a "Custom Size=custom" escape which only works where
-            the consumer also builds the custom-size repeatable and branches on
-            the sentinel - the transition banner does, this block does not.
-            Left pointed there, choosing Custom would print the word "custom"
-            into the class attribute and match nothing.
-        </cms:ignore>
-        <cms:editable type='dropdown' name='cnt_box_sz' label='Form Box Width'
-            opt_values='dropdowns/_cls/box-width.htm' dynamic='opt_values'
-            class='col-md-3 col-sm-6' order='2'>col-lg-6</cms:editable>
-        <cms:editable type='dropdown' name='cnt_box_halg' label='Box Placement'
-            desc='Where the box sits across the section'
-            opt_values='dropdowns/_tok/align-h.htm' dynamic='opt_values'
-            class='col-md-3 col-sm-6' order='4'>center</cms:editable>
-        <cms:editable type='dropdown' name='cnt_txt_halg' label='Text Alignment'
-            desc='How the words line up inside the box'
-            opt_values='dropdowns/_tok/align-h.htm' dynamic='opt_values'
-            class='col-md-3 col-sm-6' order='6'>start</cms:editable>
-    </cms:editable>
+    The contact block declared section_caching NOWHERE, and page-builder.php:272
+    defaults a missing field to 'always'. 'always' is the one value that serves
+    the cached copy even on a POST (:275) and writes it back (:282) - so a
+    visitor submitting this form would be handed the cached pre-submit HTML and
+    cms:form would never run.
+
+    contact.php does pass no_cache, but only for an admin with inline editing
+    on, which is exactly the visitor who is NOT submitting the form.
+
+    skip_post is the documented answer for a tile holding a cms:form: the
+    cached HTML is fine for DISPLAYING the form, and the POST bypasses cache so
+    the tag actually executes. Not 'never' - nothing here varies by query
+    string, so one cached artifact per page id is still correct on a GET.
+</cms:ignore>
+<cms:editable type='hidden' name='section_caching'>skip_post</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 1. WHAT THIS SECTION SHOWS                              -->
+<!-- ======================================================= -->
+<cms:editable type='message' name='cnt_ins_msg' order='1'>
+    <h2>Contact Form</h2>
+    <br>
+    <hr><br>
+    <h3>What this section shows</h3>
+    <h4>Leave all four boxes alone for a plain, working contact form. Each one
+        you check opens its own group of settings further down this page.</h4>
+    <hr>
+</cms:editable>
+
+<cms:editable type='row' name='cnt_opt_row' order='3'>
+
+    <cms:editable type='checkbox' name='cnt_hdr_rmv_opt' label='Remove Section Header'
+        desc='Hides the heading and the lines of text above the form. Helpful when stacking modules.'
+        opt_values='Remove=1' class='col-sm-6 col-md-3' order='2' />
+
+    <cms:editable type='checkbox' name='cnt_frm_cust_opt' label='Customize Form Fields'
+        desc='Opens label visibility and color, box size, and the space between boxes.'
+        opt_values='Customize=1' class='col-sm-6 col-md-3' order='4' />
+
+    <cms:editable type='checkbox' name='cnt_btn_cust_opt' label='Customize Submit Button'
+        desc='Opens the wording, color, shape, size and an optional icon. Left alone the button is a rounded primary one reading Submit.'
+        opt_values='Customize=1' class='col-sm-6 col-md-3' order='6' />
+
+    <cms:editable type='checkbox' name='cnt_aft_cust_opt' label='Customize After-Send Messages'
+        desc='Opens the thank-you wording and the subject line that reaches your inbox. All three come pre-filled and working.'
+        opt_values='Customize=1' class='col-sm-6 col-md-3' order='8' />
 
 </cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 2. THE BAND THE FORM SITS IN                            -->
+<!-- ======================================================= -->
+<cms:editable type='message' name='cnt_sec_msg' order='5'>
+    <br><hr>
+    <h3>Section Main Options</h3>
+    <h4>How tall this band is, what color sits behind it, and how much of it the
+        form runs across.</h4>
+</cms:editable>
+
+<cms:editable type='row' name='cnt_sec_row' order='7'>
+
+    <cms:ignore>
+        MINIMUM HEIGHT AND PADDING ARE DIFFERENT ELEMENTS, on purpose - the
+        reasoning is in _val/min-height.htm. The floor goes on the inner box,
+        the padding on the section, so raising one does not fight the other.
+    </cms:ignore>
+    <cms:editable type='dropdown' name='cnt_min_h' label='Minimum Height'
+        desc='A floor for the section. Padding is added on top of this.'
+        opt_values='dropdowns/_val/min-height.htm' dynamic='opt_values'
+        class='col-sm-6 col-md-4' order='2' />
+
+    <cms:editable type='dropdown' name='cnt_py_ht' label='Section Padding'
+        desc='Space above and below the content'
+        opt_values='dropdowns/_tok/space.htm' dynamic='opt_values'
+        class='col-sm-6 col-md-4' order='4' />
+
+    <cms:ignore>
+        _tok/color-bg_solid.htm, NOT _tok/color-bg.htm. That file leads its
+        palette with a "Custom Color or Gradient=custom" escape which only works
+        where the block ALSO declares the pair of color pickers and the
+        gradient angle its router reads when it sees that word. This block
+        declares none of them - the form is the focus, and a gradient behind
+        form fields is a readability problem rather than a feature - so the
+        option would be a choice that saves cleanly and then changes nothing.
+    </cms:ignore>
+    <cms:editable type='dropdown' name='cnt_bg_clr' label='Section Background Color'
+        opt_values='dropdowns/_tok/color-bg_solid.htm' dynamic='opt_values'
+        class='col-sm-6 col-md-4' order='6' />
+
+    <cms:ignore>
+        FORM WIDTH, MOVED UP FROM ITS OWN ROW. It is a section-level decision -
+        how much of the band the form takes - so it belongs with the section's
+        other measurements rather than in a second row of its own.
+
+        _cls/box-width.htm rather than the shared txt-box_size.htm. That file
+        carries a "Custom Size=custom" escape which only works where the
+        consumer also builds the custom-size repeatable and branches on the
+        sentinel - the transition banner does, this block does not. Pointed
+        there, choosing Custom would print the word "custom" into the class
+        attribute and match nothing.
+    </cms:ignore>
+    <cms:editable type='dropdown' name='cnt_box_sz' label='Form Width'
+        desc='How much of the section the form takes - narrow through full width'
+        opt_values='dropdowns/_cls/box-width.htm' dynamic='opt_values'
+        class='col-sm-6 col-md-4' order='8'>col-lg-6</cms:editable>
+
+    <cms:editable type='dropdown' name='cnt_box_halg' label='Form Placement'
+        desc='Where the form sits across the section'
+        opt_values='dropdowns/_tok/align-h.htm' dynamic='opt_values'
+        class='col-sm-6 col-md-4' order='10'>center</cms:editable>
+
+    <cms:editable type='dropdown' name='cnt_txt_halg' label='Text Alignment'
+        desc='How the words line up inside the form'
+        opt_values='dropdowns/_tok/align-h.htm' dynamic='opt_values'
+        class='col-sm-6 col-md-4' order='12'>start</cms:editable>
+
+</cms:editable>
+
+
+<cms:ignore>
+    =========================================================================
+    THE FOUR GATES - ONE PER CHECKBOX, EACH OPENING ITS OWN GROUP.
+
+        cnt_hdr_rmv_opt   ->  cnt_rmhdr_chc      ->  Section Header group
+        cnt_frm_cust_opt  ->  cnt_frm_cust_chc   ->  Form Field Appearance
+        cnt_btn_cust_opt  ->  cnt_btn_cust_chc   ->  Submit Button
+        cnt_aft_cust_opt  ->  cnt_aft_cust_chc   ->  After the Message Is Sent
+
+    REMOVE IS INVERTED AND THE OTHER THREE ARE NOT. Checking Remove HIDES its
+    group; checking any Customize box SHOWS one. That is what the labels say, so
+    the funcs read hide-on-checked for the first and show-on-checked for the
+    rest. Worth stating because the four look interchangeable in the admin.
+
+    Each returns the literal show or hide, which is what not_active reads - not
+    a truthiness test. Both strings are non-empty, so a func returning 'hide'
+    and one returning 'show' would be indistinguishable if the addon only
+    checked for emptiness. It does not; it compares the word.
+
+    ROOT LEVEL, MATCHING THEIR SLAVES. Every one of these drives a top-level
+    group in cnt_txt.htm or cnt_frm.htm, so the func has to be declared at root
+    too - a func nested inside a group cannot be named by a field outside it.
+
+    DECLARED AFTER THE CONTROLLERS, BEFORE THE SLAVES. cnt_opt_row is order 3
+    and every gated group is order 20 or higher, so the controller resolves
+    first in the nested sort. Getting that backwards is what makes a conditional
+    silently stop resolving - the field simply renders always-visible and
+    nothing looks broken.
+
+    cms:is rather than a plain comparison, because a checkbox stores its value
+    as a LIST. A bare equality test against '1' works only while exactly one
+    option exists, and quietly stops working the day a second is added.
+    =========================================================================
+</cms:ignore>
+<cms:func _into='cnt_rmhdr_chc' cnt_hdr_rmv_opt=''>
+    <cms:if "<cms:is '1' in=cnt_hdr_rmv_opt />">hide<cms:else />show</cms:if>
+</cms:func>
+
+<cms:func _into='cnt_frm_cust_chc' cnt_frm_cust_opt=''>
+    <cms:if "<cms:is '1' in=cnt_frm_cust_opt />">show<cms:else />hide</cms:if>
+</cms:func>
+
+<cms:func _into='cnt_btn_cust_chc' cnt_btn_cust_opt=''>
+    <cms:if "<cms:is '1' in=cnt_btn_cust_opt />">show<cms:else />hide</cms:if>
+</cms:func>
+
+<cms:func _into='cnt_aft_cust_chc' cnt_aft_cust_opt=''>
+    <cms:if "<cms:is '1' in=cnt_aft_cust_opt />">show<cms:else />hide</cms:if>
+</cms:func>

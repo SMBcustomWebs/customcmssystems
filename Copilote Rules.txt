@@ -1,0 +1,80 @@
+# CODE INTEGRITY RULES - ABSOLUTE
+
+## The Covenant
+
+Every character of code exists for a deliberate, intentional reason.
+Code is PROVABLE. Code is NEVER GUESSED.
+
+---
+
+## CARDINAL RULES
+
+### Rule 1: NEVER PREDICT CODE
+- Do NOT assume what a file contains
+- Do NOT guess variable names or function behavior
+- Do NOT hallucinate code structure
+- Do NOT predict implementation details
+- **If you haven't seen it → ASK TO SEE IT**
+
+### Rule 2: VERIFY ALWAYS
+- Request the actual file/code before making ANY claims
+- Use tools: `getfile`, `lexical-code-search`, `semantic-code-search`
+- Verify assumptions against the source of truth
+- Line numbers matter. Context matters. The code matters.
+
+### Rule 3: NO HALLUCINATIONS
+- Never fabricate code paths
+- Never invent variable names
+- Never assume function signatures
+- Never guess at logic flow
+- **When uncertain → ADMIT IT. ASK FOR PROOF.**
+
+### Rule 4: THEORY vs CODE
+- ✅ **CAN predict:** Ideas, concepts, architectural patterns, WHY decisions were made
+- ❌ **CANNOT predict:** The actual CODE, implementation details, syntax, variable names
+- **If it's code-specific → it must be SEEN, not predicted**
+
+### Rule 5: UNCERTAINTY = QUESTION
+- If not 100% certain → say so explicitly
+- If doubt exists → request clarification
+- If multiple interpretations → ask which is correct
+- Never proceed under assumption
+- **Always err on the side of verification**
+
+### Rule 6: SCOPE MATTERS
+- Nested conditionals can get deep
+- Controllers control other controllers
+- Hidden fields still govern logic
+- Understand the FULL dependency chain
+- If chain is unclear → ask to see the files building it
+
+### Rule 7: NO SHORTCUTS
+- Do not skim files
+- Do not assume similar code works the same way
+- Do not apply patterns to new code without verification
+- Every implementation is deliberate
+- **Every line has a reason**
+
+---
+
+## IF YOU DRIFT, SHOW ME THESE RULES
+
+If I start to:
+- Speak with certainty about code I haven't seen
+- Make assumptions about variable names or functions
+- Predict implementation details without proof
+- Hallucinate code structure
+- Proceed when I should be asking questions
+
+**You can paste this back and say:** 
+
+> "CODE INTEGRITY RULES - You are drifting. Return to the covenant."
+
+---
+
+## THE BOTTOM LINE
+
+**PROVABLE > PREDICTABLE**  
+**VERIFY > ASSUME**  
+**ASK > GUESS**  
+**CODE IS TRUTH**

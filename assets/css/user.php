@@ -3,39 +3,28 @@
 <cms:template parent='_donottouch_' hidden='1' />
 
 
-<cms:if "<cms:gpc 'page' />" && "<cms:gpc 'post' />">
-    <cms:pages masterpage="<cms:gpc 'page' />" id="<cms:gpc 'post' />" > 
-		<cms:set target_template_order=k_template_order scope='global' />
-        <cms:set target_template_name=k_template_name scope='global' />
-		
-        <cms:set bg_clr1="<cms:show ccs_hro_bg_clr_cstm_one />" "global" />
-        <cms:set bg_clr2="<cms:show ccs_hro_bg_clr_cstm_two />" "global" />
-        <cms:set bg_splt="<cms:show ccs_hro_bg_clr_cust_grad_split_opt />" "global" />
-        
-        <cms:if ccs_hro_bg_clr_cstm_grdt_opt='1' >
-            <cms:set bg_grd="1"  "global" />
-        </cms:if>
-        
-        <cms:if "<cms:is '1' in=ccs_hro_bg_clr_cstm_grad_rvrs_opt />">
-            <cms:set swap_bg_clr="1" "global" />
-        </cms:if>
+<cms:ignore>
+    REMOVED 2026-09-04 - the hero gradient path, dead in both render modes.
 
-        <cms:if ccs_hro_ovrly_clr_opt>
-            <cms:set ol_clr1="<cms:show ccs_hro_ovrly_clr_cstm_one />" "global" />
-            <cms:set ol_clr2="<cms:show ccs_hro_ovrly_clr_cstm_two />" "global" />
-            <cms:set ol_splt="<cms:show ccs_hro_ovrly_cust_grad_split_opt />" "global" />
-            
-            <cms:if ccs_hro_ovrly_clr_grdt_opt='1' >
-                <cms:set ol_grd="1"  "global" />
-            </cms:if>
-            
-            <cms:if "<cms:is '1' in=ccs_hro_ovrly_clr_cstm_grdt_rvrs_opt />">
-                <cms:set swap_ol_clr="1" "global" />
-            </cms:if>
-        </cms:if>
-        
-    </cms:pages>
-</cms:if>
+    This file used to read ccs_hro_* off ?page=&post= and emit --ccs-bg-gradient,
+    --ccs-ol-gradient and a .bg-holder.overlay-gradient:before rule. None of it
+    reached anything:
+
+      - no hero or hero_swpr theme references .bg-gradient or --ccs-bg-gradient;
+        they paint via #<id> .hro-base / .hro-overlay from hero_custom_settings.html
+      - --ccs-ol-gradient had no consumer anywhere in the codebase
+      - on a live page the fields live on the TILE, not the host page, so the
+        declarations emitted with empty color stops - linear-gradient(0deg,, ) -
+        and the browser discarded them (verified: the rule's cssText was empty)
+      - in a tile iframe it read the tile and emitted either the same empty form
+        (hero_swpr, whose fields are ccs_hro_swpr_*) or the stored #000000 default
+
+    Verified on the live home page, whose hero has BOTH a custom background
+    gradient and a custom overlay gradient: exactly one rule paints each, and
+    both come from the tile's own inline <style>. This file contributed nothing.
+
+    Removing it also removed the last reader of ?page=&post= - see main-cap.htm.
+</cms:ignore>
 
 <cms:pages masterpage="globals.php" > 
     <cms:if ccs_gl_site_custom_color_opt >
@@ -176,6 +165,38 @@
        <cms:set bfs="<cms:show ccs_gl_site_font_size_cust />" "global" />
        <cms:set bfw="<cms:show ccs_gl_site_font_weight_cust />" "global" />
        <cms:set blh="<cms:show ccs_gl_site_line_height_cust />" "global" />
+       <cms:ignore>
+           LETTER SPACING WAS NEVER WIRED.
+
+           ccs_gl_site_letter_space_cust has had a dropdown in Custom Typography
+           the whole time, with seven real em values, and this file never read
+           it - there was no letter-spacing declaration anywhere in the body
+           rule. Picking "Wider" changed nothing on the site, and the settings
+           preview on globals.php printed the chosen value as though it had.
+
+           "normal" rather than 0em when unset: they render the same for most
+           faces, but normal lets a font's own kerning table stand, and 0em
+           overrides it.
+       </cms:ignore>
+       <cms:set bls="<cms:show ccs_gl_site_letter_space_cust />" "global" />
+
+       <cms:ignore>
+           THE FOUR SIZE/WEIGHT/HEIGHT DROPDOWNS ALL LEAD WITH "Base=-".
+
+           Picked, that stores the literal string "-", and this file printed
+           font-size: -rem. Invalid, so the browser dropped the declaration and
+           body silently fell back to whatever it inherited. The Typography card
+           on the dashboard already guarded for '-' when DISPLAYING the value;
+           the CSS that actually renders never did.
+
+           Same defaults as the other two branches, so "Base" now means what it
+           says rather than nothing.
+       </cms:ignore>
+       <cms:if bfs eq '-' || bfs eq ''><cms:set bfs="1" "global" /></cms:if>
+       <cms:if bfw eq '-' || bfw eq ''><cms:set bfw="400" "global" /></cms:if>
+       <cms:if blh eq '-' || blh eq ''><cms:set blh="1.5" "global" /></cms:if>
+       <cms:if bls eq '-' || bls eq ''><cms:set bls="normal" "global" /></cms:if>
+
        
     <cms:else_if ccs_gl_site_thm_typo_opt />
         <cms:if ccs_gl_site_thm_opt == 'primavera'>
@@ -211,10 +232,10 @@
             declaration and the element inherits. Meanwhile fmn, fcs and fdc
             below ARE set, because they sit outside this chain - so three font
             roles kept working and three silently stopped, decided by which
-            COLOUR theme happened to be chosen. Nothing in the panel connects
+            COLOR theme happened to be chosen. Nothing in the panel connects
             those two things.
 
-            light, dark, scuro and notte are colour themes and were never meant
+            light, dark, scuro and notte are color themes and were never meant
             to carry typography, so they fall back to the site default stack -
             the same one the no-theme branch uses further down.
         </cms:ignore>
@@ -227,9 +248,10 @@
         <cms:set fmn='"SFMono-Regular", Menlo, Monaco, Consolas, monospace' "global" />
         <cms:set fcs='"Dancing Script", cursive' "global" />
         <cms:set fdc='"Oswald", sans-serif' "global" />
-        <cms:set bfs="0.875" "global" />
+        <cms:set bfs="1" "global" />
         <cms:set bfw="400" "global" />
         <cms:set blh="1.5" "global" />
+        <cms:set bls="normal" "global" />
 
     <cms:else />
        <cms:set bff='"Montserrat", -apple-system, sans-serif' "global" />
@@ -238,9 +260,10 @@
        <cms:set fsf='"Playfair Display", Georgia, serif' "global" />
        <cms:set fcs='"Bradley Hand", "Brush Script MT", cursive' "global" />
        <cms:set fdc='"Sreda", Arvo, Candara' "global" />
-       <cms:set bfs="0.875" "global" />
+       <cms:set bfs="1" "global" />
        <cms:set bfw="400" "global" />
        <cms:set blh="1.5" "global" />
+       <cms:set bls="normal" "global" />
     </cms:if>
     
     <cms:set ccs_gl_site_nav_logo_txt_clr="<cms:show ccs_gl_site_name_txt_clr />" "global" />
@@ -255,8 +278,17 @@
     <cms:set ccs_site_nav_hvr_clr="<cms:show ccs_gl_site_nav_hvr_clr />"  "global" />
 
     <cms:ignore>
-        Footer and utility-bar link hover colours. Both fall back to the
-        site-wide hover colour when left on Default.
+        Root text scale. Defaults to 100 so a site that has never saved the
+        field renders exactly as it did before this existed.
+    </cms:ignore>
+    <cms:set ccs_site_text_scale="<cms:show ccs_gl_site_text_scale />" "global" />
+    <cms:if ccs_site_text_scale eq ''>
+        <cms:set ccs_site_text_scale='100' "global" />
+    </cms:if>
+
+    <cms:ignore>
+        Footer and utility-bar link hover colors. Both fall back to the
+        site-wide hover color when left on Default.
     </cms:ignore>
     <cms:set ccs_site_ftr_hvr_clr="<cms:show ccs_gl_site_ftr_lnk_hvr_clr />"  "global" />
     <cms:if ccs_site_ftr_hvr_clr eq ''>
@@ -273,7 +305,31 @@
 
     <cms:set ccs_site_nav_mnu_ttl_sz="1rem" "global" />
     <cms:set ccs_site_nav_mnu_ttl_wt="400" "global" />
-    <cms:set ccs_site_nav_mnu_ttl_clr="dark" "global" />
+    <cms:ignore>
+        NAVBAR TEXT COLOR AT DEFAULT.
+
+        This was the literal "dark", so line 667 emitted
+
+            .navbar-nav { --ccs-nav-link-color: var(--ccs-dark); }
+
+        on every site, every theme, always. It is not a fallback - no field is
+        read here at all. On Notte --ccs-dark is #050505 and on Scuro it is the
+        same, so the top-level menu items were black text on a black bar. The
+        per-navbar "Navbar Text Color" dropdown at Default emits nothing and
+        falls through to exactly this value, which is why setting it to Default
+        looked broken.
+
+        --ccs-body-color is the color user.php already wrote for the active
+        theme, and a navbar whose own Background Color is Default emits the
+        class "bg-" - not a real class - so it is transparent and the site
+        background is what sits behind the menu. Matching the body color is
+        therefore the correct default on both light and dark themes.
+
+        On light themes this moves the menu from #050505 to #292b2c, which is
+        not a visible change. A navbar given an explicit background that fights
+        the body color still has the Navbar Text Color dropdown to set it.
+    </cms:ignore>
+    <cms:set ccs_site_nav_mnu_ttl_clr="body-color" "global" />
 </cms:pages>
 
 <cms:php>
@@ -302,6 +358,14 @@
             $CTX->set($color . '_rgb', hexToRgbStr($hex), 'global');
         }
     }
+
+    /* The select arrow is a data URI and an SVG in one cannot read
+       currentColor, so the stroke has to be written into the file with the
+       theme's own text colour already substituted. A URI needs the leading #
+       as %23. Computed HERE, inside the one php block that already declares
+       global $CTX, rather than inline in the CSS below - see the note on the
+       .form-select rule for why that matters. */
+    $CTX->set( 'body_clr_uri', str_replace('#', '%23', (string) $CTX->get('body_clr')), 'global' );
 </cms:php>
 
 :root {
@@ -375,39 +439,63 @@
     --ccs-body-font-size: <cms:show bfs />rem;
     --ccs-body-font-weight: <cms:show bfw />;
     --ccs-body-line-height: <cms:show blh />;
+    --ccs-body-letter-spacing: <cms:show bls />;
 
+    <cms:ignore>
+        WHY EVERY ONE OF THESE IS WRAPPED IN A TEST.
+
+        Each line builds a token NAME out of a stored value -
+        var(--ccs- plus the value plus ). When the setting is on Default the
+        value is empty, so the reference is to a property called --ccs-, which
+        no stylesheet defines and which has no fallback. CSS calls that invalid
+        at computed-value time: the custom property is dropped, and any property
+        that reads it computes to unset. For an inherited property like color
+        that means "inherit" and the damage is invisible. For background-color
+        it means transparent, which is why a dropdown menu left on Default had
+        no background at all.
+
+        Emitting nothing when the field is empty is what Default should have
+        meant all along. theme.css already carries a real value for every one of
+        these, and every one of them is theme-aware:
+
+            --ccs-navbar-active-color        rgba(emphasis, .9)   :5545
+            --ccs-link-hover-color           #0062cc / #85bfff    :108 / :180
+            --ccs-dropdown-color             var(--ccs-body-color)   :4927
+            --ccs-dropdown-bg                var(--ccs-body-bg)      :4928
+            --ccs-dropdown-link-color        var(--ccs-body-color)   :4936
+            --ccs-dropdown-link-hover-color  var(--ccs-body-color)   :4937
+            --ccs-dropdown-link-hover-bg     var(--ccs-tertiary-bg)  :4938
+
+        So Default now inherits the theme instead of silently voiding the rule.
+        Same reasoning as the navbar text color further up this file.
+    </cms:ignore>
+    <cms:if ccs_site_nav_actv_clr ne ''>
     --ccs-navbar-active-color: var(--ccs-<cms:show ccs_site_nav_actv_clr />);
+    </cms:if>
+    <cms:if ccs_site_nav_hvr_clr ne ''>
     --ccs-link-hover-color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />);
+    </cms:if>
+    <cms:if ccs_site_nav_mnu_dd_txt_clr ne ''>
     --ccs-dropdown-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_txt_clr />);
-    /* theme.css:5169 - .dropdown-item reads THIS variable for its text colour,
+    </cms:if>
+    /* theme.css:5169 - .dropdown-item reads THIS variable for its text color,
        not --ccs-dropdown-color above. --ccs-dropdown-color applies to the menu,
-       and the item's own colour declaration overrides what it inherits, so the
+       and the item's own color declaration overrides what it inherits, so the
        line above alone never reached the text. Both are set now: the menu for
        anything that inherits, the link for the items themselves. */
+    <cms:if ccs_site_nav_mnu_dd_txt_clr ne ''>
     --ccs-dropdown-link-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_txt_clr />);
+    </cms:if>
+    <cms:if ccs_site_nav_mnu_dd_bg ne ''>
     --ccs-dropdown-bg: var(--ccs-<cms:show ccs_site_nav_mnu_dd_bg />);
+    </cms:if>
+    <cms:if ccs_site_nav_mnu_dd_hvr_clr ne ''>
     --ccs-dropdown-link-hover-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_clr />);
+    </cms:if>
+    <cms:if ccs_site_nav_mnu_dd_hvr_bg ne ''>
     --ccs-dropdown-link-hover-bg: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_bg />);
-
-    <cms:if bg_grd="1" >
-        <cms:if swap_bg_clr >
-            --ccs-bg-gradient: linear-gradient(<cms:show bg_splt />deg, <cms:show bg_clr2 />, <cms:show bg_clr1 />) !important;
-        <cms:else />
-            --ccs-bg-gradient: linear-gradient(<cms:show bg_splt />deg, <cms:show bg_clr1 />, <cms:show bg_clr2 />) !important;
-        </cms:if>
-    <cms:else />
-        --ccs-bg-gradient: linear-gradient(0deg,<cms:show bg_clr1 />, <cms:show bg_clr1 />) !important;
     </cms:if>
 
-    <cms:if ol_grd="1" >
-        <cms:if swap_ol_clr >
-            --ccs-ol-gradient:linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr2 />, <cms:show ol_clr1 />) !important;
-        <cms:else />
-            --ccs-ol-gradient:linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr1 />, <cms:show ol_clr2 />) !important;
-        </cms:if>
-    <cms:else />
-        --ccs-ol-gradient:linear-gradient(0deg, <cms:show ol_clr1 />, <cms:show ol_clr1 />) !important;
-    </cms:if>
 }
 
 body {
@@ -433,10 +521,10 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 /* Divider rules used by the pagebuilder blocks.
-   Bootstrap ships <hr> at opacity .25 so an uncoloured divider reads as soft
-   grey. That washes out an explicitly chosen colour - text-danger at 25% is
-   pink, not red - so any hr driven by a colour dropdown gets full opacity and
-   the chosen colour renders true. */
+   Bootstrap ships <hr> at opacity .25 so an uncolored divider reads as soft
+   gray. That washes out an explicitly chosen color - text-danger at 25% is
+   pink, not red - so any hr driven by a color dropdown gets full opacity and
+   the chosen color renders true. */
 .nswp-hr {
   opacity: 1 !important;
 }
@@ -481,11 +569,216 @@ h1, h2, h3, h4, h5, h6, p {
   font-family: <cms:show fdc /> !important;
 }
 
+<cms:ignore>
+  ROOT SCALE. Everything in rem measures against THIS, not against body -
+  which is why the old size control never scaled the site: it was applied to
+  body. A percentage keeps the visitor's own browser default in play.
+</cms:ignore>
+html {
+  font-size: <cms:show ccs_site_text_scale />%;
+}
+
+<cms:ignore>
+  FORM FIELDS AND BUTTONS AT 1rem.
+
+  theme.css ships these at 0.7501875469rem - 12px. iOS Safari zooms the page
+  whenever a focused input is under 16px and does not zoom back out, so on
+  checkout the viewport jumped on every field. Buttons are raised with them so
+  a control next to a field does not read a size smaller.
+
+  Here rather than in theme.css: head.htm loads theme.css first and this file
+  after it, so these win on load order, and a theme update cannot wipe them.
+
+  .form-control-sm / -lg are left alone - they size with calc(1.5em + ...) and
+  follow automatically. textarea is font-size:inherit and follows too.
+</cms:ignore>
+.form-control,
+.form-select,
+.form-label,
+.input-group-text {
+  font-size: 1rem;
+}
+
+<cms:ignore>
+    =========================================================================
+    FORM FIELDS - THE MODERN BOX.
+
+    WHAT theme.css SHIPS, AND WHY IT LOOKS WRONG:
+
+        .form-control { padding: 0.8rem 2.5rem; }
+        .form-select  { padding: 0.8rem 7.5rem 0.8rem 2.5rem; }
+
+    2.5rem is 40px of horizontal padding on an input - the button's padding,
+    copied onto a field. The caret starts 40px from the left edge, which reads
+    as broken rather than styled. Bootstrap's own is 0.75rem. The select is
+    worse: 7.5rem is 120px of right padding, so its text is crushed into the
+    left third with a canyon before the arrow.
+
+    THREE COLOURS IN THERE IGNORE THE THEME ENTIRELY:
+
+        color            #464a4c                 a fixed grey
+        background       --ccs-quaternary-bg     #fff, no dark value anywhere
+        focus ring       rgba(0,122,255,.25)     stays blue on every theme
+
+    So on Scuro or Notte a field is a white box with grey text and a blue halo,
+    sitting on a near-black page. Same family as the list-group and navbar
+    faults - a literal where a token belongs.
+
+    EVERYTHING BELOW DERIVES FROM TOKENS THIS FILE ALREADY WRITES, so it
+    follows all eight themes and any added later. Nothing is hardcoded.
+
+    THE SIZE MODIFIERS ARE PROTECTED. .form-control-sm and -lg set their own
+    padding in theme.css and appear EARLIER in the cascade, so a bare
+    .form-control padding rule here would silently beat them. The :not() pair
+    keeps this to the base case and leaves both modifiers intact.
+
+    FONT SIZE IS NOT SET HERE. It is 1rem from the rule directly above - the
+    iOS Safari zoom threshold. Do not lower it.
+    =========================================================================
+</cms:ignore>
+.form-control:not(.form-control-sm):not(.form-control-lg) {
+  padding: 0.75rem 1rem;
+}
+.form-select:not(.form-select-sm):not(.form-select-lg) {
+  padding: 0.75rem 2.75rem 0.75rem 1rem;
+}
+
+.form-control,
+.form-select {
+  color: var(--ccs-body-color);
+  background-color: var(--ccs-body-bg);
+  border: 1px solid rgba(var(--ccs-body-color-rgb), 0.22);
+  border-radius: var(--ccs-border-radius);
+  box-shadow: none;
+  transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+<cms:ignore>
+    opacity:1 is required. Firefox ships placeholders at a reduced opacity of
+    its own, which would compound with the alpha here and take the hint below
+    a readable contrast.
+</cms:ignore>
+.form-control::-webkit-input-placeholder { color: rgba(var(--ccs-body-color-rgb), 0.5); opacity: 1; }
+.form-control::-moz-placeholder { color: rgba(var(--ccs-body-color-rgb), 0.5); opacity: 1; }
+.form-control:-ms-input-placeholder { color: rgba(var(--ccs-body-color-rgb), 0.5); opacity: 1; }
+.form-control::placeholder { color: rgba(var(--ccs-body-color-rgb), 0.5); opacity: 1; }
+
+.form-control:hover:not(:focus):not(:disabled),
+.form-select:hover:not(:focus):not(:disabled) {
+  border-color: rgba(var(--ccs-body-color-rgb), 0.40);
+}
+
+.form-control:focus,
+.form-select:focus {
+  color: var(--ccs-body-color);
+  background-color: var(--ccs-body-bg);
+  border-color: var(--ccs-primary);
+  box-shadow: 0 0 0 0.2rem rgba(var(--ccs-primary-rgb), 0.25);
+  outline: 0;
+}
+
+<cms:ignore>
+    THE SELECT ARROW IS A DATA URI WITH THE STROKE COLOUR BAKED IN, and
+    theme.css bakes in %23555555 - a dark grey arrow on a dark field. An SVG in
+    a data URI cannot read currentColor, so the only fix is to write the file
+    again with the theme's own text colour substituted. str_replace turns the
+    leading # into %23, which is what a URI needs.
+</cms:ignore>
+.form-select {
+  --ccs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='<cms:show body_clr_uri />' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+.form-label {
+  margin-bottom: 0.375rem;
+  font-weight: 600;
+}
+
+.input-group-text {
+  color: var(--ccs-body-color);
+  background-color: rgba(var(--ccs-body-color-rgb), 0.05);
+  border: 1px solid rgba(var(--ccs-body-color-rgb), 0.22);
+}
+
+
+.btn {
+  --ccs-btn-font-size: 1rem;
+}
+
+<cms:ignore>
+    ===========================================================================
+    FLUID HEADINGS.
+
+    theme.css sizes every heading as one fixed number with no media query - h1
+    is 4.2087rem (67px) and .display-1 is 9.9688rem (160px) at EVERY viewport
+    width. There is no @media anywhere in that file that steps a heading down,
+    and no clamp() and no vw. On a 375px phone a display-1 headline fits about
+    two characters on a line.
+
+    THIS IS NOT AN EXOTIC FIX - IT IS THE FRAMEWORK'S OWN DEFAULT, SWITCHED OFF.
+    Stock Bootstrap 5.3 ships RFS (Responsive Font Sizes) enabled:
+
+        h1, .h1 { font-size: calc(1.375rem + 1.5vw); }
+        @media (min-width: 1200px) { h1, .h1 { font-size: 2.5rem; } }
+
+    theme.css was compiled with it disabled. clamp() is the newer single-line
+    form of the same curve - one declaration instead of a rule plus a media
+    query, and no breakpoint staircase. Baseline Widely Available since 2020.
+
+    HOW THE NUMBERS WERE PICKED. Two anchor points: 375px (phone) and 1200px,
+    which is Bootstrap's own RFS cap and this site's xl breakpoint, so the
+    fluid part stops exactly where the 1140px container stops growing.
+
+        clamp( size at 375px , the line between them , TODAY'S EXACT VALUE )
+
+    Every maximum is the byte-for-byte value from theme.css, so nothing moves
+    at all above 1200px. Only phones and tablets change.
+
+    THE rem TERM IS DELIBERATELY POSITIVE ON ALL EIGHT. A middle term of pure
+    vw ignores a visitor who has raised their browser's default font size
+    without zooming - vw does not respond to that. Keeping a positive rem
+    component means their setting still moves the heading. The minimums were
+    chosen so no step needs a negative one, which is also why display-1 floors
+    at 50px rather than 40.
+
+    fs-9, fs-10 and h6 ARE NOT HERE ON PURPOSE. Those are body and caption,
+    16px and 12px. Body text must not shrink on a phone - 16px is the floor
+    everywhere and it is also the iOS Safari zoom threshold.
+
+    Composes with Site Text Size: that sets the root, and every rem term here
+    measures against the root, so the two multiply rather than fight.
+    ===========================================================================
+</cms:ignore>
+/* Fluid headings - see the note in assets/css/user.php. Max = theme.css value. */
+
+.fs-1 { font-size: clamp(3.1250rem, 13.273vw + 0.0142rem, 9.9687612606rem) !important; }
+.fs-2 { font-size: clamp(2.3750rem, 9.898vw + 0.0553rem, 7.4784405556rem) !important; }
+.fs-3 { font-size: clamp(2.0000rem, 7.002vw + 0.3590rem, 5.6102329749rem) !important; }
+.fs-4 { font-size: clamp(1.8750rem, 4.526vw + 0.8142rem, 4.2087269129rem) !important; }
+.fs-5 { font-size: clamp(1.6250rem, 2.972vw + 0.9285rem, 3.1573345183rem) !important; }
+.fs-6 { font-size: clamp(1.4375rem, 1.806vw + 1.0143rem, 2.368593037rem) !important; }
+.fs-7 { font-size: clamp(1.2500rem, 1.022vw + 1.0105rem, 1.776889rem) !important; }
+.fs-8 { font-size: clamp(1.1250rem, 0.403vw + 1.0305rem, 1.333rem) !important; }
+
+.display-1 { font-size: clamp(3.1250rem, 13.273vw + 0.0142rem, 9.9687612606rem); }
+.display-2 { font-size: clamp(2.3750rem, 9.898vw + 0.0553rem, 7.4784405556rem); }
+.display-3 { font-size: clamp(2.0000rem, 7.002vw + 0.3590rem, 5.6102329749rem); }
+.display-4 { font-size: clamp(1.8750rem, 4.526vw + 0.8142rem, 4.2087269129rem); }
+.display-5 { font-size: clamp(1.6250rem, 2.972vw + 0.9285rem, 3.1573345183rem); }
+.display-6 { font-size: clamp(1.4375rem, 1.806vw + 1.0143rem, 2.368593037rem); }
+
+h1, .h1 { font-size: clamp(1.8750rem, 4.526vw + 0.8142rem, 4.2087269129rem); }
+h2, .h2 { font-size: clamp(1.6250rem, 2.972vw + 0.9285rem, 3.1573345183rem); }
+h3, .h3 { font-size: clamp(1.4375rem, 1.806vw + 1.0143rem, 2.368593037rem); }
+h4, .h4 { font-size: clamp(1.2500rem, 1.022vw + 1.0105rem, 1.776889rem); }
+h5, .h5 { font-size: clamp(1.1250rem, 0.403vw + 1.0305rem, 1.333rem); }
+
+
 body {
   font-family: <cms:show bff />;
   font-size: <cms:show bfs />rem;
   font-weight: <cms:show bfw />;
   line-height: <cms:show blh />;
+  letter-spacing: <cms:show bls />;
   color: <cms:show body_clr />;
   background-color: <cms:show body_bg />;
   -webkit-text-size-adjust: 100%;
@@ -598,7 +891,9 @@ a {
      ACTIVE color set on this same variable at :root above. Two settings, one
      variable, and the later one won, so "Menu Item Color on Active Page" could
      never take effect even once the active class started rendering. */
+  <cms:if ccs_site_nav_actv_clr ne ''>
   --ccs-navbar-active-color: var(--ccs-<cms:show ccs_site_nav_actv_clr />);
+  </cms:if>
 }
 
 .navbar-nav {
@@ -612,44 +907,217 @@ a {
   color: var(--ccs-navbar-active-color);
 }
 
-/* The .dropdown-item colour rule that used to sit here has been removed, and
+/* The .dropdown-item color rule that used to sit here has been removed, and
    the reason it existed at all is fixed at its source in the :root block above.
 
-   theme.css:5169 reads --ccs-dropdown-link-color for the item's text colour.
+   theme.css:5169 reads --ccs-dropdown-link-color for the item's text color.
    :root here was setting --ccs-dropdown-color, which theme.css applies to the
-   MENU, not the item - and .dropdown-item's own colour declaration overrides
+   MENU, not the item - and .dropdown-item's own color declaration overrides
    what it would have inherited. So the global setting never reached the item,
    and this rule was added to force it, with !important.
 
    That !important then beat every .text-* utility, because theme.css compiles
-   its colour utilities WITHOUT !important (theme.css:11617). Result: the
-   per-navbar text colour and the per-item text-<...> class were both in the
+   its color utilities WITHOUT !important (theme.css:11617). Result: the
+   per-navbar text color and the per-item text-<...> class were both in the
    HTML and both lost, on every dropdown item in every navbar.
 
    With the correct variable set above, the global setting is the DEFAULT and a
    text-* utility overrides it - .text-primary at theme.css:11617 comes after
    .dropdown-item at :5163 in the same file, so it wins on order at equal
    specificity, with no !important needed on either side. */
+<cms:ignore>
+    THE WHOLE RULE GOES, NOT JUST THE VALUE.
+
+    These five carry !important, so an empty setting did not merely fail to
+    apply - it beat theme.css with a value that then computed to unset. The
+    dropdown background was the visible one: on Default, menus were transparent.
+
+    A rule with no declarations left in it is legal CSS and simply does nothing,
+    but the declaration is what has to be conditional, so the test wraps the
+    whole block and nothing is printed at all.
+</cms:ignore>
+<cms:if ccs_site_nav_mnu_dd_bg ne ''>
 .dropdown-menu {
   background-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_bg />) !important;
 }
+</cms:if>
+<cms:if ccs_site_nav_mnu_dd_hvr_clr ne ''>
 .dropdown-item-wrapper:hover, .dropdown-item-wrapper:focus {
   color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_clr />) !important;
 }
-.dropdown-item:hover {
+</cms:if>
+<cms:ignore>
+    :focus as well as :hover - theme.css:22195 sets both to near-black with
+    !important, so a rule that only answered :hover left a keyboard user
+    tabbing through invisible items.
+</cms:ignore>
+<cms:if ccs_site_nav_mnu_dd_hvr_clr ne '' || ccs_site_nav_mnu_dd_hvr_bg ne ''>
+.dropdown-item:hover,
+.dropdown-item:focus {
+  <cms:if ccs_site_nav_mnu_dd_hvr_clr ne ''>
   color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_clr />) !important;
+  </cms:if>
+  <cms:if ccs_site_nav_mnu_dd_hvr_bg ne ''>
   background-color: var(--ccs-<cms:show ccs_site_nav_mnu_dd_hvr_bg />) !important;
+  </cms:if>
 }
+</cms:if>
+<cms:if ccs_site_nav_actv_clr ne ''>
 .nav-link.active {
    color: var(--ccs-<cms:show ccs_site_nav_actv_clr />) !important;
 }
+</cms:if>
+<cms:if ccs_site_nav_hvr_clr ne ''>
 .nav-item:hover,
 .nav-link:hover {
   color: var(--ccs-<cms:show ccs_site_nav_hvr_clr />) !important;
 }
+</cms:if>
+
+<cms:ignore>
+    =========================================================================
+    THE DROPDOWN PANEL ON "DEFAULT".
+
+    There is no curated per-theme default for the menu dropdown and there never
+    was. ccs_theme_palette() and the chain at the top of this file curate
+    fourteen values per theme - the four brand colours, the four utilities,
+    light, dark, white, black, body background and body text. Nothing
+    nav-dropdown-specific. So with these fields on Default this file emits
+    nothing (sec.57) and theme.css's generic values stand:
+
+        --ccs-dropdown-bg            var(--ccs-body-bg)      theme.css:4928
+        --ccs-dropdown-link-color    var(--ccs-body-color)   theme.css:4936
+        --ccs-dropdown-link-hover-bg var(--ccs-tertiary-bg)  theme.css:4938
+
+    Those ARE theme-aware, which is why nothing looked broken enough to report.
+    The failure is subtler: the panel background resolves to the SAME colour as
+    the page, and theme.css gives .dropdown-menu no border, so on Notte a
+    #0B0C10 panel sits on a #0B0C10 page and the menu reads as text floating in
+    space. And --ccs-tertiary-bg is #4b4b4b on every dark theme - a mid grey
+    that belongs to none of the curated palettes.
+
+    DERIVED, NOT TABULATED. Eight more rows in the palette table is eight more
+    chances to drift, and a ninth theme would arrive with none. These build the
+    panel from tokens instead: keep the background opaque on --ccs-body-bg,
+    because a dropdown overlays content and must not be see-through, then
+    separate it from the page with a border and a shadow drawn from the body
+    text colour. Hover comes from the primary at low alpha, so it belongs to
+    whatever palette is active.
+
+    GUARDED, so an explicit choice still wins. These only apply while the
+    matching field is on Default - the moment someone picks a colour, the
+    sec.57 rules above take over.
+    =========================================================================
+</cms:ignore>
+<cms:if ccs_site_nav_mnu_dd_bg eq ''>
+.dropdown-menu {
+  background-color: var(--ccs-body-bg);
+  border: 1px solid rgba(var(--ccs-body-color-rgb), 0.15);
+  -webkit-box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.18);
+}
+
+<cms:ignore>
+    ON A DARK THEME THE PANEL HAS TO BE LIFTED, NOT JUST OUTLINED.
+
+    The rule above sets the panel to --ccs-body-bg, which is the page's own
+    background - so on Notte a #0B0C10 panel sat on a #0B0C10 page and the
+    border and shadow were doing all the work. A 1px hairline and a black
+    shadow on a near-black page are close to invisible, so the menu still read
+    as text floating in space. The panel has to be a different colour.
+
+    background-image, NOT a translucent background-color. A dropdown overlays
+    page content and must stay opaque - anything behind it showing through is
+    worse than no panel at all. A linear-gradient with two identical stops is a
+    flat wash, and it paints ON TOP of the opaque body-bg underneath, so the
+    result is a solid colour that is simply lighter.
+
+    KEYED ON data-bs-theme, which head.htm already stamps on the html element
+    for dark, scuro and notte. Light themes keep the clean body-bg panel above,
+    which is what they should have - a white menu on a white page separated by
+    a border and shadow is the conventional light-mode treatment, and tinting
+    it grey would look dirty rather than elevated.
+
+    13% lands each dark theme clearly clear of its page:
+        notte   #0B0C10 -> about #232428
+        scuro   #222831 -> about #3C424A
+        dark    #404040 -> about #555555
+</cms:ignore>
+[data-bs-theme="dark"] .dropdown-menu {
+  background-image: -webkit-gradient(linear, left top, left bottom,
+                    from(rgba(var(--ccs-body-color-rgb), 0.13)),
+                    to(rgba(var(--ccs-body-color-rgb), 0.13)));
+  background-image: linear-gradient(rgba(var(--ccs-body-color-rgb), 0.13),
+                                    rgba(var(--ccs-body-color-rgb), 0.13));
+  border-color: rgba(var(--ccs-body-color-rgb), 0.22);
+  -webkit-box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.5);
+}
+</cms:if>
+<cms:if ccs_site_nav_mnu_dd_hvr_bg eq ''>
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: rgba(var(--ccs-primary-rgb), 0.12);
+}
+</cms:if>
+
+<cms:ignore>
+    =========================================================================
+    DROPDOWN ITEM TEXT ON "DEFAULT" - TWO HARDCODED NEAR-BLACKS IN theme.css.
+
+    Default is supposed to mirror the top-level menu, and it could not, because
+    two rules in theme.css outrank everything this file writes:
+
+      theme.css:24452
+        .navbar-top .navbar-nav-top .dropdown .dropdown-item
+            color: rgba(12, 21, 26, 0.6)
+        Four classes - specificity (0,4,0). A literal near-black at 60%.
+
+      theme.css:22195
+        .navbar .dropdown-item:hover, .navbar .dropdown-item:focus
+            color: var(--ccs-gray-1100) !important
+        --ccs-gray-1100 is #0c151a. Near-black again, and !important.
+
+    On a dark panel both are invisible, which is why the items read as empty
+    while the top-level links were fine - the top level takes its colour from
+    --ccs-nav-link-color, which nothing in theme.css overrides at that weight.
+
+    theme.css DOES have a light answer for these - :24785 and :24821 - but both
+    are scoped to .navbar-dark and .navbar-secondary, and this navbar carries
+    neither. Its classes are navbar navbar-top navbar-expand-lg plus a bg-
+    utility, so those rules never match on any theme.
+
+    MIRRORING, NOT A NEW COLOUR. The base takes --ccs-nav-link-color, the exact
+    variable the top-level links use, so the two can never drift. Hover takes
+    --ccs-link-hover-color, which is what .navbar-nav feeds to
+    --ccs-nav-link-hover-color for the top level. Default now means "the same as
+    the menu above", which is what it always read as.
+
+    NO !important ON THE BASE, DELIBERATELY. It only has to match (0,4,0) and
+    load later, which it does. Leaving it off means a per-item text- utility
+    still wins - so if the navbar's own Text Color is set, the dropdown follows
+    it, which is the mirroring behaviour one level up.
+
+    !important IS REQUIRED ON HOVER, because :22195 carries it.
+    =========================================================================
+</cms:ignore>
+<cms:if ccs_site_nav_mnu_dd_txt_clr eq ''>
+.navbar-top .navbar-nav-top .dropdown .dropdown-item {
+  color: var(--ccs-nav-link-color);
+}
+</cms:if>
+<cms:if ccs_site_nav_mnu_dd_hvr_clr eq ''>
+.navbar .dropdown-item:hover,
+.navbar .dropdown-item:focus,
+.navbar-top .navbar-nav-top .dropdown .dropdown-item:hover,
+.navbar-top .navbar-nav-top .dropdown .dropdown-item:focus {
+  color: var(--ccs-link-hover-color) !important;
+}
+</cms:if>
+
 
 <cms:if ccs_site_ftr_hvr_clr ne ''>
-/* Footer links. Beats the hardcoded .link-COLOUR:hover ramp in theme.css
+/* Footer links. Beats the hardcoded .link-COLOR:hover ramp in theme.css
    on specificity (0,2,1 vs 0,2,0), so it wins regardless of load order. */
 .ccs-footer a:hover,
 .ccs-footer a:focus,
@@ -671,26 +1139,29 @@ a {
 }
 </cms:if>
 
-::selection {
-  background-color: var(--ccs-<cms:show ccs_site_slct_bg />) !important;
-  color: var(--ccs-<cms:show ccs_site_slct_clr />) !important;
-}
+<cms:ignore>
+    SAME TRAP, AND THIS ONE WAS THE WORST OF THEM.
 
-<cms:if ol_grd="1" >
-    <cms:if swap_ol_clr >
-    .bg-holder.overlay-gradient:before {
-      background: linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr2 />, <cms:show ol_clr1 />) !important;
-    }
-    <cms:else />
-    .bg-holder.overlay-gradient:before {
-      background: linear-gradient(<cms:show ol_splt />deg, <cms:show ol_clr1 />, <cms:show ol_clr2 />) !important;
-    }
-    </cms:if>
-<cms:else />
-    .bg-holder.overlay-gradient:before {
-      background: linear-gradient(0deg, <cms:show ol_clr1 />, <cms:show ol_clr1 />) !important;
-    }
+    Both Text Selection Colors default to blank, and both were interpolated into
+    a token name, so an untouched site emitted a transparent background and an
+    unset color - with !important, so the browser's own blue selection could
+    not come back. Dragging across text appeared to do nothing at all.
+
+    Now nothing is printed unless at least one color is set, and each
+    declaration is independent so setting only one of the two still leaves the
+    native highlight doing the other half.
+</cms:ignore>
+<cms:if ccs_site_slct_bg ne '' || ccs_site_slct_clr ne ''>
+::selection {
+  <cms:if ccs_site_slct_bg ne ''>
+  background-color: var(--ccs-<cms:show ccs_site_slct_bg />) !important;
+  </cms:if>
+  <cms:if ccs_site_slct_clr ne ''>
+  color: var(--ccs-<cms:show ccs_site_slct_clr />) !important;
+  </cms:if>
+}
 </cms:if>
+
 
 #tpb_mnu.sticky-top {
   z-index: 1021 !important ;
@@ -809,35 +1280,25 @@ a {
 /* -------------------------------------------------------------------------- */
 /* STRUCTURAL OVERRIDES (Site Pages only)                                    */
 /* -------------------------------------------------------------------------- */
-<cms:if (target_template_order ge '1000' && target_template_order le '1999') || target_template_name == 'index.php'>
-/* Removes the hardcoded 100vh quota so modular sections snap together */
-.content {
+/* Removes the hardcoded 100vh quota so modular sections snap together.
+
+   The template test that used to gate this rule lives in
+   pb_mods/pg_frame/main-cap.htm now, which puts .content-flush on the wrapper
+   for exactly the same templates. Moved on 2026-09-04 because it was the only
+   thing left in this file that varied by page: with it gone the stylesheet is
+   identical for every page, so it can be cached once for the site instead of
+   once per page (and once per tile in the PageBuilder canvas).
+
+   Measured before the move: user.php with no params and user.php as the home
+   page requested it differed by these three lines and nothing else. */
+.content-flush {
     min-height: unset !important;
 }
-</cms:if>
 
 
 
 
 
-/* -------------------------------------------------------------------------- */
-/* SHOPPING CART OVERRIDES                                   */
-/* -------------------------------------------------------------------------- */
-.custom-variants table { margin: 0; }
-.custom-variants table td { padding: 0 10px 0 0; }
-.custom-variants table select, 
-.custom-variants table input[type="text"] {
-    display: block;
-    width: 100%;
-    padding: .375rem 2.25rem .375rem .75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #212529;
-    background-color: #fff;
-    border: 1px solid #ced4da;
-    border-radius: .375rem;
-}
 
 /* Swiper Image Aspect Ratio Fix */
 .product-slider .swiper-slide img {
@@ -910,7 +1371,7 @@ a {
 
    theme.css gives .bg-holder z-index:-1, which only works when no ancestor
    paints a background between it and the nearest stacking context. A tile
-   with a section background (a colour or gradient on the <section>) paints
+   with a section background (a color or gradient on the <section>) paints
    straight over the image, so the same markup showed the image on one tile
    and not on another - it tracked whether a section background was set, not
    the listing mode.
@@ -1022,10 +1483,10 @@ a {
 }
 
 /* Active ("you are here") category in the left nav.
-   Deliberately no colour: .btn-link already supplies hover/active colour from
-   the site theme, and the link's own colour comes from the block's Nav Link
+   Deliberately no color: .btn-link already supplies hover/active color from
+   the site theme, and the link's own color comes from the block's Nav Link
    Text Color dropdown. Weight + underline are the only affordances added here,
-   so this rule never fights a user-chosen colour.
+   so this rule never fights a user-chosen color.
    This is the single definition - the router emits .nswp-active on page load
    and the block's JS toggles the same class on click. */
 .ajax-nav-link.nswp-folder-link.nswp-active {
@@ -1140,7 +1601,7 @@ a {
    left/right values - so those follow the chosen alignment here.
 
    Left alignment uses the rules above unchanged and remains the default.
-   Centre drops the indent entirely: an indent read from one edge is
+   Center drops the indent entirely: an indent read from one edge is
    meaningless when the text is not anchored to that edge.
 
    Specificity is one class higher than the rules it overrides, so the

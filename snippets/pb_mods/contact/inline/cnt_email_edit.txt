@@ -1,0 +1,8 @@
+<cms:ignore>
+    THE EMAIL BOX'S WORDING.
+
+    IT CARRIES cnt_frm_lbl_msg, the group's explanation of what a label is and
+    what a hint is, because the email box is the one field BOTH tiles draw. On
+    the name box it would be invisible to anyone using the email-only tile.
+</cms:ignore>
+<cms:popup_edit 'cnt_frm_email_lbl|cnt_frm_email_plc' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Email Field Wording" title="Edit Email Field Wording"><i class="fa-solid fa-tag"></i></button>' />

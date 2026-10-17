@@ -1,0 +1,33 @@
+<cms:ignore>
+    ===========================================================================
+    THE MARKETING CONSENT WORDING, DEFINED ONCE FOR THE WHOLE ACCOUNT SYSTEM.
+    snippets/utils/mkt_consent.htm
+
+    Embedded by:  users/register.php   (beside the tickbox at sign-up)
+                  users/profile.php    (beside the same tickbox later)
+
+    Sets:  mkt_consent_txt
+
+    WHY A SNIPPET AND NOT A cms:set IN EACH FILE. This exact string is SHOWN
+    beside the box and STORED on the subscriber record as
+    subscriber_consent_txt. Two pages offer the same tick, so two copies of the
+    sentence would be two things to keep in step - and the one that fell behind
+    would be the one filed against somebody's name.
+
+    It is deliberately NOT a field in globals.php. An author rewording it in the
+    admin would change what NEW records say while every existing record kept the
+    old sentence, which is correct, but they would have no way to see that had
+    happened. A change here is a deployment, which is visible.
+
+    foot_2col_form-scal.html holds nws_purpose the same way for the newsletter
+    box, and cnt_sub.htm holds the email-only tile's notice as a field because
+    that one is genuinely per-tile. Three forms, three sentences, each defined
+    exactly once.
+
+    IT DESCRIBES MARKETING AND NOTHING ELSE. Order confirmations, password
+    resets and account mail are not covered by this and must never be gated on
+    it - they are the service the person asked for, and unticking this box does
+    not stop them.
+    ===========================================================================
+</cms:ignore>
+<cms:set mkt_consent_txt = 'Yes, send me promotional emails and special offers. You can unsubscribe from any message we send.' scope='global' />

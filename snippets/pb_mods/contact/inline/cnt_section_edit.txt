@@ -1,65 +1,139 @@
-<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
-    <cms:ignore>
-        SECTION-LEVEL CLUSTER - top-left of the contact section.
+<cms:ignore>
+    =========================================================================
+    CONTACT BLOCK  -  BOX-LEVEL CLUSTER
+    snippets/pb_mods/contact/inline/cnt_section_edit.txt
 
-        These edit things with no on-screen element to point at: the section's
-        own height and spacing, the color behind everything, the box the form
-        sits in, and the screen the visitor sees AFTER sending - which by
-        definition is not on screen while you are looking at the form.
+    Four buttons in a vertical stack, pinned INSIDE THE SECTION'S TOP-LEFT
+    CORNER - the same anchor, order and inset the hero and the transition
+    banner use for their section clusters, so the corner of a slide means the
+    same thing everywhere on the site.
 
-        Same anchor, order and vertical stack as the transition banner's
-        section cluster. Vertical because a horizontal row was tried there and
-        reverted - the icons ran straight across the heading text.
+    SECTION CONTROLS GO ON THE SECTION. That is the whole rule, and it is why
+    this cluster is anchored to the section element rather than to the form
+    box. A stack hanging off the left of the form is a BOX-level cluster -
+    that placement means "these settings belong to this box", and the form's
+    own appearance button uses it. Putting both in the same place made the
+    section controls look like form controls and stacked the two clusters on
+    top of each other.
 
-        NO BACKGROUND IMAGE AND NO OVERLAY BUTTON, and their absence is a
-        decision rather than an omission. Every section has one focus. In a
-        hero or a transition banner the picture is the focus; here the form is,
-        and a photo behind form fields competes with the thing the visitor came
-        to do. The block declares no image or overlay fields at all, so there
-        is nothing for a fourth and fifth button to open.
-    </cms:ignore>
-    <cms:ignore>
-        TWO RULES THAT PRODUCE "Field not found", both learned on the
-        transition banner:
+    THESE FOUR HAVE NOTHING ON SCREEN TO POINT AT. The section's own height
+    and spacing, the color behind everything, the box the form sits in, and
+    the screen the visitor sees AFTER sending - which by definition is not on
+    screen while you are looking at the form. Everything that IS on screen
+    carries its own button, on its right, and appears in no other popup.
 
-        1. ONLY PAGE-LEVEL FIELDS MAY BE LISTED. inline_ex.php walks the PAGE
-           fields list and dies on any name it cannot match. A field declared
-           inside a cms:repeatable is not in that array. This block has no
-           repeatables, so every name below is reachable - but the rule still
-           governs anything added later.
+    VERTICAL, NOT HORIZONTAL. A horizontal row was tried on the transition
+    banner and reverted - the icons ran straight across the heading text.
 
-        2. A NAME MUST BE A REGISTERED FIELD. Adding a field to an embed is not
-           enough; Couch has to re-register the template before the name
-           exists.
+    THE ROUTER RAISES THE SECTION'S MINIMUM HEIGHT while editing so the stack
+    always fits inside the section instead of spilling over whatever comes
+    next on the page. The arithmetic is in cnt_frm.inc beside cf_min_h.
 
-        A GROUP ONLY NESTS IF THE GROUP IS ALSO LISTED. inline_ex.php sets each
-        field's group to its real group only when that group name is in the
-        list too, and to nothing otherwise. That is why cnt_gen_grp and
-        cnt_frm_grp appear in lists whose fields live inside them - drop the
-        group and the popup renders the fields loose, with the group's own
-        heading gone.
+    NO BACKGROUND IMAGE AND NO OVERLAY BUTTON, and their absence is a decision
+    rather than an omission. Every section has one focus. In a hero or a
+    transition banner the picture is the focus; here the form is, and a photo
+    behind form fields competes with the thing the visitor came to do. The
+    block declares no image or overlay fields at all, so there is nothing for
+    a fifth and sixth button to open.
+</cms:ignore>
+<cms:ignore>
+    TWO RULES THAT PRODUCE "Field not found", both learned on the transition
+    banner:
 
-        QUOTING: link_text holds a whole button, so quotes inside it must be
-        the other kind. Couch rejects a backslash-escaped quote in an attribute
-        and stops at ATTRIB_NAME. plain uses single outer / double inner.
-        toggle uses double outer / single inner, because its cms:if needs
-        single quotes.
-    </cms:ignore>
+    1. ONLY PAGE-LEVEL FIELDS MAY BE LISTED. inline_ex.php walks the PAGE
+       fields list and dies on any name it cannot match. A field declared
+       inside a cms:repeatable is not in that array. This block has no
+       repeatables, so every name below is reachable - but the rule still
+       governs anything added later.
+
+    2. A NAME MUST BE A REGISTERED FIELD. Adding a field to an embed is not
+       enough; Couch has to re-register the template before the name exists.
+
+    A GROUP OR ROW ONLY NESTS IF IT IS ALSO LISTED. inline_ex.php sets each
+    field's group to its real group only when that group's name is in the list
+    too, and to nothing otherwise. That is why cnt_sec_row and cnt_opt_row
+    appear in lists whose fields live inside them - drop the row and the popup
+    renders the fields loose with the row's heading gone. Listing a row does
+    NOT pull in its other children; only the names given are drawn.
+
+    NO POPUP IN THIS BLOCK NAMES A CONTAINER - not a row, not a group, not a
+    message, not a hidden field. Only data fields: text, dropdown, checkbox.
+
+    That is not tidiness, it is the difference between a window that opens and
+    one that dies. On every render of a template by a super admin,
+    functions.php:243 post_process_page() walks the field list and acts on
+    anything not marked "processed" during that render:
+
+        group, message, hidden   DELETED outright   functions.php:258
+        row                      DELETED outright   bootstrap-grid.php:76
+        everything else          deleted = 1        functions.php:281
+
+    Containers are destroyed; data fields are only flagged, and come back on
+    their own the next time the template registers - tags.php:1563 sets
+    deleted back to "0". So a popup naming a container is a popup that can
+    permanently break, and naming three of them broke three times in a row:
+    "Field not found: cnt_hr_msg", then cnt_txt_opt_row, then cnt_hr_len_row.
+
+    Nothing is lost by leaving them out. A row exists so the full admin page
+    lays out in columns; a four-control window does not need one. A message is
+    a heading and a sentence written for someone scrolling past a dozen groups;
+    a window opened from a button labeled Edit Dividing Line does not need a
+    heading that says Dividing Line. Where a message really is needed, put the
+    words in the desc of the field it describes - cnt_frm_btn_icon_fa does
+    that with the Font Awesome address.
+
+    THE EXCEPTION IS WIRING. A field's not_active compiles to JavaScript that
+    reads the CONTROLLING field's input out of the form it is standing in; if
+    that input is absent, conditional-fields.php emits an empty string and
+    every func here resolves to hide, so the window opens blank with no error.
+    The controller therefore goes in the list AND in hide_fields -
+    form_row.html renders a hidden field with style="display:none" rather than
+    omitting it, so the input is in the DOM to be read. Listed and hidden,
+    both. A hidden field is not a second place to edit anything, so the
+    one-place-per-setting rule still holds.
+
+    QUOTING: link_text holds a whole button, so quotes inside it must be the
+    other kind. Couch rejects a backslash-escaped quote in an attribute and
+    stops at ATTRIB_NAME. Plain buttons use single outer / double inner; the
+    one with a cms:if inside uses double outer / single inner.
+</cms:ignore>
+<cms:if cf_edit>
     <div class="position-absolute top-0 start-0 mt-3 ms-3 z-3 d-flex flex-column gap-2">
 
-        <cms:popup_edit 'cnt_gen_grp|cnt_gen_row|cnt_min_h|cnt_py_ht' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Section Height and Spacing" title="Edit Section Height and Spacing"><i class="fa-solid fa-arrows-up-down"></i></button>' />
+        <cms:ignore>
+            REMOVE SECTION HEADER USED TO RIDE ALONG HERE, and no longer does.
+            It sits in the header's own window now, on the button drawn beside
+            the header itself, which is where someone looking at a header
+            expects to find the switch that takes it away.
 
-        <cms:popup_edit 'cnt_gen_grp|cnt_gen_row|cnt_bg_clr' link_text="<button class='btn btn-sm <cms:if cnt_bg_clr>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Background Color' title='Edit Background Color'><i class='fa-solid fa-fill-drip'></i></button>" />
+            That only became possible once that button was drawn whether or not
+            the header renders - solid when it is on, dimmed when it is off.
+            While it appeared only alongside a visible header, checking the box
+            would have removed the one control able to uncheck it, so the switch
+            had to hang off this stack instead.
+        </cms:ignore>
+        <cms:popup_edit 'cnt_min_h|cnt_py_ht' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Section Height and Spacing" title="Edit Section Height and Spacing"><i class="fa-solid fa-arrows-up-down"></i></button>' />
 
-        <cms:popup_edit 'cnt_gen_grp|cnt_box_row|cnt_box_sz|cnt_box_halg|cnt_txt_halg' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Form Box Width and Placement" title="Edit Form Box Width and Placement"><i class="fa-solid fa-up-down-left-right"></i></button>' />
+        <cms:popup_edit 'cnt_bg_clr' link_text="<button class='btn btn-sm <cms:if cnt_bg_clr>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Background Color' title='Edit Background Color'><i class='fa-solid fa-fill-drip'></i></button>" />
+
+        <cms:popup_edit 'cnt_box_sz|cnt_box_halg|cnt_txt_halg' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Form Box Width and Placement" title="Edit Form Box Width and Placement"><i class="fa-solid fa-up-down-left-right"></i></button>' />
 
         <cms:ignore>
             Bottom of the stack. The thank-you screen and the subject line of
             the mail that lands in the owner's inbox. Both belong to the form,
             but neither is ever visible beside the form, so neither can carry
             its own cluster - this is the one place they can be reached.
+
+            Customize After-Send Messages opens the group, and it is in this
+            popup for the reason given above: a window whose every control is
+            hidden by JavaScript, with the switch that reveals them somewhere
+            else, is a dead end.
+
+            NO DIMMED STATE on this one. All three fields carry working
+            defaults and the router substitutes them again if they are ever
+            emptied, so there is always something real behind this button.
         </cms:ignore>
-        <cms:popup_edit 'cnt_frm_grp|cnt_frm_after_msg|cnt_frm_after_row|cnt_frm_ok_ttl|cnt_frm_ok_txt|cnt_frm_subj' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Thank You Message and Email Subject" title="Edit Thank You Message and Email Subject"><i class="fa-solid fa-envelope-circle-check"></i></button>' />
+        <cms:popup_edit 'cnt_opt_row|cnt_aft_cust_opt|cnt_aft_grp|cnt_frm_after_row|cnt_frm_ok_ttl|cnt_frm_ok_txt|cnt_frm_subj' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Thank You Message and Email Subject" title="Edit Thank You Message and Email Subject"><i class="fa-solid fa-envelope-circle-check"></i></button>' />
 
     </div>
 </cms:if>

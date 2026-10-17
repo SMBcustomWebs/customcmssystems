@@ -7,7 +7,7 @@
     footer - the conventional place for it, and the place people look.
 
     ONE FILE, FOUR CALLERS. The four footer themes have different grids and
-    different colour fields, and duplicating this row into each of them would
+    different color fields, and duplicating this row into each of them would
     mean four places to keep in step every time a legal page is added or a
     label is reworded. It is written to be layout-agnostic - its own container
     and row - so it drops into any of them without knowing their structure.
@@ -15,7 +15,7 @@
     IT IS SAFE INSIDE A CACHED TILE, AND THAT IS NOT AN ACCIDENT. Footers
     render through cms:show_pagebuilder in ftr_emb.htm, so their HTML is cached
     in one entry shared by every visitor. Everything below is visitor-
-    INDEPENDENT: three links out of globals, and a button whose behaviour is
+    INDEPENDENT: three links out of globals, and a button whose behavior is
     decided entirely in JavaScript. There is deliberately no cms:if on any
     consent variable here - that would bake one visitor's answer into the
     cache and serve it to everyone. See CLAUDE.md sec.18.
@@ -52,17 +52,17 @@
             <div class="row">
                 <div class="col-12">
                     <cms:ignore>
-                        text-reset makes these inherit the footer's own colour
+                        text-reset makes these inherit the footer's own color
                         rather than Bootstrap's link blue. The four themes each
-                        set their text colour from their own field, and those
+                        set their text color from their own field, and those
                         fields are not in scope in a shared file - inheriting
                         is the only thing that is correct in all four.
 
-                        That only works if the theme puts its colour and
+                        That only works if the theme puts its color and
                         typography on the element this row sits inside.
                         foot_bsc.html used to hang them off an inner col-auto
                         div instead, so this row inherited from body and came
-                        out in the page's text colour on the footer's
+                        out in the page's text color on the footer's
                         background. They now sit on its <footer>, matching the
                         other three.
                     </cms:ignore>

@@ -43,10 +43,19 @@
     <cms:editable type='row' name='ccs_ftr_frm_nws_inp_row' order='20'>
         <cms:editable type='text' name='ccs_ftr_frm_nws_plh' label='Form Input Placeholder' default='Enter your email' class='col-md-4' order='10' />
         <cms:editable type='text' name='ccs_ftr_frm_nws_btn' label='Button Text' default='Sign up!' class='col-md-4' order='20' />
-        <cms:editable type='dropdown' name='ccs_ftr_frm_nws_btn_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' class='col-md-4' order='30' />
+        <cms:ignore>
+            default='primary' ADDED. This was the only rendered field in this
+            footer without a default, and the theme prints it as
+            btn-<value>. Empty gives the class "btn-", which is not a class, so
+            an unconfigured sign-up button fell back to bare .btn - transparent,
+            no border, #6a6a6a text - and read as broken rather than unstyled.
+            Every other field here (headline, placeholder, button text, success
+            and error messages) already shipped a default.
+        </cms:ignore>
+        <cms:editable type='dropdown' name='ccs_ftr_frm_nws_btn_clr' label='Button Color' opt_values='dropdowns/btn-colors.htm' dynamic='opt_values' default='primary' class='col-md-4' order='30' />
     </cms:editable>
 	<cms:editable type='row' name='ccs_ftr_frm_nws_ret_row' order='25'>
-        <cms:editable type='text' name='ccs_ftr_frm_nws_msg_ok' label='Success Message' desc='Max 80 characters.' maxlength='80' default='Thank you! You are on the list.' class='col-md-6' order='10' />
+        <cms:editable type='text' name='ccs_ftr_frm_nws_msg_ok' label='Success Message' desc='Max 80 characters.' maxlength='80' default='Thank you. Your email address has been received.' class='col-md-6' order='10' />
         <cms:editable type='text' name='ccs_ftr_frm_nws_msg_err' label='Error Message' desc='Max 80 characters.' maxlength='80' default='Invalid entry or system error. Please try again.' class='col-md-6' order='20' />
     </cms:editable>
 </cms:editable>

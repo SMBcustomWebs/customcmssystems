@@ -1,125 +1,323 @@
 <cms:ignore>
     =========================================================================
-    CONTACT BLOCK  -  THE FORM ITSELF
+    CONTACT BLOCK  -  THE FORM
     snippets/pb_mods/contact/embed/common/cnt_frm.htm
 
-    Field wording, field appearance, the submit button, and the messages the
-    visitor sees afterwards.
+    Consumed by:  blocks/contact/contacts.php  ->  both tiles
+    Rendered by:  snippets/pb_mods/contact/theme/cnt_basic_frm.html
+                  snippets/pb_mods/contact/theme/cnt_email_frm.html
+    Compiled by:  snippets/pb_mods/contact/router/cnt_frm.inc
 
-    EVERY FIELD GETS A LABEL, not just a placeholder. This is not a
-    preference. A placeholder disappears the moment someone types, so anyone
-    who is interrupted loses the only clue about what the box was for; it is
-    invisible to most screen readers as a name; and its grey-on-white default
-    fails contrast in nearly every theme. Labels can be visually hidden if the
-    design wants a clean look - the field below controls that - but the label
-    ELEMENT is always emitted.
+    FOUR GROUPS, THREE OF THEM SHUT BY DEFAULT.
 
-    WORDING IS EDITABLE because this block is not a restaurant. The source HTML
-    hardcoded "Write your massage..." (sic) - which is both a typo and an
-    assumption about the business.
+        30  Form Fields and Wording       always open
+        40  Form Field Appearance         Customize Form Fields
+        50  Submit Button                 Customize Submit Button
+        60  After the Message Is Sent     Customize After-Send Messages
 
-    SPAM PROTECTION is deliberately not built yet. The section marked
-    CAPTCHA SLOT in the theme is where it goes; reCAPTCHA is already loaded in
-    kfunctions.php and its keys are set in config.php, so it is a small change
-    when the approach is settled.
+    The wording group stays open because an owner who wants to change what a box
+    is called should not have to find a checkbox first. The other three are
+    styling and defaults that already work, so they stay out of the way until
+    someone asks for them. All three funcs are declared in cnt_opts.htm, which
+    both tiles embed before this file.
+
+    NOTHING IN A GATED GROUP IS MARKED required, AND THAT IS DELIBERATE.
+    conditional-fields.php builds not_active into client-side JavaScript - look
+    at the echo blocks around line 247, every one of them writes a browser
+    function. It hides a field in the admin. It does NOT tell Couch to skip that
+    field when the form posts. So a required field inside a shut group is still
+    validated on save, and if it is empty the page refuses to save and points at
+    a field the editor cannot see, in a group JavaScript is actively hiding.
+    KRow::_render_form_row expands a ROW on error; it does nothing for a group.
+
+    So required lives only in group 30, which is always open. Everything in 50
+    and 60 falls back in the router instead - an empty button reads Submit, an
+    empty subject line reads Website Contact Form. Same guarantee, no trap.
+
+    EVERY FIELD GETS A LABEL, not just a placeholder. This is not a preference.
+    A placeholder disappears the moment someone types, so anyone interrupted
+    loses the only clue about what the box was for; it is invisible to most
+    screen readers as a name; and its gray-on-white default fails contrast in
+    nearly every theme. Labels can be hidden visually if the design wants a
+    clean look - the field in group 40 does that with visually-hidden, which
+    keeps them in the accessibility tree - but the label ELEMENT is always
+    emitted.
+
+    SPAM PROTECTION is still not built. The CAPTCHA SLOT marked in the theme is
+    where it goes; reCAPTCHA is already loaded in kfunctions.php and its keys
+    are in config.php, so it is a small change once the approach is settled.
+
+    EVERY ROW FILLS TO TWELVE:
+
+        cnt_frm_name_row    6 + 6                 = 12
+        cnt_frm_email_row   6 + 6                 = 12
+        cnt_frm_msg_row     5 + 4 + 3             = 12
+        cnt_frm_look_row    3 + 3 + 3 + 3         = 12
+        cnt_frm_btn_row     6 + 3 + 3 | 3+3+3+3   = 24
+        cnt_btn_icon_row    4 + 4 + 4             = 12
+        cnt_frm_after_row   6 + 6 | 12            = 24
+
+    The message row used to run 6 + 6 + 4, leaving the box-height dropdown
+    stranded on a line of its own with two thirds of the row empty, and the
+    appearance row ran four controls at col-md-4 for the same reason.
     =========================================================================
 </cms:ignore>
-<cms:editable type='group' name='cnt_frm_grp' label='Form Fields and Wording' collapsed='1' order='20'>
 
-    <cms:editable type='message' name='cnt_frm_lbl_msg' class='col-md-12' order='2'>
-        <hr><h2>What each box is called</h2>
+
+<!-- ======================================================= -->
+<!-- 30. FORM FIELDS AND WORDING          always open        -->
+<!-- ======================================================= -->
+<cms:editable type='group' name='cnt_frm_grp' label='Form Fields and Wording'
+    collapsed='1' order='30'>
+
+    <cms:editable type='message' name='cnt_frm_lbl_msg' order='2'>
+        <h3>What each box is called</h3>
         <h4>The label is what a screen reader announces and what appears above
-            the box. The placeholder is the faint hint inside it.</h4>
-        <h4>Every box marked with a red star already has working wording in it.
-            You do not have to type anything to put this form on a page. Change
-            any of it you like &ndash; you just cannot leave one of them empty,
-            because an unlabeled field is unusable to anyone on a screen reader
-            and a button with no words is unusable to everyone.</h4>
+            the box. The hint is the faint text inside it.</h4>
+        <h4>All three labels come pre-filled and working. You do not have to
+            type anything to put this form on a page. Change any of it you like
+            &ndash; you just cannot leave one empty, because an unlabeled field
+            is unusable to anyone on a screen reader.</h4>
         <h4>The faint hints are genuinely optional and start out blank.</h4>
+        <hr>
     </cms:editable>
 
     <cms:editable type='row' name='cnt_frm_name_row' order='5'>
         <cms:editable type='text' name='cnt_frm_name_lbl' label='Name Field Label'
             desc='Comes pre-filled. Change the wording if you like, but it cannot be left empty.'
-            required='1' class='col-md-6' order='2'>Your Name</cms:editable>
+            required='1' maxlength='60' class='col-sm-6 col-md-6' order='2'>Your Name</cms:editable>
         <cms:editable type='text' name='cnt_frm_name_plc' label='Name Field Hint'
-            desc='Optional. Shown faintly inside the empty box.' class='col-md-6' order='4' />
+            desc='Optional. Shown faintly inside the empty box.'
+            maxlength='60' class='col-sm-6 col-md-6' order='4' />
     </cms:editable>
 
     <cms:editable type='row' name='cnt_frm_email_row' order='10'>
         <cms:editable type='text' name='cnt_frm_email_lbl' label='Email Field Label'
             desc='Comes pre-filled. Change the wording if you like, but it cannot be left empty.'
-            required='1' class='col-md-6' order='2'>Email Address</cms:editable>
+            required='1' maxlength='60' class='col-sm-6 col-md-6' order='2'>Email Address</cms:editable>
         <cms:editable type='text' name='cnt_frm_email_plc' label='Email Field Hint'
-            class='col-md-6' order='4' />
+            desc='Optional. Shown faintly inside the empty box.'
+            maxlength='60' class='col-sm-6 col-md-6' order='4' />
     </cms:editable>
 
+    <cms:ignore>
+        5 + 4 + 3 RATHER THAN 6 + 6 + 4. The message row carries one control the
+        other two do not - how tall the box starts - so it cannot be two equal
+        halves. Widening the label to 5 and trimming the hint to 4 leaves exactly
+        3 for the height and the row closes. The alternative was moving the
+        height control up into the appearance group, which separates it from the
+        box it sizes for no gain.
+    </cms:ignore>
     <cms:editable type='row' name='cnt_frm_msg_row' order='15'>
         <cms:editable type='text' name='cnt_frm_msg_lbl' label='Message Field Label'
             desc='Comes pre-filled. Change the wording if you like, but it cannot be left empty.'
-            required='1' class='col-md-6' order='2'>Your Message</cms:editable>
+            required='1' maxlength='60' class='col-sm-6 col-md-5' order='2'>Your Message</cms:editable>
         <cms:editable type='text' name='cnt_frm_msg_plc' label='Message Field Hint'
-            class='col-md-6' order='4' />
+            desc='Optional. Shown faintly inside the empty box.'
+            maxlength='60' class='col-sm-6 col-md-4' order='4' />
         <cms:editable type='dropdown' name='cnt_frm_msg_rows' label='Message Box Height'
+            desc='How many lines tall the box starts. It still grows as they type.'
             opt_values='dropdowns/_val/textarea-rows.htm' dynamic='opt_values'
-            class='col-md-4' order='6'>6</cms:editable>
+            class='col-sm-6 col-md-3' order='6'>6</cms:editable>
     </cms:editable>
 
-    <cms:editable type='message' name='cnt_frm_look_msg' class='col-md-12' order='20'>
-        <hr><h2>How the boxes look</h2>
+</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 40. FORM FIELD APPEARANCE            gated              -->
+<!-- ======================================================= -->
+<cms:editable type='group' name='cnt_look_grp' label='Form Field Appearance'
+    not_active=cnt_frm_cust_chc collapsed='1' order='40'>
+
+    <cms:editable type='message' name='cnt_frm_look_msg' order='2'>
+        <h3>How the boxes look</h3>
+        <h4>Left alone, the boxes match every other form on the site &ndash; the
+            shared styling lives in assets/css/user.php, so a change there
+            reaches all of them at once.</h4>
+        <hr>
     </cms:editable>
 
-    <cms:editable type='row' name='cnt_frm_look_row' order='25'>
+    <cms:editable type='row' name='cnt_frm_look_row' order='5'>
         <cms:editable type='dropdown' name='cnt_frm_lbl_vis' label='Show Labels'
-            desc='Hidden still reads aloud to screen readers - it only hides them visually'
+            desc='Hidden still reads aloud to screen readers - it only hides them visually.'
             opt_values='dropdowns/_cls/label-visibility.htm' dynamic='opt_values'
-            class='col-md-4' order='2' />
+            class='col-sm-6 col-md-3' order='2' />
         <cms:editable type='dropdown' name='cnt_frm_lbl_clr' label='Label Color'
-            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='4' />
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-3' order='4' />
         <cms:editable type='dropdown' name='cnt_frm_fld_sz' label='Box Size'
             opt_values='dropdowns/_cls/field-size.htm' dynamic='opt_values'
-            class='col-md-4' order='6' />
+            class='col-sm-6 col-md-3' order='6' />
         <cms:editable type='dropdown' name='cnt_frm_fld_gap' label='Space Between Boxes'
-            opt_values='dropdowns/_tok/space-gap.htm' dynamic='opt_values' class='col-md-4' order='8'>3</cms:editable>
+            opt_values='dropdowns/_tok/space-gap.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-3' order='8'>3</cms:editable>
     </cms:editable>
 
-    <cms:editable type='message' name='cnt_frm_btn_msg' class='col-md-12' order='30'>
-        <hr><h2>The send button</h2>
+</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 50. SUBMIT BUTTON                    gated              -->
+<!-- ======================================================= -->
+<cms:ignore>
+    LEFT ALONE, THE BUTTON IS A ROUNDED PRIMARY ONE READING SUBMIT.
+
+    That is decided in the router, not here, and it has to be. Hiding a field
+    does not clear it - the value an editor saved before unchecking the box is
+    still in the database and still readable. So the router branches on
+    cnt_btn_cust_opt itself rather than on whether these fields happen to hold
+    something, and ignores every one of them while the box is unchecked.
+
+    Without that, ticking the box, choosing a lurid green, then unticking it
+    would leave the green button on the page with no visible setting explaining
+    why.
+
+    Same reason there is no required='1' on the button text - see the note at
+    the top of this file. The router supplies Submit when it is empty.
+</cms:ignore>
+<cms:editable type='group' name='cnt_btn_grp' label='Submit Button'
+    not_active=cnt_btn_cust_chc collapsed='1' order='50'>
+
+    <cms:editable type='message' name='cnt_frm_btn_msg' order='2'>
+        <h3>The send button</h3>
+        <h4>These only apply while Customize Submit Button is checked. Uncheck it
+            and the button goes back to a rounded primary one reading Submit,
+            whatever is saved here.</h4>
+        <hr>
     </cms:editable>
 
-    <cms:editable type='row' name='cnt_frm_btn_row' order='35'>
+    <cms:editable type='row' name='cnt_frm_btn_row' order='5'>
         <cms:editable type='text' name='cnt_frm_btn_txt' label='Button Text'
-            desc='Comes pre-filled. A button with no words on it is unusable, so this cannot be left empty.'
-            required='1' maxlength='40' class='col-md-6' order='2'>Send Message</cms:editable>
+            desc='Leave empty and the button reads Submit.'
+            maxlength='40' class='col-sm-6 col-md-6' order='2'>Submit</cms:editable>
         <cms:editable type='dropdown' name='cnt_frm_btn_clr' label='Button Color'
-            opt_values='dropdowns/_tok/color-btn.htm' dynamic='opt_values' class='col-md-3' order='4'>primary</cms:editable>
+            opt_values='dropdowns/_tok/color-btn.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-3' order='4'>primary</cms:editable>
         <cms:editable type='dropdown' name='cnt_frm_btn_fill' label='Fill Style'
-            opt_values='dropdowns/_tok/btn-fill.htm' dynamic='opt_values' class='col-md-3' order='6'>btn</cms:editable>
+            opt_values='dropdowns/_tok/btn-fill.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-3' order='6'>btn</cms:editable>
         <cms:editable type='dropdown' name='cnt_frm_btn_st' label='Button Shape'
-            opt_values='dropdowns/_cls/btn-shape.htm' dynamic='opt_values' class='col-md-3' order='8' />
+            opt_values='dropdowns/_cls/btn-shape.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-3' order='8' />
         <cms:editable type='dropdown' name='cnt_frm_btn_sz' label='Button Size'
-            opt_values='dropdowns/_cls/btn-size.htm' dynamic='opt_values' class='col-md-3' order='10' />
+            opt_values='dropdowns/_cls/btn-size.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-3' order='10' />
         <cms:editable type='dropdown' name='cnt_frm_btn_w' label='Button Width'
-            opt_values='dropdowns/_cls/btn-width.htm' dynamic='opt_values' class='col-md-3' order='12' />
+            opt_values='dropdowns/_cls/btn-width.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-3' order='12' />
         <cms:editable type='dropdown' name='cnt_frm_btn_halg' label='Button Placement'
-            opt_values='dropdowns/_tok/align-h.htm' dynamic='opt_values' class='col-md-3' order='14' />
+            desc='Where the button sits across the form. Ignored while the width is Full.'
+            opt_values='dropdowns/_tok/align-h.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-3' order='14' />
     </cms:editable>
 
-    <cms:editable type='message' name='cnt_frm_after_msg' class='col-md-12' order='40'>
-        <hr><h2>What the visitor sees after sending</h2>
-        <h4>Shown in place of the form once the message goes through.</h4>
+    <cms:ignore>
+        THE ICON, AND THE MARKUP IT DEMANDS.
+
+        _cls/btn-icon-pos.htm emits a complete class PAIR - btn-icon plus the
+        left or right modifier - because every positioning rule in theme.css is
+        written .btn-icon.btn-icon-left, so the base is required for the modifier
+        to match anything. Print it as-is and never prefix it.
+
+        It also requires the icon to be wrapped in a span carrying btn-brand,
+        INSIDE the button. theme.css positions that span absolutely to draw the
+        tinted icon well; a bare i tag gets no well and sits in the text flow, so
+        the reserved padding shows as a gap. The theme handles that.
+
+        _cls/btn-icon-pos.htm rather than the older dropdowns/button-icon.htm the
+        utility bars still use - that file emits the modifier alone and leaves
+        the required base to the caller, and its own header says to point new
+        fields here.
+
+        BARE IN THE GROUP RATHER THAN WRAPPED IN A ROW, matching the two
+        Override Default Text Style checkboxes in content/embed/img_cntn_blk.htm.
+        A single full-width control that decides whether the row below it exists
+        is a switch, not a setting, and the established shape for one here is to
+        let it stand alone between two rows.
+
+        No Icon emits an empty string, so the func below is a plain truthiness
+        test and the theme guards the span on the same field. A button with no
+        icon chosen prints no empty span.
+    </cms:ignore>
+    <cms:editable type='dropdown' name='cnt_frm_btn_icon_pos' label='Button Icon'
+        desc='Adds a Font Awesome icon to the button and decides which side it sits on.'
+        opt_values='dropdowns/_cls/btn-icon-pos.htm' dynamic='opt_values'
+        class='col-12' order='18' />
+
+    <cms:func _into='cnt_btn_no_icon' cnt_frm_btn_icon_pos=''>
+        <cms:if cnt_frm_btn_icon_pos>show<cms:else />hide</cms:if>
+    </cms:func>
+
+    <cms:ignore>
+        THE CLICKABLE LINK IS ADMIN-PAGE ONLY, and the same address is repeated
+        as plain text in the icon field's desc above.
+
+        No popup names a type='message' field anywhere in this block - see the
+        note in inline/cnt_section_edit.txt for why - so this one is drawn on
+        the full admin page and not in the window an author reaches from the
+        page.
+        Duplicating the address in a desc is the cheap way to have it in both
+        places; a desc renders as text, so only the admin copy is clickable.
+    </cms:ignore>
+    <cms:editable type='row' name='cnt_btn_icon_row' not_active=cnt_btn_no_icon order='20'>
+        <cms:editable type='message' name='cnt_frm_btn_icon_msg' class='col-sm-12 col-md-4' order='2'>
+            <p class="mb-0 mt-3" style="font-size:12px;">Find icons at
+                <a href="https://fontawesome.com/v6/search?m=free" target="_blank"
+                    rel="noopener">Font Awesome v6</a>. Copy the whole class.</p>
+        </cms:editable>
+        <cms:editable type='text' name='cnt_frm_btn_icon_fa' label='Font Awesome Icon Class'
+            desc='The whole class, for example: fa-solid fa-paper-plane. Browse the free set at fontawesome.com/v6/search'
+            maxlength='50' class='col-sm-6 col-md-4' order='4' />
+        <cms:editable type='dropdown' name='cnt_frm_btn_icon_clr' label='Icon Color'
+            desc='Leave on Default to match the button text.'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='6' />
     </cms:editable>
 
-    <cms:editable type='row' name='cnt_frm_after_row' order='45'>
+</cms:editable>
+
+
+<!-- ======================================================= -->
+<!-- 60. AFTER THE MESSAGE IS SENT        gated              -->
+<!-- ======================================================= -->
+<cms:ignore>
+    THESE THREE APPLY WHETHER THE BOX IS CHECKED OR NOT, unlike the button.
+
+    They are wording with real defaults already in them, not styling. An
+    untouched form has to send with a working subject line and show a sensible
+    thank-you, so the router reads them straight rather than branching on the
+    checkbox. Checking the box only makes them editable.
+
+    THE SUBJECT LINE IS THE ONE THAT MATTERS BEYOND THIS PAGE. An empty Subject
+    header is a strong spam signal, and mail from this domain has already been
+    through that once - see the SPF work in CLAUDE.md. It cannot be marked
+    required for the reason at the top of this file, so the router substitutes
+    Website Contact Form the moment it reads an empty one. Never let this reach
+    cms:send_mail blank.
+</cms:ignore>
+<cms:editable type='group' name='cnt_aft_grp' label='After the Message Is Sent'
+    not_active=cnt_aft_cust_chc collapsed='1' order='60'>
+
+    <cms:editable type='message' name='cnt_frm_after_msg' order='2'>
+        <h3>What the visitor sees after sending</h3>
+        <h4>Shown in place of the form once the message goes through. All three
+            come pre-filled and working &ndash; erase and retype to change them.
+            Emptying one puts the original wording back rather than leaving a
+            blank on the page.</h4>
+        <hr>
+    </cms:editable>
+
+    <cms:editable type='row' name='cnt_frm_after_row' order='5'>
         <cms:editable type='text' name='cnt_frm_ok_ttl' label='Thank You Heading'
-            desc='Comes pre-filled. Shown where the form was, once the message goes through.'
-            required='1' class='col-md-6' order='2'>Thank You</cms:editable>
+            desc='Shown where the form was, once the message goes through.'
+            maxlength='80' class='col-sm-6 col-md-6' order='2'>Thank You</cms:editable>
         <cms:editable type='text' name='cnt_frm_ok_txt' label='Thank You Message'
-            desc='Comes pre-filled. The line under the heading.'
-            required='1' class='col-md-6' order='4'>Your message has been sent. We will get back to you shortly.</cms:editable>
+            desc='The line under the heading.'
+            maxlength='200' class='col-sm-6 col-md-6' order='4'>Your message has been sent. We will get back to you shortly.</cms:editable>
         <cms:editable type='text' name='cnt_frm_subj' label='Email Subject Line'
-            desc='What YOU see in your inbox when a message arrives. Comes pre-filled and cannot be left empty, or the mail arrives with a blank subject and lands in spam.'
-            required='1' class='col-md-12' order='6'>Website Contact Form</cms:editable>
+            desc='What YOU see in your inbox when a message arrives. Left empty it reads Website Contact Form - mail with a blank subject lands in spam.'
+            maxlength='120' class='col-12' order='6'>Website Contact Form</cms:editable>
     </cms:editable>
 
 </cms:editable>

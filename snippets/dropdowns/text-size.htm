@@ -1,11 +1,34 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/dropdowns/text-size.htm
+
+    Values are steps on the fs-* scale, which is defined in REM. No pixel value
+    is true here: assets/css/user.php sets html { font-size: <scale>% } from the
+    Site Text Size global, so every step moves with it - and moves again for a
+    visitor who has raised their own browser font size.
+
+    An earlier version of this file labeled the steps in pixels. That was wrong
+    at two of the three site scales, and wrong for any visitor with a non-default
+    browser setting. The version before THAT was worse: it called fs-8 "small"
+    when fs-8 is 1.333rem, half again larger than body.
+
+    Role names are the only labeling that stays true. They are also accurate to
+    the theme: h1 is fs-4, h2 is fs-5, h3 is fs-6, h4 is fs-7, h5 is fs-8, and
+    body sits at fs-9. Picking "Heading 3" here really does match an h3.
+
+    FOR REFERENCE ONLY, at 100% scale with a default browser: fs-1 160px,
+    fs-2 120, fs-3 90, fs-4 67, fs-5 50, fs-6 38, fs-7 28, fs-8 21, fs-9 16,
+    fs-10 12. Ratio is 1.333 per step. Do not put those numbers in the labels.
+    ===========================================================================
+</cms:ignore>
 Default=
-|Largest=1
-|XX-Large=2
-|X-Large=3
-|Large=4
-|Larger=5
-|Medium=6
-|Lead=7
-|small=8
-|x-small=9
-|xx-small=10
+|Display 1 - largest=1
+|Display 2=2
+|Display 3=3
+|Heading 1=4
+|Heading 2=5
+|Heading 3=6
+|Heading 4=7
+|Heading 5=8
+|Body=9
+|Caption - smallest=10

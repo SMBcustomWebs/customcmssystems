@@ -1,0 +1,80 @@
+<cms:ignore>
+    ===========================================================================
+    snippets/utils/maintenance_gate.htm
+
+    Sends public visitors to maintenance.php while the switch in globals is on.
+    Embedded as the FIRST thing in pb_mods/pg_frame/head.htm.
+
+    WHY head.htm AND NOT kfunctions.php. head.htm is reached by every front-end
+    page - directly, or through tl_if_pb_emb.html for product, service and
+    about - and by nothing else. The Stripe and PayPal callbacks, cart-modal,
+    wishlist-modal and categories.php do not embed it, so a payment already in
+    flight still completes and the AJAX fragments keep answering. A gate in
+    kfunctions.php would catch those too, which is the opposite of what a soft
+    maintenance mode is for.
+
+    WHY IT IS THE FIRST LINE OF head.htm. Line 1 of that file is the doctype.
+    Couch buffers output so a redirect further down would still fire, but there
+    is no reason to build a page that is about to be discarded.
+
+    THE FOUR PASSES, AND WHY EACH ONE EXISTS
+
+      maintenance.php   - it embeds head.htm itself. Without this the page
+                          redirects to itself, forever.
+      users/login.php   - an admin who is not signed in has to be able to sign
+                          in. Leave this out and turning maintenance on from a
+                          browser you are not logged into locks you out of your
+                          own site.
+      users/logout.php  - so a session can be ended cleanly rather than by
+                          clearing cookies.
+      lost-password.php - the other half of being able to get back in.
+
+    Level 7 and above passes everything, which is the point: the site stays
+    fully browsable for whoever is doing the work.
+
+    k_template_name CARRIES THE FOLDER, so the users/ entries need their prefix.
+
+    TWO PARSER RULES ARE BEING OBEYED HERE, BOTH LEARNED THE HARD WAY (sec.33).
+
+    The switch is read into mnt_on first and compared on the next line. Putting
+    the get_custom_field call directly on the left of the == instead, as a
+    quoted tag, does not parse - it fails the whole file with LOGIC_OP: Invalid
+    char. Described rather than shown on purpose: cms:ignore discards its body
+    but the PARSER STILL READS IT, so a broken tag written as an example here
+    breaks the file exactly as if it were live code. That is what happened on
+    the first upload of this snippet.
+
+    The four passes are four chained ne tests rather than a list, because
+    cms:is takes an ARRAY for its in= parameter (tags.php:7806, in_array) and
+    has no delimiter option. Handed a pipe-delimited string it returns 0 without
+    complaining, which would have sent maintenance.php to itself.
+    ===========================================================================
+</cms:ignore>
+<cms:ignore>
+    THE SELF-EXCLUSION IS CHECKED ON $CTX->script, NOT ON k_template_name.
+
+    cms.php sets $CTX->script from SCRIPT_FILENAME, relative to K_SITE_DIR, at
+    line 49 - before any template is parsed or registered. So it says
+    "maintenance.php" whether or not Couch has ever registered that template.
+
+    k_template_name is only populated once COUCH::invoke() has run. A template
+    that has not been registered yet, or that is missing its invoke() call,
+    reports it as empty - which passes an "is this the maintenance page" test
+    written against it, and the holding page redirects to itself until the
+    browser gives up. That is exactly what happened on the first attempt.
+</cms:ignore>
+<cms:php>
+    global $CTX;
+    $CTX->set( 'mnt_script', ltrim( str_replace('\\','/',(string)$CTX->script), '/' ), 'global' );
+</cms:php>
+
+<cms:set mnt_on = "<cms:get_custom_field 'ccs_gl_maintenance_mode' masterpage='globals.php' />" />
+
+<cms:if mnt_on == '1' && k_user_access_level lt '7'>
+    <cms:if mnt_script ne 'maintenance.php'
+         && mnt_script ne 'users/login.php'
+         && mnt_script ne 'users/logout.php'
+         && mnt_script ne 'users/lost-password.php'>
+        <cms:redirect "<cms:show k_site_link />maintenance.php" />
+    </cms:if>
+</cms:if>

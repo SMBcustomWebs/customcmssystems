@@ -1,0 +1,117 @@
+<cms:ignore>
+    =========================================================================
+    CONTACT BLOCK  -  SECTION HEADER  (shared by both tiles)
+    snippets/pb_mods/contact/theme/cnt_header.html
+
+    Embedded by:  theme/cnt_basic_frm.html
+                  theme/cnt_email_frm.html
+    Compiled by:  router/cnt_frm.inc
+
+    ONE FILE RATHER THAN THE SAME HUNDRED LINES IN BOTH TILES. The heading,
+    the two lines and the rule are identical on the basic and the email-only
+    tile - only the form below them differs. They were duplicated, and the
+    first thing that happened was that one copy got an edit button the other
+    did not.
+
+    ONE BUTTON FOR THE WHOLE HEADER. It opens the switch that removes the
+    header, the heading and its formatting, the line count, both lines and
+    their formatting, and the dividing rule - the entire Section Header group
+    in one window. There were four buttons here, one per piece, and four
+    stacked down the right of a header that is often two lines of text was
+    more furniture than the thing it was editing.
+
+    IT SITS AT THE UPPER LEFT OF THE TEXT BOX, which is a structural position
+    rather than a per-element one. The per-element buttons this replaced sat
+    on the right, beside the words they changed - that is the rule for editing
+    one thing on screen. This edits the shape of the section, so it goes where
+    the other structural controls go: top-left, just inside the content column
+    and therefore immediately to the right of the section cluster hanging off
+    the section's own corner. Reading left to right, section then header, the
+    two clusters say what they own.
+
+    INSIDE THE COLUMN, NOT HANGING OFF IT. The section cluster already occupies
+    the space outside the left edge; a second stack out there would land on top
+    of it.
+
+    pt-5 WHILE EDITING IS WHAT MAKES ROOM. The button is absolutely positioned
+    against this wrapper, and top-0 resolves to the inner edge of the border -
+    padding does not push it down. So the 3rem of top padding becomes an empty
+    band the button sits in, and the heading starts below it rather than
+    underneath it. It also gives the wrapper height when the header is switched
+    off and there is no content at all, which is what keeps the button
+    reachable in the one state where nothing else renders.
+
+    DIMMED WHENEVER THERE IS NO HEADING ON THE PAGE - whether that is because
+    Remove Section Header is checked or because nobody has written one yet.
+    cf_show_hdg covers both: the router only sets it inside the branch that
+    cf_show_hdr guards, so a removed header can never report a visible
+    heading. One test, both meanings.
+    =========================================================================
+</cms:ignore>
+<cms:if cf_show_hdr || cf_edit>
+    <div class="w-100 position-relative <cms:if cf_edit>pt-5</cms:if>">
+
+        <cms:if cf_edit>
+            <div class="position-absolute top-0 start-0 mt-2 z-3">
+                <cms:ignore>
+                    THE WHOLE GROUP, ROWS AND ALL.
+
+                    THE ROW NAMES ARE IN THE LIST ON PURPOSE, which is the
+                    opposite of every other popup in this block. Those name
+                    only data fields, because functions.php:258 and
+                    bootstrap-grid.php:76 hard-delete an unprocessed container
+                    and a popup that names one can permanently break.
+
+                    A one-row window can afford that rule; this one cannot.
+                    addons/bootstrap-grid/theme/form_row_row.html renders a
+                    listed row as its own .row wrapper and pulls its children
+                    in with childof, so the rows are what give thirty-odd
+                    controls their column layout and their order. Leave them
+                    out and the fields flatten into one pseudo-group sorted by
+                    k_order, where every row's order-2 field lands next to
+                    every other row's order-2 field.
+
+                    NO MESSAGE FIELDS EVEN SO - not cnt_txt1_msg, not
+                    cnt_txt2_msg, not cnt_hr_msg. A message is the one type
+                    that has already broken this block, and it carries no
+                    setting. The field labels do that job instead: every
+                    control in here names the line it belongs to, so "Line 1
+                    Color" and "Line 2 Color" tell the two rows apart without
+                    a heading between them.
+
+                    EVERY CONTROLLER IS VISIBLE IN THIS WINDOW, so nothing
+                    needs hide_fields. cnt_hdr_rmv_opt gates the group,
+                    cnt_txt_opt gates the two line rows, cnt_hdg_hr gates the
+                    three rule-style fields, and all three are in the list.
+                    Checking Remove folds the group shut in the window while
+                    leaving the checkbox above it, which is what lets it be
+                    unchecked again - and the reason that checkbox can live
+                    here at all is that this button is drawn whether or not
+                    the header renders.
+                </cms:ignore>
+                <cms:popup_edit 'cnt_opt_row|cnt_hdr_rmv_opt|cnt_txt_grp|cnt_hdg_row|cnt_hdg_ln|cnt_hdg_tag|cnt_hdg_clr|cnt_hdg_sz|cnt_hdg_font|cnt_hdg_fnt_wt|cnt_hdg_ltr_spc|cnt_txt_opt_row|cnt_txt_opt|cnt_txt1_row|cnt_txt1_ln|cnt_txt1_clr|cnt_txt1_sz|cnt_txt1_font|cnt_txt1_fnt_wt|cnt_txt1_ltr_spc|cnt_txt2_row|cnt_txt2_ln|cnt_txt2_clr|cnt_txt2_sz|cnt_txt2_font|cnt_txt2_fnt_wt|cnt_txt2_ltr_spc|cnt_hr_len_row|cnt_hdg_hr|cnt_hr_row|cnt_hr_wt|cnt_hr_clr|cnt_hr_pd' height='760' width='980' link_text="<button class='btn btn-sm <cms:if cf_show_hdg>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Section Header' title='Edit Section Header'><i class='fa-solid fa-heading'></i></button>" />
+            </div>
+        </cms:if>
+
+        <cms:if cf_show_hdr>
+
+            <cms:if cf_show_hdg>
+                <<cms:show cnt_hdg_tag /> class="<cms:show cf_hdg_cls />mb-3"><cms:show cnt_hdg_ln /></<cms:show cnt_hdg_tag />>
+            </cms:if>
+
+            <cms:if cf_show_txt1>
+                <p class="<cms:show cf_txt1_cls />mb-2"><cms:show cnt_txt1_ln /></p>
+            </cms:if>
+
+            <cms:if cf_show_txt2>
+                <p class="<cms:show cf_txt2_cls />mb-2"><cms:show cnt_txt2_ln /></p>
+            </cms:if>
+
+            <cms:if cf_show_hr>
+                <hr class="<cms:show cf_hr_cls />" />
+            </cms:if>
+
+        </cms:if>
+
+    </div>
+</cms:if>

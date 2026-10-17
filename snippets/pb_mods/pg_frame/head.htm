@@ -1,3 +1,15 @@
+<cms:ignore>
+    MAINTENANCE GATE RUNS BEFORE THE DOCTYPE.
+
+    utils/maintenance_gate.htm redirects public visitors to maintenance.php
+    while the switch in globals is on, and lets level 7+ through. It is here,
+    at the top of the shared frame, because this file is reached by every
+    front-end page and by nothing else - the payment callbacks and the AJAX
+    fragments do not embed it, so they keep working while the site is closed.
+
+    Emits no markup. The reasoning for each exception is in the snippet.
+</cms:ignore>
+<cms:embed 'utils/maintenance_gate.htm' />
 <!DOCTYPE html>
 <cms:ignore>
     CONSENT IS RESOLVED FIRST, BEFORE ANYTHING ELSE IN THE DOCUMENT.
@@ -27,8 +39,31 @@
 
 <cms:set ccs_thm="<cms:get_custom_field 'ccs_gl_site_thm_opt' masterpage='globals.php' />" />
 
+<cms:ignore>
+    DISABLE THEME BACKGROUND/TEXT COLORS HAS TO BE READ HERE TOO.
+
+    ccs_gl_site_thm_clr_opt lived in exactly one file - assets/css/user.php -
+    where it guards the two lines in each theme branch that set body_bg and
+    body_clr. Ticked, the palette still applies but the page falls back to the
+    chain's base pair, #fff on #292b2c. A white page.
+
+    This block decided dark mode from the theme NAME alone and never consulted
+    it, so notte with the box ticked rendered a WHITE page still carrying
+    data-bs-theme="dark". Every Bootstrap dark token kept firing on it:
+    --ccs-secondary-color went to rgba(225,225,225,.75), which is near-white
+    muted text on a white page, borders lightened, and the dropdown lift in
+    user.php tinted a panel that was sitting on white.
+
+    The two settings have to agree. If the theme's background is not being
+    applied, the page is not in dark mode, whatever the theme is called.
+
+    Read with get_custom_field to match the line above - this snippet runs
+    before any cms:pages on globals.php, so the field is not otherwise in scope.
+</cms:ignore>
+<cms:set ccs_thm_plain="<cms:get_custom_field 'ccs_gl_site_thm_clr_opt' masterpage='globals.php' />" />
+
 <cms:set bs_theme_mode='light' />
-<cms:if ccs_thm=='dark' || ccs_thm=='scuro' || ccs_thm=='notte'>
+<cms:if (ccs_thm=='dark' || ccs_thm=='scuro' || ccs_thm=='notte') && ccs_thm_plain != '1'>
     <cms:set bs_theme_mode='dark' />
 </cms:if>
 
@@ -169,9 +204,29 @@
         NOTE: it does not change when globals.php theme settings change, since
         those alter the OUTPUT without touching this file. Bump it by saving
         user.php, or hard-refresh, after a theme colour/font change.
+
+        ?page= AND ?post= WERE REMOVED 2026-09-04, AND MUST NOT COME BACK
+        WITHOUT A READER. They existed so the stylesheet could resolve the
+        current page's hero gradient fields. That path is gone (see the note at
+        the top of user.php) and the one rule that still varied by template -
+        .content { min-height: unset } - now rides a .content-flush class emitted
+        by main-cap.htm instead.
+
+        What that buys: the URL is identical for every page, so a visitor
+        downloads and caches ONE copy of this ~30KB stylesheet for the whole
+        site rather than one per page. It matters more in the PageBuilder canvas,
+        where every tile is an iframe embedding this same head - four hero tiles
+        on the home page meant four separate copies, and PB tile caching is off
+        on this install (ccs_dash/cache/ does not exist), so they were regenerated
+        on every load.
+
+        A per-page or per-tile value can never be expressed here again: one URL
+        now means one cached artefact for the entire site. Anything that varies
+        by tile belongs in the tile's own scoped <style>, the way
+        hero_custom_settings.html does it.
     </cms:ignore>
     <link
-        href="<cms:show k_site_link />assets/css/user.php?page=<cms:show k_template_name />&post=<cms:show k_page_id />&v=<cms:php>echo @filemtime( K_SITE_DIR . 'assets/css/user.php' );</cms:php>"
+        href="<cms:show k_site_link />assets/css/user.php?v=<cms:php>echo @filemtime( K_SITE_DIR . 'assets/css/user.php' );</cms:php>"
         rel="stylesheet" />
 
     <cms:ignore>

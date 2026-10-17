@@ -1,0 +1,87 @@
+<cms:ignore>
+    =========================================================================
+    CONTACT BLOCK  -  MAILING-LIST NOTICE
+    snippets/pb_mods/contact/embed/cnt_sub.htm
+
+    Consumed by:  blocks/contact/contacts.php  ->  cnt_email_frm_tl ONLY
+    Rendered by:  snippets/pb_mods/contact/theme/cnt_email_frm.html
+    Compiled by:  snippets/pb_mods/contact/router/cnt_sub.inc
+
+    THE EMAIL-ONLY TILE COLLECTS ADDRESSES. THAT IS WHAT IT IS FOR.
+
+    There is no switch. The tile always writes to subscribers.php and always
+    prints the notice, which is why this file holds one field and no gate: a
+    toggle would mean the tile sometimes tells people and sometimes does not,
+    and the two states would be indistinguishable on the page.
+
+    Choosing between the two tiles IS the decision. cnt_basic_frm_tl asks for a
+    name and a message and stores nothing; this one asks for an address and
+    keeps it. An author who does not want to collect addresses uses the other
+    tile.
+
+    NOT IN embed/common/, and that is what enforces it. The other three schema
+    files are embedded by both tiles, so a field added to any of them appears on
+    both. This one is embedded here and nowhere else, so the basic tile has no
+    notice field, no notice, and no write - not by configuration, but because
+    the fields are not on it.
+
+    ONE FIELD, ONE ROW, NO GROUP AND NO FUNC. Nothing here is conditional, so
+    there is nothing to gate. cnt_sub_row fills to twelve with a single col-12.
+
+    THE ADDRESS IS NOT TRUSTED UNTIL IT ANSWERS. The theme writes the row as
+    'pending' and mails the address a confirmation link; confirm-subscription.php
+    promotes it. That is the tile's bot defence and the reason it carries no
+    captcha - the reasoning is written out at the CAPTCHA SLOT note in
+    theme/cnt_email_frm.html. An invisible honeypot sits alongside it and needs no
+    field here either.
+    =========================================================================
+</cms:ignore>
+
+
+<!-- ======================================================= -->
+<!-- 70. MAILING LIST                                        -->
+<!-- ======================================================= -->
+<cms:editable type='message' name='cnt_sub_msg' order='70'>
+    <br><hr>
+    <h3>Mailing List</h3>
+    <h4>This form saves every address sent through it to <strong>Subscribers</strong>
+        in the admin menu, with the date, the form it came from, the notice
+        below, and a private unsubscribe link.</h4>
+    <h4><strong>Addresses arrive as "pending" and are not sent to.</strong> The
+        visitor gets one email asking them to confirm, and opening the link in
+        it is what turns the record into a real subscriber. That is what keeps
+        bots and mistyped addresses off the list: neither can open the mail, so
+        neither ever becomes live. Nothing to configure &ndash; it happens on
+        its own.</h4>
+    <h4>The notice below is what tells the visitor. It sits above the button and
+        a copy is filed with every record, so it can be reworded but not
+        removed.</h4>
+    <h4>Use the other contact tile for a plain get-in-touch form &ndash; it
+        stores nothing. Use this one where the heading tells people they are
+        signing up.</h4>
+    <hr>
+</cms:editable>
+
+<cms:ignore>
+    THE NOTICE IS A FIELD, NOT HARDCODED IN THE THEME, for the same reason
+    nws_purpose is a variable in foot_2col_form-scal.html: it is displayed and
+    stored from ONE place, so the sentence on file can never drift from the
+    sentence that was on the page.
+
+    IT PRINTS WHERE THE PRIVACY LINE ALREADY PRINTS - above the button, in the
+    same small type as every other point-of-collection line on the site. Stated
+    once, where a person looks for it, and not dressed up as a banner.
+
+    Emptying it does not silence it. The router substitutes the working sentence
+    the moment it reads a blank, exactly as cf_subj does for the mail subject.
+
+    Existing records keep the notice they were signed up under. That is correct
+    - they were shown the old wording, not this one.
+</cms:ignore>
+<cms:editable type='row' name='cnt_sub_row' order='72'>
+
+    <cms:editable type='text' name='cnt_sub_notice' label='Mailing-List Notice'
+        desc='Shown above the button and filed with every record. Say plainly that sending the form adds the address to the list, and that they can leave.'
+        maxlength='240' class='col-12' order='2'>Sending this form adds your email address to our mailing list once you confirm it by email. You can unsubscribe from any message we send.</cms:editable>
+
+</cms:editable>

@@ -1,43 +1,78 @@
-<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")>
-    <cms:ignore>
-        FORM CLUSTER - hovers at the top-left of the form itself.
+<cms:ignore>
+    =========================================================================
+    THE FORM'S OWN CLUSTER - one button, hanging off the left edge of the
+    form.
 
-        Two buttons, split the way the author thinks about the form rather than
-        the way the fields happen to be declared:
+    ONE BUTTON, because there is only one thing here that belongs to the form
+    as a whole rather than to a field: how the boxes look. Label visibility
+    and color, box size, and the space between boxes all apply to every field
+    at once, so there is no single field to hang them on. Each field's WORDING
+    is a different matter and lives on that field, to its right.
 
-            WORDING   what each box is called and the faint hint inside it
-            LOOK      label visibility and color, box size, space between boxes
+    CUSTOMIZE FORM FIELDS IS IN THIS WINDOW. Without it the window would open
+    onto four controls JavaScript is hiding, with the switch that reveals them
+    on a different popup entirely. Ticking it here reveals them in place.
 
-        The send button is NOT here. It has its own cluster sitting on the
-        button, because the button is a thing on screen that can be pointed at.
-        The thank-you screen and the mail subject are not here either - they
-        are in the section cluster, because neither is ever visible beside the
-        form.
+    IT DIMS WHEN THE BOX IS UNTICKED, which is the honest signal: the settings
+    behind this button are not currently affecting anything.
 
-        ONE FILE SERVES BOTH TILES. The basic tile and the email-only tile
-        embed the same three schema files, so all sixty-seven fields exist on
-        both and every name below resolves on both. What differs is which of
-        them RENDER: the email-only tile has no name box and no message box, so
-        offering to reword them would be offering to edit something that is not
-        there.
+    fa-sliders, NOT fa-palette. A palette says "pick a color", and only one of
+    these four controls is a color - the other three are whether labels show,
+    how big the boxes are, and how much air sits between them. Sliders is the
+    plain "adjust these settings" glyph, which is what this window actually is.
 
-        cnt_inl_hide carries that difference. The theme sets it immediately
-        before embedding this file, and hide_fields on the wording popup loads
-        the fields but does not draw them. It is set to an empty string by the
-        basic tile rather than left unset, because scope global writes to the
-        root and an unset variable would carry over from whichever contact
-        section rendered before it on the same page.
+    It also has to survive being seen next to its neighbors. fa-fill-drip is
+    already the background-color button in the section cluster, so a second
+    paint-flavored icon a few inches away was two buttons claiming the same
+    job. Nothing else in snippets/pb_mods uses fa-sliders.
 
-        WHY hide_fields AND NOT skip. skip suppresses the "Field not found"
-        error, which is the one signal that catches a typo or an unregistered
-        field. Using it here to hide two rows would also silence a genuine
-        mistake in the other ten names. hide_fields hides without lying.
-    </cms:ignore>
-    <div class="position-absolute top-0 start-0 mt-2 ms-2 z-3 d-flex flex-column gap-2">
+    ONE FILE, BOTH TILES, and nothing in it differs between them - which is
+    new. It used to carry a hide list naming the seven name-and-message fields
+    so the email-only tile would not offer to reword boxes it does not draw.
+    Now that each field's controls hang off the field itself, not drawing the
+    field is all it takes. The list is gone and cnt_inl_hide with it.
+    =========================================================================
+</cms:ignore>
+<cms:ignore>
+    =========================================================================
+    A GATED GROUP HAS TO BE NAMED IN THE WINDOW THAT SHOWS ITS FIELDS.
 
-        <cms:popup_edit 'cnt_frm_grp|cnt_frm_lbl_msg|cnt_frm_name_row|cnt_frm_name_lbl|cnt_frm_name_plc|cnt_frm_email_row|cnt_frm_email_lbl|cnt_frm_email_plc|cnt_frm_msg_row|cnt_frm_msg_lbl|cnt_frm_msg_plc|cnt_frm_msg_rows' hide_fields=cnt_inl_hide link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Field Wording" title="Edit Field Wording"><i class="fa-solid fa-tag"></i></button>' />
+    This is the rule that broke this button, and it is worth stating plainly
+    because it is not the same rule as "list the controller".
 
-        <cms:popup_edit 'cnt_frm_grp|cnt_frm_look_msg|cnt_frm_look_row|cnt_frm_lbl_vis|cnt_frm_lbl_clr|cnt_frm_fld_sz|cnt_frm_fld_gap' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Field Appearance" title="Edit Field Appearance"><i class="fa-solid fa-palette"></i></button>' />
+    Two separate things have to be in the form for a conditional to work:
+
+      THE CONTROLLER, because functions.php:4724 only wires a dependency when
+      array_key_exists($k, $PAGE->forms[$form_name]) - the controlling field
+      has to have been rendered into THIS form. Miss it and the dependency is
+      skipped without a word and the func evaluates against the empty default
+      declared on it, which in this block always means hide.
+
+      THE THING THAT CARRIES not_active, because that is what the JavaScript
+      shows and hides. For the two text rows in the header that is the row,
+      and bootstrap-grid.php copies a row's not_active down onto every child,
+      so listing the children is enough. FOR A GROUP IT IS NOT. _alter_editable
+      returns early unless the type is 'row', so a group's children carry
+      nothing - the group itself is the only gate.
+
+    So a window showing cnt_frm_lbl_vis and its three neighbors without also
+    naming cnt_look_grp shows four controls that no checkbox can reach. They
+    render, they save, and Customize Form Fields appears to do nothing. That
+    is exactly what it did.
+
+    Naming the group brings the gate into the window: ticking the box opens
+    the four fields in place, unticking folds them away again.
+
+    AND NAMING A CONTAINER MEANS NAMING ITS WHOLE CHAIN. inline_ex.php:116
+    only nests a field under its group when that group's name is in the list
+    too, so cnt_opt_row comes along for the checkbox and cnt_frm_look_row for
+    the four dropdowns.
+    =========================================================================
+</cms:ignore>
+<cms:if cf_edit>
+    <div class="ccs-edit-out-left mt-4 d-flex flex-column gap-2">
+
+        <cms:popup_edit 'cnt_opt_row|cnt_frm_cust_opt|cnt_look_grp|cnt_frm_look_row|cnt_frm_lbl_vis|cnt_frm_lbl_clr|cnt_frm_fld_sz|cnt_frm_fld_gap' link_text="<button class='btn btn-sm <cms:if cf_frm_cust>btn-light shadow-sm<cms:else />btn-outline-secondary bg-white opacity-50</cms:if> rounded-circle' type='button' aria-label='Edit Form Field Appearance' title='Edit Form Field Appearance'><i class='fa-solid fa-sliders'></i></button>" />
 
     </div>
 </cms:if>

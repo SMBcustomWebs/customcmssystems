@@ -32,10 +32,10 @@
                     COMPANY NAME APPEARANCE, resolved once and reused everywhere
                     the name is printed - the heading below AND the no-logo
                     fallback further down, which used to hardcode fs-4 fw-bold
-                    and no colour at all.
+                    and no color at all.
 
                     PER-NAVBAR FIRST, GLOBAL AS THE FALLBACK. A dark navbar and
-                    a light one need different name colours, so the choice has
+                    a light one need different name colors, so the choice has
                     to live on the tile; the global stays as the site-wide
                     default for any navbar that has not overridden it.
 
@@ -82,19 +82,19 @@
 
                     THE COLLISION. It also carried .h1 through .h6 as a supposed
                     SIZE class. In this theme those are not size classes -
-                    user.php:452 gives them colour and font-family too - so
+                    user.php:452 gives them color and font-family too - so
                     "Displayed Text Size" silently overrode "Displayed Text
-                    Colour" sitting next to it in the same panel. That is the bug
-                    where every theme colour except tertiary and quaternary
+                    Color" sitting next to it in the same panel. That is the bug
+                    where every theme color except tertiary and quaternary
                     refused to show: those two are the only .text-* utilities
                     carrying !important, so they were the only ones that could
                     win. The size fields now emit fs-N, which sets font-size and
                     nothing else.
 
                     One anchor replaces three elements. .navbar-brand is
-                    Bootstrap's own pattern for this and its colour rule sits at
+                    Bootstrap's own pattern for this and its color rule sits at
                     theme.css:5599, well before the .text-* utilities, so it
-                    yields to the author's colour choice.
+                    yields to the author's color choice.
                 </cms:ignore>
                 <cms:if final_brand_type=='name'>
                     <a class="navbar-brand mb-0 <cms:show final_name_cls />" href="<cms:show k_site_link />">
@@ -119,12 +119,12 @@
                         aria-label="<cms:show ccs_gl_site_name /> Home">
                         <cms:if "<cms:not_empty final_logo_src />">
                             <img src="<cms:show final_logo_src />" alt="<cms:show ccs_gl_site_name /> logo"
-                                class="w-100" style="max-width: 264px; height: auto; max-height: 80px;" />
+                                style="width: auto; height: auto; max-width: 264px; max-height: 80px;" />
                             <cms:else />
                             <cms:ignore>
                                 Reached when a logo style is chosen but no image
                                 has been uploaded. It used to hardcode fs-4
-                                fw-bold and emit no colour class at all, so this
+                                fw-bold and emit no color class at all, so this
                                 was a third way for the company name to appear
                                 on screen ignoring every setting that governs
                                 it. Now it honours the same resolved classes as
@@ -177,9 +177,9 @@
 
                         <cms:pages masterpage='globals.php' limit='1'>
                             <cms:popup_edit 'ccs_gl_site_nav_mnu_dd_msg|ccs_gl_site_nav_actv_clr|ccs_gl_site_nav_mnu_dd_row|ccs_gl_site_nav_dd_txt_clr|ccs_gl_site_nav_dd_bg'
-                                link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format dropdown menu colors'><i class='fas fa-palette text-warning' style='font-size: 12px;'></i></span>" />
+                                link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px; pointer-events: auto;' title='Format dropdown menu colors'><i class='fas fa-palette text-warning' style='font-size: 12px;'></i></span>" />
                             <cms:popup_edit 'ccs_gl_site_nav_hvr_clr|ccs_gl_site_nav_dd_hvr_clr|ccs_gl_site_nav_dd_hvr_bg'
-                                link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px;' title='Format floatover colors'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
+                                link_text="<span class='badge bg-dark rounded-circle shadow border border-secondary d-inline-flex align-items-center justify-content-center' style='width: 26px; height: 26px; pointer-events: auto;' title='Format floatover colors'><i class='fas fa-mouse-pointer text-warning' style='font-size: 12px;'></i></span>" />
                         </cms:pages>
                     </div>
                 </cms:if>

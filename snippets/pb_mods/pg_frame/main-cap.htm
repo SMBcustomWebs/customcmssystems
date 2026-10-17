@@ -3,4 +3,16 @@
 <!-- ===============================================-->
 <main class="main" id="top">
     <div data-layout="container">
-        <div class="content">
+<cms:ignore>
+    content-flush carries the rule that used to be gated inside user.php
+    ('STRUCTURAL OVERRIDES'). It was the last thing on that stylesheet that
+    varied by page, and it cost a separate cached copy of the whole file for
+    every page a visitor opened. The test is identical - it just runs here,
+    where the template is already in context, instead of being re-derived
+    from ?page=&post=.
+
+    k_template_order / k_template_name are set by KWebpage::set_context()
+    (page.php:1774,1782), so this resolves the same way on a live page and
+    inside a PageBuilder tile iframe - which is what the old form did too.
+</cms:ignore>
+        <div class="content<cms:if (k_template_order ge '1000' && k_template_order le '1999') || k_template_name == 'index.php'> content-flush</cms:if>">

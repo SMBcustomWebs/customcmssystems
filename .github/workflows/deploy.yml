@@ -1,0 +1,26 @@
+name: Deploy to HostGator
+
+on:
+  push:
+    branches:
+      - main # Triggers only when you push to the main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2 # Required for the FTP action to determine changed files
+
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.3
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # HostGator often uses standard FTP (port 21). 
+          # If your HostGator account enforces SFTP, uncomment the next two lines and verify your port (often 2222 for HostGator):
+          # protocol: sftp
+          # port: 2222

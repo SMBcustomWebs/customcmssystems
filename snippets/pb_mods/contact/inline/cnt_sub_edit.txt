@@ -1,0 +1,17 @@
+<cms:ignore>
+    THE MAILING-LIST NOTICE.
+
+    ONE FIELD, NO CONTAINERS NAMED. Nothing on this tile is gated, so there is
+    no group to carry and no controller to make reachable - the same shape as
+    cnt_email_edit.txt. Naming the row would only risk the "Field not found"
+    that containers in popup lists caused across this block.
+
+    cnt_sub_msg IS NOT NAMED. It is type='message', and functions.php:258
+    HARD-DELETES an unprocessed message field, so a popup naming one throws
+    "Field not found" the moment the admin re-registers the template. Message
+    fields belong to the backend form only.
+
+    NEVER DIMMED. There is no off state to signal - this tile always collects
+    and always prints the notice.
+</cms:ignore>
+<cms:popup_edit 'cnt_sub_notice' height='420' width='820' link_text="<button class='btn btn-sm btn-light shadow-sm rounded-circle' type='button' aria-label='Edit Mailing-List Notice' title='Edit Mailing-List Notice'><i class='fa-solid fa-address-book'></i></button>" />

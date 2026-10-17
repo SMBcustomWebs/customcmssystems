@@ -11,6 +11,66 @@
 </cms:ignore>
 <cms:set nws_purpose = 'We use your email address only to send this newsletter. You can unsubscribe at any time using the link in any message.' />
 
+<cms:ignore>
+    =========================================================================
+    THE SHIPPED DEFAULTS, APPLIED AT RENDER.
+
+    WHY THIS EXISTS: default= on a cms:editable is honored when a PAGE is
+    created. These fields do not live on a page - they live on a MOSAIC TILE,
+    and a tile added in the PageBuilder comes up with every one of them empty.
+    The pre-made footers in this install were not proof otherwise; somebody had
+    typed into them years ago. Build a new footer and the button says nothing,
+    the input has no placeholder, and the sign-up box has no headline. Reported
+    from a fresh footer 2026-09-20.
+
+    So the defaults declared in embed/foot_2col_form-scal.htm are repeated here
+    and applied to anything still empty. Keep the two lists identical - a value
+    that differs between them means the admin shows one thing and the page
+    prints another.
+
+    BARE cms:set, NOT scope='global'. These names belong to the tile's own
+    frame. A global write lands in ctx[0] and the tile's empty value, being
+    nearer, shadows it - the page would not change and nothing would error. A
+    bare set writes to this file's frame, which is inside the tile's, so every
+    read below finds it first. See CLAUDE.md sec.64.4.
+
+    ONLY THE TEXT. The dropdowns are left alone on purpose: their option lists
+    open with "Default=" and an empty value is a real choice there, meaning
+    "no override". Top and Bottom Padding is the one exception - util-pad.htm
+    has no empty option - so set that one in the footer settings.
+    =========================================================================
+</cms:ignore>
+<cms:if ccs_ftr_frm_nws_hd eq ''>
+    <cms:set ccs_ftr_frm_nws_hd = 'Latest Trends, Styles &amp; Promotions. Are you on the list?' />
+</cms:if>
+<cms:if ccs_ftr_frm_nws_dsc eq ''>
+    <cms:set ccs_ftr_frm_nws_dsc = 'By entering your email address, you agree to receive offers, promotions, and other commercial messages. You may unsubscribe at any time.' />
+</cms:if>
+<cms:if ccs_ftr_frm_nws_plh eq ''>
+    <cms:set ccs_ftr_frm_nws_plh = 'Enter your email' />
+</cms:if>
+<cms:if ccs_ftr_frm_nws_btn eq ''>
+    <cms:set ccs_ftr_frm_nws_btn = 'Sign up!' />
+</cms:if>
+<cms:if ccs_ftr_frm_nws_btn_clr eq ''>
+    <cms:set ccs_ftr_frm_nws_btn_clr = 'primary' />
+</cms:if>
+<cms:if ccs_ftr_frm_nws_msg_ok eq ''>
+    <cms:set ccs_ftr_frm_nws_msg_ok = 'Thank you. Your email address has been received.' />
+</cms:if>
+<cms:if ccs_ftr_frm_nws_msg_err eq ''>
+    <cms:set ccs_ftr_frm_nws_msg_err = 'Invalid entry or system error. Please try again.' />
+</cms:if>
+<cms:if ccs_ftr_frm_c1_ttl eq ''>
+    <cms:set ccs_ftr_frm_c1_ttl = 'Company' />
+</cms:if>
+<cms:if ccs_ftr_frm_c2_ttl eq ''>
+    <cms:set ccs_ftr_frm_c2_ttl = 'Customer Support' />
+</cms:if>
+<cms:if ccs_ftr_frm_c3_ttl eq ''>
+    <cms:set ccs_ftr_frm_c3_ttl = 'Quicklinks' />
+</cms:if>
+
 <section
     class="ccs-footer position-relative py-<cms:show ccs_ftr_frm_pad_y /> bg-<cms:show ccs_ftr_frm_bg_clr /> fs-<cms:show ccs_ftr_frm_txt_sz /> fst-<cms:show ccs_ftr_frm_txt_fnt_st /> fw-<cms:show ccs_ftr_frm_txt_fnt_wt /> ls-<cms:show ccs_ftr_frm_txt_ltr_spc /> font-<cms:show ccs_ftr_frm_txt_font /> text-<cms:show ccs_ftr_frm_txt_clr />">
 
@@ -40,47 +100,184 @@
                     <cms:show ccs_ftr_frm_nws_hd />
                 </h5>
 
-                <cms:form method="post" anchor='0'>
+                <cms:ignore>
+                    THE HONEYPOT VALUE, READ BEFORE ANYTHING ACTS ON THE SUBMISSION.
 
-                    <cms:if k_success>
+                    NOT A cms:input. It has to stay invisible to cms:form so it never
+                    validates, never repopulates and never turns up in k_error_email -
+                    which is the only error this compact box has room to show. cms:gpc is
+                    how a raw input's value is recovered.
+                </cms:ignore>
+                <cms:gpc var='ftr_hp_co' method='post' into='ftr_hp' scope='global' />
 
-                        <cms:set is_duplicate='0' scope='global' />
-                        <cms:pages masterpage='subscribers.php' custom_field="subscriber_email==<cms:show frm_email />"
-                            limit='1'>
-                            <cms:set is_duplicate='1' scope='global' />
+                <cms:ignore>
+                    PROOF THAT THIS FORM IS THE ONE THAT WAS SUBMITTED.
+
+                    k_success IS NOT PRIVATE TO A FORM. tags.php:5646 sets it with
+                    $CTX->set() and no scope, so it lands in whichever frame is
+                    innermost at the time. When the form itself is submitted that is the
+                    form's own frame and all is well. But cms:process_activation sets
+                    k_success at PAGE scope (users/register.php, the activation branch),
+                    and a form that was NOT submitted has no k_success of its own - so
+                    the read walks outward, finds the page's, and the form concludes it
+                    was posted.
+
+                    WHAT THAT DID: opening an account activation link ran this entire
+                    block. frm_email was empty, so it wrote a subscriber row with a blank
+                    address, a fresh token and status 'pending', stamped "Footer
+                    newsletter sign-up" - and printed the green thank-you in the footer
+                    of the activation page. Diagnosed 2026-09-20 from a row whose consent
+                    source named a form nobody had touched.
+
+                    ftr_nws_sent is a hidden input inside this form and nowhere else, so
+                    it is in POST only when this form was the thing submitted. Testing it
+                    alongside k_success is what makes the gate mean "this form".
+                </cms:ignore>
+                <cms:gpc var='ftr_nws_sent' method='post' into='ftr_sent' scope='global' />
+
+                <cms:ignore>
+                    NAMED, AND IT MATTERS THAT IT IS.
+
+                    An unnamed cms:form does not go without a name - Couch invents one:
+                    tags.php does
+
+                        $name = 'kformname' . $PAGE->form_num++;
+
+                    and emits it as the form's HTML name attribute. That counter is
+                    POSITIONAL and site-wide, and this site has a dozen unnamed forms -
+                    the nav, the utility bar directory, the page-builder wrappers in
+                    index.php and tl_if_pb_emb.html, login, lost-password. So this box's
+                    identity was "however many unnamed forms happened to render above me
+                    on this page", which differs between the homepage, a product page and
+                    a legal page.
+
+                    It worked, because the identity only has to hold between a render and
+                    its POST and the same page renders the same forms in the same order.
+                    It is still a name that moves for reasons that have nothing to do with
+                    this form, in the one place where a name is how Couch tells one
+                    submission from another (it matches on the k_hid_<name> hidden field).
+
+                    SAFE TO PIN, checked rather than assumed:
+
+                      - Nothing anywhere references a kformname* value - not a template,
+                        not a stylesheet, not a script - so no generated name is load
+                        bearing and re-numbering the others breaks nothing.
+                      - ftr_nws_frm collides with none of the three names in use
+                        (ccs_hro_frm, cnt_basic_frm, cnt_email_frm).
+                      - Lowercase and underscores only, which is all is_title_clean
+                        permits.
+                      - A supplied name is still emitted as the HTML name attribute, so
+                        the markup is unchanged apart from its value.
+                      - Exactly one footer renders per page: ftr_emb.htm takes only the
+                        first tile (k_count == '1'), this is the only footer theme with a
+                        form in it, and no page embeds ftr_emb.htm twice. Two copies of
+                        one EXPLICIT name would collide, where two generated ones would
+                        not - which is the only thing pinning could have broken.
+
+                    anchor='0' is unrelated and unchanged: no <a name> is emitted and no
+                    #fragment is added to the action, so submitting does not jump the page.
+                </cms:ignore>
+                <cms:form name='ftr_nws_frm' method="post" anchor='0'>
+
+                    <cms:ignore>
+                        ===============================================================
+                        THE HONEYPOT GATE WRAPS EVERY EFFECT AND NOTHING ELSE.
+
+                        ftr_hp_co is an off-screen input further down. A person never
+                        sees it; a commodity form bot fills every input it finds. A
+                        non-empty value here is not a suspicious signal, it is a bot by
+                        definition.
+
+                        A filled trap falls through to the ordinary success message
+                        without sending, without writing and without complaining. The
+                        bot is told it worked - a form that answers "you are a robot"
+                        is a form somebody tunes against.
+
+                        The same three defences the email-only contact tile carries,
+                        for the same reasons, written out at the CAPTCHA SLOT note in
+                        snippets/pb_mods/contact/theme/cnt_email_frm.html. This box and
+                        that tile are the site's two public list sign-ups and there is
+                        no argument for hardening one and not the other.
+                        ===============================================================
+                    </cms:ignore>
+                    <cms:if ftr_sent && k_success && ftr_hp eq ''>
+
+                        <cms:ignore>
+                            THE EXISTING ROW, IF THERE IS ONE, AND ITS STATE.
+
+                            Three things can be true of this address and each needs a
+                            different answer, so the status and the token both come out
+                            of the lookup rather than a bare found/not-found flag.
+
+                            An 'unsubscribed' row is never matched: its address was
+                            blanked when they left. Correct - signing up again after
+                            unsubscribing is a new decision and earns a new row with a
+                            new token and today's date.
+                        </cms:ignore>
+                        <cms:set nws_found = '' scope='global' />
+                        <cms:set nws_state = '' scope='global' />
+                        <cms:set nws_token = '' scope='global' />
+                        <cms:pages masterpage='subscribers.php' custom_field="subscriber_email==<cms:show frm_email />" limit='1'>
+                            <cms:set nws_found = '1' scope='global' />
+                            <cms:set nws_state = subscriber_status scope='global' />
+                            <cms:set nws_token = subscriber_token scope='global' />
                         </cms:pages>
 
-                        <cms:if is_duplicate>
-                            <cms:set success_msg="1" scope="global" />
-                            <cms:else />
-                            <cms:ignore>
-                                Stores WHEN, WHERE and WHAT-THEY-WERE-TOLD alongside
-                                the address. An address on its own cannot answer a
-                                complaint; these three can. subscriber_consent_txt is
-                                nws_purpose - the same string displayed beside the
-                                box, so the record matches what was actually shown.
-                            </cms:ignore>
+                                                <cms:ignore>
+                            A SEPARATE found FLAG, BECAUSE A STATUS CAN BE BLANK.
+
+                            This used to test `state eq ''` to mean "no row exists".
+                            Row 137 - written by the footer box in August - has an EMPTY
+                            subscriber_status, so the lookup FOUND it, set state to '',
+                            and the code concluded there was no row and wrote a duplicate.
+                            Diagnostic 2026-09-20: two rows for one address, both real.
+
+                            Found-ness and state are different questions. Ask them
+                            separately or a blank field answers the wrong one.
+                        </cms:ignore>
+                        <cms:if nws_found eq ''>
                             <cms:ignore>
                                 THE UNSUBSCRIBE TOKEN, GENERATED HERE.
 
-                                random_bytes is cryptographically secure; 16
-                                bytes is 32 hex characters, far beyond guessing.
-                                It has to exist BEFORE the row is written, which
-                                is why it is captured on the line above rather
-                                than filled in afterwards.
+                                random_bytes is cryptographically secure; 16 bytes is 32
+                                hex characters, far beyond guessing. It has to exist
+                                BEFORE the row is written, which is why it is captured on
+                                the line below rather than filled in afterwards.
 
-                                Not the email address: an address in a URL ends
-                                up in referrer headers, server logs and browser
-                                history, and would let anyone unsubscribe anyone
-                                else by guessing. See unsubscribe.php.
+                                Not the email address: an address in a URL ends up in
+                                referrer headers, server logs and browser history, and
+                                would let anyone unsubscribe anyone else by guessing. See
+                                unsubscribe.php.
+
+                                ONE TOKEN, TWO USES. It is the ?t= in the confirmation
+                                link AND the ?t= in every unsubscribe link thereafter -
+                                one secret per subscriber, not two to keep in step.
                             </cms:ignore>
                             <cms:capture into='nws_token'><cms:php>echo bin2hex( random_bytes(16) );</cms:php></cms:capture>
 
+                            <cms:ignore>
+                                WRITTEN 'pending', NOT 'subscribed'.
+
+                                This box sits in the footer of every page on the site,
+                                which makes it the most-crawled form here. An address
+                                that arrives has passed a format check and nothing else.
+                                The row goes in pending and the confirmation mail below
+                                is what a real person uses to promote it
+                                (confirm-subscription.php). A bot does not read the
+                                mailbox; a typo never reaches a real one. Both stay
+                                pending forever and no send loop touches a pending row.
+
+                                Stores WHEN, WHERE and WHAT-THEY-WERE-TOLD alongside the
+                                address. An address on its own cannot answer a complaint;
+                                these three can. subscriber_consent_txt is nws_purpose -
+                                the same string displayed beside the box, so the record
+                                matches what was actually shown.
+                            </cms:ignore>
                             <cms:db_persist _masterpage='subscribers.php' _mode='create' _auto_title='1'
                                 k_page_title=frm_email
                                 subscriber_email=frm_email
                                 subscriber_token=nws_token
-                                subscriber_status='subscribed'
+                                subscriber_status='pending'
                                 subscriber_consent_ts="<cms:date format='Y-m-d H:i:s' />"
                                 subscriber_consent_src='Footer newsletter sign-up'
                                 subscriber_consent_txt=nws_purpose />
@@ -89,28 +286,110 @@
                                 <div class="text-danger fs-9 mt-2">
                                     <cms:show ccs_ftr_frm_nws_msg_err />
                                 </div>
-                                <cms:else />
-                                <cms:send_mail from="<cms:get_field 'ccs_gl_site_email' masterpage='globals.php' />"
-                                    to=frm_email subject="Thank you for subscribing!">
-                                    Hello!
-
-                                    Thank you for subscribing to the
-                                    <cms:get_field 'ccs_gl_site_name' masterpage='globals.php' /> newsletter.
-
-                                    You are now on the list for our latest updates and promotions.
-
-                                    To stop receiving these emails, use this link at any time:
-                                    <cms:link 'unsubscribe.php' />?t=<cms:show nws_token />
-                                </cms:send_mail>
-
-                                <cms:set success_msg="1" scope="global" />
+                                <cms:ignore>
+                                    A FAILED WRITE MUST NOT PRODUCE A CONFIRMATION MAIL.
+                                    The token is cleared so the send below is skipped - a
+                                    link pointing at a row that was never created is worse
+                                    than no mail, because the person clicks it and is told
+                                    their link did not work.
+                                </cms:ignore>
+                                <cms:set nws_token = '' scope='global' />
                             </cms:if>
                         </cms:if>
+
+                        <cms:ignore>
+                            ===========================================================
+                            THE CONFIRMATION MAIL - THIS IS THE BOT CHECK.
+
+                            Sent when the row is new or still pending. Pending means the
+                            last one went unread, and re-sending is the useful thing to
+                            do - it reuses the SAME token, so an older link still works.
+                            An address already 'subscribed' gets nothing; they are on the
+                            list and a second mail is noise.
+
+                            FROM COMES FROM THE COUCH CONFIG, NOT A PAGE FIELD.
+
+                            This once read ccs_gl_site_email, which is declared nowhere
+                            on this site. get_field returned empty, and functions.php:2365
+                            ends at
+
+                                @mail( $to, $subject, $text, 'From: '.$from.$h )
+
+                            so the header shipped literally as "From: " and the MTA
+                            substituted its own default sender - an address the domain's
+                            SPF record does not authorize, so every confirmation arrived
+                            unaligned. K_EMAIL_FROM is the verified sender in the dash
+                            config and what users/register.php already uses. reply_to
+                            carries K_EMAIL_TO so a reply reaches a real inbox.
+
+                            Deliberately NOT an editable: an admin field here invites
+                            someone typing an address the SPF record does not cover,
+                            which breaks deliverability silently and site-wide.
+
+                            THE BODY STARTS AT COLUMN 0 AND HAS TO STAY THERE.
+                            cms:send_mail sends its children verbatim.
+                            ===========================================================
+                        </cms:ignore>
+                        <cms:set nws_conf_sent = '' scope='global' />
+                        <cms:if nws_token && nws_state ne 'subscribed'>
+
+                            <cms:set nws_site = "<cms:get_field 'ccs_gl_site_name' masterpage='globals.php' />" />
+
+                            <cms:set nws_conf_sent = '1' scope='global' />
+
+                            <cms:send_mail from="<cms:php>echo K_EMAIL_FROM;</cms:php>"
+                                to=frm_email reply_to="<cms:php>echo K_EMAIL_TO;</cms:php>"
+                                subject="Confirm your <cms:show nws_site /> newsletter subscription">
+Please confirm your email address.
+
+This address was used to join the <cms:show nws_site /> newsletter at
+<cms:show k_site_link />.
+
+Open this link and you are on the list:
+
+<cms:link 'confirm-subscription.php' />?t=<cms:show nws_token />
+
+If that was not you, do nothing. The address will not be added and you will not
+hear from us again.
+
+Thanks,
+<cms:show nws_site />
+</cms:send_mail>
+
+                        </cms:if>
+
+                        <cms:set success_msg="1" scope="global" />
+                    </cms:if>
+
+                    <cms:ignore>
+                        THE SUCCESS MESSAGE RENDERS FOR EVERYONE, INCLUDING A BOT that
+                        tripped the honeypot - which is why this sits outside the gate
+                        above. The page has to look identical whether anything happened
+                        or not.
+                    </cms:ignore>
+                    <cms:if ftr_sent && k_success && ftr_hp>
+                        <cms:set success_msg="1" scope="global" />
                     </cms:if>
 
                     <cms:if success_msg>
                         <div class="alert alert-success bg-success text-white border-0 fs-9 py-2 mt-2">
                             <cms:show ccs_ftr_frm_nws_msg_ok />
+                            <cms:ignore>
+                                NOT AN AUTHOR FIELD. ccs_ftr_frm_nws_msg_ok still says
+                                whatever the author wrote - by default "Thank you! You are
+                                on the list." - and this adds the one thing they now have
+                                to DO. Without it the confirmation mail sits unopened and
+                                they never join: the mechanism would fail silently and
+                                look like it worked.
+
+                                Fixed wording because it describes the mechanism, not the
+                                offer. Shown only when a mail actually went out, so
+                                somebody already subscribed is not sent looking for a
+                                message that is not coming - and neither is a bot.
+                            </cms:ignore>
+                            <cms:if nws_conf_sent>
+                                <div class="mt-1 fw-semibold">Check your email and open the link we just sent to confirm.</div>
+                            </cms:if>
                         </div>
                         <cms:else />
                         <div class="input-group">
@@ -122,9 +401,62 @@
                             </button>
                         </div>
 
+                        <cms:ignore>
+                            THE HONEYPOT INPUT.
+
+                            OFF-SCREEN, NOT display:none AND NOT hidden. Bots have skipped
+                            those for years; a field that is in the layout and merely
+                            positioned outside the viewport still reads as real.
+
+                            INVISIBLE TO ASSISTIVE TECH TOO. aria-hidden keeps a screen
+                            reader quiet and tabindex=-1 keeps it out of the tab order, so
+                            nobody using this page any way at all fills it by accident. It
+                            keeps a label because a bot checks for one, and
+                            autocomplete=off so no browser helpfully fills it and locks a
+                            real person out of the footer form on every page of the site.
+
+                            The inline style is deliberate: this element must be invisible
+                            even if assets/css/user.php is stale or unuploaded. A visible
+                            honeypot is a field real people fill.
+                        </cms:ignore>
+                        <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+                            <label for="ftr_nws_co">Company</label>
+                            <input type="text" name="ftr_hp_co" id="ftr_nws_co" tabindex="-1" autocomplete="off" value="">
+                        </div>
+
+                        <cms:ignore>
+                            THE SUBMIT MARKER. Read at the top of this file as ftr_sent.
+                            Its only job is to be present in POST when this form is the
+                            one that was sent, because k_success alone cannot tell.
+                        </cms:ignore>
+                        <input type="hidden" name="ftr_nws_sent" value="1">
+
+                        <cms:ignore>
+                            THERE WAS A PER-IP THROTTLE HERE AND IT HAD TO COME OUT.
+
+                            addons/data-bound-form/throttle.php refuses a submission when
+                            the same IP created ANY page recently - throttle.php:80 has no
+                            template filter, so it counts every row in K_TBL_PAGES. Saving
+                            a tile in the admin inserts such a row (edit-page-builder.php:196)
+                            and so does placing an order, so both the author testing the
+                            site and a customer who just checked out were refused.
+
+                            The honeypot above and the confirmation mail are what guard
+                            this box. The reasoning, and what a correctly-targeted rate
+                            limit would have to count instead, is at the matching note in
+                            snippets/pb_mods/contact/theme/cnt_email_frm.html.
+                        </cms:ignore>
+
                         <cms:set pn_purpose = nws_purpose />
                         <cms:embed 'utils/privacy_notice.htm' />
 
+                        <cms:ignore>
+                            ONE ERROR, ONE SENTENCE. k_error_email is the only failure this
+                            form can now produce - the address did not look right - and
+                            ccs_ftr_frm_nws_msg_err is the author's wording for exactly
+                            that. The throttle branch that briefly sat here went with the
+                            throttle.
+                        </cms:ignore>
                         <cms:if k_error_email>
                             <div class="text-danger fs-10 mt-1">
                                 <cms:show ccs_ftr_frm_nws_msg_err />
@@ -134,7 +466,30 @@
 
                 </cms:form>
 
-                <div class="my-2">
+                <cms:ignore>
+                    FOLLOWS THE GENERAL FOOTER FORMAT, EXPLICITLY.
+
+                    This block used to carry no classes but my-2, which made it the ONLY
+                    text in this column still taking the section's inherited color at the
+                    browser's default size. Everything around it overrides that and it
+                    did not, so it read as the odd one out:
+
+                      h5 headline      Bootstrap's --bs-heading-color beats inheritance
+                      privacy line     fs-9 text-body-secondary, set in
+                                       snippets/utils/privacy_notice.htm
+                      column headers   the format fields applied as classes
+                      THIS ONE         nothing - inherited the lot
+
+                    Now it carries the same five format fields the column headers do, so
+                    Text Size, Font Family, Font Weight, Font Style, Letter Spacing and
+                    General Text Color all reach it. Change them in Footer Settings and
+                    this moves with everything else.
+
+                    The privacy line below it stays muted on purpose - that one is fine
+                    print about data handling, not footer copy, and it is shared with
+                    the contact block through privacy_notice.htm.
+                </cms:ignore>
+                <div class="my-2 fs-<cms:show ccs_ftr_frm_txt_sz /> font-<cms:show ccs_ftr_frm_txt_font /> fw-<cms:show ccs_ftr_frm_txt_fnt_wt /> fst-<cms:show ccs_ftr_frm_txt_fnt_st /> ls-<cms:show ccs_ftr_frm_txt_ltr_spc /> text-<cms:show ccs_ftr_frm_txt_clr />">
                     <cms:show ccs_ftr_frm_nws_dsc />
                 </div>
 

@@ -3,8 +3,8 @@
     CONTACT BLOCK  -  BASIC CONTACT FORM
     snippets/pb_mods/contact/theme/cnt_basic_frm.html
 
-    Name, email and message, with an optional heading and up to two
-    lines above. The ordinary contact form.
+    Name, email and message, with an optional heading and up to two lines
+    above. The ordinary contact form.
 
     ACCESSIBILITY, and every one of these is a real failure mode rather than a
     box-tick:
@@ -13,7 +13,7 @@
       author can hide them visually; visually-hidden keeps them in the
       accessibility tree where display:none would not. A placeholder is not a
       label - it vanishes on first keystroke, most screen readers ignore it as
-      a name, and its grey default fails contrast almost everywhere.
+      a name, and its gray default fails contrast almost everywhere.
 
       autocomplete= lets a browser fill known values. For someone with a motor
       impairment that is the difference between one tap and typing an address.
@@ -21,20 +21,37 @@
       inputmode='email' raises the @ keyboard on a phone. cms:input has no
       HTML5 email type, so this is how that is reached.
 
-      role='alert' on the error summary announces itself the moment it appears.
-      role='status' on the thank-you is polite - it waits for a pause rather
-      than interrupting.
+      role='alert' on the error summary announces itself the moment it
+      appears. role='status' on the thank-you is polite - it waits for a pause
+      rather than interrupting.
 
-      The submit is a real button element carrying real text, not an
-      input type=submit with a value, so an icon can sit beside a label.
+      The submit is a real button element carrying real text, not an input
+      type=submit with a value, so an icon can sit beside a label.
 
     SEO. One heading element, level chosen by the author, h2 down to h6 or a
     plain paragraph. Never h1 - that belongs to the page. The section is a
     landmark element.
 
-    RESPONSIVE. The box width comes from the shared txt-box_size.htm, so this
-    section lines up with every other block on the page. No fixed pixel widths
-    anywhere; spacing is all utility classes.
+    INLINE EDITING, and the shape of it is the same everywhere in this block:
+
+      THINGS ON SCREEN get a button on their RIGHT, inside their own wrapper.
+      Each form field is one of those - its own popup for its own wording.
+
+      THINGS WITH NOTHING TO POINT AT get a button in a cluster hanging off
+      the LEFT edge, outside the box. Section height, the color behind
+      everything, the width of the form, and the appearance settings that
+      apply to all three fields at once.
+
+      EVERY EDITABLE APPEARS IN EXACTLY ONE POPUP. Two routes to the same
+      field is two places to look for it and two things to keep in step.
+
+      THE CUSTOMIZE CHECKBOX TRAVELS WITH WHAT IT OPENS. Customize Form Fields
+      is inside the field-appearance popup, Customize Submit Button inside the
+      button popup. Without that, opening either one from the page shows a
+      window of controls JavaScript is hiding and no way to reveal them.
+      Remove Section Header is the exception and sits in the left cluster,
+      because checking it removes the header - and with it any button that
+      could ever uncheck it.
 
     THE FORM NAME IS HARDCODED AND MUST STAY THAT WAY. Couch matches a
     submission back to the form by this name; a generated one would mean no
@@ -51,49 +68,72 @@
         <style><cms:show cf_min_h_css /></style>
     </cms:if>
 
+    <cms:ignore>
+        THE SECTION CLUSTER SITS HERE, A DIRECT CHILD OF THE SECTION, so it
+        pins to the section's own top-left corner the way every other slide on
+        the site does. The section already carries position-relative.
+
+        It used to be embedded down inside the column, which anchored it to the
+        form box - and a form box is where BOX-level controls belong, so the
+        section's controls read as the form's and landed on top of the form's
+        own cluster.
+    </cms:ignore>
     <cms:embed 'pb_mods/contact/inline/cnt_section_edit.txt' />
 
     <div class="container">
-        <div class="row cnt-body justify-content-<cms:show cnt_box_halg /> align-items-center">
-            <div class="<cms:show cf_box /> text-<cms:show cnt_txt_halg />">
+        <div class="row cnt-body justify-content-<cms:show cf_box_halg /> align-items-center">
+
+            <cms:ignore>
+                position-relative ON THE COLUMN is for the per-element edit
+                buttons inside it - the heading, the lines, the rule and each
+                form field pin their control to their own wrapper, and every
+                one of those wrappers needs a positioned ancestor somewhere up
+                the chain. Eight of fifteen frame roots were missing one of
+                these and their clusters escaped to the page corner; the same
+                mistake here would be the same bug.
+            </cms:ignore>
+            <div class="<cms:show cf_box /> text-<cms:show cf_txt_halg /> position-relative">
+
+                <cms:embed 'pb_mods/contact/theme/cnt_header.html' />
 
                 <cms:ignore>
-                    The wrapper is position-relative and always renders, even
-                    with no heading and no lines in it, because a blank text
-                    area is exactly when the author needs the button that adds
-                    the first heading.
-                </cms:ignore>
-                <div class="position-relative">
-                    <cms:embed 'pb_mods/contact/inline/cnt_txtbx_edit.txt' />
+                    The form wrapper is position-relative for its own left
+                    cluster - the one holding the appearance settings that
+                    belong to all three fields rather than to any one of them.
 
-                    <cms:if cnt_hdg_ln>
-                        <<cms:show cnt_hdg_tag /> class="<cms:show cf_hdg_cls />mb-3"><cms:show cnt_hdg_ln /></<cms:show cnt_hdg_tag />>
-                    </cms:if>
-
-                    <cms:if cnt_txt_opt ge '1' && cnt_txt1_ln>
-                        <p class="<cms:show cf_txt1_cls />mb-2"><cms:show cnt_txt1_ln /></p>
-                    </cms:if>
-                    <cms:if cnt_txt_opt ge '2' && cnt_txt2_ln>
-                        <p class="<cms:show cf_txt2_cls />mb-2"><cms:show cnt_txt2_ln /></p>
-                    </cms:if>
-                </div>
-
-                <cms:ignore>
-                    cnt_inl_hide is set to an empty string HERE rather than left
-                    unset. scope global writes to the root, which outlives a
-                    tile, so an email-only section rendered earlier on the same
-                    page would otherwise leave its hide list behind and blank
-                    out the name and message wording on this one.
-
-                    The cluster sits outside cms:form on purpose. Couch runs a
+                    That cluster sits OUTSIDE cms:form on purpose. Couch runs a
                     form's children twice - once to register the fields and
                     process the post, once to render - and only the second pass
                     is emitted. Nothing here depends on that, and staying
                     outside means nothing ever has to.
                 </cms:ignore>
-                <cms:set cnt_inl_hide = '' scope='global' />
                 <div class="position-relative">
                     <cms:embed 'pb_mods/contact/inline/cnt_form_edit.txt' />
+
+                <cms:ignore>
+                    =====================================================================
+                    THE HONEYPOT, READ BEFORE ANYTHING ACTS ON THE SUBMISSION.
+
+                    cnt_hp_co is a real input positioned off-screen. A person never sees
+                    it and never fills it. A commodity form bot walks the DOM, fills every
+                    input it finds, and posts - so a non-empty value here is not a
+                    suspicious signal, it is a bot by definition.
+
+                    THIS TILE HAD NO DEFENCE AT ALL until now. It writes nothing to the
+                    database, so the damage from spam is junk in the owner's inbox rather
+                    than junk on the mailing list - lower stakes than the email-only tile,
+                    but not zero, and a honeypot costs nothing.
+
+                    NOT A cms:input. It has to stay invisible to cms:form so it never
+                    validates, never repopulates and never turns up in k_error. cms:gpc is
+                    how a raw input's value is recovered.
+
+                    WHAT HAPPENS WHEN IT IS FILLED is nothing: the ordinary thank-you
+                    renders and no mail is sent. Showing an error would tell whoever wrote
+                    the bot which field gave it away, and they adjust.
+                    =====================================================================
+                </cms:ignore>
+                <cms:gpc var='cnt_hp_co' method='post' into='cnt_hp' scope='global' />
 
                 <cms:form name='cnt_basic_frm' method='post' class='mt-4' anchor='0'>
 
@@ -109,6 +149,10 @@
                             in the inbox answers them directly. from stays the
                             site's own address: putting the visitor's address
                             in From is what gets mail rejected by SPF and DMARC.
+
+                            cf_subj, not cnt_frm_subj. The router substitutes
+                            a working subject line if the field is empty, and
+                            an empty Subject header is a strong spam signal.
                         </cms:ignore>
                         <cms:ignore>
                             THE WHOLE FORM, IN ONE TAG. k_success is not a
@@ -133,11 +177,61 @@
                             the newlines survive and nothing markup-ish gets
                             through.
                         </cms:ignore>
-                        <cms:send_mail from=k_email_from to=k_email_to reply_to=frm_email subject="<cms:show cnt_frm_subj />"><cms:show k_success /></cms:send_mail>
+                        <cms:ignore>
+                            THE HONEYPOT GATE WRAPS THE SEND AND NOTHING ELSE. A filled
+                            trap falls through to the thank-you below without sending and
+                            without complaining - the bot is told it worked, which is the
+                            point.
+                        </cms:ignore>
+                        <cms:ignore>
+                            EMPTY LINES COME OUT FIRST.
 
+                            k_success writes one "Label: value" line per field, and a
+                            field with a label but no value still gets its line. The
+                            CAPTCHA is exactly that - it has to carry label='Verification'
+                            so an unlabelled input cannot leak its internal name into
+                            k_error (tags.php:5599 builds each error as label-or-name) -
+                            so every contact email arrived ending in a bare
+                            "Verification:" with nothing after it. Seen in a live send
+                            2026-09-22.
+
+                            THE RULE IS "NO VALUE, NO LINE", not "drop the CAPTCHA".
+                            Naming the field here would put back the stale hand-list the
+                            note above argues against, and the next valueless field added
+                            to this form would print the same way.
+
+                            TRAILING ONLY, AND THAT MATTERS. A first attempt stripped
+                            every empty-value line anywhere in the body, which would have
+                            eaten any line of somebody's MESSAGE that happened to end in
+                            a colon - the message is free text and can contain anything.
+                            k_success writes fields in declaration order and the CAPTCHA
+                            is last, so anchoring to the end of the body reaches it and
+                            can reach nothing a person typed.
+
+                            Done on a captured copy rather than on k_success itself, so
+                            the thank-you and anything else reading it are untouched.
+                        </cms:ignore>
+                        <cms:capture into='cf_body'><cms:show k_success /></cms:capture>
+                        <cms:php>
+                            global $CTX;
+                            $body = $CTX->get( 'cf_body' );
+                            $body = preg_replace( '/(?:^[^:\r\n]*:[ \t]*\r?$\n?)+\z/m', '', $body );
+                            $CTX->set( 'cf_body', rtrim($body) . "\n", 'global' );
+                        </cms:php>
+
+                        <cms:if cnt_hp><cms:else />
+                            <cms:send_mail from=k_email_from to=k_email_to reply_to=frm_email subject="<cms:show cf_subj />"><cms:show cf_body /></cms:send_mail>
+                        </cms:if>
+
+                        <cms:ignore>
+                            THE THANK-YOU RENDERS FOR EVERYONE, INCLUDING A BOT that
+                            tripped the honeypot. That is why the gate closes above this
+                            line rather than below it: the page has to look identical
+                            whether anything happened or not.
+                        </cms:ignore>
                         <div class="alert alert-success shadow-sm" role="status">
-                            <h3 class="alert-heading h5 mb-1"><cms:show cnt_frm_ok_ttl /></h3>
-                            <p class="mb-0"><cms:show cnt_frm_ok_txt /></p>
+                            <h3 class="alert-heading h5 mb-1"><cms:show cf_ok_ttl /></h3>
+                            <p class="mb-0"><cms:show cf_ok_txt /></p>
                         </div>
 
                     <cms:else />
@@ -151,50 +245,225 @@
                             </div>
                         </cms:if>
 
-                        <div class="<cms:show cf_gap_cls />">
+                        <cms:ignore>
+                            EACH FIELD IS ITS OWN EDITABLE OBJECT with its own
+                            popup, holding that field's label wording and its
+                            hint - and, for the message box, how tall it starts.
+
+                            THE EMAIL BUTTON IS STILL A FILE and the other two
+                            are not. inline/cnt_email_edit.txt is embedded by
+                            both tiles, so one copy is the point of it; the
+                            name and message buttons are drawn by this file
+                            alone and a separate file for one tag was a file to
+                            open for nothing.
+
+                            position-relative on the SAME div that already
+                            carries the spacing class rather than a new wrapper
+                            inside it. One element, one job each, and the
+                            button lands beside the label-and-box pair rather
+                            than beside just one of them.
+
+                            NOT d-inline-block here, unlike the heading. A
+                            form-control is width:100%, so a shrink-to-fit
+                            wrapper would collapse to the input's default size
+                            attribute and the field would stop filling the
+                            column.
+                        </cms:ignore>
+                        <div class="<cms:show cf_gap_cls /> position-relative <cms:if cf_edit>pe-5</cms:if>">
+                            <cms:if cf_edit>
+                                <div class="position-absolute top-50 end-0 translate-middle-y z-3">
+                                    <cms:ignore>
+                                        THE NAME BOX'S WORDING - what it is
+                                        called, and the faint hint inside it.
+
+                                        WRITTEN HERE RATHER THAN IN ITS OWN
+                                        FILE because only this tile draws a
+                                        name box, so only this file ever
+                                        embedded it. The email-only tile
+                                        renders no name box and therefore no
+                                        button, which is how these two fields
+                                        stay unreachable there - no hide list
+                                        arranges it.
+                                    </cms:ignore>
+                                    <cms:popup_edit 'cnt_frm_name_lbl|cnt_frm_name_plc' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Name Field Wording" title="Edit Name Field Wording"><i class="fa-solid fa-tag"></i></button>' />
+                                </div>
+                            </cms:if>
                             <label class="<cms:show cf_lbl_cls />" for="<cms:show cnt_uid />_name"><cms:show cnt_frm_name_lbl /></label>
-                            <cms:input type="text" name="frm_name" label=cnt_frm_name_lbl id="<cms:show cnt_uid />_name" class="<cms:show cf_fld_cls />" required='1' autocomplete='name' placeholder="<cms:show cnt_frm_name_plc />" />
+                        <cms:ignore>
+                            FIELD NAMES ARE BARE. COUCH ADDS THE frm_ PREFIX.
+
+                            tags.php:5636 publishes every submitted field as
+                            frm_ + the field's name. So name="email" is what makes
+                            <cms:show frm_email /> work.
+
+                            These were name="frm_email" until 2026-09-19, which made
+                            Couch publish frm_frm_email. Every read of frm_email then
+                            resolved to nothing, silently: the mail still sent because
+                            k_success dumps all fields independently, so only reply_to
+                            was empty and nobody noticed for weeks. On the email-only
+                            tile the same emptiness reached db_persist and wrote a
+                            subscriber row with a blank address.
+
+                            The footer newsletter box never had this - it has always
+                            used name="email". Match that convention.
+                        </cms:ignore>
+                            <cms:input type="text" name="name" label=cnt_frm_name_lbl id="<cms:show cnt_uid />_name" class="<cms:show cf_fld_cls />" required='1' autocomplete='name' placeholder="<cms:show cnt_frm_name_plc />" />
                         </div>
-                        <div class="<cms:show cf_gap_cls />">
+
+                        <div class="<cms:show cf_gap_cls /> position-relative <cms:if cf_edit>pe-5</cms:if>">
+                            <cms:if cf_edit>
+                                <div class="position-absolute top-50 end-0 translate-middle-y z-3">
+                                    <cms:embed 'pb_mods/contact/inline/cnt_email_edit.txt' />
+                                </div>
+                            </cms:if>
                             <label class="<cms:show cf_lbl_cls />" for="<cms:show cnt_uid />_email"><cms:show cnt_frm_email_lbl /></label>
-                            <cms:input type="text" name="frm_email" label=cnt_frm_email_lbl id="<cms:show cnt_uid />_email" class="<cms:show cf_fld_cls />" validator='email' required='1' autocomplete='email' inputmode='email' placeholder="<cms:show cnt_frm_email_plc />" />
+                            <cms:input type="text" name="email" label=cnt_frm_email_lbl id="<cms:show cnt_uid />_email" class="<cms:show cf_fld_cls />" validator='email' required='1' autocomplete='email' inputmode='email' placeholder="<cms:show cnt_frm_email_plc />" />
                         </div>
-                        <div class="<cms:show cf_gap_cls />">
+
+                        <div class="<cms:show cf_gap_cls /> position-relative <cms:if cf_edit>pe-5</cms:if>">
+                            <cms:if cf_edit>
+                                <div class="position-absolute top-50 end-0 translate-middle-y z-3">
+                                    <cms:ignore>
+                                        THE MESSAGE BOX - its wording, and how
+                                        tall it starts.
+
+                                        THE HEIGHT IS HERE rather than in the
+                                        appearance window because it sizes this
+                                        one box and nothing else, while that
+                                        window is for settings applying to
+                                        every field at once. It also means the
+                                        height is unreachable on the email-only
+                                        tile, which draws no message box.
+
+                                        Basic tile only, same as the name box.
+                                    </cms:ignore>
+                                    <cms:popup_edit 'cnt_frm_msg_lbl|cnt_frm_msg_plc|cnt_frm_msg_rows' link_text='<button class="btn btn-sm btn-light shadow-sm rounded-circle" type="button" aria-label="Edit Message Field Wording" title="Edit Message Field Wording"><i class="fa-solid fa-tag"></i></button>' />
+                                </div>
+                            </cms:if>
                             <label class="<cms:show cf_lbl_cls />" for="<cms:show cnt_uid />_msg"><cms:show cnt_frm_msg_lbl /></label>
-                            <cms:input type="textarea" name="frm_msg" label=cnt_frm_msg_lbl id="<cms:show cnt_uid />_msg" class="<cms:show cf_fld_cls />" rows="<cms:show cnt_frm_msg_rows />" required='1' placeholder="<cms:show cnt_frm_msg_plc />" />
+                            <cms:input type="textarea" name="msg" label=cnt_frm_msg_lbl id="<cms:show cnt_uid />_msg" class="<cms:show cf_fld_cls />" rows="<cms:show cnt_frm_msg_rows />" required='1' placeholder="<cms:show cnt_frm_msg_plc />" />
                         </div>
 
                         <cms:ignore>
-                            CAPTCHA SLOT. reCAPTCHA is already loaded in
-                            kfunctions.php and its keys are set in config.php,
-                            so this is one cms:input away when the approach is
-                            settled. Left empty on purpose rather than guessed
-                            at.
+                            THE HONEYPOT INPUT.
+
+                            OFF-SCREEN, NOT display:none AND NOT hidden. Bots have skipped
+                            those for years; a field that is in the layout and merely
+                            positioned outside the viewport still reads as real to them.
+
+                            INVISIBLE TO ASSISTIVE TECH TOO. aria-hidden keeps a screen
+                            reader from announcing it and tabindex=-1 keeps it out of the
+                            tab order. It keeps a label because a bot checks for one, and
+                            autocomplete=off so no browser helpfully fills it and locks a
+                            real person out of the form.
+
+                            The inline style is deliberate: this must be invisible even if
+                            assets/css/user.php is stale or unuploaded. A visible honeypot
+                            is a field real people fill.
                         </cms:ignore>
+                        <div aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+                            <label for="<cms:show cnt_uid />_co">Company</label>
+                            <input type="text" name="cnt_hp_co" id="<cms:show cnt_uid />_co" tabindex="-1" autocomplete="off" value="">
+                        </div>
 
                         <cms:ignore>
-                            position-relative goes on the wrapper that already
-                            carries the alignment class, so the button's own
-                            cluster travels with it when the author moves the
-                            button left, center or right.
+                            reCAPTCHA v2 CHECKBOX. THIS FORM IS THE ONE THAT NEEDS IT.
+
+                            NOT THE PICTURE GRID. api.js with render=explicit and a
+                            g-recaptcha-response check is v2, and the addon only accepts
+                            size normal or compact, so this is the "I'm not a robot" box.
+                            Most people click it once and it goes green; Google scores the
+                            request from interaction signals behind the scenes. The image
+                            challenge appears only when that score is uncertain - VPN,
+                            privacy browser, cleared cookies. An earlier version of this
+                            note called it "a puzzle", which overstated the cost badly and
+                            is why it was left off for so long.
+
+                            WHY HERE AND NOT ON THE EMAIL-ONLY TILE. That tile writes a
+                            'pending' row and mails a confirmation link, so volume does not
+                            matter there - a thousand bot submissions still put nothing on
+                            the mailing list. THIS form has no such absorber. Every
+                            submission that gets through is an email in the owner's inbox,
+                            one for one, so volume IS the damage.
+
+                            THE HONEYPOT ABOVE IS NOT VOLUME CONTROL. It catches bots that
+                            fill every field they find. A script that POSTs name,
+                            email, msg and k_hid_cnt_basic_frm straight at the URL
+                            never reads the page, never sees the trap, and can run in a
+                            loop. Nothing else on this form stopped that. Keep the honeypot
+                            anyway - it costs nothing and filters the bulk noise so this
+                            has less to catch.
+
+                            THE NONCE WAS CONSIDERED AND REJECTED. add_security_token binds
+                            to session_id() and stays valid 12-24 hours
+                            (functions.php create_nonce), so a script that loads the page
+                            once can replay that token all day. It stops a blind POST and
+                            nothing more.
+
+                            label='Verification' IS NOT DECORATION. On failure the addon
+                            sets err_msg 'reCAPTCHA is incomplete', and tags.php:5599 builds
+                            each k_error entry as label-or-name. Without a label the visitor
+                            is shown "cnt_captcha: reCAPTCHA is incomplete" - the same
+                            internal-name leak the removed throttle produced.
+
+                            THE SKIN FOLLOWS THE SECTION. cf_cap_thm is derived in
+                            cnt_frm.inc from cnt_bg_clr - the background the author
+                            already chose - so the widget goes dark when the band does.
+                            It was hardcoded theme='light' for about ten minutes, which
+                            is exactly the kind of fixed appearance value this block is
+                            built to avoid. Google's iframe only accepts light or dark,
+                            so that is as far as it can follow the site.
                         </cms:ignore>
+                        <div class="<cms:show cf_gap_cls />">
+                            <cms:input type='recaptcha' name='cnt_captcha' label='Verification' theme="<cms:show cf_cap_thm />" size='normal' />
+                        </div>
+
                         <cms:ignore>
-                            POINT-OF-COLLECTION PRIVACY LINE. A policy linked only
-                            from the footer is not where anyone reads it; the link
-                            that counts is the one beside the button, at the moment
-                            someone decides whether to hand their details over.
-                            Shared file so the wording is edited in one place -
-                            see snippets/utils/privacy_notice.htm.
+                            POINT-OF-COLLECTION PRIVACY LINE. A policy linked
+                            only from the footer is not where anyone reads it;
+                            the link that counts is the one beside the button,
+                            at the moment someone decides whether to hand their
+                            details over. Shared file so the wording is edited
+                            in one place - see snippets/utils/privacy_notice.htm.
                         </cms:ignore>
-                        <cms:set pn_purpose = 'We use your name, email address and message only to reply to you. We do not sell them or use them for advertising.' />
+                        <cms:set pn_purpose = 'We use your name, email address and message only to reply to you. We do not sell them or use them for advertising. This form is protected by Google reCAPTCHA to stop automated messages, so Google receives your IP address and some information about how you interact with this page.' />
                         <cms:embed 'utils/privacy_notice.htm' />
 
-                        <div class="position-relative <cms:show cf_btn_wrap /> <cms:show cf_gap_cls />">
-                            <cms:embed 'pb_mods/contact/inline/cnt_btn_edit.txt' />
+                        <cms:ignore>
+                            THE BUTTON. cf_btn_wrap carries the alignment, so
+                            the shrink-to-fit wrapper inside it - and the edit
+                            button pinned to that wrapper - travel with the
+                            button when the author moves it left, center or
+                            right.
 
-                            <button type="submit" class="<cms:show cf_btn_cls />">
-                                <cms:show cnt_frm_btn_txt />
-                            </button>
+                            THE ICON SPAN IS ALWAYS THE FIRST CHILD and the
+                            class on the button decides which side it appears
+                            on. That is what _cls/btn-icon-pos.htm requires:
+                            theme.css positions span.btn-brand absolutely
+                            against the button box to draw the tinted well, and
+                            branching the markup on position would put the span
+                            somewhere those rules do not expect. cf_btn_icon is
+                            empty unless both a side and a Font Awesome class
+                            were given, so no empty span is ever printed.
+
+                            THIS BUTTON AND ITS CONTROL ARE BOTH GONE from the
+                            moment a message is sent until the page is loaded
+                            again. That is correct rather than a gap: a control
+                            floating where its subject used to be is worse than
+                            no control.
+                        </cms:ignore>
+                        <div class="<cms:show cf_btn_wrap /> <cms:show cf_gap_cls />">
+                            <div class="position-relative <cms:show cf_btn_box /> <cms:if cf_edit>pe-5</cms:if>">
+                                <cms:if cf_edit>
+                                    <div class="position-absolute top-50 end-0 translate-middle-y z-3">
+                                        <cms:embed 'pb_mods/contact/inline/cnt_btn_edit.txt' />
+                                    </div>
+                                </cms:if>
+                                <button type="submit" class="<cms:show cf_btn_cls />">
+                                    <cms:if cf_btn_icon><span class="btn-brand"><i class="<cms:show cf_btn_icon />"></i></span></cms:if>
+                                    <cms:show cf_btn_txt />
+                                </button>
+                            </div>
                         </div>
 
                     </cms:if>

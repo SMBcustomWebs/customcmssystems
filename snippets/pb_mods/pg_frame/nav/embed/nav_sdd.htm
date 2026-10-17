@@ -28,7 +28,7 @@
     </cms:editable>
 
     <cms:editable type='row' name='ccs_nav_sdd_brnd_row' order='20'>
-        <cms:editable type='dropdown' name='ccs_nav_sdd_brand_type' label='Brand Display Style' opt_values='dropdowns/brand-style.htm' dynamic='opt_values' class='col-md-6' order='10' />
+        <cms:editable type='dropdown' name='ccs_nav_sdd_brand_type' label='Brand Display Style' desc='Match the site-wide setting follows Default Website Brand Display in Branding and Identity. The other three override it for this block only.' opt_values='dropdowns/brand-style.htm' dynamic='opt_values' class='col-md-6' order='10' />
         
         <cms:func _into='ccs_nav_sdd_theme_cond' ccs_nav_sdd_brand_type=''><cms:if ccs_nav_sdd_brand_type == 'name'>hide<cms:else />show</cms:if></cms:func>
         

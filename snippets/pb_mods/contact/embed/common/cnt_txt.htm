@@ -1,43 +1,108 @@
 <cms:ignore>
     =========================================================================
-    CONTACT BLOCK  -  HEADING AND UP TO TWO LINES
+    CONTACT BLOCK  -  SECTION HEADER
     snippets/pb_mods/contact/embed/common/cnt_txt.htm
 
-    An optional heading plus up to two supporting lines, each styled on its
-    own. Same shape as the transition banner's text block, and for the same
-    reason: a repeatable would force every line to share one set of style
-    fields, so a large heading above a smaller byline would be impossible.
+    Consumed by:  blocks/contact/contacts.php  ->  both tiles
+    Rendered by:  snippets/pb_mods/contact/theme/cnt_basic_frm.html
+                  snippets/pb_mods/contact/theme/cnt_email_frm.html
+    Compiled by:  snippets/pb_mods/contact/router/cnt_frm.inc
 
-    HEADING LEVEL runs h2 to h6 plus p. h2 IS offered here, unlike the
-    transition banner - a contact section is usually a major landmark of the
-    page rather than a divider between two others, so h2 is legitimate. h1 is
-    still absent: that belongs to the page itself.
+    THE WHOLE GROUP IS GATED ON Remove Section Header, the first checkbox in
+    cnt_opts.htm. Unchecked - the default - the group is open and this is the
+    heading, up to two lines of text under it, and an optional rule between the
+    words and the form. Checked, all of it disappears in one move, which is what
+    stacking two modules against each other needs.
+
+    THE ORDER THE CONDITIONALS HAVE TO BE DECLARED IN, because getting it wrong
+    fails silently - the field just renders always-visible and nothing looks
+    broken:
+
+        1. the controlling field       cnt_hdr_rmv_opt, in cnt_opts.htm
+        2. the cms:func naming it      cnt_rmhdr_chc, also in cnt_opts.htm
+        3. the slave that reads it     this group
+
+    cnt_opts.htm is embedded before this file by both tiles, so 1 and 2 are
+    already parsed by the time the group below is read. The same three-step
+    holds for the two funcs declared INSIDE this group: cnt_txt_opt is declared
+    first, then cnt_txt1_chc and cnt_txt2_chc, then the rows that name them. A
+    func has to sit at the same nesting level as its slave, which is why those
+    two live in the group rather than at root with the other four.
+
+    Verified against ccs_dash/conditional-fields.php:411, which whitelists
+    exactly if, else, else_if, not, arr_val_exists and is inside a func. Every
+    func here uses only if, is and else.
+
+    EVERY ROW FILLS TO TWELVE:
+
+        cnt_hdg_row       12 + 4+4+4 + 4+4+4        = 36
+        cnt_txt_opt_row   12                        = 12
+        cnt_txt1_row      12 + 12 + 4+4+4 + 6+6     = 48
+        cnt_txt2_row      same                      = 48
+        cnt_hr_len_row    12                        = 12
+        cnt_hr_row        4+4+4                     = 12
+
+    The old txt1 and txt2 rows ran 12 + 12 + five controls at col-md-4 = 44,
+    so the last line held two of them and left a third of the row empty.
     =========================================================================
 </cms:ignore>
-<cms:editable type='group' name='cnt_txt_grp' label='Heading and Text' collapsed='1' order='10'>
 
+<cms:editable type='group' name='cnt_txt_grp' label='Section Header'
+    not_active=cnt_rmhdr_chc collapsed='1' order='20'>
+
+    <!-- ============ THE HEADING ============ -->
     <cms:editable type='row' name='cnt_hdg_row' order='5'>
         <cms:editable type='text' name='cnt_hdg_ln' label='Heading'
-            desc='Leave empty for no heading' class='col-md-12' order='2' />
+            desc='Leave empty for no heading' class='col-12' order='2' />
+
+        <cms:ignore>
+            LEVEL AND SIZE ARE TWO CONTROLS, DELIBERATELY. The level is the real
+            HTML element and decides where this sits in the document outline for
+            search engines and screen readers. The size only emits an fs- class.
+            So a heading can be visually small and still be the h2 it ought to
+            be, or large while staying an h4 under a hero's h1.
+        </cms:ignore>
         <cms:editable type='dropdown' name='cnt_hdg_tag' label='Heading Level'
-            desc='Sets the outline level for search engines and screen readers'
+            desc='The HTML element. Size below is separate and only changes how big it looks.'
             opt_values='dropdowns/_val/heading-tag_sec.htm' dynamic='opt_values'
-            class='col-md-4' order='4'>h2</cms:editable>
+            class='col-sm-6 col-md-4' order='4'>h2</cms:editable>
+
         <cms:editable type='dropdown' name='cnt_hdg_clr' label='Heading Color'
-            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='6' />
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='6' />
         <cms:editable type='dropdown' name='cnt_hdg_sz' label='Heading Size'
-            opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-4' order='8' />
+            opt_values='dropdowns/text-size.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='8' />
         <cms:editable type='dropdown' name='cnt_hdg_font' label='Heading Font'
-            opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4' order='10' />
+            opt_values='dropdowns/font-family.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='10' />
         <cms:editable type='dropdown' name='cnt_hdg_fnt_wt' label='Heading Weight'
-            opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4' order='12' />
+            opt_values='dropdowns/font-weight.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='12' />
         <cms:editable type='dropdown' name='cnt_hdg_ltr_spc' label='Heading Letter Spacing'
-            opt_values='dropdowns/_tok/letter-spacing.htm' dynamic='opt_values' class='col-md-4' order='14' />
+            opt_values='dropdowns/_tok/letter-spacing.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='14' />
     </cms:editable>
 
-    <cms:editable type='dropdown' name='cnt_txt_opt' label='Lines of Text Under the Heading'
-        opt_values='No Text= |1 Line=1|2 Lines=2' class='col-md-3' order='18' />
 
+    <!-- ============ HOW MANY LINES UNDER IT ============ -->
+    <cms:ignore>
+        FULL WIDTH ON ITS OWN ROW, and that is a layout decision rather than an
+        accident. This one control decides whether the two rows below it exist
+        at all, so it is a structural switch sitting among styling dropdowns.
+        Giving it the whole row says so, and it means the row fills.
+    </cms:ignore>
+    <cms:editable type='row' name='cnt_txt_opt_row' order='8'>
+        <cms:editable type='dropdown' name='cnt_txt_opt' label='Lines of Text Under the Heading'
+            desc='Each line you add opens its own wording and styling below.'
+            opt_values='No Text= |1 Line=1|2 Lines=2' class='col-12' order='2' />
+    </cms:editable>
+
+    <cms:ignore>
+        DECLARED HERE, BETWEEN THE CONTROLLER ABOVE AND THE SLAVES BELOW.
+        ge rather than == so that choosing 2 Lines keeps Line 1 open - the
+        second line is an addition to the first, not a replacement for it.
+    </cms:ignore>
     <cms:func _into='cnt_txt1_chc' cnt_txt_opt=''>
         <cms:if cnt_txt_opt ge '1'>show<cms:else />hide</cms:if>
     </cms:func>
@@ -45,34 +110,105 @@
         <cms:if cnt_txt_opt ge '2'>show<cms:else />hide</cms:if>
     </cms:func>
 
+
+<cms:ignore>
+    EVERY LABEL NAMES THE LINE IT BELONGS TO - "Line 1 Color", not "Text
+    Color". Both lines carry the same six controls, and the whole header is
+    now edited from ONE button on the page, so all twelve arrive in a single
+    window together. "Text Color" twice in one window says nothing.
+
+    The row wrappers are what separate them structurally, but a row carries no
+    heading of its own, so the field label is the only thing a person reads.
+    It also survives being moved: a label that only makes sense next to its
+    neighbor breaks the first time something is reordered.
+</cms:ignore>
+
+    <!-- ============ LINE 1 ============ -->
     <cms:editable type='row' name='cnt_txt1_row' not_active=cnt_txt1_chc order='20'>
-        <cms:editable type='message' name='cnt_txt1_msg' class='col-md-12' order='2'><hr><h2>Line 1</h2></cms:editable>
-        <cms:editable type='text' name='cnt_txt1_ln' label='Text' class='col-md-12' order='4' />
-        <cms:editable type='dropdown' name='cnt_txt1_clr' label='Text Color'
-            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='6' />
-        <cms:editable type='dropdown' name='cnt_txt1_sz' label='Text Size'
-            opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-4' order='8' />
-        <cms:editable type='dropdown' name='cnt_txt1_font' label='Font Family'
-            opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4' order='10' />
-        <cms:editable type='dropdown' name='cnt_txt1_fnt_wt' label='Font Weight'
-            opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4' order='12' />
-        <cms:editable type='dropdown' name='cnt_txt1_ltr_spc' label='Letter Spacing'
-            opt_values='dropdowns/_tok/letter-spacing.htm' dynamic='opt_values' class='col-md-4' order='14' />
+        <cms:editable type='message' name='cnt_txt1_msg' class='col-12' order='2'>
+            <hr><h2>Line 1</h2>
+        </cms:editable>
+        <cms:editable type='text' name='cnt_txt1_ln' label='Line 1 Text' class='col-12' order='4' />
+        <cms:editable type='dropdown' name='cnt_txt1_clr' label='Line 1 Color'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='6' />
+        <cms:editable type='dropdown' name='cnt_txt1_sz' label='Line 1 Size'
+            opt_values='dropdowns/text-size.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='8' />
+        <cms:editable type='dropdown' name='cnt_txt1_font' label='Line 1 Font'
+            opt_values='dropdowns/font-family.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='10' />
+        <cms:editable type='dropdown' name='cnt_txt1_fnt_wt' label='Line 1 Weight'
+            opt_values='dropdowns/font-weight.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-6' order='12' />
+        <cms:editable type='dropdown' name='cnt_txt1_ltr_spc' label='Line 1 Letter Spacing'
+            opt_values='dropdowns/_tok/letter-spacing.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-6' order='14' />
     </cms:editable>
 
+
+    <!-- ============ LINE 2 ============ -->
     <cms:editable type='row' name='cnt_txt2_row' not_active=cnt_txt2_chc order='30'>
-        <cms:editable type='message' name='cnt_txt2_msg' class='col-md-12' order='2'><hr><h2>Line 2</h2></cms:editable>
-        <cms:editable type='text' name='cnt_txt2_ln' label='Text' class='col-md-12' order='4' />
-        <cms:editable type='dropdown' name='cnt_txt2_clr' label='Text Color'
-            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='6' />
-        <cms:editable type='dropdown' name='cnt_txt2_sz' label='Text Size'
-            opt_values='dropdowns/text-size.htm' dynamic='opt_values' class='col-md-4' order='8' />
-        <cms:editable type='dropdown' name='cnt_txt2_font' label='Font Family'
-            opt_values='dropdowns/font-family.htm' dynamic='opt_values' class='col-md-4' order='10' />
-        <cms:editable type='dropdown' name='cnt_txt2_fnt_wt' label='Font Weight'
-            opt_values='dropdowns/font-weight.htm' dynamic='opt_values' class='col-md-4' order='12' />
-        <cms:editable type='dropdown' name='cnt_txt2_ltr_spc' label='Letter Spacing'
-            opt_values='dropdowns/_tok/letter-spacing.htm' dynamic='opt_values' class='col-md-4' order='14' />
+        <cms:editable type='message' name='cnt_txt2_msg' class='col-12' order='2'>
+            <hr><h2>Line 2</h2>
+        </cms:editable>
+        <cms:editable type='text' name='cnt_txt2_ln' label='Line 2 Text' class='col-12' order='4' />
+        <cms:editable type='dropdown' name='cnt_txt2_clr' label='Line 2 Color'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='6' />
+        <cms:editable type='dropdown' name='cnt_txt2_sz' label='Line 2 Size'
+            opt_values='dropdowns/text-size.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='8' />
+        <cms:editable type='dropdown' name='cnt_txt2_font' label='Line 2 Font'
+            opt_values='dropdowns/font-family.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='10' />
+        <cms:editable type='dropdown' name='cnt_txt2_fnt_wt' label='Line 2 Weight'
+            opt_values='dropdowns/font-weight.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-6' order='12' />
+        <cms:editable type='dropdown' name='cnt_txt2_ltr_spc' label='Line 2 Letter Spacing'
+            opt_values='dropdowns/_tok/letter-spacing.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-6' order='14' />
+    </cms:editable>
+
+
+    <!-- ============ THE RULE BETWEEN HEADER AND FORM ============ -->
+    <cms:editable type='message' name='cnt_hr_msg' order='40'>
+        <br><hr><br>
+        <h2>Dividing Line</h2>
+        <h4>An optional rule between these words and the form below them.</h4>
+    </cms:editable>
+
+    <cms:editable type='row' name='cnt_hr_len_row' order='42'>
+        <cms:editable type='dropdown' name='cnt_hdg_hr' label='Line Length'
+            desc='Leave on the first option for no line at all.'
+            opt_values='dropdowns/hr-size.htm' dynamic='opt_values'
+            class='col-12' order='2' />
+    </cms:editable>
+
+    <cms:ignore>
+        NO LINE MEANS NOTHING TO STYLE, so thickness, color and spacing stay
+        shut until a length is chosen. hr-size.htm's first option emits an EMPTY
+        value, so this is a plain truthiness test - not a comparison against the
+        word none.
+
+        not_active ON THE ROW, not on each of the three. bootstrap-grid.php
+        copies a row's not_active down to every child that does not carry its
+        own, so one declaration gates all three and they cannot drift apart.
+    </cms:ignore>
+    <cms:func _into='cnt_hr_chc' cnt_hdg_hr=''>
+        <cms:if cnt_hdg_hr>show<cms:else />hide</cms:if>
+    </cms:func>
+
+    <cms:editable type='row' name='cnt_hr_row' not_active=cnt_hr_chc order='44'>
+        <cms:editable type='dropdown' name='cnt_hr_wt' label='Line Thickness'
+            opt_values='dropdowns/hr-thickness.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='2' />
+        <cms:editable type='dropdown' name='cnt_hr_clr' label='Line Color'
+            opt_values='dropdowns/solid-colors.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='4' />
+        <cms:editable type='dropdown' name='cnt_hr_pd' label='Space Around the Line'
+            opt_values='dropdowns/_tok/space.htm' dynamic='opt_values'
+            class='col-sm-6 col-md-4' order='6' />
     </cms:editable>
 
 </cms:editable>

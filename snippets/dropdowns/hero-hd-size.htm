@@ -1,1 +1,10 @@
-Default= | Massive=display-1 | X-Large=display-2 | Large=display-3 | Medium=fs-1 | Small=fs-2
+<cms:ignore>
+    display-1..3 and fs-1..3 are the SAME three sizes in theme.css, so the last
+    two entries duplicate the first two. They are kept, and labeled as
+    duplicates, rather than removed: a hero already saved as fs-1 would have a
+    stored value missing from this list, the dropdown would show nothing
+    selected, and the next save would silently resize that hero.
+
+    Role names, not pixels - the reasoning is in text-size.htm's header.
+</cms:ignore>
+Default= | Massive=display-1 | X-Large=display-2 | Large=display-3 | Massive (same as above)=fs-1 | X-Large (same as above)=fs-2
