@@ -101,9 +101,18 @@ jobs:
           # A missing .deploy-state is normal on a first run, so this step must
           # not fail the job: cmd:fail-exit is off here and the shell swallows
           # a non-zero exit.
+          # The retry settings in LFTP_SETTINGS exist for the UPLOAD, where
+          # reconnecting after a dropped transfer is the whole point. They are
+          # wrong here: a missing .deploy-state returns 550, which lftp counts
+          # as a hard error, and net:persist-retries makes it retry anyway.
+          # That cost 9m30s on the first run. A later 'set' wins, so these two
+          # lines cap it - the lookup now gives up at once and the job carries
+          # on to a full deploy, which is what a missing state file means.
           lftp --env-password -u "$FTP_USER" "ftp://$FTP_HOST" -e "
             $LFTP_SETTINGS
             set cmd:fail-exit no;
+            set net:max-retries 2;
+            set net:persist-retries 0;
             get .deploy-state -o last_deployed.txt;
             bye
           " || true
