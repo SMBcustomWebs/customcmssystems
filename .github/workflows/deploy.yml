@@ -58,3 +58,17 @@ jobs:
             **/*.md
             *.txt
             **/*.map
+
+            # Font Awesome source assets. The site loads FA through
+            # assets/fontawesome/css/*.css + webfonts/ only - verified: zero
+            # references to any folder below, anywhere in the codebase.
+            # svgs/ alone is 2,060 files, about half the whole deployment,
+            # and the first full deploy died on a dropped FTP connection at
+            # 6m11s. These stay in GitHub. If FA is ever switched to the SVG
+            # or JS build, delete the matching line.
+            assets/fontawesome/svgs/**
+            assets/fontawesome/sprites/**
+            assets/fontawesome/scss/**
+            assets/fontawesome/less/**
+            assets/fontawesome/metadata/**
+            assets/fontawesome/js/**
