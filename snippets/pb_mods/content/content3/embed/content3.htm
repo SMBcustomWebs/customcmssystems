@@ -1,0 +1,14 @@
+<cms:ignore>
+    PLACEHOLDER - field cluster not built yet.
+
+    Tile:     cntnt_pg_tl3
+    Label:    Content Layout 3
+    Template: content/content3/theme/content3
+    Embedded: blocks/content/content_st_3.php:5
+
+    Renders nothing - cms:embed on an empty file returns '' and
+    couch skips it. This file must still EXIST: a missing target
+    makes cms:embed print "Error embedding file:" onto the page.
+    It is non-empty only because HostGator's FTP drops the session
+    on a zero-byte upload.
+</cms:ignore>

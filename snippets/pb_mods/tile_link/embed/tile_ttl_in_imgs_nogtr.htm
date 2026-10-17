@@ -1,0 +1,14 @@
+<cms:ignore>
+    PLACEHOLDER - field cluster not built yet.
+
+    Tile:     ___pg_tile_link_imgs_nogtr_ins_tl
+    Label:    Images with links, no gutter Title inside
+    Template: tile_link/theme/tile_ttl_in_imgs_nogtr
+    Embedded: blocks/mods/tile_links.php:8
+
+    Renders nothing - cms:embed on an empty file returns '' and
+    couch skips it. This file must still EXIST: a missing target
+    makes cms:embed print "Error embedding file:" onto the page.
+    It is non-empty only because HostGator's FTP drops the session
+    on a zero-byte upload.
+</cms:ignore>

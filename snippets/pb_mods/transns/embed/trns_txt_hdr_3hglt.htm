@@ -1,0 +1,14 @@
+<cms:ignore>
+    PLACEHOLDER - field cluster not built yet.
+
+    Tile:     trns_txt_hdr_3hglt_tl
+    Label:    Transition - Header - 3 Highlights
+    Template: transns/theme/trns_txt_hdr_3hglt
+    Embedded: blocks/banner/transitions.php:27
+
+    Renders nothing - cms:embed on an empty file returns '' and
+    couch skips it. This file must still EXIST: a missing target
+    makes cms:embed print "Error embedding file:" onto the page.
+    It is non-empty only because HostGator's FTP drops the session
+    on a zero-byte upload.
+</cms:ignore>
