@@ -33,7 +33,7 @@ jobs:
 
           # FIRST RUN SAFETY. Prints every file it would add, change or delete and
           # uploads nothing. Read the log, confirm it looks right, then set to false.
-          dry-run: true
+          dry-run: false
           log-level: verbose
 
           # NEVER add dangerous-clean-slate. It deletes everything in server-dir,
