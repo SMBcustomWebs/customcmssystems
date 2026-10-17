@@ -3363,6 +3363,38 @@ That message means the deploy worked. Put `config.php` in that environment's
 `ccs_dash/` with its OWN database — staging must not point at production — and
 its own `K_SITE_URL`, e.g. `https://staging.customcmssystems.com/`.
 
+### Branching — main is the deployed state
+
+As of 2026-10-17 the workflow fires on every push to `main`, and a merge is a
+push. So:
+
+- Work on a branch. Pushing to a branch deploys nothing and runs nothing.
+- Open a PR, merge it into `main`. That merge deploys.
+- `main` is therefore always what is on staging. If the two ever disagree,
+  `main` is right and the server is stale - never the other way round.
+
+`workflow_dispatch` is kept, so a deploy can still be run by hand without a
+merge - useful after placing `config.php` or when a run failed halfway.
+
+A merge touching only `*.md`, `.github/`, `.vscode/`, `_tools/`,
+`_merge_backup/`, `module-display/` or a root `*.txt` does not spend a deploy.
+GitHub skips the run only when EVERY changed file matches, so a commit mixing a
+doc and a template still deploys.
+
+`concurrency` is set with `cancel-in-progress: false`. Killing a half-finished
+mirror would leave the server in a mixed state, so a second merge queues behind
+the first rather than racing it on the same FTP account.
+
+**Every deploy re-uploads the whole payload**, because `actions/checkout` stamps
+every file with the checkout time and lftp compares timestamps. This is
+deliberate. The incremental alternative is to restore mtimes from commit dates,
+but if the server does not honour `SITE UTIME` the remote keeps its upload time,
+and a file whose commit is OLDER than the last deploy is then silently skipped -
+merge a branch on Friday that you committed on Monday, after a Wednesday deploy,
+and the change never ships with no error anywhere. A slow, complete deploy beats
+a fast one that can silently omit a file. Do not "optimise" this without
+first proving `SITE UTIME` sticks on this host.
+
 ### Still open
 
 `ssl:verify-certificate` is off in the mirror command. This is parity, not a

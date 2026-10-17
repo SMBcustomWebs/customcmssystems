@@ -1,7 +1,13 @@
 name: Deploy to Staging
 
-# MANUAL ONLY. Never fires on a push or a merge.
-# Actions tab -> "Deploy to Staging" -> Run workflow -> pick a branch.
+# FIRES ON EVERY MERGE INTO main, and can also be run by hand from the
+# Actions tab -> "Deploy to Staging" -> Run workflow.
+#
+# Work on a branch, open a PR, merge it. The merge is a push to main, which is
+# what triggers this. main is therefore ALWAYS what is on staging - if the two
+# ever disagree, main is right and the server is stale, never the other way.
+#
+# Nothing deploys from a feature branch. Pushing to your branch runs nothing.
 #
 # WHY lftp AND NOT SamKirkland/FTP-Deploy-Action
 # That action has no retry. Its 14 inputs (verified against action.yml at the
@@ -36,7 +42,28 @@ name: Deploy to Staging
 # once the deploy is green and the FTP password has been rotated.
 
 on:
+  push:
+    branches:
+      - main
+    # A merge touching ONLY these never reaches the server, so it should not
+    # spend a deploy. GitHub skips the run only when EVERY changed file matches,
+    # so a commit mixing a doc and a template still deploys.
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - '.vscode/**'
+      - '_tools/**'
+      - '_merge_backup/**'
+      - 'module-display/**'
+      - '*.txt'
   workflow_dispatch:
+
+# One deploy at a time against one FTP account. cancel-in-progress is false on
+# purpose: killing a half-finished mirror would leave the server in a mixed
+# state. A second merge queues behind the first instead of racing it.
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
 
 jobs:
   deploy:
