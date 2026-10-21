@@ -7,41 +7,72 @@ name: Deploy to Staging
 # what triggers this. main is therefore ALWAYS what is on staging - if the two
 # ever disagree, main is right and the server is stale, never the other way.
 #
-# INCREMENTAL: ONLY CHANGED FILES ARE SENT
-# The server holds a file called .deploy-state containing the commit SHA of the
-# last successful deploy. Each run reads it and asks GIT what changed since
-# then. Git compares file CONTENT, so nothing depends on timestamps.
+# ---------------------------------------------------------------------------
+# HOW IT DECIDES WHAT TO SEND
+# ---------------------------------------------------------------------------
+# The server holds .deploy-state:
 #
-# Timestamps were the obvious approach and they are a trap here. actions/checkout
-# stamps every file with the checkout time, so everything always looks new. The
-# fix for that is to restore mtimes from commit dates - but then, if the server
-# does not honour SITE UTIME, the remote keeps its upload time and a file whose
-# commit is OLDER than the last deploy is silently skipped. Merge a branch on
-# Friday that you committed on Monday, after a Wednesday deploy, and the change
-# never ships, with no error anywhere. Asking git is exact and has no such hole.
+#     sha=<commit of the last successful deploy>
+#     excl=<md5 of the EXCL regex that deploy used>
 #
-# IT FALLS BACK TO A FULL DEPLOY, SAFELY, WHEN:
-#   - .deploy-state is missing (first run, or you deleted it to force a resync)
-#   - the SHA in it is not in this repo's history (force-push, rewritten history)
-#   - this workflow file itself changed, since the exclude rules below may have
-#     changed with it and git would not report the newly-included files as edits
+# Each run reads it and asks GIT what changed since that commit. Git compares
+# file CONTENT, so nothing depends on timestamps.
 #
-# TO FORCE A FULL RESYNC: delete .deploy-state from public_html/staging in
-# cPanel File Manager and run the workflow. That is the repair for any suspicion
-# that the server has drifted.
+# Timestamps were the obvious approach and they are a trap here.
+# actions/checkout stamps every file with the checkout time, so everything
+# always looks new. The fix for that is restoring mtimes from commit dates -
+# but then, if the server does not honour SITE UTIME, the remote keeps its
+# upload time and a file whose commit is OLDER than the last deploy is silently
+# skipped. Merge a branch on Friday that you committed on Monday, after a
+# Wednesday deploy, and the change never ships, with no error anywhere.
+#
+# A FULL RESYNC happens when, and only when:
+#   - .deploy-state is missing (first run, or you deleted it to force one)
+#   - its sha is not in this repo's history (force-push, rewritten history)
+#   - its excl hash differs from this run's, i.e. the EXCLUSION LIST CHANGED
+#     and git would not report newly-included files as edits
+#   - the state file is in the old bare-sha format with no excl line
+#
+# Note it keys on the EXCLUSION LIST, not on "deploy.yml changed". Editing a
+# comment or a timeout in this file no longer costs a 25-minute full deploy.
+# If you change the manifest LOGIC below without changing EXCL, force a resync
+# by hand: delete .deploy-state in cPanel File Manager and run the workflow.
+#
+# ---------------------------------------------------------------------------
+# HOW IT SENDS
+# ---------------------------------------------------------------------------
+# INCREMENTAL uses curl, one file per invocation, with --ftp-create-dirs.
+# FULL uses lftp mirror.
+#
+# They differ because mirror compares a source tree to a target tree, and that
+# means enumerating the remote side first. With 1,784 files on the server that
+# took 9m30s to deliver ONE changed file - the transfer itself was two log
+# lines at the very end. curl just opens a connection and puts the file, so an
+# incremental deploy costs seconds. For a full resync the enumeration is
+# irrelevant because everything is being sent anyway, and mirror handles the
+# whole tree in one session.
+#
+# mirror also logs "Removing old file" before each transfer - it deletes the
+# remote file, then writes the new one. On a live page that is a window where
+# the file 404s. curl overwrites in place.
+#
+# Credentials go to curl on STDIN via -K -, so the password never appears in
+# the process list or on disk. lftp uses --env-password for the same reason.
 #
 # DELETIONS ARE NOT PROPAGATED. A file deleted from the repo stays on the
-# server. The mirror carries no --delete and must not: ccs_dash/uploads is
-# 1.1 GB and exists in no repository. Remove a retired file by hand in cPanel.
+# server; the run warns and lists them. Nothing here carries --delete and
+# nothing should: ccs_dash/uploads is 1.1 GB and exists in no repository.
 #
+# ---------------------------------------------------------------------------
 # WHAT GOES TO THE SERVER
-# Every exclusion is decided HERE, in git, before lftp is involved - not in lftp
-# glob patterns whose nested-path matching is easy to get subtly wrong. The list
-# comes from `git ls-files`, so anything gitignored (config.php, ccs_dash/uploads,
-# assets media) cannot appear by construction. _deploy/ holds EXACTLY what is
-# being sent and is mirrored with no --exclude at all.
+# ---------------------------------------------------------------------------
+# Every exclusion is decided HERE, in git, before any FTP tool is involved -
+# not in glob patterns whose nested-path matching is easy to get subtly wrong.
+# The list comes from `git ls-files`, so anything gitignored (config.php,
+# ccs_dash/uploads, assets media) cannot appear by construction. _deploy/ holds
+# EXACTLY what is being sent.
 #
-# A FULL payload is 1,784 files as of 2026-10-17.
+# A FULL payload is 1,784 files as of 2026-10-21.
 
 on:
   push:
@@ -60,7 +91,7 @@ on:
   workflow_dispatch:
 
 # One deploy at a time against one FTP account. cancel-in-progress is false on
-# purpose: killing a half-finished mirror would leave the server in a mixed
+# purpose: killing a half-finished upload would leave the server in a mixed
 # state. A second merge queues behind the first instead of racing it.
 concurrency:
   group: deploy-staging
@@ -96,57 +127,62 @@ jobs:
       - name: Install lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
-      - name: Read last deployed commit from the server
+      - name: Read deploy state from the server
         run: |
           # A missing .deploy-state is normal on a first run, so this step must
-          # not fail the job: cmd:fail-exit is off here and the shell swallows
-          # a non-zero exit.
-          # The retry settings in LFTP_SETTINGS exist for the UPLOAD, where
-          # reconnecting after a dropped transfer is the whole point. They are
-          # wrong here: a missing .deploy-state returns 550, which lftp counts
-          # as a hard error, and net:persist-retries makes it retry anyway.
-          # That cost 9m30s on the first run. A later 'set' wins, so these two
-          # lines cap it - the lookup now gives up at once and the job carries
-          # on to a full deploy, which is what a missing state file means.
+          # not fail the job. The retry settings in LFTP_SETTINGS are for the
+          # upload; here a 550 "not found" is a hard error that persist-retries
+          # would sit and retry for 9+ minutes. A later 'set' wins.
           lftp --env-password -u "$FTP_USER" "ftp://$FTP_HOST" -e "
             $LFTP_SETTINGS
             set cmd:fail-exit no;
             set net:max-retries 2;
             set net:persist-retries 0;
-            get .deploy-state -o last_deployed.txt;
+            get .deploy-state -o state.txt;
             bye
           " || true
-          if [ -s last_deployed.txt ]; then
-            LAST=$(tr -dc '[:alnum:]' < last_deployed.txt)
-            echo "server reports last deploy: $LAST"
-          else
-            LAST=""
-            echo "no .deploy-state on the server - this will be a full deploy"
-          fi
-          echo "LAST=$LAST" >> "$GITHUB_ENV"
+          if [ -s state.txt ]; then echo "state file retrieved"; else echo "no .deploy-state on the server"; fi
 
       - name: Decide what to send
         run: |
           set -euo pipefail
-          MODE=full
-          if [ -n "${LAST:-}" ] && git cat-file -e "${LAST}^{commit}" 2>/dev/null; then
-            if git diff --name-only "$LAST" HEAD | grep -q '^\.github/workflows/deploy\.yml$'; then
-              echo "deploy.yml changed since $LAST - forcing a full resync"
+          EXCL_HASH=$(printf '%s' "$EXCL" | md5sum | cut -d' ' -f1)
+          LAST=""; LASTEXCL=""; LEGACY=0; MODE=full
+          WHY="no .deploy-state on the server"
+
+          if [ -s state.txt ]; then
+            if grep -q '^sha=' state.txt; then
+              LAST=$(grep '^sha='  state.txt | head -1 | cut -d= -f2- | tr -dc '[:alnum:]')
+              LASTEXCL=$(grep '^excl=' state.txt | head -1 | cut -d= -f2- | tr -dc '[:alnum:]')
+            else
+              # legacy format: the whole file was just the sha, no excl line
+              LAST=$(tr -dc '[:alnum:]' < state.txt)
+              LEGACY=1
+            fi
+          fi
+
+          if [ -n "$LAST" ]; then
+            if ! git cat-file -e "${LAST}^{commit}" 2>/dev/null; then
+              WHY="commit $LAST is not in this history"
+            elif [ "$LEGACY" = 1 ]; then
+              WHY="state file predates exclusion tracking - resyncing once to record it"
+            elif [ "$LASTEXCL" != "$EXCL_HASH" ]; then
+              WHY="the exclusion list changed since the last deploy"
             else
               MODE=incremental
             fi
-          elif [ -n "${LAST:-}" ]; then
-            echo "commit $LAST is not in this history - forcing a full resync"
           fi
 
           if [ "$MODE" = full ]; then
+            echo "FULL RESYNC: $WHY"
             git ls-files | grep -v -E "$EXCL" > send.txt || true
           else
+            echo "incremental, from $LAST"
             # ACMRT = added/copied/modified/renamed/typechanged. Deletions are
-            # excluded deliberately: the file is gone from the tree, so trying
-            # to stage it would fail, and the mirror does not delete anyway.
+            # excluded deliberately: the file is gone from the tree, so staging
+            # it would fail, and nothing here deletes on the server anyway.
             git diff --name-only --diff-filter=ACMRT "$LAST" HEAD | grep -v -E "$EXCL" > send.txt || true
-            git diff --name-only --diff-filter=D "$LAST" HEAD | grep -v -E "$EXCL" > gone.txt || true
+            git diff --name-only --diff-filter=D    "$LAST" HEAD | grep -v -E "$EXCL" > gone.txt || true
             if [ -s gone.txt ]; then
               echo "::warning::deleted from the repo but LEFT ON THE SERVER - remove by hand in cPanel:"
               sed 's/^/  /' gone.txt
@@ -159,8 +195,7 @@ jobs:
           # early, sed die of SIGPIPE, and pipefail kill the whole step.
           head -40 send.txt | sed 's/^/  /'
           [ "$COUNT" -gt 40 ] && echo "  ... and $((COUNT-40)) more" || true
-          echo "MODE=$MODE"   >> "$GITHUB_ENV"
-          echo "COUNT=$COUNT" >> "$GITHUB_ENV"
+          { echo "MODE=$MODE"; echo "COUNT=$COUNT"; echo "EXCL_HASH=$EXCL_HASH"; } >> "$GITHUB_ENV"
 
       - name: Build payload
         if: env.COUNT != '0'
@@ -180,20 +215,40 @@ jobs:
         if: env.COUNT != '0'
         run: |
           set -euo pipefail
-          git rev-parse HEAD > deploy-state.txt
-          # --transfer-all: _deploy/ already contains exactly what must go up,
-          # so send it regardless of what timestamps either side reports.
-          # cmd:fail-exit yes: if the mirror fails, lftp exits WITHOUT running
-          # the put below, so .deploy-state is never advanced past a failure.
-          lftp --env-password -u "$FTP_USER" "ftp://$FTP_HOST" -e "
-            $LFTP_SETTINGS
-            set cmd:fail-exit yes;
-            mirror -R --transfer-all --verbose=1 --parallel=1 _deploy/ ./ ;
-            put deploy-state.txt -o .deploy-state;
-            bye
-          "
-          echo "deployed $COUNT file(s) at $(cat deploy-state.txt)"
+          printf 'sha=%s\nexcl=%s\n' "$(git rev-parse HEAD)" "$EXCL_HASH" > deploy-state.txt
+
+          # credentials on stdin: never in the process list, never on disk
+          creds() { printf 'user = "%s:%s"\n' "$FTP_USER" "$LFTP_PASSWORD"; }
+          send() {  # send <local> <remote>
+            creds | curl -K - --ssl-reqd -k --ftp-create-dirs \
+                         --retry 5 --retry-delay 3 --retry-connrefused \
+                         --connect-timeout 30 --max-time 300 \
+                         --fail --silent --show-error \
+                         -T "$1" "ftp://$FTP_HOST/$2"
+          }
+
+          if [ "$MODE" = full ]; then
+            echo "full resync via lftp mirror - enumeration cost is irrelevant when sending everything"
+            lftp --env-password -u "$FTP_USER" "ftp://$FTP_HOST" -e "
+              $LFTP_SETTINGS
+              set cmd:fail-exit yes;
+              mirror -R --transfer-all --verbose=1 --parallel=1 _deploy/ ./ ;
+              bye
+            "
+          else
+            # set -e means the first failure aborts before the state write below
+            while IFS= read -r f; do
+              [ -n "$f" ] || continue
+              send "_deploy/$f" "$f"
+              echo "  sent $f"
+            done < send.txt
+          fi
+
+          # Only reached if every transfer above succeeded, so .deploy-state is
+          # never advanced past a failure.
+          send deploy-state.txt .deploy-state
+          echo "deployed $COUNT file(s) at $(git rev-parse HEAD)"
 
       - name: Nothing to do
         if: env.COUNT == '0'
-        run: echo "No deployable file changed since $LAST - server is already current."
+        run: echo "No deployable file changed - server is already current."
