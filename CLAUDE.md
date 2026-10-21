@@ -3267,8 +3267,8 @@ confirms it has been.
 
 ## 62. The deploy workflow — what goes to the server, and what never does
 
-`.github/workflows/deploy.yml`. **Manual only** — `workflow_dispatch`, nothing
-fires on a push or a merge. Actions tab → "Deploy to Staging" → Run workflow.
+`.github/workflows/deploy.yml`. Fires on every push to `main`, and a merge is a
+push. Also runnable by hand from the Actions tab.
 
 A `workflow_dispatch` workflow only appears in the Actions UI if the file exists
 on the DEFAULT branch. Editing it on a feature branch and wondering where the
@@ -3276,56 +3276,84 @@ button went is the first mistake everyone makes with this.
 
 ### Three buckets, and where each one is decided
 
-Every file in the project is in exactly one of three states, and the three are
-decided in three different places. Mixing them up is how credentials reach a web
-server.
+Every file is in exactly one of three states, decided in three different places.
+Mixing them up is how credentials reach a web server.
 
 1. **Not in GitHub at all** — decided by `.gitignore`. `ccs_dash/config.php`,
    `ccs_dash/uploads/` (1.1 GB), `ccs_dash/cache/`, the 63 MB `.sql` dump,
    `.vscode/`, and `assets/images|logos|videos|media/`. Media lives on the front
    end and is uploaded through the CMS, never through the repo.
-2. **In GitHub, not on the site** — decided by the manifest filter in the
-   workflow's "Build deploy payload" step. `.github/`, `.vscode/`, `_tools/`,
-   `_merge_backup/`, `module-display/`, `ccs_dash/includes/ckeditor_old/`, the
-   Font Awesome source trees, `snippets/pb_mods/DNU_header/`, every `*.md`,
-   every `*.map`, and root-level `*.txt`.
-3. **Both** — everything else. 1,784 files as of this writing.
+2. **In GitHub, not on the site** — decided by the `EXCL` regex in the workflow.
+   `.github/`, `.vscode/`, `_tools/`, `_merge_backup/`, `module-display/`,
+   `ccs_dash/includes/ckeditor_old/`, the Font Awesome source trees,
+   `snippets/pb_mods/DNU_header/`, every `*.md`, every `*.map`, root `*.txt`.
+3. **Both** — everything else. 1,784 files as of 2026-10-21.
 
-The manifest is built from `git ls-files`, not from a directory walk. Anything
+The file list comes from `git ls-files`, not a directory walk. Anything
 gitignored therefore cannot reach the server by construction, even if someone
-later adds a wrong pattern to the filter. That ordering is deliberate — keep it.
+later adds a wrong pattern to `EXCL`. Keep that ordering.
 
-### Why lftp and not SamKirkland/FTP-Deploy-Action
+### How it decides what to send
 
-The action was used first and could not finish a deploy. Four runs died at four
-different files with
+The server holds `.deploy-state`:
 
-    Error: Server sent FIN packet unexpectedly, closing connection.
+    sha=<commit of the last successful deploy>
+    excl=<md5 of the EXCL regex that deploy used>
 
-HostGator's Pure-FTPd drops sessions, and **the action has no retry** — verified
-against `action.yml` at the `v4.3.3` tag: 14 inputs, none of them a retry,
-concurrency or throttle control. One dropped socket fails the step and discards
-everything it had already sent.
+Each run reads it and asks GIT what changed since that commit. Git compares file
+CONTENT, so nothing depends on timestamps.
 
-The tree was split into sixteen per-folder steps to limit the damage. That was
-the wrong fix. It made each loss smaller but never made a transfer survive a
-drop, which was the actual problem. `lftp` reconnects and continues:
+Timestamps are a trap here, and this is why the obvious approach was rejected.
+`actions/checkout` stamps every file with the checkout time, so everything always
+looks new. The fix for that is restoring mtimes from commit dates - but if the
+server does not honour `SITE UTIME` the remote keeps its upload time, and a file
+whose commit is OLDER than the last deploy is then silently skipped. Merge a
+branch on Friday that you committed on Monday, after a Wednesday deploy, and the
+change never ships, with no error anywhere.
 
-    set net:max-retries 15;
-    set net:persist-retries 10;
-    set net:reconnect-interval-base 5;
+A FULL RESYNC happens when, and only when:
 
-**Do not put the exclusions into lftp glob patterns.** They live in the git
-manifest step, and `_deploy/` is mirrored with no `--exclude` at all, so there
-is no nested-path glob semantics to get subtly wrong.
+- `.deploy-state` is missing (first run, or deleted to force one)
+- its `sha` is not in this repo's history (force-push, rewritten history)
+- its `excl` hash differs from this run's - the EXCLUSION LIST CHANGED, and git
+  would not report newly-included files as edits
+- the state file is in the old bare-sha format with no `excl` line
+
+It keys on the EXCLUSION LIST, not on "did `deploy.yml` change". Editing a
+comment or a timeout costs nothing. **If you change the manifest LOGIC without
+changing `EXCL`, force a resync by hand:** delete `.deploy-state` in cPanel and
+run the workflow.
+
+`.deploy-state` is written only AFTER every transfer succeeds, so a failed deploy
+leaves the recorded commit where it was and the next run re-sends everything
+outstanding. A failure can never make the next run think files shipped.
+
+### Two transports, and why
+
+**Incremental uses `curl`** - one file per invocation, `--ftp-create-dirs`.
+**A full resync uses `lftp mirror`.**
+
+`mirror` compares a source tree to a target tree, which means enumerating the
+remote side first. With 1,784 files on the server that took **9m30s to deliver
+one changed file** - the transfer itself was two log lines at the very end. The
+same one-file deploy via curl takes **under a second**. For a full resync the
+enumeration does not matter, because everything is being sent anyway.
+
+`mirror` also logs `Removing old file` before each transfer: it deletes the
+remote file, then writes the new one. On a live page that is a window where the
+file 404s. curl overwrites in place.
+
+Credentials go to curl on STDIN via `-K -`, so the password never appears in the
+process list or on disk. lftp uses `--env-password` for the same reason. Do not
+put them in the URL - the FTP username contains an `@`.
 
 ### No empty files, ever
 
-**A zero-byte file kills the whole transfer.** HostGator's FTP drops the session
-on a zero-byte upload. Three failed deploys were caused by this before it was
-spotted; each died on the first empty file its step reached.
+**A zero-byte file drops the whole FTP session on this host.** Three failed
+deploys were caused by this before it was spotted; each died on the first empty
+file its step reached.
 
-33 empty `embed/*.htm` stubs caused it. They could not simply be skipped —
+33 empty `embed/*.htm` stubs caused it. They could not simply be skipped -
 `tags.php:573`:
 
     $html = @file_get_contents( $filepath );
@@ -3334,23 +3362,34 @@ spotted; each died on the first empty file its step reached.
 
 A MISSING target prints `Error embedding file:` onto the page. An EMPTY one
 returns `''`, which is falsy, so it renders nothing. Empty stubs are correct
-Couch — they are placeholders for tiles whose field cluster is not built yet,
+couch - they are placeholders for tiles whose field cluster is not built yet,
 and `blocks/` does `cms:embed` them. They have to exist. They just cannot be
 transferred.
 
 Each now carries a `cms:ignore` block naming its tile, label, template and the
-`blocks/` line that embeds it. The parser strips it, so page output is
-unchanged.
+`blocks/` line that embeds it. The parser strips it, so page output is unchanged.
 
-The build step hard-fails if the payload contains any zero-byte file, so this
-cannot silently return. **If a deploy fails on that check, fill the file — do
-not delete it and do not exclude it.**
+The build step hard-fails if the payload contains any zero-byte file. **If a
+deploy fails that check, FILL the file - do not delete it and do not exclude it.**
 
-### Never add `--delete` to the mirror
+### No spaces in filenames
 
-It would remove everything on the server not present in `_deploy/`, and
-`ccs_dash/uploads/` is 1.1 GB that exists in no repository. The same reason the
-old action's `dangerous-clean-slate` was never enabled.
+`snippets/pb_mods/transns/embed/trnsmp_c2a _full.htm` carried a space for months.
+`mirror` handled it silently, so nothing ever broke and nothing ever flagged it -
+right up until the move to per-file `curl` made it a live hazard. Renamed
+2026-10-21.
+
+The only tracked path with a space now is `Copilote Rules.txt`, which never
+deploys. Keep it that way: no spaces, no quotes, no non-ASCII in any path under
+version control.
+
+### Deletions do not propagate
+
+A file deleted from the repo STAYS ON THE SERVER. Nothing here carries
+`--delete` and nothing should: `ccs_dash/uploads` is 1.1 GB and exists in no
+repository. The run prints a warning listing what you deleted; remove those by
+hand in cPanel. The same applies to renames - git sees a rename as a delete plus
+an add, and only the add ships.
 
 ### config.php is placed by hand, once per environment
 
@@ -3360,48 +3399,31 @@ Gitignored, so a fresh deploy lands on CouchCMS's setup screen:
     "config.example.php" file to "config.php" after editing it?
 
 That message means the deploy worked. Put `config.php` in that environment's
-`ccs_dash/` with its OWN database — staging must not point at production — and
+`ccs_dash/` with its OWN database - staging must not point at production - and
 its own `K_SITE_URL`, e.g. `https://staging.customcmssystems.com/`.
 
 ### Branching — main is the deployed state
 
-As of 2026-10-17 the workflow fires on every push to `main`, and a merge is a
-push. So:
-
 - Work on a branch. Pushing to a branch deploys nothing and runs nothing.
-- Open a PR, merge it into `main`. That merge deploys.
-- `main` is therefore always what is on staging. If the two ever disagree,
-  `main` is right and the server is stale - never the other way round.
+- Merge into `main`. That merge deploys.
+- `main` is always what is on staging. If the two disagree, `main` is right and
+  the server is stale - never the other way round.
 
-`workflow_dispatch` is kept, so a deploy can still be run by hand without a
-merge - useful after placing `config.php` or when a run failed halfway.
-
-A merge touching only `*.md`, `.github/`, `.vscode/`, `_tools/`,
-`_merge_backup/`, `module-display/` or a root `*.txt` does not spend a deploy.
-GitHub skips the run only when EVERY changed file matches, so a commit mixing a
-doc and a template still deploys.
+A merge touching only `*.md`, `.vscode/`, `_tools/`, `_merge_backup/`,
+`module-display/` or a root `*.txt` does not spend a deploy. GitHub skips the run
+only when EVERY changed file matches, so a commit mixing a doc and a template
+still deploys.
 
 `concurrency` is set with `cancel-in-progress: false`. Killing a half-finished
-mirror would leave the server in a mixed state, so a second merge queues behind
-the first rather than racing it on the same FTP account.
-
-**Every deploy re-uploads the whole payload**, because `actions/checkout` stamps
-every file with the checkout time and lftp compares timestamps. This is
-deliberate. The incremental alternative is to restore mtimes from commit dates,
-but if the server does not honour `SITE UTIME` the remote keeps its upload time,
-and a file whose commit is OLDER than the last deploy is then silently skipped -
-merge a branch on Friday that you committed on Monday, after a Wednesday deploy,
-and the change never ships with no error anywhere. A slow, complete deploy beats
-a fast one that can silently omit a file. Do not "optimise" this without
-first proving `SITE UTIME` sticks on this host.
+upload would leave the server mixed, so a second merge queues behind the first
+rather than racing it on one FTP account.
 
 ### Still open
 
-`ssl:verify-certificate` is off in the mirror command. This is parity, not a
-regression: the action's `security` input defaults to `loose`, documented as
-"allow connection even when the domain is not certificate", so the certificate
-was never being verified. Worth turning on once the deploy is green to see
-whether HostGator's cert passes.
+`ssl:verify-certificate no` / curl `-k`. This is parity, not a regression: the
+old action's `security` input defaulted to `loose`, documented as "allow
+connection even when the domain is not certificate", so the certificate was never
+verified. Worth turning on to see whether HostGator's cert passes.
 
 No production workflow exists yet. When one is written it needs its own FTP
-account, its own secrets, and its own `config.php` — it must not share staging's.
+account, its own secrets, and its own `config.php` - it must not share staging's.

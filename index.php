@@ -58,7 +58,7 @@
 
 <cms:show_pagebuilder 'cont_pb'  no_cache="<cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />") >1</cms:if>">
 	<cms:show k_content />
-</cms:show_pagebuilder>
+</cms:show_pagebuilder><cms:dump />
 <cms:embed 'pb_mods/pg_frame/footer/ftr_emb.htm' />
 <cms:embed 'pb_mods/pg_frame/tail.htm' />
 <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")  >     
