@@ -63,7 +63,7 @@
 <cms:embed 'pb_mods/pg_frame/tail.htm' />
 <cms:if (k_user_access_level ge '7') && ("<cms:get_session 'inline_edit_on' />")  >     
     <div>
-        <cms:popup_edit_ex 'hero_pb|cont_pb' width='1050' height='1200' link_text='<button class="btn btn-lg btn-danger me-2 mb-1 fs--1" type="button">Full Page Mosaic Edit</button>' /> 
+        <cms:popup_edit_ex 'hero_pb|cont_pb' width='1050' height='1200' link_text='<button class="btn btn-lg btn-danger me-2 mb-1 fs--1" type="button">Full HomePage Mosaic Edit</button>' /> 
     </div>         
 </cms:if>
 <?php COUCH::invoke(); ?>
