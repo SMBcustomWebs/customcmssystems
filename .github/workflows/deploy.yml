@@ -103,8 +103,14 @@ jobs:
     timeout-minutes: 60
     env:
       FTP_HOST: ${{ secrets.FTP_SERVER }}
-      FTP_USER: ${{ secrets.FTP_USERNAME_STAGING }}
-      LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD_STAGING }}
+      # ftpadmin@customcmssystems.com - lands in the SITE ROOT (public_html).
+      # The site moved out of public_html/staging on 2026-11-03; uploads are
+      # written relative to wherever this account lands, so the account's home
+      # directory IS the deploy target. Changing accounts changes the target.
+      # FTP_USERNAME_STAGING / FTP_PASSWORD_STAGING are left in place for a
+      # future real staging environment.
+      FTP_USER: ${{ secrets.FTP_USERNAME }}
+      LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
       # every exclusion, as ONE regex so no intermediate grep can fail the pipe
       EXCL: '^(\.github|\.vscode|_tools|_merge_backup|module-display)/|^ccs_dash/includes/ckeditor_old/|^assets/fontawesome/(svgs|sprites|scss|less|metadata|js)/|^snippets/pb_mods/DNU_header/|\.md$|\.map$|^[^/]*\.txt$'
       LFTP_SETTINGS: >-
