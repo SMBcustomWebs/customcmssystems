@@ -59,84 +59,13 @@
                 <cms:if ccs_gl_site_name_txt_lgo_opt='1'>show<cms:else />hide</cms:if>
             </cms:func>
             
-            <cms:ignore>
-                not_active REMOVED from these two, and it could not have been
-                made correct by rewriting the condition.
-
-                It read ccs_gl_site_name_txt_lgo_chc, which shows these only when
-                the GLOBAL Default Website Brand Display is Site Name. But every
-                navbar carries its own Brand Display Style and can choose Site
-                Name independently of this setting. The ordinary case - global
-                left on Image, one navbar switched to Site Name - hid both
-                fields, so the company name rendered with an empty size and an
-                orphan "text-" prefix, and there was no way in the panel to reach
-                them and fix it.
-
-                A better condition is not available. not_active compiles to
-                JavaScript bound to fields on the SAME template, and the field
-                that would have to drive it lives on a navbar tile in another
-                template entirely. So these are always visible now. They are the
-                site-wide fallback and any navbar may be relying on them.
-
-                A NOTE FOR ANYONE TEMPTED BY opt_selected HERE. It will not do
-                what it looks like it does. field.php:997 consults get_data()
-                first and falls back to opt_selected only to decide which option
-                to mark selected while DRAWING the select - it is admin-panel
-                only, never stored, and the front end still reads the field
-                itself, which is still empty. The panel shows a color chosen and
-                the page renders without one. To give a field a real starting
-                value, put it in the BODY of the editable: get_data() returns
-                default_data whenever data is empty, on the front end and in the
-                panel alike.
-
-                PER-NAVBAR OVERRIDES now live on each nav tile as
-                ccs_nav_{mdd,sdd,xtr}_name_sz / _name_clr and win when set.
-
-                ccs_gl_site_name_txt_lgo_chc, declared just above, no longer has
-                a consumer. Left in place rather than deleted - it is inert, and
-                removing a func is a schema change for no gain.
-            </cms:ignore>
-            <cms:ignore>
-                heading-size_sec.htm, NOT heading-size.htm, and this is the fix
-                for the color bug rather than a tidy-up.
-
-                heading-size.htm stores h1 through h6. Those are not size classes
-                in this theme - user.php:452 gives .h1 through .h6 a color and a
-                font-family as well - so choosing a SIZE here silently overrode
-                the COLOR field sitting immediately beside it. Only .text-tertiary
-                and .text-quaternary survived it, because theme.css:25774 is the
-                only place the color utilities carry !important.
-
-                heading-size_sec.htm stores 5 through 9, consumed as fs-N, and
-                .fs-N sets font-size and nothing else. It is the same list the
-                per-navbar override already uses, so both ends of the fallback now
-                speak one convention.
-
-                A STORED h3 WILL NOT MATCH this list, so the field reads blank
-                after the change and the size wants picking once. That is the cost
-                of the fix and it is one click.
-            </cms:ignore>
+           
             <cms:editable type='dropdown' name='ccs_gl_site_name_txt_sz' label='Displayed Text Size' desc='Site-wide default. Each navbar can override it.' opt_values='dropdowns/heading-size_sec.htm' dynamic='opt_values' class='col-md-3' order='3' />
             <cms:editable type='dropdown' name='ccs_gl_site_name_txt_clr' label='Displayed Text Color' desc='Site-wide default. Each navbar can override it.' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-3' order='4' />
         </cms:editable>
 
         <cms:editable type='message' name='ccs_gl_tgln_fmt_msg' order='7' ><br><hr><h2>Tagline Configuration</h2></cms:editable>
 
-        <cms:ignore>
-            COLUMN WIDTHS ON THE FIRST FOUR FIELDS: 6 + 2 + 2 + 2 = 12.
-
-            They were 7 + 3 + 3 + 3 = 16. Bootstrap wraps at 12, so the tagline
-            and its checkbox took the first line at 10 of 12, and Color and
-            Size were pushed onto a second line that then sat two thirds empty -
-            which is the ragged gap you could see in the panel.
-
-            The four typography fields below are 3 + 3 + 3 + 3 and were always
-            correct; only this first group was over.
-
-            Any row's children must total 12 or a multiple of it. The
-            col-md-12 message in the middle is the deliberate exception: it
-            forces the line break between the two halves.
-        </cms:ignore>
         <cms:editable type='row' name='ccs_gl_site_tgl_row'  order='8' >
             <cms:editable type='text' name='ccs_gl_tgln' label='Business Tagline' class='col-md-6' order='1' />
             <cms:editable type='checkbox' name='ccs_gl_tgln_opt' label='Show Tagline under logo?' opt_values='Show Tagline=1'  class='col-md-2' order='2' />
@@ -150,22 +79,7 @@
         </cms:editable>
 
         <cms:editable type='message' name='ccs_gl_site_desc_msg' order='9' ><br><hr><h2>Website Metadata</h2></cms:editable>
-        <cms:ignore>
-            class REMOVED. This carried col-md-12 while its parent is
-            ccs_gl_site_biz_grp - a GROUP, not a row. It was the only col-* in
-            this file whose parent was not a row.
-
-            A Bootstrap column outside a flex row still takes the column's
-            padding and float behavior but has no row to lay out inside, and
-            this field sits at the very boundary where the next group's header
-            begins - which is where the Master Theme Controls banner was
-            overlapping the field above it.
-
-            A group child with no class already renders full width, which is
-            what col-md-12 was asking for, so nothing is lost by dropping it.
-            The message directly above has no class either, so the two now
-            match.
-        </cms:ignore>
+     
         <cms:editable type='textarea' name='ccs_gl_site_desc' label='Website Description' desc='SEO meta description.' order='10' />
     </cms:editable>
 
@@ -203,36 +117,7 @@
         </cms:func>
 
         <cms:editable type='checkbox' name='ccs_gl_site_thm_clr_opt' label='Disable Theme Background/Text Colors' desc='Check this box to revert to basic white/dark.' opt_values='Do Not Apply Theme Bg/Text=1' not_active=ccs_gl_site_thm_clr_cond order='6' />
-        <cms:ignore>
-            SITE TEXT SIZE SCALES THE WHOLE SYSTEM, NOT JUST TYPE.
-
-            This is emitted by user.php as a percentage on the ROOT element:
-
-                html { font-size: 100%; }
-
-            Nearly everything in theme.css is rem - 2477 declarations, and only
-            104 of them are font-size. The rest is padding, margin and gap. So a
-            step up here makes the site roomier as well as larger-lettered,
-            which is what a text-size control should do.
-
-            A PERCENTAGE, NOT PIXELS, DELIBERATELY. 100% means "whatever this
-            visitor set as their browser default". Someone who raised theirs to
-            20px for eyesight reasons still gets 20px here, and Comfortable
-            gives them 22.5px. A pixel value on html would override that and
-            take the choice away from them.
-
-            IT STOPS AT 112.5% ON PURPOSE. All 81 media queries in theme.css are
-            in px, and the container max-widths are hardcoded (540/720/960/1140).
-            Neither follows the root size. At 125% the navbar - navbar-expand-lg,
-            so horizontal down to 992px - would be a quarter wider inside a
-            container that had not grown, and would run out of room before the
-            hamburger takes over. 112.5% fits in the slack the layout already
-            has. Adding larger steps means converting those breakpoints to em
-            and the containers to rem first.
-
-            Composes with the body size in Custom Typography: this sets the
-            root, that sets body relative to the root.
-        </cms:ignore>
+        
         <cms:editable type='dropdown' name='ccs_gl_site_text_scale' label='Site Text Size'
             desc='Scales all text and spacing together. Respects the visitor&apos;s own browser font setting.'
             opt_values='dropdowns/text-scale.htm' dynamic='opt_values' order='8' >100</cms:editable>
@@ -242,31 +127,7 @@
     </cms:editable>
 
 
-    <cms:ignore>
-        THESE color= VALUES ARE SEED DEFAULTS, NOT LIVE THEME COLORS.
-
-        color= on a type='color' editable is a static literal. The picker addon
-        uses it only while the field has never been saved -
-        addons/color-picker/color-picker.php line 67:
-
-            $data = strlen( $this->data ) ? $this->data : $this->color;
-
-        So it cannot follow ccs_gl_site_thm_opt, and interpolating the theme
-        color here would not help either: the first save of this page writes a
-        value into every one of these fields, and from then on the default is
-        never consulted again. Seeding from a theme needs an explicit action
-        that WRITES the fields, not a smarter default.
-
-        WHAT THEY WERE. Bootstrap 4's stock palette, which is not this site's.
-        White and Black were both #007AFF - the primary color, pasted into the
-        wrong two rows - so ticking Customize Colors turned white and black
-        blue. They now match the default palette in assets/css/user.php, the
-        one that renders with Customize Site Colors unchecked, so ticking the
-        box starts from what was already on screen.
-
-        KEEP IN STEP with the <cms:else /> branch of the color chain in
-        assets/css/user.php (approx lines 55-68 and 143-155).
-    </cms:ignore>
+    
     <cms:editable type='group' name='ccs_gl_site_site_cst_clr_grp' label='Custom Website Theme Colors' not_active=ccs_gl_site_colors_custom order='80' >
         <cms:editable type='color' name='ccs_gl_site_primary_cust' label='Primary Color' color='#007AFF' alpha='0' width='50%' height='100px' order='1' />
         <cms:editable type='color' name='ccs_gl_site_secondary_cust' label='Secondary Color' color='#292b2c' alpha='0' width='50%' height='100px' order='2' />
@@ -313,26 +174,10 @@
 
     <cms:editable type='group' name='ccs_gl_site_nav_mnu_grp' label='Navigation Menu Settings' collapsed='1' order='110'>
         <cms:editable type='message' name='ccs_gl_site_nav_mnu_dd_msg' order='1' ><h2>Settings for Hovering and Dropdown Menus</h2></cms:editable>
-                <cms:ignore>
-            col-md-4 ADDED to all six. They had no class at all, inside a row -
-            the only row in this file whose children carried none - so six
-            controls that were meant to sit three across had no width to lay out
-            with. Six at col-md-4 is 24, which wraps cleanly into two lines of
-            three.
-        </cms:ignore>
+              
 <cms:editable type='row' name='ccs_gl_site_nav_mnu_dd_row'  order='2' >
             <cms:editable type='dropdown' name='ccs_gl_site_nav_actv_clr' label='Menu Item Color on Active Page' opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='1' />
-            <cms:ignore>
-                RENAMED. This is not just the menu. assets/css/user.php feeds it
-                into TWO places: the nav's own hover rule, and
-                --ccs-link-hover-color, which is the hover color for every
-                ordinary link on the site. Called "Menu Text Color" it looked
-                like a nav-only setting, and someone changing it for the menu
-                was quietly changing links everywhere.
-
-                The footer has its own control now, below, because it needs to
-                sit on its own background.
-            </cms:ignore>
+            
             <cms:editable type='dropdown' name='ccs_gl_site_nav_hvr_clr' label='Link Color on Mouse Hover (menu and site-wide)'
                 desc='Applies to the navigation menu AND to ordinary links across the site. The footer is set separately.'
                 opt_values='dropdowns/solid-colors.htm' dynamic='opt_values' class='col-md-4' order='2' />
@@ -427,21 +272,7 @@
         <cms:editable type='row' name='ccs_gl_legal_ctl_row' order='5'>
             <cms:editable type='checkbox' name='ccs_gl_cookie_consent' label='Show the Cookie Consent Bar'
                 opt_values='Yes=1' class='col-md-6' order='1' />
-            <cms:ignore>
-                THE VERSION IS THE RE-ASK SWITCH, and it is the one field here
-                with a consequence beyond wording.
 
-                Consent is given to a specific policy, not to the idea of
-                cookies. utils/consent.htm stores this number in the visitor's
-                cookie and compares it on every request. Change it - to 2, or to
-                anything different - and every stored answer stops matching, so
-                everyone is asked again.
-
-                Raise it whenever the policy changes in a way someone might have
-                answered differently about: a new processor, a new category, a
-                new purpose. Leaving it alone after such a change means carrying
-                on under consent that was given to something else.
-            </cms:ignore>
             <cms:editable type='text' name='ccs_gl_consent_ver' label='Consent Policy Version'
                 desc='Change this to ask every visitor again. See the note in the code before you do.'
                 required='1' class='col-md-6' order='2'>1</cms:editable>
@@ -459,13 +290,6 @@
                 required='1' class='col-md-8' order='2'>We use cookies that are needed to run this site and keep your cart working. With your permission we would also like to use cookies that help us understand how the site is used and let us show embedded videos. Your cart and checkout work either way.</cms:editable>
         </cms:editable>
 
-        <cms:ignore>
-            THE TWO ANSWER BUTTONS ARE STYLED IDENTICALLY IN THE THEME and that
-            is not a detail to undo here by wording one of them softly. Refusing
-            has to be exactly as easy as accepting - same prominence, same number
-            of clicks. A decline that is quieter or buried a level deeper is the
-            specific pattern regulators have issued fines over.
-        </cms:ignore>
         <cms:editable type='row' name='ccs_gl_legal_btn_row' order='20'>
             <cms:editable type='text' name='ccs_gl_consent_no' label='Decline Button'
                 required='1' class='col-md-4' order='1'>Reject all</cms:editable>
@@ -499,30 +323,7 @@
                 written.</h4>
         </cms:editable>
 
-        <cms:ignore>
-            THESE THREE FILL THEMSELVES IN, and the mechanism is worth knowing
-            because it is not obvious that it works.
-
-            The body of a cms:editable is not stored as literal text. tags.php
-            line 1514 walks the node's children and calls get_HTML() on each,
-            accumulating the RESULT, and line 1559 stores that as default_data.
-            So a cms:link in the body is resolved at registration time and the
-            finished URL is what gets saved. get_data() then returns it whenever
-            the field is empty (field.php:363), on the front end and in the panel
-            alike - so the author sees a real, working link sitting in the box on
-            their first visit, and can overwrite it with anything they like.
-
-            ORDER OF REGISTRATION MATTERS, once. cms:link returns NOTHING for a
-            template that has no row in the templates table (tags.php:1029) - the
-            same trap that made the Logout button emit an empty href. So the
-            three legal templates must be visited by a super admin BEFORE this
-            file is re-registered, or these defaults bake in as empty.
-
-            If that happens there is no damage and no mystery: fill them by hand,
-            or visit the legal pages and re-register globals. Nothing downstream
-            breaks on an empty link - the consent bar simply omits the link
-            rather than printing a dead one.
-        </cms:ignore>
+        
         <cms:editable type='row' name='ccs_gl_legal_lnk_row' order='40'>
             <cms:editable type='text' name='ccs_gl_privacy_link' label='Privacy Policy Link'
                 desc='Pre-filled from your Privacy Policy page. Overwrite it to point somewhere else.'
@@ -539,18 +340,7 @@
 
     <cms:editable type='group' name='ccs_gl_store_grp' label='Store Appearance' desc='Panels and text on the cart, checkout, product and order pages' collapsed='1' order='155'>
 
-        <cms:ignore>
-            THE MASTER SWITCH FOR THE SHOP FRONT-END.
 
-            This framework is forked per site, and most forks never sell
-            anything. Off, tail.htm does not load assets/js/ccs_shop.js at all -
-            no cart, no wishlist, nothing downloaded or parsed. On, it does.
-
-            It gates the SCRIPT only. Templates, snippets and the cart addon are
-            unaffected, so switching it off does not break an existing store's
-            data - it just stops the interactive layer being served. Turn it on
-            for any site with a cart, a wishlist, or the shop utility bar.
-        </cms:ignore>
         <cms:editable type='checkbox' name='ccs_gl_shop_on' label='This site sells things'
             desc='Loads the cart and wishlist JavaScript. Leave off on a brochure site so visitors never download it.'
             opt_values='Enable the shop front-end=1' order='0' />
@@ -569,19 +359,7 @@
                 same reason.</h4>
         </cms:editable>
 
-        <cms:ignore>
-            THESE TWO NEEDED A type='row' AROUND THEM.
-
-            col-md-6 is a Bootstrap grid class and does nothing without a .row
-            parent. Sitting loose in the group, the two controls had no grid to
-            lay out in - they collapsed onto one line and the next group's header
-            drew straight over them. Every other side-by-side pair in this file
-            is wrapped; these two were not.
-
-            The reverse mistake is a few hundred lines up in
-            ccs_gl_site_nav_mnu_dd_row: fields inside a row with no col class at
-            all. Both shapes break, in opposite directions.
-        </cms:ignore>
+ 
         <cms:editable type='row' name='ccs_gl_store_row' order='5' >
 
             <cms:editable type='dropdown' name='ccs_gl_store_panel' label='Panel Surface'
@@ -701,20 +479,7 @@
             order='15' >We are making some improvements to the site. Everything will be back to normal soon - thanks for your patience.</cms:editable>
 
         <cms:editable type='row' name='ccs_gl_maint_opt_row' order='20' >
-            <cms:ignore>
-                BOTH OF THESE POINT AT FIELDS THAT LIVE IN OTHER GROUPS, so the
-                labels name the field and the group. There are four email fields
-                in this file and only one of them belongs on a public page:
 
-                  ccs_gl_hdqt_email     Public Email          <- this one
-                  ccs_gl_form_email     form routing inbox
-                  ccs_gl_ordml_from     unmonitored sender
-                  ccs_gl_ordml_contact  order questions
-
-                Either box ticked with its source field empty renders nothing at
-                all rather than an empty line, which is correct but silent - so
-                the descs say so.
-            </cms:ignore>
             <cms:editable type='checkbox' name='ccs_gl_maint_show_email' label='Show Public Email'
                 desc='The Public Email set in Contact Settings. Leave that field blank and nothing is shown here.'
                 opt_values='Show the public email=1' class='col-md-6 mb-3' order='1' />
@@ -821,14 +586,6 @@
                 </cms:if>
             </div>
 
-            <cms:ignore>
-                COUNTS ARE READ ONCE, HERE, NOT INSIDE THE CARD.
-
-                Each of these opens a pagebuilder loop, and a loop reassigns the
-                context while it runs. Reading them up front and stashing the
-                result globally keeps the card markup free of loops and means the
-                Layout card can show all three counts side by side.
-            </cms:ignore>
             <cms:set nav_count='0' scope='global' />
             <cms:show_pagebuilder 'ccs_gl_nav_pb'><cms:set nav_count=k_count scope='global' /></cms:show_pagebuilder>
             <cms:set ftr_count='0' scope='global' />
@@ -871,38 +628,6 @@
                                 </span>
                             </div>
 
-                            <cms:ignore>
-                                THE FAVICON HAS NO ROW OF ITS OWN.
-
-                                It is one 64px image that is set once and never touched
-                                again, and the Logos popup already carries it - the field
-                                list ends ccs_gl_site_biz_lgo_fav_row|ccs_gl_site_favicon.
-                                A second row pointing at the same field made the card look
-                                like it held two jobs when it holds one. The Logos row now
-                                says so, and flags it when the favicon is missing.
-
-                                WHAT WENT WITH IT: ccs_gl_site_social_share. The pre-rebuild
-                                dashboard paired that name with the favicon under a label
-                                promising a share image, and the field is declared nowhere -
-                                not in this template, not anywhere on either site. One
-                                reference, zero definitions.
-
-                                The feature behind it is unbuilt as well: the Open Graph tags
-                                in snippets/pb_mods/pg_frame/head.htm lines 82-87 are still
-                                boilerplate, so every page ships og:title empty and og:image
-                                set to the literal string LINK TO THE IMAGE FILE. Any link to
-                                this site shared anywhere shows no title and no picture.
-                                Building it means an image editable plus real values in those
-                                six meta tags. Still outstanding.
-                            </cms:ignore>
-
-                            <cms:ignore>
-                                NEW ROW. ccs_gl_site_desc is the SEO meta description and it
-                                existed in the template with no way to reach it from here -
-                                the Brand popup listed the name and tagline fields but never
-                                this one. Same story as the two groups added to the Layout
-                                card below.
-                            </cms:ignore>
                             <div class="ccs-dash-row">
                                 <span class="ccs-dash-row-ico"><i class="fas fa-magnifying-glass"></i></span>
                                 <span class="ccs-dash-row-main">
@@ -926,26 +651,6 @@
                         </div>
                         <div class="card-body">
 
-                            <cms:ignore>
-                                ONE SOURCE FOR THE PALETTE.
-
-                                The swatches used to be a sixty-line per-theme cms:if chain
-                                copied out of assets/css/user.php - a second copy of the same
-                                table, which is exactly how the font chain drifted and ended
-                                up blank on two themes.
-
-                                ccs_theme_palette() in the dash's kfunctions.php is that table
-                                in PHP, and _tools/check-theme-palette.py already diffs it
-                                against user.php. Calling it here means the swatches cannot
-                                disagree with the stylesheet, and a new theme is added in two
-                                places instead of three.
-
-                                It returns the CURATED palette. The two things it does not
-                                know about are applied after: Customize Colors, which replaces
-                                every value with the saved custom fields, and Disable Theme
-                                Bg/Text, which sends the background and text back to the base
-                                white-on-dark pair rather than the theme's own.
-                            </cms:ignore>
                             <cms:php>
                                 global $CTX;
                                 $p = ccs_theme_palette( $CTX->get('ccs_gl_site_thm_opt') );
@@ -1021,31 +726,6 @@
                         </div>
                         <div class="card-body">
 
-                            <cms:ignore>
-                                THE FONT CHAIN, RESOLVED ONCE, MIRRORING user.php EXACTLY.
-
-                                Three branches, and the two that are easy to get wrong:
-
-                                CURSIVE AND DECORATIVE ARE NOT THE SAME IN BOTH BRANCHES.
-                                With Apply Theme Typography ON they are Dancing Script and
-                                Oswald; with it OFF they are Bradley Hand and Sreda. Same
-                                monospace either way. Verified against user.php lines 48-50
-                                and its else branch - not assumed.
-
-                                ONLY FOUR THEMES HAVE A CURATED PAIRING. primavera, estate,
-                                autunno and inverno. dark, light, scuro and notte fall to the
-                                stock Montserrat / Raleway / Playfair Display. Inventing
-                                branches for them would name fonts the stylesheet never loads.
-
-                                THE DEFAULTS ARE SET FIRST, THEN OVERRIDDEN. Same shape as
-                                the chain in user.php, so a branch that sets only three of
-                                the six leaves the rest correct instead of blank. The missing
-                                else here is what left the specimen empty on scuro and notte.
-
-                                SIZE DEFAULT IS 1, NOT 0.875. This card said 0.875 while
-                                user.php has said 1 since the typography overhaul, so the
-                                preview was printing a number the site had not used for weeks.
-                            </cms:ignore>
                             <cms:set dash_font_body='Montserrat' "global" />
                             <cms:set dash_font_sans='Raleway' "global" />
                             <cms:set dash_font_serif='Playfair Display' "global" />
@@ -1111,27 +791,6 @@
                                 </span>
                             </div>
 
-                            <cms:ignore>
-                                WATERFALL, NOT ONE BIG TRUNCATED LINE.
-
-                                The tiles originally showed one sentence at fs-6 with
-                                text-truncate, so every one ended in an ellipsis. An ellipsis
-                                reads as "click to see the rest" - it looked like a control
-                                and was not one.
-
-                                A waterfall is the standard way to present a typeface: the
-                                same word at descending sizes, so both the letterforms and how
-                                the face holds together as it shrinks are visible at once.
-                                Nothing is cut off, so nothing implies there is more to open.
-
-                                "Handgloves" is the traditional type-tester word. It carries
-                                ascenders, descenders, round and straight forms and a
-                                distinctive g - the letters that actually separate one face
-                                from another - while still reading as a word.
-
-                                The tiles size to their content. The fixed height:48% with
-                                overflow-hidden is what forced the truncation originally.
-                            </cms:ignore>
                             <div class="row g-3 mt-1">
                                 <cms:ignore>Base / Body</cms:ignore>
                                 <div class="col-12 col-sm-6 col-xl-4">
@@ -1224,21 +883,7 @@
                                 </div>
                             </div>
 
-                            <cms:ignore>
-                                THE SETTINGS SENTENCE.
-
-                                Real running text carrying the four base settings as inline
-                                style, so what is described in the label is what is rendered
-                                below it. A specimen tile shows you a letterform; only a
-                                paragraph shows you what those numbers do to a block of text,
-                                which is the thing being set.
-
-                                The size is multiplied by the Site Text Size scale in the
-                                browser, not here: font-size is in rem and rem measures
-                                against the root, which user.php sets to that percentage. So
-                                this paragraph is the true rendered size at the current scale
-                                without any arithmetic in the template.
-                            </cms:ignore>
+     
                             <div class="ccs-dash-strip mt-3">
                                 <div class="ccs-dash-spec-lbl mb-2">
                                     Base text &middot; size <cms:show dash_font_size />rem
@@ -1303,15 +948,6 @@
                                 </span>
                             </div>
 
-                            <cms:ignore>
-                                TWO ROWS THAT HAD NO WAY IN.
-
-                                ccs_gl_site_nav_mnu_grp and ccs_gl_site_ftr_grp are both real
-                                groups in this template with saved values driving live CSS,
-                                and neither appeared anywhere on the old dashboard - the only
-                                way to reach them was the back end. The footer one was added
-                                earlier this month and never wired to a button at all.
-                            </cms:ignore>
                             <div class="ccs-dash-row">
                                 <span class="ccs-dash-row-ico"><i class="fas fa-square-caret-down"></i></span>
                                 <span class="ccs-dash-row-main">
