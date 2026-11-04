@@ -612,7 +612,7 @@
                                     <span class="ccs-dash-row-val"><cms:if ccs_gl_site_name ne ''><cms:show ccs_gl_site_name /><cms:else />Not set</cms:if></span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_site_biz_grp|ccs_gl_site_biz_mta_msg|ccs_gl_site_biz_mta_row|ccs_gl_site_name_txt_lgo_opt|ccs_gl_site_name|ccs_gl_site_name_txt_sz|ccs_gl_site_name_txt_clr|ccs_gl_tgln_fmt_msg|ccs_gl_site_tgl_row|ccs_gl_tgln|ccs_gl_tgln_opt|ccs_gl_tgln_clr|ccs_gl_tgln_txt_sz|nca_cntnt_2col_img_br|ccs_gl_tgln_fnt_fm|ccs_gl_tgln_fnt_wt|ccs_gl_tgln_fnt_st|ccs_gl_tgln_ltr_spc' 
+                                    <cms:popup_edit 'ccs_gl_site_biz_mta_msg|ccs_gl_site_biz_mta_row|ccs_gl_site_name_txt_lgo_opt|ccs_gl_site_name|ccs_gl_site_name_txt_sz|ccs_gl_site_name_txt_clr|ccs_gl_tgln_fmt_msg|ccs_gl_site_tgl_row|ccs_gl_tgln|ccs_gl_tgln_opt|ccs_gl_tgln_clr|ccs_gl_tgln_txt_sz|nca_cntnt_2col_img_br|ccs_gl_tgln_fnt_fm|ccs_gl_tgln_fnt_wt|ccs_gl_tgln_fnt_st|ccs_gl_tgln_ltr_spc' 
                                     link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
@@ -624,7 +624,7 @@
                                     <span class="ccs-dash-row-val">Wide and square, light and dark<cms:if ccs_gl_site_favicon eq ''> &middot; no favicon set</cms:if></span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_site_biz_grp|ccs_gl_site_biz_lgo_msg|ccs_gl_site_biz_lgo_hoz_row|ccs_gl_site_logo_hoz_drk|ccs_gl_site_logo_hoz_lgt|ccs_gl_site_biz_lgo_sqr_row|ccs_gl_site_logo_sqr_drk|ccs_gl_site_logo_sqr_lgt|ccs_gl_site_biz_lgo_fav_row|ccs_gl_site_favicon' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_site_biz_lgo_msg|ccs_gl_site_biz_lgo_hoz_row|ccs_gl_site_logo_hoz_drk|ccs_gl_site_logo_hoz_lgt|ccs_gl_site_biz_lgo_sqr_row|ccs_gl_site_logo_sqr_drk|ccs_gl_site_logo_sqr_lgt|ccs_gl_site_biz_lgo_fav_row|ccs_gl_site_favicon' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -635,7 +635,7 @@
                                     <span class="ccs-dash-row-val"><cms:if ccs_gl_site_desc ne ''><cms:show ccs_gl_site_desc /><cms:else />Not set</cms:if></span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_site_biz_grp|ccs_gl_site_desc_msg|ccs_gl_site_desc' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_site_desc_msg|ccs_gl_site_desc' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -710,7 +710,7 @@
                                     <span class="ccs-dash-row-val"><cms:if ccs_gl_site_hglt_clr ne '' || ccs_gl_site_hglt_bg ne ''>Custom<cms:else />Browser default</cms:if></span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_site_site_cst_slct_grp|ccs_gl_site_site_cst_slct_msg|ccs_gl_site_hglt_row|ccs_gl_site_hglt_clr|ccs_gl_site_hglt_bg' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_site_site_cst_slct_msg|ccs_gl_site_hglt_row|ccs_gl_site_hglt_clr|ccs_gl_site_hglt_bg' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -787,7 +787,7 @@
                                     <span class="ccs-dash-row-val">Whole site at <cms:if ccs_gl_site_text_scale ne ''><cms:show ccs_gl_site_text_scale /><cms:else />100</cms:if>%</span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_master_theme_grp|ccs_gl_site_text_scale' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_site_text_scale' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -955,7 +955,7 @@
                                     <span class="ccs-dash-row-val">Hover, active page and dropdown panels</span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_site_nav_mnu_grp|ccs_gl_site_nav_mnu_dd_msg|ccs_gl_site_nav_actv_clr|ccs_gl_site_nav_hvr_clr|ccs_gl_site_nav_mnu_dd_row|ccs_gl_site_nav_dd_txt_clr|ccs_gl_site_nav_dd_bg|ccs_gl_site_nav_dd_hvr_clr|ccs_gl_site_nav_dd_hvr_bg' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_site_nav_mnu_dd_msg|ccs_gl_site_nav_actv_clr|ccs_gl_site_nav_hvr_clr|ccs_gl_site_nav_mnu_dd_row|ccs_gl_site_nav_dd_txt_clr|ccs_gl_site_nav_dd_bg|ccs_gl_site_nav_dd_hvr_clr|ccs_gl_site_nav_dd_hvr_bg' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -966,7 +966,7 @@
                                     <span class="ccs-dash-row-val">Hover color for the two bars</span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_site_ftr_grp|ccs_gl_site_ftr_msg|ccs_gl_site_ftr_row|ccs_gl_site_ftr_lnk_hvr_clr|ccs_gl_site_ubr_lnk_hvr_clr' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_site_ftr_msg|ccs_gl_site_ftr_row|ccs_gl_site_ftr_lnk_hvr_clr|ccs_gl_site_ubr_lnk_hvr_clr' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -1000,7 +1000,7 @@
                                     <span class="ccs-dash-row-val"><cms:if ccs_gl_hdqt_cty ne ''><cms:show ccs_gl_hdqt_cty /><cms:if ccs_gl_hdqt_sta ne ''>, <cms:show ccs_gl_hdqt_sta /></cms:if><cms:else_if ccs_gl_hdqt_email ne '' /><cms:show ccs_gl_hdqt_email /><cms:else />Not set</cms:if></span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_site_cntc_grp|ccs_gl_hdqt_st_add|ccs_gl_hdqt_st_ad2|ccs_gl_hdqt_cty|ccs_gl_hdqt_sta|ccs_gl_hdqt_zip|ccs_gl_hdqt_ggl_lnk|ccs_gl_hdqt_email|ccs_gl_cntct_pho_msg|ccs_gl_hdqt_pho_rpt|ccs_gl_hdqt_fax|ccs_gl_cntct_map_msg|ccs_gl_ggl_maps_rpt' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_hdqt_st_add|ccs_gl_hdqt_st_ad2|ccs_gl_hdqt_cty|ccs_gl_hdqt_sta|ccs_gl_hdqt_zip|ccs_gl_hdqt_ggl_lnk|ccs_gl_hdqt_email|ccs_gl_cntct_pho_msg|ccs_gl_hdqt_pho_rpt|ccs_gl_hdqt_fax|ccs_gl_cntct_map_msg|ccs_gl_ggl_maps_rpt' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -1011,7 +1011,7 @@
                                     <span class="ccs-dash-row-val">Profiles and app store links</span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_site_scl_grp|ccs_gl_social_msg|ccs_gl_social|ccs_gl_andr_app|ccs_gl_appl_app' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_social_msg|ccs_gl_social|ccs_gl_andr_app|ccs_gl_appl_app' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -1034,7 +1034,7 @@
                                     <span class="ccs-dash-row-val">Cart, checkout and receipt panels</span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_store_grp|ccs_gl_store_msg|ccs_gl_store_panel|ccs_gl_store_secondary' height='620' width='940' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_store_msg|ccs_gl_store_panel|ccs_gl_store_secondary' height='620' width='940' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -1045,7 +1045,7 @@
                                     <span class="ccs-dash-row-val"><cms:if ccs_gl_ordml_from ne ''>From <cms:show ccs_gl_ordml_from /><cms:else />Sender address not set</cms:if></span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_ordml_grp|ccs_gl_ordml_msg|ccs_gl_ordml_addr_row|ccs_gl_ordml_from|ccs_gl_ordml_contact|ccs_gl_ordml_wording_msg|ccs_gl_ordml_head_row|ccs_gl_ordml_subject|ccs_gl_ordml_greeting|ccs_gl_ordml_intro_row|ccs_gl_ordml_confirm|ccs_gl_ordml_reference|ccs_gl_ordml_close_row|ccs_gl_ordml_next|ccs_gl_ordml_help|ccs_gl_ordml_foot_row|ccs_gl_ordml_btn|ccs_gl_ordml_footer' height='860' width='1040' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_ordml_msg|ccs_gl_ordml_addr_row|ccs_gl_ordml_from|ccs_gl_ordml_contact|ccs_gl_ordml_wording_msg|ccs_gl_ordml_head_row|ccs_gl_ordml_subject|ccs_gl_ordml_greeting|ccs_gl_ordml_intro_row|ccs_gl_ordml_confirm|ccs_gl_ordml_reference|ccs_gl_ordml_close_row|ccs_gl_ordml_next|ccs_gl_ordml_help|ccs_gl_ordml_foot_row|ccs_gl_ordml_btn|ccs_gl_ordml_footer' height='860' width='1040' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -1068,7 +1068,7 @@
                                     <span class="ccs-dash-row-val"><cms:if ccs_gl_form_email ne ''><cms:show ccs_gl_form_email /><cms:else />Not set &mdash; form messages go nowhere</cms:if></span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_integrations_grp|ccs_gl_form_email' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_form_email' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -1079,7 +1079,7 @@
                                     <span class="ccs-dash-row-val"><cms:if ccs_gl_header_scripts ne '' || ccs_gl_footer_scripts ne ''>Active<cms:else />None</cms:if></span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_integrations_grp|ccs_gl_header_scripts|ccs_gl_footer_scripts' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_header_scripts|ccs_gl_footer_scripts' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -1090,7 +1090,7 @@
                                     <span class="ccs-dash-row-val"><cms:if ccs_gl_cookie_consent>Consent bar on<cms:else />Consent bar off</cms:if></span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_legal_grp|ccs_gl_cookie_consent|ccs_gl_privacy_link|ccs_gl_terms_link' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_cookie_consent|ccs_gl_privacy_link|ccs_gl_terms_link' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
@@ -1115,7 +1115,7 @@
                                     <span class="ccs-dash-row-val"><cms:if ccs_gl_maintenance_mode>Everyone below level 7 sees the holding page<cms:else />Visitors see the live site</cms:if></span>
                                 </span>
                                 <span class="ccs-dash-row-act">
-                                    <cms:popup_edit 'ccs_gl_maintenance_grp|ccs_gl_maint_msg_hdr|ccs_gl_maintenance_mode|ccs_gl_maint_head|ccs_gl_maint_body|ccs_gl_maint_opt_row|ccs_gl_maint_show_email|ccs_gl_maint_show_social' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
+                                    <cms:popup_edit 'ccs_gl_maint_msg_hdr|ccs_gl_maintenance_mode|ccs_gl_maint_head|ccs_gl_maint_body|ccs_gl_maint_opt_row|ccs_gl_maint_show_email|ccs_gl_maint_show_social' link_text="<button class='btn btn-sm btn-outline-primary'>Edit</button>" />
                                 </span>
                             </div>
 
