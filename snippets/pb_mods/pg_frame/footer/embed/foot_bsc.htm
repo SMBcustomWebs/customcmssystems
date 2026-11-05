@@ -79,7 +79,11 @@
             opt_values='https|http'
             class='col-md-3' not_active=ccs_ftr_bsc_hide_cst order='15' >https</cms:editable>
 
-        <cms:editable type='text' name='ccs_ftr_bsc_lnk_cst' label='Custom URL' desc='No https:// &mdash; set that at left. Example: yoursite.com/page' width='400' not_active=ccs_ftr_bsc_hide_cst order='20' />
+        <cms:ignore>
+            INSTRUCTION LIVES IN THE LABEL, NOT desc. A desc is not rendered on
+            a field inside a repeatable, so it would never reach the user.
+        </cms:ignore>
+        <cms:editable type='text' name='ccs_ftr_bsc_lnk_cst' label='URL (do not add http:// or https://)' width='400' not_active=ccs_ftr_bsc_hide_cst order='20' />
         <cms:editable type='text' name='ccs_ftr_bsc_ttl' label='Link Title' width='200' maxlength="40" order='30' />
     </cms:repeatable>
 </cms:editable>
