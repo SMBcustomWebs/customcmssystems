@@ -78,7 +78,13 @@
                     <cms:set final_icon="" scope='global' />
 
                     <cms:if ccs_ftr_bsc_lnk_dd=='custom'>
-                        <cms:set final_ftr_lnk="<cms:show ccs_ftr_bsc_lnk_cst />" scope='global' />
+                        <cms:ignore>
+                            Scheme and address are stored apart and joined here.
+                            See embed/foot_bsc.htm for why. An address entered
+                            WITH a protocol will come out doubled - enter it
+                            without one.
+                        </cms:ignore>
+                        <cms:set final_ftr_lnk="<cms:show ccs_ftr_bsc_lnk_sch />://<cms:show ccs_ftr_bsc_lnk_cst />" scope='global' />
                         <cms:set final_ftr_tgt="target='_blank'" scope='global' />
                         <cms:set
                             final_icon="<i class='fa-solid fa-arrow-up-right-from-square ms-1' style='font-size: 0.75em;' aria-hidden='true'></i>"

@@ -52,7 +52,33 @@
     <cms:repeatable name='ccs_ftr_bsc_lnks_rpt' label='Footer Site Links' stacked_layout='1' order='30'>
         <cms:editable type='dropdown' name='ccs_ftr_bsc_lnk_dd' label='Select Page or Custom Link' opt_values='dropdowns/links.htm' dynamic='opt_values' order='10' />
         <cms:func _into='ccs_ftr_bsc_hide_cst' ccs_ftr_bsc_lnk_dd=''><cms:if ccs_ftr_bsc_lnk_dd='custom'>0<cms:else />1</cms:if></cms:func>
-        <cms:editable type='text' name='ccs_ftr_bsc_lnk_cst' label='Custom URL' desc='Input the entire URL (e.g., https://yoursite.com/)' width='400' not_active=ccs_ftr_bsc_hide_cst order='20' />
+        <cms:ignore>
+            SCHEME IS A SEPARATE FIELD, AND THE VALUES ARE BARE ON PURPOSE.
+
+            ModSecurity on this host returns 406 Not Acceptable when a scheme
+            followed by a colon and two slashes appears in the POST body. The
+            same save goes through once that sequence is removed, which is how
+            the rule was identified.
+
+            So the dropdown stores https or http with nothing after it, the text
+            field holds the rest of the address, and the theme file joins them
+            when it renders. Nothing posted by this form contains the sequence
+            the rule matches.
+
+            DO NOT put the punctuation into the dropdown values. A dropdown
+            posts its value like any other field, so it would trip the same rule
+            and the separation would buy nothing.
+
+            The default sits in the BODY of the editable rather than in
+            opt_selected - opt_selected only marks an option while the panel
+            draws the select and is never stored, so the front end would still
+            read an empty field.
+        </cms:ignore>
+        <cms:editable type='dropdown' name='ccs_ftr_bsc_lnk_sch' label='Protocol'
+            opt_values='https|http'
+            class='col-md-3' not_active=ccs_ftr_bsc_hide_cst order='15' >https</cms:editable>
+
+        <cms:editable type='text' name='ccs_ftr_bsc_lnk_cst' label='Custom URL' desc='Address WITHOUT the protocol - e.g. yoursite.com/page' width='400' not_active=ccs_ftr_bsc_hide_cst order='20' />
         <cms:editable type='text' name='ccs_ftr_bsc_ttl' label='Link Title' width='200' maxlength="40" order='30' />
     </cms:repeatable>
 </cms:editable>
