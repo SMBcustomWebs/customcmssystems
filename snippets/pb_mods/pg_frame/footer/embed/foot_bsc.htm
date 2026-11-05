@@ -46,6 +46,7 @@
         <br><hr><br>
         <h3>Footer Site Links</h3>
         <p>Select an internal page or choose "Custom" to enter an external URL. External URLs will automatically open in a new tab.</p>
+        <p><strong>For a custom link, pick the protocol from the dropdown and type the address without it</strong> &mdash; e.g. <code>yoursite.com/page</code>, not <code>https://yoursite.com/page</code>.</p>
         <br>
     </cms:editable>
 
@@ -78,7 +79,7 @@
             opt_values='https|http'
             class='col-md-3' not_active=ccs_ftr_bsc_hide_cst order='15' >https</cms:editable>
 
-        <cms:editable type='text' name='ccs_ftr_bsc_lnk_cst' label='Custom URL' desc='Address WITHOUT the protocol - e.g. yoursite.com/page' width='400' not_active=ccs_ftr_bsc_hide_cst order='20' />
+        <cms:editable type='text' name='ccs_ftr_bsc_lnk_cst' label='Custom URL' desc='No https:// &mdash; set that at left. Example: yoursite.com/page' width='400' not_active=ccs_ftr_bsc_hide_cst order='20' />
         <cms:editable type='text' name='ccs_ftr_bsc_ttl' label='Link Title' width='200' maxlength="40" order='30' />
     </cms:repeatable>
 </cms:editable>
